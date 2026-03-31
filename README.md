@@ -9,7 +9,7 @@ A comprehensive systematic literature review of deep learning methods for 3D org
 
 ## Paper
 
-- **Manuscript:** [docdo-paper](https://github.com/gameguild-gg/docdo-paper)
+- **Manuscript:** [https://github.com/gameguild-gg/docdo-paper](https://github.com/gameguild-gg/docdo-paper)
 - **Format:** IEEE Conference
 - **Studies Reviewed:** 52 peer-reviewed papers (2015–2025)
 
