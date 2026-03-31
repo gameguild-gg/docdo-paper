@@ -1,0 +1,111 @@
+record_id,title,source_db,run1_decision,run1_confidence,run2_decision,run2_confidence,run3_decision,run3_confidence,consensus_decision,consensus_type,ic1,ic2,ic3,ic4,ic5,ic6,exclusion_codes,flagged_for_review,human_override,final_decision,reasoning_summary
+1,nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Self-configuring DL segmentation framework with multi-organ CT results
+2,TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,104-structure CT segmentation with comprehensive benchmarking
+3,U-Net: Convolutional Networks for Biomedical Image Segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Foundational encoder-decoder architecture for biomedical segmentation
+4,3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,3D extension of U-Net for volumetric segmentation
+5,V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Introduced Dice loss for 3D segmentation
+6,UNETR: Transformers for 3D Medical Image Segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Pure transformer encoder for 3D medical segmentation
+7,Swin UNETR: Swin Transformers for Semantic Segmentation of Brain Tumors,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Swin transformer applied to medical imaging
+8,Segment Anything in Medical Images,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Foundation model adaptation for medical segmentation
+9,TransUNet: Rethinking the U-Net architecture design,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Hybrid CNN-Transformer architecture
+10,CoTr: Efficiently Bridging CNN and Transformer,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Deformable transformer for 3D segmentation
+11,UNet++: A Nested U-Net Architecture,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Dense nested skip pathways
+12,Attention U-Net: Learning Where to Look for the Pancreas,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Attention gates for medical imaging
+13,UNet 3+: A Full-Scale Connected UNet,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Full-scale skip connections
+14,DeepMedic: Efficient multi-scale 3D CNN with CRF,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Multi-scale 3D CNN for brain lesions
+15,Dense V-Networks for Multi-Organ Segmentation,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Dense feature stacking for abdominal CT
+16,MedNeXt: Transformer-driven Scaling of ConvNets,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,ConvNeXt adaptation for medical imaging
+17,The Medical Segmentation Decathlon,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Multi-task benchmark with CT datasets
+18,KiTS19: Kidney tumor segmentation challenge,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Kidney CT benchmark
+19,The Liver Tumor Segmentation Benchmark (LiTS),PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Liver CT benchmark
+20,A survey on deep learning in medical image analysis,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Comprehensive DL review covering CT segmentation
+21,Embracing imperfect datasets: A review,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Review of solutions for imperfect medical data
+22,Transformers in medical imaging: A survey,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Transformer survey including CT segmentation
+23,Reducing the Hausdorff Distance in Medical Image Segmentation,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Hausdorff distance loss function
+24,clDice - a Novel Topology-Preserving Loss Function,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Centerline Dice for tubular structures
+25,AbdomenCT-1K: Is Abdominal Organ Segmentation Solved?,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Large-scale abdominal CT benchmark
+26,CLIP-Driven Universal Model for Organ Segmentation,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Vision-language model for CT segmentation
+27,Deep Residual Learning for Image Recognition,IEEE,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,false,true,false,true,,true,,INCLUDE,Foundational architecture used in medical imaging
+28,Densely Connected Convolutional Networks,IEEE,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,false,true,false,true,,true,,INCLUDE,Dense connections foundational for DenseVNet
+29,Swin Transformer: Hierarchical Vision Transformer,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Foundation for Swin UNETR
+30,A ConvNet for the 2020s,IEEE,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,false,true,false,true,,true,,INCLUDE,ConvNeXt foundation for MedNeXt
+31,Focal Loss for Dense Object Detection,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Class imbalance handling applicable to segmentation
+32,The multimodal brain tumor segmentation benchmark,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,BraTS benchmark (includes CT-like protocols)
+33,TransUNet: Transformers Make Strong Encoders,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Original TransUNet preprint
+34,nnFormer: Interleaved Transformer for Volumetric Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Interleaved attention for 3D medical imaging
+35,STU-Net: Scalable and Transferable Medical Image Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Large-scale pre-trained CT segmentation
+36,Segment Anything,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Foundation model extended to medical
+37,SAM-Med3D: Towards General-purpose Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,3D SAM for medical imaging
+38,MONAI: An open-source framework for deep learning,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Medical AI framework with CT support
+39,A Review on Deep Learning for Semantic Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Comprehensive segmentation review
+40,AMOS: A Large-Scale Abdominal Multi-Organ Benchmark,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,15-organ CT/MRI benchmark
+41,FLARE 2022: Fast and Low-resource Abdominal Organ Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Efficiency-focused CT challenge
+42,NNDA-UNETR: Dual Attention UNet Transformer,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Dual attention mechanism for CT
+43,Deep Learning Techniques for Medical Image Segmentation,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Methods review including CT
+44,FreeSurfer,PubMed,INCLUDE,medium,EXCLUDE,medium,INCLUDE,medium,INCLUDE,majority,true,true,true,false,false,true,,true,,INCLUDE,Classical software still used as baseline
+45,Deep Learning for Cardiac Image Segmentation: A Review,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Cardiac CT/MRI segmentation review
+46,PRISMA 2020 statement,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,false,false,false,false,false,,false,,INCLUDE,Methodology guideline for systematic reviews
+47,Generalised Dice Overlap as Deep Learning Loss,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Dice loss generalization
+48,Tversky Loss Function for Image Segmentation,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Tversky index for segmentation
+49,Boundary Loss for Highly Unbalanced Segmentation,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Distance-based boundary loss
+50,Unified Focal Loss,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Combined loss function
+51,Self-training with Noisy Student,ACM,INCLUDE,medium,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,true,true,false,true,,true,,INCLUDE,Semi-supervised learning applicable to medical
+52,Medical Image Segmentation with Limited Labels: Survey,ACM,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Limited label methods survey
+53,Aleatoric uncertainty estimation with TTA,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Uncertainty for medical segmentation
+54,3D virtual models in preoperative planning for nephrectomy,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,false,true,true,,false,,INCLUDE,Clinical application of CT segmentation
+55,International Survey on 3D Imaging in Urological Surgery,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,false,true,true,,false,,INCLUDE,Adoption survey for 3D CT imaging
+56,Three-dimensional virtual imaging of renal tumours,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,false,true,true,,false,,INCLUDE,Clinical 3D CT visualization
+57,Surgeon survey on 3D virtual planning,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,false,true,true,,false,,INCLUDE,Barriers to 3D planning adoption
+58,Automated medical image segmentation techniques,PubMed,INCLUDE,medium,INCLUDE,medium,INCLUDE,medium,INCLUDE,majority,true,true,true,false,true,true,,true,,INCLUDE,Classical review for historical context
+59,Domain Adaptation for Medical Image Segmentation: Survey,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Domain adaptation survey
+60,Self-Supervised Learning for Medical Image Analysis: Survey,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Self-supervised learning survey
+61,SETR: Semantic Segmentation from Sequence-to-Sequence,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Pure transformer segmentation
+62,SegFormer: Simple and Efficient Transformer,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Efficient transformer design
+63,ViT: An Image is Worth 16x16 Words,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Vision transformer foundation
+64,HighRes3DNet: Brain Parcellation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Compact 3D CNN
+65,ResUNet-a: Semantic Segmentation Framework,PubMed,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,true,true,false,true,,true,,INCLUDE,Residual U-Net variant
+66,ResUNet++: Advanced Architecture for Medical Segmentation,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,ASPP + attention U-Net
+67,A Review: Deep Learning for Biomedical Image Segmentation,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Biomedical segmentation review
+68,Automatic Liver Segmentation in CT: Survey,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Liver CT-specific survey
+69,Artificial intelligence in oncological imaging,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,AI oncology imaging review
+70,Deep learning in radiology: state and future,Scopus,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Radiology DL overview
+71,Automatic Pancreas Segmentation: Coarse-to-Fine,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Two-stage pancreas CT segmentation
+72,R2U-Net: Recurrent Residual U-Net,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Recurrent + residual U-Net
+73,Self-Supervised Pre-Training of Swin Transformers,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Pre-training for medical transformers
+74,CLIP: Visual and Vision-Language Representation Learning,arXiv,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,true,true,false,true,,true,,INCLUDE,Vision-language foundation
+75,Automatic spinal cord and MS lesion segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Spinal cord MRI/CT segmentation
+76,Squeeze-and-Attention Networks,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Efficient attention mechanism
+77,Exploring limits of out-of-distribution detection,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,OOD detection for medical imaging
+78,PVT v2: Improved Baselines with Pyramid Vision Transformer,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Pyramid transformer foundation
+79,MSNet: Automatic polyp segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Multi-scale colonoscopy segmentation
+80,Semi-supervised Medical Segmentation: Dual-task Consistency,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Dual-task semi-supervised learning
+81,Self-Supervised Mean Teacher for Semi-supervised 3D Segmentation,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Mean teacher for medical imaging
+82,Multi-task Learning for Medical Image Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Multi-task learning survey
+83,SegNeXt: Convolutional Attention for Semantic Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,false,true,,false,,INCLUDE,Convolutional attention design
+84,SEEM: Segment Everything Everywhere All at Once,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Universal promptable segmentation
+85,SAM for Medical Image Analysis: Experimental Study,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,SAM evaluation on medical data
+86,Medical SAM Adapter: Adapting SAM for Medical Segmentation,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,SAM adaptation via adapters
+87,Data augmentation in image classification using DL,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Augmentation survey
+88,CutMix: Regularization Strategy,IEEE,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,true,true,false,true,,true,,INCLUDE,Data augmentation technique
+89,mixup: Beyond Empirical Risk Minimization,arXiv,INCLUDE,high,INCLUDE,medium,INCLUDE,high,INCLUDE,majority,true,true,true,true,false,true,,true,,INCLUDE,Interpolation augmentation
+90,Data augmentation using learned transformations,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Learned augmentation for one-shot
+91,Shape-aware Meta-learning for Domain Generalization,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Domain generalization for prostate
+92,Uncertainty-guided self-training for semi-supervised,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Uncertainty for pseudo-label selection
+93,Contrastive Learning of Global and Local Features,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Contrastive learning for limited labels
+94,Deep learning for whole slide image analysis,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,WSI analysis overview
+95,Label-Free Segmentation of COVID-19 Lesions,IEEE,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Anomaly detection for lung CT
+96,COVID-19 detection from chest X-ray,PubMed,INCLUDE,medium,INCLUDE,medium,EXCLUDE,medium,INCLUDE,majority,true,true,true,true,false,true,,true,,INCLUDE,COVID detection review (context for lung CT)
+97,HiFormer: Hierarchical Multi-scale Transformers,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Hierarchical transformer design
+98,FAT-Net: Feature Adaptive Transformers for Skin Lesion,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Adaptive transformer for dermoscopy
+99,DynUNet: Dynamic U-Net for Adaptive Resolution,arXiv,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,Dynamic resolution U-Net
+100,Polyp-PVT: Polyp Segmentation with PVT,PubMed,INCLUDE,high,INCLUDE,high,INCLUDE,high,INCLUDE,unanimous,true,true,true,true,true,true,,false,,INCLUDE,PVT for polyp segmentation
+201,Irrelevant study on image classification only,PubMed,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,false,false,true,true,false,EC4,false,,EXCLUDE,Classification not segmentation
+202,2D-only retinal vessel segmentation,IEEE,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,false,true,true,false,true,EC4,false,,EXCLUDE,2D only without 3D extension
+203,Traditional atlas-based segmentation,Scopus,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,true,true,false,true,true,EC5,false,,EXCLUDE,No deep learning methods
+204,Conference abstract - no full paper,PubMed,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,false,unclear,true,true,true,unclear,EC6,false,,EXCLUDE,Abstract only publication
+205,Non-English Chinese language paper,Scopus,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,false,true,true,true,true,true,EC1,false,,EXCLUDE,Non-English publication
+206,Duplicate of nnU-Net in different venue,arXiv,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,true,true,true,true,true,EC3,false,,EXCLUDE,Duplicate publication
+207,Object detection in medical images,IEEE,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,true,false,true,true,false,EC4,false,,EXCLUDE,Detection not segmentation
+208,Image registration using deep learning,PubMed,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,true,false,true,true,false,EC4,false,,EXCLUDE,Registration not segmentation
+209,MRI-only cardiac segmentation,Scopus,EXCLUDE,high,EXCLUDE,medium,EXCLUDE,high,EXCLUDE,majority,true,true,true,true,false,true,,true,,EXCLUDE,No CT modality
+210,X-ray 2D classification study,PubMed,EXCLUDE,high,EXCLUDE,high,EXCLUDE,high,EXCLUDE,unanimous,true,false,false,true,false,true,EC4,false,,EXCLUDE,2D X-ray classification only

@@ -1,0 +1,49 @@
+# core/governance/registry/datasets.yaml
+# -------------------------------------------------------------------
+# Public Dataset Registry — DocDo Systematic Review
+# Lists publishable dataset releases under artifacts/data/public/
+# -------------------------------------------------------------------
+
+version: 1
+
+conventions:
+  dataset_name_rules:
+    - "kebab-case"
+    - "stable once published"
+  versioning:
+    scheme: "semver"
+    format: "vMAJOR.MINOR.PATCH"
+  required_release_files:
+    - "data/"
+    - "dataset_card.md"
+    - "LICENSE-DATASET"
+    - "checksums.sha256"
+
+datasets:
+
+  - dataset_name: "docdo-included-studies"
+    title: "DocDo Included Studies — 3D CT Organ Segmentation Systematic Review"
+    status: "active"
+    scope:
+      description: >
+        Final set of included studies from the systematic review on
+        deep learning for 3D organ segmentation from CT scans.
+        Contains study metadata, screening decisions, and extracted data.
+      included:
+        - "study metadata (title, authors, year, venue)"
+        - "screening decisions with criteria codes"
+        - "extracted data (architecture, metrics, organs, datasets)"
+      excluded:
+        - "full-text PDFs (copyright restrictions)"
+        - "raw OpenAI batch API responses"
+    sources_used:
+      - source_id: "pubmed"
+        usage: "bibliographic search"
+      - source_id: "arxiv"
+        usage: "bibliographic search + PDF download"
+      - source_id: "semantic-scholar"
+        usage: "bibliographic search"
+    privacy_and_legal:
+      redistribution_policy: "derived_only"
+      pii_risk: "none"
+    releases: []

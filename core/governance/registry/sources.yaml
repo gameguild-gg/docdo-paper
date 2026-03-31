@@ -1,0 +1,83 @@
+# core/governance/registry/sources.yaml
+# -------------------------------------------------------------------
+# Source Registry — DocDo Systematic Review
+# Binds each data source to its folder, legal docs, and access info.
+# -------------------------------------------------------------------
+
+version: 1
+
+conventions:
+  source_id_rules:
+    - "kebab-case"
+    - "stable once published"
+  folder_binding_rules:
+    - "Every source_id must have a data_root path under artifacts/data/external/"
+    - "Folder names are generic; specifics go in display_name/notes"
+
+sources:
+
+  - source_id: pubmed
+    display_name: "PubMed / MEDLINE"
+    category: "bibliographic-database"
+    data_roots:
+      catalog: null
+      evidence: null
+    redistribution:
+      policy: "allowed"
+      publishable_outputs:
+        - "bibliographic metadata"
+        - "search result CSVs"
+    access:
+      auth_required: false
+      api: "NCBI Entrez E-utilities"
+      rate_limit_notes: "Max 3 requests/sec without API key, 10/sec with"
+    tags: ["primary-source", "S1-identification"]
+
+  - source_id: arxiv
+    display_name: "arXiv"
+    category: "preprint-server"
+    data_roots:
+      catalog: null
+      evidence: null
+    redistribution:
+      policy: "allowed"
+      publishable_outputs:
+        - "bibliographic metadata"
+        - "open-access PDFs"
+    access:
+      auth_required: false
+      api: "arXiv API + bulk download"
+      rate_limit_notes: "Respectful crawling, 1 req/3sec recommended"
+    tags: ["primary-source", "S1-identification", "pdf-source"]
+
+  - source_id: semantic-scholar
+    display_name: "Semantic Scholar"
+    category: "bibliographic-database"
+    data_roots:
+      catalog: null
+      evidence: null
+    redistribution:
+      policy: "allowed"
+      publishable_outputs:
+        - "bibliographic metadata"
+    access:
+      auth_required: false
+      api: "Semantic Scholar Academic Graph API"
+      rate_limit_notes: "100 req/5min without API key"
+    tags: ["primary-source", "S1-identification"]
+
+  - source_id: unpaywall
+    display_name: "Unpaywall"
+    category: "open-access-discovery"
+    data_roots:
+      catalog: null
+      evidence: null
+    redistribution:
+      policy: "mixed"
+      publishable_outputs:
+        - "OA status metadata"
+    access:
+      auth_required: false
+      api: "Unpaywall REST API (email required)"
+      rate_limit_notes: "100k/day"
+    tags: ["pdf-source", "S3-fulltext"]

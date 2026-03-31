@@ -1,0 +1,8 @@
+# Requirements for fetching real literature search data
+biopython>=1.80
+arxiv>=2.0.0
+requests>=2.28.0
+
+# Requirements for screening (Batch API) + env loading
+openai>=1.0.0
+python-dotenv>=1.0.0

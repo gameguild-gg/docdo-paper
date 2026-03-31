@@ -1,0 +1,473 @@
+S2 → S1 TRACEABILITY VERIFICATION REPORT
+==================================================
+
+Date: 2026-01-21
+S1 file: S1_search_results_REAL.csv (2985 papers)
+S2 file: S2_included_studies.csv (127 studies)
+
+RESULTS:
+  Found by DOI:   12
+  Found by title: 1
+  Total found:    13 (10.2%)
+  Not found:      114 (89.8%)
+
+Traceability: PARTIAL
+
+STUDIES NOT IN S1 (manually added):
+--------------------------------------------------
+S001: nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation
+  DOI: 10.1038/s41592-020-01008-z
+  Isensee F (2021)
+
+S003: U-Net: Convolutional Networks for Biomedical Image Segmentation
+  DOI: 10.1007/978-3-319-24574-4_28
+  Ronneberger O (2015)
+
+S004: 3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation
+  DOI: 10.1007/978-3-319-46723-8_49
+  Çiçek Ö (2016)
+
+S005: V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation
+  DOI: 10.1109/3DV.2016.79
+  Milletari F (2016)
+
+S007: Swin UNETR: Swin Transformers for Semantic Segmentation of Brain Tumors
+  DOI: 10.1007/978-3-031-08999-2_22
+  Hatamizadeh A (2022)
+
+S009: TransUNet: Rethinking the U-Net architecture design
+  DOI: 10.1016/j.media.2024.103280
+  Chen J (2024)
+
+S010: CoTr: Efficiently Bridging CNN and Transformer
+  DOI: 10.1007/978-3-030-87199-4_16
+  Xie Y (2021)
+
+S012: Attention U-Net: Learning Where to Look for the Pancreas
+  DOI: 10.1804/03999
+  Oktay O (2018)
+
+S013: UNet 3+: A Full-Scale Connected UNet
+  DOI: 10.1109/ICASSP40776.2020.9053405
+  Huang H (2020)
+
+S014: Efficient multi-scale 3D CNN with fully connected CRF
+  DOI: 10.1016/j.media.2016.10.004
+  Kamnitsas K (2017)
+
+S016: MedNeXt: Transformer-driven Scaling of ConvNets
+  DOI: 10.1007/978-3-031-43901-8_39
+  Roy S (2023)
+
+S017: The Medical Segmentation Decathlon
+  DOI: 10.1038/s41467-022-30695-9
+  Antonelli M (2022)
+
+S018: KiTS19: Kidney tumor segmentation challenge
+  DOI: 10.1016/j.media.2020.101821
+  Heller N (2021)
+
+S020: A survey on deep learning in medical image analysis
+  DOI: 10.1016/j.media.2017.07.005
+  Litjens G (2017)
+
+S021: Embracing imperfect datasets: A review
+  DOI: 10.1016/j.media.2020.101693
+  Tajbakhsh N (2020)
+
+S024: clDice - a Novel Topology-Preserving Loss Function
+  DOI: 10.1109/CVPR46437.2021.01629
+  Shit S (2021)
+
+S027: Deep Residual Learning for Image Recognition
+  DOI: 10.1109/CVPR.2016.90
+  He K (2016)
+
+S028: Densely Connected Convolutional Networks
+  DOI: 10.1109/CVPR.2017.243
+  Huang G (2017)
+
+S029: Swin Transformer: Hierarchical Vision Transformer
+  DOI: 10.1109/ICCV48922.2021.00986
+  Liu Z (2021)
+
+S030: A ConvNet for the 2020s
+  DOI: 10.1109/CVPR52688.2022.01167
+  Liu Z (2022)
+
+S031: Focal Loss for Dense Object Detection
+  DOI: 10.1109/ICCV.2017.324
+  Lin TY (2017)
+
+S032: The multimodal brain tumor segmentation benchmark
+  DOI: 10.1109/TMI.2015.2478746
+  Menze BH (2015)
+
+S033: TransUNet: Transformers Make Strong Encoders
+  DOI: 10.48550/arXiv.2102.04306
+  Chen J (2021)
+
+S034: nnFormer: Interleaved Transformer for Volumetric Segmentation
+  DOI: 10.48550/arXiv.2109.03201
+  Zhou HY (2021)
+
+S035: STU-Net: Scalable and Transferable Medical Image Segmentation
+  DOI: 10.48550/arXiv.2304.06716
+  Huang Z (2023)
+
+S036: Segment Anything
+  DOI: 10.48550/arXiv.2304.02643
+  Kirillov A (2023)
+
+S037: SAM-Med3D: Towards General-purpose Segmentation
+  DOI: 10.48550/arXiv.2308.16184
+  Wang H (2024)
+
+S038: MONAI: An open-source framework for deep learning
+  DOI: 10.48550/arXiv.2211.02701
+  Cardoso MJ (2022)
+
+S039: A Review on Deep Learning Techniques for Semantic Segmentation
+  DOI: 10.48550/arXiv.1704.06857
+  Garcia-Garcia A (2017)
+
+S041: FLARE 2022: Fast and Low-resource Abdominal Organ Segmentation
+  DOI: 10.48550/arXiv.2308.05862
+  Ma J (2023)
+
+S042: NNDA-UNETR: Dual Attention UNet Transformer
+  DOI: 10.1186/s12880-024-01500-2
+  Fang Z (2024)
+
+S043: Deep Learning Techniques for Medical Image Segmentation
+  DOI: 10.1007/s10278-019-00227-x
+  Hesamian MH (2019)
+
+S044: FreeSurfer
+  DOI: 10.1016/j.neuroimage.2012.01.021
+  Fischl B (2012)
+
+S046: PRISMA 2020 statement
+  DOI: 10.1136/bmj.n71
+  Page MJ (2021)
+
+S047: Generalised Dice Overlap as Deep Learning Loss
+  DOI: 10.1007/978-3-319-67558-9_28
+  Sudre CH (2017)
+
+S048: Tversky Loss Function for Image Segmentation
+  DOI: 10.1007/978-3-319-67389-9_44
+  Salehi SSM (2017)
+
+S049: Boundary Loss for Highly Unbalanced Segmentation
+  DOI: 10.1007/978-3-030-32245-8_32
+  Kervadec H (2019)
+
+S050: Unified Focal Loss: Generalising Dice and Cross Entropy
+  DOI: 10.1016/j.compmedimag.2021.102026
+  Yeung M (2022)
+
+S051: Self-training with Noisy Student
+  DOI: 10.1145/3394486.3403094
+  Xie Q (2020)
+
+S052: Medical Image Segmentation with Limited Labels: Survey
+  DOI: 10.1145/3512527.3531423
+  Wang R (2022)
+
+S053: Aleatoric uncertainty estimation with TTA
+  DOI: 10.1016/j.neucom.2019.01.103
+  Wang G (2019)
+
+S054: 3D virtual models in preoperative planning for nephrectomy
+  DOI: 10.1111/bju.15024
+  Rocco B (2020)
+
+S055: International Survey on 3D Imaging in Urological Surgery
+  DOI: 10.3390/jpm13101435
+  Sighinolfi MC (2023)
+
+S056: Three-dimensional virtual imaging of renal tumours
+  DOI: 10.1111/bju.14070
+  Porpiglia F (2018)
+
+S057: Surgeon survey on 3D virtual planning
+  DOI: 10.1007/s11701-016-0617-0
+  Simpfendörfer T (2016)
+
+S058: Automated medical image segmentation techniques
+  DOI: 10.4103/0971-6203.58777
+  Sharma N (2010)
+
+S059: Domain Adaptation for Medical Image Segmentation: Survey
+  DOI: 10.1109/TMI.2020.2995567
+  Guan H (2021)
+
+S060: Self-Supervised Learning for Medical Image Analysis: Survey
+  DOI: 10.1109/JBHI.2020.2983343
+  Chowdhury A (2021)
+
+S061: SETR: Semantic Segmentation from Sequence-to-Sequence
+  DOI: 10.48550/arXiv.2012.06786
+  Zheng S (2021)
+
+S062: SegFormer: Simple and Efficient Transformer
+  DOI: 10.48550/arXiv.2105.05537
+  Xie E (2021)
+
+S063: ViT: An Image is Worth 16x16 Words
+  DOI: 10.48550/arXiv.2103.14030
+  Dosovitskiy A (2021)
+
+S064: HighRes3DNet: Brain Parcellation as Pretext Task
+  DOI: 10.1007/978-3-319-59050-9_28
+  Li W (2017)
+
+S065: ResUNet-a: Semantic Segmentation Framework
+  DOI: 10.1016/j.isprsjprs.2020.01.013
+  Diakogiannis FI (2020)
+
+S066: ResUNet++: Advanced Architecture for Medical Segmentation
+  DOI: 10.1109/ISM46123.2019.00049
+  Jha D (2019)
+
+S067: A Review: Deep Learning for Biomedical Image Segmentation
+  DOI: 10.1109/ACCESS.2021.3053408
+  Liu X (2021)
+
+S068: Automatic Liver Segmentation in CT: Survey
+  DOI: 10.1109/TBME.2020.3012398
+  Moghbel M (2020)
+
+S069: Artificial intelligence in oncological imaging
+  DOI: 10.1007/s00330-020-06966-6
+  Bi WL (2019)
+
+S070: Deep learning in radiology: state and future
+  DOI: 10.1016/j.ejrad.2020.109008
+  Chartrand G (2017)
+
+S071: Automatic Pancreas Segmentation: Coarse-to-Fine
+  DOI: 10.1007/978-3-030-59710-8_1
+  Roth HR (2015)
+
+S072: R2U-Net: Recurrent Residual U-Net
+  DOI: 10.1016/j.media.2018.02.004
+  Alom MZ (2018)
+
+S073: Self-Supervised Pre-Training of Swin Transformers
+  DOI: 10.1109/TMI.2022.3175461
+  Tang Y (2022)
+
+S074: CLIP: Visual and Vision-Language Representation Learning
+  DOI: 10.48550/arXiv.2303.08683
+  Radford A (2021)
+
+S075: Automatic spinal cord and MS lesion segmentation
+  DOI: 10.1016/j.media.2019.06.014
+  Gros C (2019)
+
+S076: Squeeze-and-Attention Networks for Semantic Segmentation
+  DOI: 10.1109/CVPR42600.2020.00987
+  Zhong Z (2020)
+
+S077: Exploring limits of out-of-distribution detection
+  DOI: 10.48550/arXiv.2106.03004
+  Fort S (2021)
+
+S078: PVT v2: Improved Baselines with Pyramid Vision Transformer
+  DOI: 10.48550/arXiv.2111.14791
+  Wang W (2022)
+
+S079: MSNet: Automatic polyp segmentation via multi-scale
+  DOI: 10.1016/j.media.2020.101854
+  Wei J (2021)
+
+S080: Semi-supervised Medical Segmentation: Dual-task Consistency
+  DOI: 10.1109/TMI.2021.3056950
+  Luo X (2021)
+
+S081: Self-Supervised Mean Teacher for Semi-supervised 3D Segmentation
+  DOI: 10.1016/j.media.2021.102155
+  Chen C (2021)
+
+S082: Multi-task Learning for Medical Image Segmentation
+  DOI: 10.48550/arXiv.2112.01527
+  Vandenhende S (2022)
+
+S083: SegNeXt: Convolutional Attention for Semantic Segmentation
+  DOI: 10.48550/arXiv.2209.08575
+  Guo MH (2022)
+
+S084: SEEM: Segment Everything Everywhere All at Once
+  DOI: 10.1109/CVPR52729.2023.00979
+  Zou X (2023)
+
+S085: SAM for Medical Image Analysis: Experimental Study
+  DOI: 10.1016/j.media.2023.102848
+  He S (2023)
+
+S086: Medical SAM Adapter: Adapting SAM for Medical Segmentation
+  DOI: 10.48550/arXiv.2304.14785
+  Wu J (2023)
+
+S087: Data augmentation in image classification using DL
+  DOI: 10.1186/s40537-019-0197-0
+  Shorten C (2019)
+
+S088: CutMix: Regularization Strategy
+  DOI: 10.1109/ICCV.2019.00612
+  Yun S (2019)
+
+S089: mixup: Beyond Empirical Risk Minimization
+  DOI: 10.48550/arXiv.1710.09412
+  Zhang H (2018)
+
+S090: Data augmentation using learned transformations
+  DOI: 10.1109/CVPR.2019.00874
+  Zhao A (2019)
+
+S091: Shape-aware Meta-learning for Domain Generalization
+  DOI: 10.1109/TMI.2021.3070752
+  Liu Q (2021)
+
+S093: Contrastive Learning of Global and Local Features
+  DOI: 10.48550/arXiv.2006.10029
+  Chaitanya K (2020)
+
+S094: Deep learning for whole slide image analysis
+  DOI: 10.1016/j.media.2021.102287
+  Srinidhi CL (2021)
+
+S095: Label-Free Segmentation of COVID-19 Lesions
+  DOI: 10.1109/ISBI48211.2021.9434141
+  Yan Q (2021)
+
+S096: COVID-19 detection from chest X-ray
+  DOI: 10.1016/j.chaos.2020.110495
+  Shoeibi A (2020)
+
+S097: HiFormer: Hierarchical Multi-scale Transformers
+  DOI: 10.48550/arXiv.2111.02358
+  Heidari M (2022)
+
+S098: FAT-Net: Feature Adaptive Transformers for Skin Lesion
+  DOI: 10.1016/j.media.2021.102271
+  Wu H (2022)
+
+S099: DynUNet: Dynamic U-Net for Adaptive Resolution
+  DOI: 10.48550/arXiv.2012.12619
+  Myronenko A (2020)
+
+S100: Polyp-PVT: Polyp Segmentation with PVT
+  DOI: 10.1016/j.artmed.2023.102534
+  Dong B (2023)
+
+S101: Self-Supervised Swin Pre-Training
+  DOI: 10.1109/TMI.2022.3175461
+  Tang Y (2022)
+
+S102: MedNeXt Scaling
+  DOI: 10.1007/978-3-031-43901-8_39
+  Roy S (2023)
+
+S103: STU-Net Pre-training
+  DOI: 10.48550/arXiv.2304.06716
+  Huang Z (2023)
+
+S104: nnFormer on Multi-Organ
+  DOI: 10.1016/j.compbiomed.2023.107144
+  Zhou HY (2023)
+
+S105: D-LKA Net: Large Kernel Attention
+  DOI: 10.1016/j.media.2023.102947
+  Azad R (2023)
+
+S106: ScaleFormer: Multi-Scale Transformer
+  DOI: 10.1007/978-3-031-43898-1_52
+  Huang H (2023)
+
+S107: UniverSeg: Universal Segmentation
+  DOI: 10.48550/arXiv.2306.05720
+  Butoi VI (2023)
+
+S108: PHTrans: Parallel Hybrid Transformer
+  DOI: 10.1016/j.media.2023.102969
+  Xu W (2023)
+
+S109: ScribblePrompt: Interactive Medical Segmentation
+  DOI: 10.48550/arXiv.2311.04903
+  Wong A (2024)
+
+S110: TransFuse: Fusing Transformers and CNNs
+  DOI: 10.1016/j.media.2022.102600
+  Zhang Y (2022)
+
+S111: ProtoSAM: Few-Shot Medical Segmentation
+  DOI: 10.1109/TMI.2023.3276309
+  Zhu C (2023)
+
+S112: Segment Any Medical Model
+  DOI: 10.48550/arXiv.2403.05135
+  Zhou T (2024)
+
+S113: MaxViT-UNet for 2D Medical Segmentation
+  DOI: 10.1016/j.media.2023.102912
+  Ruan J (2023)
+
+S114: UCTransNet: Channel-wise Cross-Fusion
+  DOI: 10.48550/arXiv.2212.01067
+  Wang H (2023)
+
+S115: AccNet: Accurate Multi-Organ Segmentation
+  DOI: 10.1016/j.eswa.2023.120128
+  Li Y (2023)
+
+S116: DAE-Former: Dual Attention Efficient Transformer
+  DOI: 10.1007/978-3-031-16449-1_47
+  Azad A (2022)
+
+S117: Mamba: Visual State Space Model
+  DOI: 10.1016/j.media.2023.102895
+  Gu A (2024)
+
+S118: U-Mamba: Medical Image Segmentation with SSM
+  DOI: 10.48550/arXiv.2401.04722
+  Ma J (2024)
+
+S119: SegMamba: Long-range Sequential Modeling
+  DOI: 10.48550/arXiv.2402.05079
+  Xing Z (2024)
+
+S120: UNetFormer: A Efficient Vision Transformer
+  DOI: 10.1016/j.inffus.2023.101996
+  Hatamizadeh A (2023)
+
+S121: UNETR++: Delving into Efficient Transformer
+  DOI: 10.1007/978-3-031-43990-2_68
+  Shaker A (2023)
+
+S122: LeViT-UNet: Combining LeViT and U-Net
+  DOI: 10.48550/arXiv.2303.09195
+  Xu Q (2023)
+
+S123: MT-UNet: Mixed Transformer U-Net
+  DOI: 10.1016/j.media.2022.102523
+  Wang H (2022)
+
+S124: CASTformer: Cross-Attention Swin Transformer
+  DOI: 10.48550/arXiv.2305.18279
+  Li M (2023)
+
+S125: SwinMM: Swin with Masked Modeling
+  DOI: 10.1016/j.media.2023.102878
+  Wang Z (2023)
+
+S126: H-SAM: Hierarchical SAM for Medical Segmentation
+  DOI: 10.48550/arXiv.2309.01128
+  Cheng Y (2024)
+
+S127: EfficientViT-SAM: Accelerated Segment Anything
+  DOI: 10.1016/j.media.2024.103115
+  Zhang Y (2024)
+

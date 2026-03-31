@@ -1,0 +1,57 @@
+record_id,tracking_type,source_paper_doi,source_paper_title,discovered_doi,discovered_title,discovered_authors,discovered_year,discovered_journal,discovery_date,relevance_notes,duplicate_of
+101,forward,10.1038/s41592-020-01008-z,nnU-Net,10.1109/TMI.2022.3175461,"Self-Supervised Pre-Training of Swin Transformers for 3D Medical Image Analysis","Tang Y, Yang D, Li W, et al.",2022,IEEE TMI,2025-09-20,Cites nnU-Net as baseline; proposes pre-training strategy,73
+102,forward,10.1038/s41592-020-01008-z,nnU-Net,10.1007/978-3-031-43901-8_39,MedNeXt,"Roy S, Koehler G, Ulrich C, et al.",2023,MICCAI,2025-09-20,Extends nnU-Net with ConvNeXt blocks,16
+103,forward,10.1038/s41592-020-01008-z,nnU-Net,10.48550/arXiv.2304.06716,STU-Net,"Huang Z, Wang H, Deng Z, et al.",2023,arXiv,2025-09-20,Scalable extension of nnU-Net architecture,35
+104,forward,10.1007/978-3-319-24574-4_28,U-Net,10.1007/978-3-030-00889-5_1,UNet++,"Zhou Z, Siddiquee MMR, et al.",2018,DLMIA,2025-09-20,Nested U-Net extension,11
+105,forward,10.1007/978-3-319-24574-4_28,U-Net,10.1804/03999,Attention U-Net,"Oktay O, Schlemper J, et al.",2018,MIDL,2025-09-20,Attention mechanism for U-Net,12
+106,forward,10.1007/978-3-319-24574-4_28,U-Net,10.1109/WACV51458.2022.00181,UNETR,"Hatamizadeh A, Tang Y, et al.",2022,WACV,2025-09-20,Transformer encoder with U-Net decoder,6
+107,forward,10.1007/978-3-319-24574-4_28,U-Net,10.48550/arXiv.2102.04306,TransUNet,"Chen J, Lu Y, et al.",2021,arXiv,2025-09-20,Hybrid CNN-Transformer U-Net,33
+108,backward,10.1038/s41592-020-01008-z,nnU-Net,10.1007/978-3-319-24574-4_28,U-Net,"Ronneberger O, Fischer P, Brox T",2015,MICCAI,2025-09-20,Foundational architecture,3
+109,backward,10.1038/s41592-020-01008-z,nnU-Net,10.1109/CVPR.2016.90,ResNet,"He K, Zhang X, Ren S, Sun J",2016,CVPR,2025-09-20,Residual learning framework,27
+110,backward,10.1148/ryai.230024,TotalSegmentator,10.1038/s41592-020-01008-z,nnU-Net,"Isensee F, Jaeger PF, et al.",2021,Nature Methods,2025-09-20,Base architecture,1
+111,forward,10.1148/ryai.230024,TotalSegmentator,10.1038/s41467-024-44824-z,MedSAM,"Ma J, He Y, Li F, et al.",2024,Nature Communications,2025-09-20,References TotalSegmentator for comparison,8
+112,forward,10.1109/WACV51458.2022.00181,UNETR,10.1007/978-3-031-08999-2_22,Swin UNETR,"Hatamizadeh A, Nath V, et al.",2022,BrainLes,2025-09-20,Extension with Swin Transformer,7
+113,backward,10.1038/s41467-024-44824-z,MedSAM,10.48550/arXiv.2304.02643,SAM,"Kirillov A, Mintun E, et al.",2023,arXiv,2025-09-20,Base SAM model,36
+114,forward,10.48550/arXiv.2304.02643,SAM,10.48550/arXiv.2308.16184,SAM-Med3D,"Wang H, Guo S, Ye J, et al.",2024,arXiv,2025-09-20,3D medical extension of SAM,37
+115,forward,10.48550/arXiv.2304.02643,SAM,10.48550/arXiv.2304.14785,Medical SAM Adapter,"Wu J, Wang W, Ji R, et al.",2023,arXiv,2025-09-20,Adapter for medical imaging,86
+116,backward,10.1007/978-3-030-87199-4_16,CoTr,10.1109/ICCV48922.2021.00986,Swin Transformer,"Liu Z, Lin Y, Cao Y, et al.",2021,ICCV,2025-09-20,Swin Transformer backbone,29
+117,forward,10.1109/ICCV48922.2021.00986,Swin Transformer,10.1007/978-3-031-08999-2_22,Swin UNETR,"Hatamizadeh A, Nath V, et al.",2022,BrainLes,2025-09-20,Swin for medical segmentation,7
+118,backward,10.1016/j.media.2024.103280,TransUNet,10.48550/arXiv.2103.14030,ViT,"Dosovitskiy A, Beyer L, et al.",2021,ICLR,2025-09-20,Vision transformer foundation,63
+119,forward,10.48550/arXiv.2103.14030,ViT,10.1109/WACV51458.2022.00181,UNETR,"Hatamizadeh A, Tang Y, et al.",2022,WACV,2025-09-20,ViT encoder for segmentation,6
+120,forward,10.48550/arXiv.2103.14030,ViT,10.48550/arXiv.2012.06786,SETR,"Zheng S, Lu J, Zhao H, et al.",2021,arXiv,2025-09-20,Sequence-to-sequence with ViT,61
+121,backward,10.1038/s41467-022-30695-9,MSD,10.1007/978-3-319-24574-4_28,U-Net,"Ronneberger O, Fischer P, Brox T",2015,MICCAI,2025-09-20,Baseline method in challenge,3
+122,forward,10.1038/s41467-022-30695-9,MSD,10.1038/s41592-020-01008-z,nnU-Net,"Isensee F, Jaeger PF, et al.",2021,Nature Methods,2025-09-20,Challenge winner,1
+123,backward,10.1016/j.media.2020.101821,KiTS19,10.1007/978-3-319-24574-4_28,U-Net,"Ronneberger O, Fischer P, Brox T",2015,MICCAI,2025-09-20,Baseline architecture,3
+124,forward,10.1016/j.media.2020.101821,KiTS19,10.1038/s41592-020-01008-z,nnU-Net,"Isensee F, Jaeger PF, et al.",2021,Nature Methods,2025-09-20,Top performing method,1
+125,backward,10.1016/j.media.2022.102680,LiTS,10.1016/j.media.2016.10.004,DeepMedic,"Kamnitsas K, Ledig C, et al.",2017,MedIA,2025-09-20,Early challenge participant,14
+126,forward,10.1016/j.media.2022.102680,LiTS,10.1109/TMI.2018.2806309,DenseVNet,"Gibson E, Giganti F, et al.",2018,IEEE TMI,2025-09-20,Multi-organ benchmark method,15
+127,backward,10.48550/arXiv.2206.08023,AMOS,10.1038/s41467-022-30695-9,MSD,"Antonelli M, Reinke A, et al.",2022,Nature Communications,2025-09-20,Related benchmark dataset,17
+128,forward,10.48550/arXiv.2206.08023,AMOS,10.1109/ICCV51070.2023.01934,CLIP-Driven Universal Model,"Liu J, Zhang Y, et al.",2023,ICCV,2025-09-20,Evaluated on AMOS,26
+129,backward,10.1109/TMI.2021.3100536,AbdomenCT-1K,10.1038/s41592-020-01008-z,nnU-Net,"Isensee F, Jaeger PF, et al.",2021,Nature Methods,2025-09-20,Baseline method,1
+130,forward,10.1109/TMI.2021.3100536,AbdomenCT-1K,10.1148/ryai.230024,TotalSegmentator,"Wasserthal J, Breit HC, et al.",2023,Radiology AI,2025-09-20,Extended organ coverage,2
+131,backward,10.1007/978-3-319-67558-9_28,Generalised Dice Loss,10.1109/3DV.2016.79,V-Net Dice Loss,"Milletari F, Navab N, Ahmadi SA",2016,3DV,2025-09-20,Original Dice loss formulation,5
+132,forward,10.1007/978-3-319-67558-9_28,Generalised Dice Loss,10.1016/j.compmedimag.2021.102026,Unified Focal Loss,"Yeung M, Sala E, et al.",2022,CMIG,2025-09-20,Combines with focal loss,50
+133,backward,10.1007/978-3-319-67389-9_44,Tversky Loss,10.1007/978-3-319-67558-9_28,Generalised Dice Loss,"Sudre CH, Li W, et al.",2017,DLMIA,2025-09-20,Related loss formulation,47
+134,forward,10.1007/978-3-319-67389-9_44,Tversky Loss,10.1007/978-3-030-32245-8_32,Boundary Loss,"Kervadec H, Bouchtiba J, et al.",2019,MICCAI,2025-09-20,Complementary loss approach,49
+135,backward,10.1109/TMI.2019.2930068,Hausdorff Loss,10.1109/3DV.2016.79,V-Net,"Milletari F, Navab N, Ahmadi SA",2016,3DV,2025-09-20,Baseline Dice comparison,5
+136,forward,10.1109/TMI.2019.2930068,Hausdorff Loss,10.1109/CVPR46437.2021.01629,clDice,"Shit S, Paetzold JC, et al.",2021,CVPR,2025-09-20,Topology-aware extension,24
+137,backward,10.1016/j.media.2017.07.005,Litjens Survey,10.1007/978-3-319-24574-4_28,U-Net,"Ronneberger O, Fischer P, Brox T",2015,MICCAI,2025-09-20,Key architecture reviewed,3
+138,forward,10.1016/j.media.2017.07.005,Litjens Survey,10.1016/j.media.2023.102802,Transformers Survey,"Shamshad F, Khan S, et al.",2023,MedIA,2025-09-20,Follow-up survey on transformers,22
+139,backward,10.1016/j.media.2023.102802,Transformers Survey,10.48550/arXiv.2103.14030,ViT,"Dosovitskiy A, Beyer L, et al.",2021,ICLR,2025-09-20,Foundational transformer,63
+140,forward,10.1016/j.media.2023.102802,Transformers Survey,10.1038/s41467-024-44824-z,MedSAM,"Ma J, He Y, Li F, et al.",2024,Nature Communications,2025-09-20,Foundation model reviewed,8
+141,backward,10.1016/j.media.2020.101693,Imperfect Datasets Review,10.1016/j.media.2017.07.005,Litjens Survey,"Litjens G, Kooi T, et al.",2017,MedIA,2025-09-20,Foundational survey referenced,20
+142,forward,10.1016/j.media.2020.101693,Imperfect Datasets Review,10.1109/TMI.2021.3056950,Dual-task Consistency,"Luo X, Chen J, et al.",2021,IEEE TMI,2025-09-20,Semi-supervised approach,80
+143,backward,10.48550/arXiv.2211.02701,MONAI,10.1038/s41592-020-01008-z,nnU-Net,"Isensee F, Jaeger PF, et al.",2021,Nature Methods,2025-09-20,Integrated in framework,1
+144,forward,10.48550/arXiv.2211.02701,MONAI,10.48550/arXiv.2304.06716,STU-Net,"Huang Z, Wang H, et al.",2023,arXiv,2025-09-20,Uses MONAI framework,35
+145,backward,10.1109/CVPR.2016.90,ResNet,10.1109/CVPR.2017.243,DenseNet,"Huang G, Liu Z, et al.",2017,CVPR,2025-09-20,Alternative dense architecture,28
+146,forward,10.1109/CVPR.2017.243,DenseNet,10.1109/TMI.2018.2806309,DenseVNet,"Gibson E, Giganti F, et al.",2018,IEEE TMI,2025-09-20,Applied to medical imaging,15
+147,backward,10.1109/CVPR52688.2022.01167,ConvNeXt,10.1109/ICCV48922.2021.00986,Swin Transformer,"Liu Z, Lin Y, et al.",2021,ICCV,2025-09-20,Comparison architecture,29
+148,forward,10.1109/CVPR52688.2022.01167,ConvNeXt,10.1007/978-3-031-43901-8_39,MedNeXt,"Roy S, Koehler G, et al.",2023,MICCAI,2025-09-20,Medical adaptation,16
+149,backward,10.1109/ICCV.2017.324,Focal Loss,10.1007/978-3-319-67558-9_28,Generalised Dice Loss,"Sudre CH, Li W, et al.",2017,DLMIA,2025-09-20,Alternative imbalance handling,47
+150,forward,10.1109/ICCV.2017.324,Focal Loss,10.1016/j.compmedimag.2021.102026,Unified Focal Loss,"Yeung M, Sala E, et al.",2022,CMIG,2025-09-20,Combines Dice and focal,50
+151,backward,10.1186/s12880-024-01500-2,NNDA-UNETR,10.1109/WACV51458.2022.00181,UNETR,"Hatamizadeh A, Tang Y, et al.",2022,WACV,2025-09-20,Base architecture,6
+152,forward,10.1186/s12880-024-01500-2,NNDA-UNETR,10.1007/978-3-031-08999-2_22,Swin UNETR,"Hatamizadeh A, Nath V, et al.",2022,BrainLes,2025-09-20,Comparison method,7
+153,backward,10.1016/j.media.2018.02.004,R2U-Net,10.1007/978-3-319-24574-4_28,U-Net,"Ronneberger O, Fischer P, Brox T",2015,MICCAI,2025-09-20,Base architecture,3
+154,forward,10.1016/j.media.2018.02.004,R2U-Net,10.1109/ISM46123.2019.00049,ResUNet++,"Jha D, Smedsrud PH, et al.",2019,ISM,2025-09-20,Extended architecture,66
+155,backward,10.1109/ICASSP40776.2020.9053405,UNet 3+,10.1007/978-3-030-00889-5_1,UNet++,"Zhou Z, Siddiquee MMR, et al.",2018,DLMIA,2025-09-20,Predecessor architecture,11
+156,forward,10.1109/ICASSP40776.2020.9053405,UNet 3+,10.1016/j.media.2020.101854,MSNet,"Wei J, Hu Y, et al.",2021,MedIA,2025-09-20,Multi-scale approach,79

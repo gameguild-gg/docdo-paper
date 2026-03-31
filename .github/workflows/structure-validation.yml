@@ -1,0 +1,128 @@
+# ============================================================================
+# Structure & Link Validation
+# ============================================================================
+# Runs on every push and PR to ensure repository structure integrity.
+# - Validates 6-bucket context model
+# - Checks documentation links
+# - Validates paper/project scaffolds
+# ============================================================================
+
+name: Structure Validation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - '**/*.md'
+      - 'core/**'
+      - 'artifacts/**'
+      - 'work/**'
+      - 'operations/**'
+      - 'scholar/**'
+      - 'documentation/**'
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-structure:
+    name: Validate Repository Structure
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check 6-bucket context model
+        run: |
+          echo "Checking context buckets..."
+          errors=0
+          for bucket in core artifacts work operations scholar documentation; do
+            if [ ! -d "$bucket" ]; then
+              echo "❌ Missing bucket: $bucket/"
+              errors=1
+            else
+              echo "✅ Found: $bucket/"
+            fi
+          done
+          if [ $errors -eq 1 ]; then
+            exit 1
+          fi
+          echo "All context buckets present."
+
+      - name: Check critical directories
+        run: |
+          echo "Checking critical directories..."
+          dirs=(
+            "core/governance/registry"
+            "core/governance/evidence"
+            "core/governance/legal"
+            "artifacts/data"
+            "artifacts/reports"
+            "work/projects"
+            "operations/pipelines"
+            "operations/tools"
+            "documentation"
+          )
+          for dir in "${dirs[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "⚠️ Missing directory: $dir/"
+            else
+              echo "✅ Found: $dir/"
+            fi
+          done
+
+      - name: Validate no reports inside data
+        run: |
+          echo "Checking for misplaced reports..."
+          if find artifacts/data -maxdepth 3 -type d -name reports 2>/dev/null | grep -q .; then
+            echo "❌ Found 'reports/' inside artifacts/data/. Should be at artifacts/reports/"
+            exit 1
+          fi
+          echo "✅ No misplaced reports directories"
+
+      - name: Validate documentation links
+        run: |
+          echo "Validating documentation links..."
+          errors=0
+          for md in documentation/*.md; do
+            [ -f "$md" ] || continue
+            # Extract relative links (not http/https, not anchors)
+            links=$(grep -oE '\]\([^)]+\)' "$md" | sed 's/](\(.*\))/\1/' | grep -v '^http' | grep -v '^#' || true)
+            for link in $links; do
+              # Handle relative paths from documentation/
+              if [ -e "documentation/$link" ] || [ -e "$link" ]; then
+                continue
+              fi
+              # Handle ../ paths
+              resolved=$(cd documentation && realpath -m "$link" 2>/dev/null || echo "")
+              if [ -n "$resolved" ] && [ -e "$resolved" ]; then
+                continue
+              fi
+              echo "⚠️ Broken link in $md: $link"
+              errors=1
+            done
+          done
+          if [ $errors -eq 1 ]; then
+            echo "Some documentation links are broken"
+            exit 1
+          fi
+          echo "✅ All documentation links valid"
+
+      - name: Check paper scaffolds
+        run: |
+          echo "Checking paper scaffolds..."
+          for d in work/projects/papers/*/; do
+            [ -d "$d" ] || continue
+            paper_name=$(basename "$d")
+            missing=""
+            for f in README.md paper.md; do
+              if [ ! -f "${d}${f}" ]; then
+                missing="$missing $f"
+              fi
+            done
+            if [ -n "$missing" ]; then
+              echo "⚠️ Paper '$paper_name' missing:$missing"
+            else
+              echo "✅ Paper '$paper_name' has required files"
+            fi
+          done

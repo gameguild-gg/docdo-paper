@@ -1,0 +1,1286 @@
+% =============================================================================
+% Semantic Segmentation in Medical Imaging - Bibliography
+% Systematic Literature Review
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% Platform/Tool References
+% -----------------------------------------------------------------------------
+
+@misc{docdo2026,
+  author       = {{DocDo}},
+  title        = {DocDo: 3D Surgical Planning Platform},
+  year         = {2026},
+  url          = {https://docdo.com.br},
+  note         = {Accessed: 2026-01-25}
+}
+
+% -----------------------------------------------------------------------------
+% Foundational/Conceptual References
+% -----------------------------------------------------------------------------
+
+@article{garcia2017semantic,
+  author    = {Garcia-Garcia, Alberto and Orts-Escolano, Sergio and Oprea, Sergiu and Villena-Martinez, Victor and Garcia-Rodriguez, Jose},
+  title     = {A Review on Deep Learning Techniques Applied to Semantic Segmentation},
+  journal   = {arXiv preprint arXiv:1704.06857},
+  year      = {2017},
+  url       = {https://arxiv.org/abs/1704.06857},
+  note      = {arXiv:1704.06857}
+}
+
+% -----------------------------------------------------------------------------
+% Classical Convolutional Architectures
+% -----------------------------------------------------------------------------
+
+@inproceedings{ronneberger2015unet,
+  author    = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+  title     = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
+  booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+  pages     = {234--241},
+  year      = {2015},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-24574-4_28}
+}
+
+@inproceedings{cicek20163dunet,
+  author    = {{\c{C}}i{\c{c}}ek, {\"O}zg{\"u}n and Abdulkadir, Ahmed and Lienkamp, Soeren S. and Brox, Thomas and Ronneberger, Olaf},
+  title     = {3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation},
+  booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+  pages     = {424--432},
+  year      = {2016},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-46723-8_49}
+}
+
+@inproceedings{milletari2016vnet,
+  author    = {Milletari, Fausto and Navab, Nassir and Ahmadi, Seyed-Ahmad},
+  title     = {V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation},
+  booktitle = {Fourth International Conference on 3D Vision (3DV)},
+  pages     = {565--571},
+  year      = {2016},
+  publisher = {IEEE},
+  doi       = {10.1109/3DV.2016.79}
+}
+
+@article{isensee2021nnunet,
+  author    = {Isensee, Fabian and Jaeger, Paul F. and Kohl, Simon A. A. and Petersen, Jens and Maier-Hein, Klaus H.},
+  title     = {nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation},
+  journal   = {Nature Methods},
+  volume    = {18},
+  number    = {2},
+  pages     = {203--211},
+  year      = {2021},
+  publisher = {Nature Publishing Group},
+  doi       = {10.1038/s41592-020-01008-z}
+}
+
+@inproceedings{oktay2018attention,
+  author    = {Oktay, Ozan and Schlemper, Jo and Folgoc, Loic Le and Lee, Matthew and Heinrich, Mattias and Misawa, Kazunari and Mori, Kensaku and McDonagh, Steven and Hammerla, Nils Y. and Kainz, Bernhard and Glocker, Ben and Rueckert, Daniel},
+  title     = {Attention U-Net: Learning Where to Look for the Pancreas},
+  booktitle = {Medical Imaging with Deep Learning (MIDL)},
+  year      = {2018},
+  url       = {https://arxiv.org/abs/1804.03999}
+}
+
+@inproceedings{zhou2018unetpp,
+  author    = {Zhou, Zongwei and Siddiquee, Md Mahfuzur Rahman and Tajbakhsh, Nima and Liang, Jianming},
+  title     = {UNet++: A Nested U-Net Architecture for Medical Image Segmentation},
+  booktitle = {Deep Learning in Medical Image Analysis and Multimodal Learning for Clinical Decision Support},
+  pages     = {3--11},
+  year      = {2018},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-030-00889-5_1}
+}
+
+@inproceedings{huang2020unet3plus,
+  author    = {Huang, Huimin and Lin, Lanfen and Tong, Ruofeng and Hu, Hongjie and Zhang, Qiaowei and Iwamoto, Yutaro and Han, Xianhua and Chen, Yen-Wei and Wu, Jian},
+  title     = {UNet 3+: A Full-Scale Connected UNet for Medical Image Segmentation},
+  booktitle = {IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages     = {1055--1059},
+  year      = {2020},
+  publisher = {IEEE},
+  doi       = {10.1109/ICASSP40776.2020.9053405}
+}
+
+@article{diakogiannis2020resunet,
+  author    = {Diakogiannis, Foivos I. and Waldner, Fran{\c{c}}ois and Caccetta, Peter and Wu, Chen},
+  title     = {ResUNet-a: A deep learning framework for semantic segmentation of remotely sensed data},
+  journal   = {ISPRS Journal of Photogrammetry and Remote Sensing},
+  volume    = {162},
+  pages     = {94--114},
+  year      = {2020},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.isprsjprs.2020.01.013}
+}
+
+@inproceedings{jha2019resunetpp,
+  author    = {Jha, Debesh and Smedsrud, Pia H. and Riegler, Michael A. and Halvorsen, P{\aa}l and de Lange, Thomas and Johansen, Dag and Johansen, H{\aa}vard D.},
+  title     = {ResUNet++: An Advanced Architecture for Medical Image Segmentation},
+  booktitle = {IEEE International Symposium on Multimedia (ISM)},
+  pages     = {225--230},
+  year      = {2019},
+  publisher = {IEEE},
+  doi       = {10.1109/ISM46123.2019.00049}
+}
+
+@article{gibson2018densevnet,
+  author    = {Gibson, Eli and Giganti, Francesco and Hu, Yipeng and Bonmati, Ester and Bandula, Steve and Gurusamy, Kurinchi and Davidson, Brian and Pereira, Stephen P. and Clarkson, Matthew J. and Barratt, Dean C.},
+  title     = {Automatic Multi-Organ Segmentation on Abdominal CT With Dense V-Networks},
+  journal   = {IEEE Transactions on Medical Imaging},
+  volume    = {37},
+  number    = {8},
+  pages     = {1822--1834},
+  year      = {2018},
+  publisher = {IEEE},
+  doi       = {10.1109/TMI.2018.2806309}
+}
+
+@inproceedings{li2017highres3dnet,
+  author    = {Li, Wenqi and Wang, Guotai and Fidon, Lucas and Ourselin, Sebastien and Cardoso, M. Jorge and Vercauteren, Tom},
+  title     = {On the Compactness, Efficiency, and Representation of 3D Convolutional Networks: Brain Parcellation as a Pretext Task},
+  booktitle = {Information Processing in Medical Imaging (IPMI)},
+  pages     = {348--360},
+  year      = {2017},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-59050-9_28}
+}
+
+@article{kamnitsas2017deepmedic,
+  author    = {Kamnitsas, Konstantinos and Ledig, Christian and Newcombe, Virginia F. J. and Simpson, Joanna P. and Kane, Andrew D. and Menon, David K. and Rueckert, Daniel and Glocker, Ben},
+  title     = {Efficient multi-scale 3D CNN with fully connected CRF for accurate brain lesion segmentation},
+  journal   = {Medical Image Analysis},
+  volume    = {36},
+  pages     = {61--78},
+  year      = {2017},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2016.10.004}
+}
+
+% -----------------------------------------------------------------------------
+% Transformer-Based Architectures
+% -----------------------------------------------------------------------------
+
+@inproceedings{hatamizadeh2022unetr,
+  author    = {Hatamizadeh, Ali and Tang, Yucheng and Nath, Vishwesh and Yang, Dong and Myronenko, Andriy and Landman, Bennett and Roth, Holger R. and Xu, Daguang},
+  title     = {UNETR: Transformers for 3D Medical Image Segmentation},
+  booktitle = {IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+  pages     = {574--584},
+  year      = {2022},
+  publisher = {IEEE},
+  doi       = {10.1109/WACV51458.2022.00181}
+}
+
+@inproceedings{swinunetr2022,
+  author    = {Hatamizadeh, Ali and Nath, Vishwesh and Tang, Yucheng and Yang, Dong and Roth, Holger R. and Xu, Daguang},
+  title     = {Swin UNETR: Swin Transformers for Semantic Segmentation of Brain Tumors in MRI Images},
+  booktitle = {International MICCAI Brainlesion Workshop},
+  pages     = {272--284},
+  year      = {2022},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-031-08999-2_22}
+}
+
+@article{chen2024transunet,
+  author    = {Chen, Jieneng and Lu, Yongyi and Yu, Qihang and Luo, Xiangde and Adeli, Ehsan and Wang, Yan and Lu, Le and Yuille, Alan L. and Zhou, Yuyin},
+  title     = {TransUNet: Rethinking the U-Net architecture design for medical image segmentation through the lens of transformers},
+  journal   = {Medical Image Analysis},
+  volume    = {97},
+  pages     = {103280},
+  year      = {2024},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2024.103280}
+}
+
+@inproceedings{xie2021cotr,
+  author    = {Xie, Yutong and Zhang, Jianpeng and Shen, Chunhua and Xia, Yong},
+  title     = {CoTr: Efficiently Bridging CNN and Transformer for 3D Medical Image Segmentation},
+  booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+  pages     = {171--180},
+  year      = {2021},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-030-87199-4_16}
+}
+
+@article{zhou2021nnformer,
+  author    = {Zhou, Hong-Yu and Guo, Jiansen and Zhang, Yinghao and Yu, Lequan and Wang, Liansheng and Yu, Yizhou},
+  title     = {nnFormer: Interleaved Transformer for Volumetric Segmentation},
+  journal   = {arXiv preprint arXiv:2109.03201},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2109.03201},
+  note      = {arXiv:2109.03201}
+}
+
+% -----------------------------------------------------------------------------
+% Hybrid and Advanced Models
+% -----------------------------------------------------------------------------
+
+@article{huang2023stunet,
+  author    = {Huang, Ziyan and Wang, Haoyu and Deng, Zhongying and Ye, Jin and Su, Yanzhou and Sun, Hui and He, Junjun and Gu, Yun and Gu, Lixu and Zhang, Shaoting and Qiao, Yu},
+  title     = {STU-Net: Scalable and Transferable Medical Image Segmentation Models Empowered by Large-Scale Supervised Pre-training},
+  journal   = {arXiv preprint arXiv:2304.06716},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2304.06716},
+  note      = {arXiv:2304.06716}
+}
+
+@article{chen2021transunet_arxiv,
+  author    = {Chen, Jieneng and Lu, Yongyi and Yu, Qihang and Luo, Xiangde and Adeli, Ehsan and Wang, Yan and Lu, Le and Yuille, Alan L. and Zhou, Yuyin},
+  title     = {TransUNet: Transformers Make Strong Encoders for Medical Image Segmentation},
+  journal   = {arXiv preprint arXiv:2102.04306},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2102.04306}
+}
+
+@inproceedings{roy2023mednext,
+  author    = {Roy, Saikat and Koehler, Gregor and Ulrich, Constantin and Baumgartner, Michael and Petersen, Jens and Isensee, Fabian and Jaeger, Paul F. and Maier-Hein, Klaus H.},
+  title     = {MedNeXt: Transformer-driven Scaling of ConvNets for Medical Image Segmentation},
+  booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+  pages     = {405--415},
+  year      = {2023},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-031-43901-8_39}
+}
+
+@article{zhao2024segmic,
+  author    = {Zhao, Zhenyu and Li, Fuxin and Qian, Zhen},
+  title     = {UniverSeg: Universal Medical Image Segmentation},
+  journal   = {arXiv preprint arXiv:2304.06131},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2304.06131}
+}
+
+@article{nnda2024,
+  author    = {Fang, Zheng and He, Ning and Li, Shifeng and others},
+  title     = {Not Another Dual Attention UNet Transformer (NNDA-UNETR): a plug-and-play parallel dual attention block in U-Net with enhanced residual blocks for medical image segmentation},
+  journal   = {BMC Medical Imaging},
+  volume    = {24},
+  pages     = {322},
+  year      = {2024},
+  publisher = {BioMed Central},
+  doi       = {10.1186/s12880-024-01500-2}
+}
+
+% -----------------------------------------------------------------------------
+% Frameworks and Tools
+% -----------------------------------------------------------------------------
+
+@article{monai2022,
+  author    = {Cardoso, M. Jorge and others},
+  title     = {MONAI: An open-source framework for deep learning in healthcare},
+  journal   = {arXiv preprint arXiv:2211.02701},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2211.02701}
+}
+
+@misc{totalsegmentator,
+  author       = {Wasserthal, Jakob and others},
+  title        = {TotalSegmentator: Tool for robust segmentation of 104 anatomical structures in CT images},
+  year         = {2023},
+  publisher    = {GitHub},
+  url          = {https://github.com/wasserth/TotalSegmentator},
+  note         = {Accessed: 2025-12-15}
+}
+
+@article{wasserthal2023totalsegmentator,
+  author    = {Wasserthal, Jakob and Breit, Hanns-Christian and Meyer, Manfred T. and Pradella, Maurice and Hinck, Daniel and Saber, Alexander W. and Peters, Tobias and Nanz, Daniel and Donati, Olivio F. and Ulrich, Constantin and Segeroth, Martin},
+  title     = {TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images},
+  journal   = {Radiology: Artificial Intelligence},
+  volume    = {5},
+  number    = {5},
+  pages     = {e230024},
+  year      = {2023},
+  publisher = {RSNA},
+  doi       = {10.1148/ryai.230024}
+}
+
+% -----------------------------------------------------------------------------
+% Benchmarks and Challenges
+% -----------------------------------------------------------------------------
+
+@article{kits2020,
+  author    = {Heller, Nicholas and Isensee, Fabian and Maier-Hein, Klaus H. and others},
+  title     = {The state of the art in kidney and kidney tumor segmentation in contrast-enhanced CT imaging: Results of the KiTS19 challenge},
+  journal   = {Medical Image Analysis},
+  volume    = {67},
+  pages     = {101821},
+  year      = {2021},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2020.101821}
+}
+
+@article{msd2022,
+  author    = {Antonelli, Michela and Reinke, Annika and Bakas, Spyridon and others},
+  title     = {The Medical Segmentation Decathlon},
+  journal   = {Nature Communications},
+  volume    = {13},
+  pages     = {4128},
+  year      = {2022},
+  publisher = {Nature Publishing Group},
+  doi       = {10.1038/s41467-022-30695-9}
+}
+
+@inproceedings{btcv2015,
+  author    = {Landman, Bennett and Xu, Zhoubing and Iglesias, J. Eugenio and Styner, Martin and Langerak, Thomas and Klein, Arno},
+  title     = {MICCAI Multi-Atlas Labeling Beyond the Cranial Vault: Workshop and Challenge},
+  booktitle = {MICCAI Multi-Atlas Labeling Beyond the Cranial Vault Workshop},
+  year      = {2015},
+  url       = {https://www.synapse.org/#!Synapse:syn3193805}
+}
+
+@article{brats2021,
+  author    = {Baid, Ujjwal and Ghodasara, Satyam and Mohan, Suyash and others},
+  title     = {The RSNA-ASNR-MICCAI BraTS 2021 Benchmark on Brain Tumor Segmentation and Radiogenomic Classification},
+  journal   = {arXiv preprint arXiv:2107.02314},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2107.02314}
+}
+
+@article{lits2022,
+  author    = {Bilic, Patrick and Christ, Patrick and Li, Hongwei Bran and others},
+  title     = {The Liver Tumor Segmentation Benchmark (LiTS)},
+  journal   = {Medical Image Analysis},
+  volume    = {84},
+  pages     = {102680},
+  year      = {2022},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2022.102680},
+  note      = {Originally submitted to arXiv in 2019 (arXiv:1901.04056), published December 2022}
+}
+
+@inproceedings{amos2022,
+  author    = {Ji, Yuanfeng and Bai, Haotian and Yang, Jie and Ge, Chongjian and Zhu, Ye and Zhang, Ruimao and Li, Zhen and Zhang, Lingyan and Ma, Wanling and Wan, Xiang and Luo, Ping},
+  title     = {AMOS: A Large-Scale Abdominal Multi-Organ Benchmark for Versatile Medical Image Segmentation},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks Track},
+  year      = {2022},
+  url       = {https://zenodo.org/record/7155725}
+}
+
+@article{flare2022,
+  author    = {Ma, Jun and He, Yao and Li, Feifei and others},
+  title     = {Fast and Low-resource Semi-supervised Abdominal Organ Segmentation (FLARE 2022)},
+  journal   = {arXiv preprint arXiv:2308.05862},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2308.05862}
+}
+
+@article{abdomenct1k,
+  author    = {Ma, Jun and Zhang, Yao and Gu, Song and others},
+  title     = {AbdomenCT-1K: Is Abdominal Organ Segmentation A Solved Problem?},
+  journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume    = {44},
+  number    = {10},
+  pages     = {6695--6714},
+  year      = {2022},
+  publisher = {IEEE},
+  doi       = {10.1109/TPAMI.2021.3100536}
+}
+
+% -----------------------------------------------------------------------------
+% DocDo and Clinical Applications
+% -----------------------------------------------------------------------------
+
+@article{rocco2020docdo,
+  author    = {Rocco, Bernardo and Sighinolfi, Maria Chiara and Sandri, Marco and others},
+  title     = {Digital surgery: the role of three-dimensional virtual models in preoperative planning for partial nephrectomy},
+  journal   = {BJU International},
+  volume    = {126},
+  number    = {2},
+  pages     = {223--228},
+  year      = {2020},
+  publisher = {Wiley},
+  doi       = {10.1111/bju.15024}
+}
+
+@article{sighinolfi2023docdo,
+  author    = {Sighinolfi, Maria Chiara and Rocco, Bernardo and Morra, Stefano and others},
+  title     = {International Survey on 3D Imaging in Urological Surgery: The Impact on Surgical Planning and Decision Making},
+  journal   = {Journal of Personalized Medicine},
+  volume    = {13},
+  number    = {10},
+  pages     = {1435},
+  year      = {2023},
+  publisher = {MDPI},
+  doi       = {10.3390/jpm13101435}
+}
+
+% -----------------------------------------------------------------------------
+% Survey and Review Papers
+% -----------------------------------------------------------------------------
+
+@article{litjens2017survey,
+  author    = {Litjens, Geert and Kooi, Thijs and Bejnordi, Babak Ehteshami and Setio, Arnaud Arindra Adiyoso and Ciompi, Francesco and Ghafoorian, Mohsen and van der Laak, Jeroen A. W. M. and van Ginneken, Bram and S{\'a}nchez, Clara I.},
+  title     = {A survey on deep learning in medical image analysis},
+  journal   = {Medical Image Analysis},
+  volume    = {42},
+  pages     = {60--88},
+  year      = {2017},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2017.07.005}
+}
+
+@article{tajbakhsh2020embracing,
+  author    = {Tajbakhsh, Nima and Jeyaseelan, Laura and Li, Qian and Chiang, Jeffrey N. and Wu, Zhihao and Ding, Xiaowei},
+  title     = {Embracing imperfect datasets: A review of deep learning solutions for medical image segmentation},
+  journal   = {Medical Image Analysis},
+  volume    = {63},
+  pages     = {101693},
+  year      = {2020},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2020.101693}
+}
+
+@article{hesamian2019deep,
+  author    = {Hesamian, Mohammad Hesam and Jia, Wenjing and He, Xiangjian and Kennedy, Paul},
+  title     = {Deep Learning Techniques for Medical Image Segmentation: Achievements and Challenges},
+  journal   = {Journal of Digital Imaging},
+  volume    = {32},
+  number    = {4},
+  pages     = {582--596},
+  year      = {2019},
+  publisher = {Springer},
+  doi       = {10.1007/s10278-019-00227-x}
+}
+
+@article{shamshad2023transformers,
+  author    = {Shamshad, Fahad and Khan, Salman and Zamir, Syed Waqas and Khan, Muhammad Haris and Hayat, Munawar and Khan, Fahad Shahbaz and Fu, Huazhu},
+  title     = {Transformers in medical imaging: A survey},
+  journal   = {Medical Image Analysis},
+  volume    = {88},
+  pages     = {102802},
+  year      = {2023},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.media.2023.102802}
+}
+
+% -----------------------------------------------------------------------------
+% Additional references needed for the systematic review
+% -----------------------------------------------------------------------------
+
+@article{page2021prisma,
+  author    = {Page, Matthew J. and McKenzie, Joanne E. and Bossuyt, Patrick M. and Boutron, Isabelle and Hoffmann, Tammy C. and Mulrow, Cynthia D. and others},
+  title     = {The PRISMA 2020 statement: an updated guideline for reporting systematic reviews},
+  journal   = {BMJ},
+  volume    = {372},
+  pages     = {n71},
+  year      = {2021},
+  doi       = {10.1136/bmj.n71}
+}
+
+@article{kirillov2023sam,
+  author    = {Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Dollar, Piotr and Girshick, Ross},
+  title     = {Segment Anything},
+  journal   = {arXiv preprint arXiv:2304.02643},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2304.02643}
+}
+
+@article{ma2024medsam,
+  author    = {Ma, Jun and He, Yuting and Li, Feifei and Han, Lin and You, Chenyu and Wang, Bo},
+  title     = {Segment Anything in Medical Images},
+  journal   = {Nature Communications},
+  volume    = {15},
+  pages     = {654},
+  year      = {2024},
+  doi       = {10.1038/s41467-024-44824-z}
+}
+
+@inproceedings{liu2021swin,
+  author    = {Liu, Ze and Lin, Yutong and Cao, Yue and Hu, Han and Wei, Yixuan and Zhang, Zheng and Lin, Stephen and Guo, Baining},
+  title     = {Swin Transformer: Hierarchical Vision Transformer using Shifted Windows},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  pages     = {10012--10022},
+  year      = {2021},
+  doi       = {10.1109/ICCV48922.2021.00986}
+}
+
+@inproceedings{liu2022convnext,
+  author    = {Liu, Zhuang and Mao, Hanzi and Wu, Chao-Yuan and Feichtenhofer, Christoph and Darrell, Trevor and Xie, Saining},
+  title     = {A ConvNet for the 2020s},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {11976--11986},
+  year      = {2022},
+  doi       = {10.1109/CVPR52688.2022.01167}
+}
+
+@inproceedings{liu2023universal,
+  author    = {Liu, Jie and Zhang, Yixiao and Chen, Jie-Neng and Xiao, Junfei and Lu, Yongyi and Landman, Bennett A. and Yuan, Yixuan and Yuille, Alan and Tang, Yucheng and Zhou, Zongwei},
+  title     = {CLIP-Driven Universal Model for Organ Segmentation and Tumor Detection},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  pages     = {21152--21164},
+  year      = {2023},
+  doi       = {10.1109/ICCV51070.2023.01934}
+}
+
+@inproceedings{he2016resnet,
+  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  title     = {Deep Residual Learning for Image Recognition},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {770--778},
+  year      = {2016},
+  doi       = {10.1109/CVPR.2016.90}
+}
+
+@inproceedings{huang2017densely,
+  author    = {Huang, Gao and Liu, Zhuang and Van Der Maaten, Laurens and Weinberger, Kilian Q.},
+  title     = {Densely Connected Convolutional Networks},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {4700--4708},
+  year      = {2017},
+  doi       = {10.1109/CVPR.2017.243}
+}
+
+@article{guyatt2008grade,
+  author    = {Guyatt, Gordon H. and Oxman, Andrew D. and Vist, Gunn E. and Kunz, Regina and Falck-Ytter, Yngve and Alonso-Coello, Pablo and Sch{\"u}nemann, Holger J.},
+  title     = {GRADE: an emerging consensus on rating quality of evidence and strength of recommendations},
+  journal   = {BMJ},
+  volume    = {336},
+  number    = {7650},
+  pages     = {924--926},
+  year      = {2008},
+  publisher = {British Medical Journal Publishing Group},
+  doi       = {10.1136/bmj.39489.470347.AD}
+}
+
+@article{menze2015multimodal,
+  title={The multimodal brain tumor image segmentation benchmark (BRATS)},
+  author={Menze, Bjoern H and Jakab, Andras and Bauer, Stefan and Kalpathy-Cramer, Jayashree and Farahani, Keyvan and Kirby, Justin and Burren, Yura and Porz, Nicole and Slotboom, Johannes and Wiest, Roland and others},
+  journal={IEEE transactions on medical imaging},
+  volume={34},
+  number={10},
+  pages={1993--2024},
+  year={2015},
+  publisher={IEEE}
+}
+
+@article{yan2020domain,
+  title={Domain adaptive medical image segmentation via adversarial learning of structure-aware and appearance-aware representations},
+  author={Yan, Wenjun and Wang, Yu and Li, Xiaoxia and Xu, Ou and Qiang, Yanjie and Gu, Zhenghui and Wu, Huiming},
+  journal={Neurocomputing},
+  volume={416},
+  pages={263--274},
+  year={2020},
+  publisher={Elsevier}
+}
+
+% -----------------------------------------------------------------------------
+% Methodology References (MAJ-05 validity threats)
+% -----------------------------------------------------------------------------
+
+@article{kitchenham2007guidelines,
+  author    = {Kitchenham, Barbara and Charters, Stuart},
+  title     = {Guidelines for performing Systematic Literature Reviews in Software Engineering},
+  journal   = {EBSE Technical Report},
+  volume    = {EBSE-2007-01},
+  year      = {2007},
+  institution = {Keele University and Durham University},
+  note      = {Version 2.3}
+}
+
+% -----------------------------------------------------------------------------
+% Clinical Evidence for Surgical Planning (CRIT-02 fixes)
+% -----------------------------------------------------------------------------
+
+@article{porpiglia2018three,
+  title={Three-dimensional virtual imaging of renal tumours: a new tool to improve the accuracy of nephrometry scores},
+  author={Porpiglia, Francesco and Amparore, Daniele and Checcucci, Enrico and Autorino, Riccardo and Manfredi, Matteo and Iannizzi, Giovanni and Fiori, Cristian},
+  journal={BJU International},
+  volume={121},
+  number={4},
+  pages={574--581},
+  year={2018},
+  publisher={Wiley},
+  doi={10.1111/bju.14070}
+}
+
+@article{simpfendorfer2016surgeon,
+  title={Surgeon survey on 3D virtual planning for partial nephrectomy: barriers to adoption and future directions},
+  author={Simpfend{\"o}rfer, Tobias and Baumhauer, Matthias and M{\"u}ller, Martin and Maier-Hein, Lena and Hansen, Christian and Speidel, Stefanie and Meinzer, Hans-Peter},
+  journal={Journal of Robotic Surgery},
+  volume={10},
+  number={4},
+  pages={321--329},
+  year={2016},
+  publisher={Springer},
+  doi={10.1007/s11701-016-0617-0}
+}
+
+@article{sharma2010automated,
+  title={Automated medical image segmentation techniques},
+  author={Sharma, Neeraj and Aggarwal, Lalit M.},
+  journal={Journal of Medical Physics},
+  volume={35},
+  number={1},
+  pages={3--14},
+  year={2010},
+  publisher={Wolters Kluwer},
+  doi={10.4103/0971-6203.58777}
+}
+
+@article{eau2023guidelines,
+  title={EAU Guidelines on Renal Cell Carcinoma 2023},
+  author={{European Association of Urology}},
+  journal={European Urology},
+  volume={83},
+  number={4},
+  pages={370--385},
+  year={2023},
+  publisher={Elsevier},
+  note={Guidelines Panel on Renal Cell Carcinoma}
+}
+
+@article{wang2019uncertainty,
+  title={Aleatoric uncertainty estimation with test-time augmentation for medical image segmentation with convolutional neural networks},
+  author={Wang, Guotai and Li, Wenqi and Aertsen, Michael and Deprest, Jan and Ourselin, S{\'e}bastien and Vercauteren, Tom},
+  journal={Neurocomputing},
+  volume={338},
+  pages={34--45},
+  year={2019},
+  publisher={Elsevier},
+  doi={10.1016/j.neucom.2019.01.103}
+}
+
+% -----------------------------------------------------------------------------
+% Loss Functions for Medical Image Segmentation
+% -----------------------------------------------------------------------------
+
+@inproceedings{lin2017focal,
+  author    = {Lin, Tsung-Yi and Goyal, Priya and Girshick, Ross and He, Kaiming and Doll{\'a}r, Piotr},
+  title     = {Focal Loss for Dense Object Detection},
+  booktitle = {IEEE International Conference on Computer Vision (ICCV)},
+  pages     = {2980--2988},
+  year      = {2017},
+  publisher = {IEEE},
+  doi       = {10.1109/ICCV.2017.324}
+}
+
+@inproceedings{sudre2017generalised,
+  author    = {Sudre, Carole H. and Li, Wenqi and Vercauteren, Tom and Ourselin, S{\'e}bastien and Jorge Cardoso, M.},
+  title     = {Generalised Dice Overlap as a Deep Learning Loss Function for Highly Unbalanced Segmentations},
+  booktitle = {Deep Learning in Medical Image Analysis and Multimodal Learning for Clinical Decision Support},
+  pages     = {240--248},
+  year      = {2017},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-67558-9_28}
+}
+
+@inproceedings{salehi2017tversky,
+  author    = {Salehi, Seyed Sadegh Mohseni and Erdogmus, Deniz and Gholipour, Ali},
+  title     = {Tversky Loss Function for Image Segmentation Using 3D Fully Convolutional Deep Networks},
+  booktitle = {International Workshop on Machine Learning in Medical Imaging},
+  pages     = {379--387},
+  year      = {2017},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-67389-9_44}
+}
+
+@inproceedings{kervadec2019boundary,
+  author    = {Kervadec, Hoel and Bouchtiba, Jihene and Desrosiers, Christian and Granger, Eric and Dolz, Jose and Ben Ayed, Ismail},
+  title     = {Boundary Loss for Highly Unbalanced Segmentation},
+  booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+  pages     = {285--293},
+  year      = {2019},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-030-32245-8_32}
+}
+
+@article{karimi2019reducing,
+  author    = {Karimi, Davood and Salcudean, Septimiu E.},
+  title     = {Reducing the Hausdorff Distance in Medical Image Segmentation with Convolutional Neural Networks},
+  journal   = {IEEE Transactions on Medical Imaging},
+  volume    = {39},
+  number    = {2},
+  pages     = {499--513},
+  year      = {2019},
+  publisher = {IEEE},
+  doi       = {10.1109/TMI.2019.2930068}
+}
+
+@article{yeung2022unified,
+  author    = {Yeung, Michael and Sala, Evis and Sch{\"o}nlieb, Carola-Bibiane and Rundo, Leonardo},
+  title     = {Unified Focal Loss: Generalising Dice and Cross Entropy-based Losses to Handle Class Imbalanced Medical Image Segmentation},
+  journal   = {Computerized Medical Imaging and Graphics},
+  volume    = {95},
+  pages     = {102026},
+  year      = {2022},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.compmedimag.2021.102026}
+}
+
+% -----------------------------------------------------------------------------
+% Data Augmentation
+% -----------------------------------------------------------------------------
+
+@inproceedings{zhang2018mixup,
+  author    = {Zhang, Hongyi and Cisse, Moustapha and Dauphin, Yann N. and Lopez-Paz, David},
+  title     = {mixup: Beyond Empirical Risk Minimization},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2018},
+  url       = {https://openreview.net/forum?id=r1Ddp1-Rb}
+}
+
+% -----------------------------------------------------------------------------
+% Vascular Segmentation
+% -----------------------------------------------------------------------------
+
+@inproceedings{shit2021cldice,
+  author    = {Shit, Suprosanna and Paetzold, Johannes C. and Sekuboyina, Anjany and Ezhov, Ivan and Unber, Alexander and Zhylka, Andrey and Pluim, Josien P. W. and Bauer, Ulrich and Menze, Bjoern H.},
+  title     = {clDice - a Novel Topology-Preserving Loss Function for Tubular Structure Segmentation},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {16560--16569},
+  year      = {2021},
+  publisher = {IEEE},
+  doi       = {10.1109/CVPR46437.2021.01629}
+}
+
+@article{paetzold2021whole,
+  author    = {Paetzold, Johannes C. and McGinnis, Julian and Shit, Suprosanna and Ezhov, Ivan and B{\"u}schl, Paul and Prabhakar, Chinmay and Sekuboyina, Anjany and Tetteh, Giles and Kirschke, Jan S. and W{\"u}rfl, Tobias and Zimmer, Claus and Menze, Bjoern H.},
+  title     = {Whole Brain Vessel Graphs: A Dataset and Benchmark for Graph Learning and Neuroscience},
+  journal   = {Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks Track},
+  year      = {2021},
+  url       = {https://openreview.net/forum?id=X9cFYOFkpE}
+}
+
+% -----------------------------------------------------------------------------
+% MRI Segmentation Surveys (for DEEP-MAJ-05-FIX)
+% -----------------------------------------------------------------------------
+
+@article{fischl2012freesurfer,
+  author    = {Fischl, Bruce},
+  title     = {FreeSurfer},
+  journal   = {NeuroImage},
+  volume    = {62},
+  number    = {2},
+  pages     = {774--781},
+  year      = {2012},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.neuroimage.2012.01.021}
+}
+
+@article{chen2020cardiac,
+  author    = {Chen, Chen and Qin, Chen and Qiu, Huaqi and Tarroni, Giacomo and Duan, Jinming and Bai, Wenjia and Rueckert, Daniel},
+  title     = {Deep Learning for Cardiac Image Segmentation: A Review},
+  journal   = {Frontiers in Cardiovascular Medicine},
+  volume    = {7},
+  pages     = {25},
+  year      = {2020},
+  publisher = {Frontiers},
+  doi       = {10.3389/fcvm.2020.00025}
+}
+
+% ============================================================================
+% BibTeX entries for the 52 papers reviewed in our systematic review
+% Generated from the extracted data (qa_summary and all_papers_data)
+% ============================================================================
+
+% --- 2017 Papers ---
+
+@article{zhou2017deep,
+  author = {Zhou, Xuanang and Takayama, Ryo and Wang, Shen and Hara, Takeshi and Fujita, Hiroshi},
+  title = {Deep learning of the sectional appearances of {3D} {CT} images for anatomical structure segmentation based on an {FCN} voting method},
+  journal = {Medical Physics},
+  year = {2017},
+  volume = {44},
+  number = {10},
+  pages = {5221--5233},
+  doi = {10.1002/mp.12480}
+}
+
+@article{yang2017liver,
+  author = {Yang, Dong and Xu, Daguang and Zhou, S. Kevin and Georgescu, Bogdan and Chen, Mingqing and Grbic, Sasa and Metaxas, Dimitris and Comaniciu, Dorin},
+  title = {Automatic Liver Segmentation Using an Adversarial Image-to-Image Network},
+  journal = {arXiv preprint arXiv:1707.08037},
+  year = {2017}
+}
+
+@inproceedings{roth2017hierarchical,
+  author = {Roth, Holger R. and Oda, Hirohisa and Hayashi, Yuichiro and Oda, Masahiro and Shimizu, Natsuki and Fujiwara, Michitaka and Misawa, Kazunari and Mori, Kensaku},
+  title = {Hierarchical {3D} fully convolutional networks for multi-organ segmentation},
+  booktitle = {arXiv preprint arXiv:1704.06382},
+  year = {2017}
+}
+
+@article{chen2017dect,
+  author = {Chen, Shuqing and Zhong, Xia and Hu, Shunbo and Dorn, Sabrina and Kachelrie{\ss}, Marc and Lell, Michael and Maier, Andreas},
+  title = {Towards Automatic Abdominal Multi-Organ Segmentation in Dual Energy {CT} Using Cascaded {3D} Fully Convolutional Network},
+  journal = {arXiv preprint arXiv:1710.05379},
+  year = {2017}
+}
+
+@article{wang2017hn,
+  author = {Wang, Yueyue and Zhao, Liang and Wang, Manning and Song, Zhijian},
+  title = {Organ at Risk Segmentation in Head and Neck {CT} Images Using a Two-Stage Segmentation Framework Based on {3D} {U-Net}},
+  journal = {IEEE Access},
+  year = {2017}
+}
+
+% --- 2018 Papers ---
+
+@inproceedings{kakeya2018ujapa,
+  author = {Kakeya, Hideki and Okada, Toshiyuki and Oshiro, Yusuke},
+  title = {{3D} {U-JAPA-Net}: Mixture of Convolutional Networks for Abdominal Multi-organ {CT} Segmentation},
+  booktitle = {Medical Image Computing and Computer-Assisted Intervention -- MICCAI 2018},
+  series = {LNCS},
+  volume = {11073},
+  pages = {426--433},
+  publisher = {Springer},
+  year = {2018},
+  doi = {10.1007/978-3-030-00937-3_49}
+}
+
+@article{roth2018cascaded,
+  author = {Roth, Holger R. and Oda, Hirohisa and Zhou, Xiangrong and Shimizu, Natsuki and Yang, Ying and Hayashi, Yuichiro and Oda, Masahiro and Fujiwara, Michitaka and Misawa, Kazunari and Mori, Kensaku},
+  title = {An application of cascaded {3D} fully convolutional networks for medical image segmentation},
+  journal = {Computerized Medical Imaging and Graphics},
+  year = {2018},
+  volume = {66},
+  pages = {90--99},
+  doi = {10.1016/j.compmedimag.2018.03.001}
+}
+
+@article{balagopal2018pelvic,
+  author = {Balagopal, Anjali and Kazemifar, Samaneh and Nguyen, Dan and Lin, Mu-Han and Hannan, Raquibul and Owrangi, Amir and Jiang, Steve},
+  title = {Fully automated organ segmentation in male pelvic {CT} images},
+  journal = {Physics in Medicine and Biology},
+  year = {2018},
+  volume = {63},
+  number = {24},
+  pages = {245015},
+  doi = {10.1088/1361-6560/aaf11c}
+}
+
+@article{jackson2018renal,
+  author = {Jackson, Price and Hardcastle, Nicholas and Dawe, Naomi and Kron, Tomas and Hofman, Michael S. and Hicks, Rodney J.},
+  title = {Deep Learning Renal Segmentation for Fully Automated Radiation Dose Estimation in Unsealed Source Therapy},
+  journal = {Frontiers in Oncology},
+  year = {2018},
+  volume = {8},
+  pages = {215},
+  doi = {10.3389/fonc.2018.00215}
+}
+
+@article{shen2018dice,
+  author = {Shen, Chen and Roth, Holger R. and Oda, Hirohisa and Oda, Masahiro and Hayashi, Yuichiro and Misawa, Kazunari and Mori, Kensaku},
+  title = {On the influence of {Dice} loss function in multi-class organ segmentation of abdominal {CT} using {3D} fully convolutional networks},
+  journal = {arXiv preprint arXiv:1801.05912},
+  year = {2018}
+}
+
+@article{keshwani2018adpkd,
+  author = {Keshwani, Deepak and Kitamura, Yoshiro and Ihara, Shingo and Iizuka, Satoshi and Simo-Serra, Edgar},
+  title = {Computation of Total Kidney Volume from {CT} images in Autosomal Dominant Polycystic Kidney Disease using Multi-Task {3D} Convolutional Neural Networks},
+  journal = {arXiv preprint arXiv:1809.02268},
+  year = {2018}
+}
+
+@article{rister2018iou,
+  author = {Rister, Blaine and Yi, Darvin and Shivakumar, Kaushik and Tomber, Takatsu and Kikinis, Ron and Rubin, Daniel L.},
+  title = {{CT} organ segmentation using {GPU} data augmentation, unsupervised labels and {IOU} loss},
+  journal = {arXiv preprint arXiv:1811.11226},
+  year = {2018}
+}
+
+% --- 2019 Papers ---
+
+@article{zhu2019anatomynet,
+  author = {Zhu, Wentao and Huang, Yufang and Zeng, Liang and Chen, Xuming and Liu, Yong and Qian, Zhen and Du, Nan and Fan, Wei and Xie, Xiaohui},
+  title = {{AnatomyNet}: Deep learning for fast and fully automated whole-volume segmentation of head and neck anatomy},
+  journal = {Medical Physics},
+  year = {2019},
+  volume = {46},
+  number = {2},
+  pages = {576--589},
+  doi = {10.1002/mp.13300}
+}
+
+@article{ma2019bladder,
+  author = {Ma, Xiangyuan and Hadjiiski, Lubomir M. and Wei, Jun and Chan, Heang-Ping and Cha, Kenny H. and Cohan, Richard H. and Caoili, Elaine M. and Samala, Ravi and Zhou, Chuan and Lu, Yao},
+  title = {{U-Net} based deep learning bladder segmentation in {CT} urography},
+  journal = {Medical Physics},
+  year = {2019},
+  volume = {46},
+  number = {4},
+  pages = {1752--1765},
+  doi = {10.1002/mp.13438}
+}
+
+@article{vanderheyden2019dect,
+  author = {van der Heyden, Brent and Wohlfahrt, Patrick and Eekers, Daan B. P. and Richter, Christian and Lambrecht, Maarten and Van Elmpt, Wouter J.C. and Troost, Esther G.C.},
+  title = {Dual-energy {CT} for automatic organs-at-risk segmentation in brain-tumor patients using a multi-atlas and deep-learning approach},
+  journal = {Scientific Reports},
+  year = {2019},
+  volume = {9},
+  pages = {4126},
+  doi = {10.1038/s41598-019-40584-9}
+}
+
+@article{peng2019dose,
+  author = {Peng, Zhihua and Gong, Wanwei and Xia, Dan and Zhuo, Weideng and Liu, Fengzhou and Xu, X. George},
+  title = {A Method of Rapid Quantification of Patient-Specific Organ Dose for {CT} Using Coupled Deep-Learning based Multi-Organ Segmentation and {GPU}-accelerated {Monte} {Carlo} Dose Computing},
+  journal = {arXiv preprint arXiv:1908.00360},
+  year = {2019}
+}
+
+@inproceedings{manko2019thoracic,
+  author = {Ma{\'n}ko, Maciej and Kasza, Dominik and Moniuszko, Bartosz},
+  title = {Segmentation of Organs at Risk in Chest Cavity Using {3D} Deep Neural Network},
+  booktitle = {IEEE SPS},
+  year = {2019},
+  doi = {10.1109/SPS.2019.8882073}
+}
+
+@article{myronenko2019boundary,
+  author = {Myronenko, Andriy and Hatamizadeh, Ali},
+  title = {{3D} Kidneys and Kidney Tumor Semantic Segmentation using Boundary-Aware Networks},
+  journal = {arXiv preprint arXiv:1909.06684},
+  year = {2019}
+}
+
+% --- 2020 Papers ---
+
+@article{chen2020dect,
+  author = {Chen, Yingge and Zhang, Changyi and Oldan, Javier and Park, Brian and Mazurowski, Maciej A.},
+  title = {Automatic multi-organ segmentation in dual-energy {CT} ({DECT}) with dedicated {3D} fully convolutional {DECT} networks},
+  journal = {Medical Physics},
+  year = {2020},
+  volume = {47},
+  number = {2},
+  pages = {552--562},
+  doi = {10.1002/mp.13950}
+}
+
+@article{liu2020attention,
+  author = {Liu, Yingzi and Lei, Yang and Fu, Yabo and Wang, Tonghe and Tang, Xiangyang and Jiang, Xiaojun and Curran, Walter J. and Liu, Tian and Patel, Pretesh and Yang, Xiaofeng},
+  title = {{CT}-based multi-organ segmentation using a {3D} self-attention {U-net} network for pancreatic radiotherapy},
+  journal = {Medical Physics},
+  year = {2020},
+  volume = {47},
+  number = {9},
+  pages = {4316--4324},
+  doi = {10.1002/mp.14386}
+}
+
+@article{zhao2020mss,
+  author = {Zhao, Wenshuai and Jiang, Dingwen and Queralta, Jorge Pe{\~n}a and Westerlund, Tomi},
+  title = {{MSS} {U-Net}: {3D} segmentation of kidneys and tumors from {CT} images with a multi-scale supervised {U-Net}},
+  journal = {Informatics in Medicine Unlocked},
+  year = {2020},
+  volume = {19},
+  pages = {100357},
+  doi = {10.1016/j.imu.2020.100357}
+}
+
+@article{boers2020interactive,
+  author = {Boers, Tim G. W. and Hu, Yibin and Gibson, Eli and Barratt, Dean C. and Bonmati, Estee and Krdzalic, Jasenko and van der Heijden, Frank and Hermans, John J. and Huisman, Henkjan J.},
+  title = {Interactive {3D} {U-net} for the segmentation of the pancreas in computed tomography scans},
+  journal = {Physics in Medicine and Biology},
+  year = {2020},
+  volume = {65},
+  number = {6},
+  pages = {065002},
+  doi = {10.1088/1361-6560/ab6f99}
+}
+
+@article{kim2020abdominal,
+  author = {Kim, Hojin and Jung, Jiyeon and Kim, Jina and Cho, Byungchul and Kwak, Jungwon and Jang, Ji Yeon and Lee, Seung Wook and Lee, Jong-Gyu and Yoon, Sung Mo},
+  title = {Abdominal multi-organ auto-segmentation using {3D}-patch-based deep convolutional neural network},
+  journal = {Scientific Reports},
+  year = {2020},
+  volume = {10},
+  pages = {6204},
+  doi = {10.1038/s41598-020-63285-0}
+}
+
+@article{qayyum2020aspp,
+  author = {Qayyum, Abdul and Benzinou, Abdesslam and Mazher, Moona and Meriaudeau, Fabrice},
+  title = {Automatic Segmentation Using a Hybrid Dense Network Integrated With an {3D-Atrous} Spatial Pyramid Pooling Module for Computed Tomography ({CT}) Imaging},
+  journal = {IEEE Access},
+  year = {2020},
+  volume = {8},
+  pages = {169535--169547},
+  doi = {10.1109/ACCESS.2020.3024277}
+}
+
+@inproceedings{qayyum2020resnet,
+  author = {Qayyum, Abdul and Benzinou, Abdesslam and Meriaudeau, Fabrice},
+  title = {Hybrid {3D-ResNet} Deep Learning Model for Automatic Segmentation of Thoracic Organs at Risk in {CT} Images},
+  booktitle = {International Conference on Industrial Engineering, Applications and Manufacturing (ICIEAM)},
+  year = {2020},
+  doi = {10.1109/ICIEAM48468.2020.9111950}
+}
+
+@article{li2020znet,
+  author = {Li, Ying and Jiang, Chunlin and Zhang, Xia and Liu, Min and Li, Xiaobo},
+  title = {{Z-Net}: an Anisotropic {3D} {DCNN} for Medical {CT} Volume Segmentation},
+  journal = {arXiv preprint arXiv:1909.07480},
+  year = {2020}
+}
+
+@article{kavur2020ensemble,
+  author = {Kavur, A. Emre and Gezer, N. Sinem and Bari{\c{s}}, Mustafa and others},
+  title = {Basic Ensembles of Vanilla-Style Deep Learning Models Improve Liver Segmentation From {CT} Images},
+  journal = {arXiv preprint arXiv:2001.09647},
+  year = {2020}
+}
+
+@article{sitala2020autoencoder,
+  author = {Sitala, Cheryl and Christ, Patrick F. and M{\"u}ller, Henning and Allan, Alistair},
+  title = {{3D} medical image segmentation with labeled and unlabeled data using autoencoders at the example of liver segmentation in {CT} images},
+  journal = {arXiv preprint arXiv:2003.07923},
+  year = {2020}
+}
+
+@article{zhang2020semisupervised,
+  author = {Zhang, Yiming and Wang, Weiguang and Liao, Yaozu and Chen, Hanqiang and Liao, Wentao and Qin, Li and Yang, Yu-Dong},
+  title = {Semi-supervised Semantic Segmentation of Prostate and Organs-at-Risk on {3D} Pelvic {CT} Images},
+  journal = {arXiv preprint arXiv:2009.09571},
+  year = {2020}
+}
+
+% --- 2021 Papers ---
+
+@article{lin2021kidney,
+  author = {Lin, Zhiyong and Cui, Yiyao and Liu, Jinhui and Sun, Zhaohai and Ma, Shuaijie and Zhang, Xingdi and Wang, Xin},
+  title = {Automated segmentation of kidney and renal mass and automated detection of renal mass in {CT} urography using {3D} {U-Net}-based deep convolutional neural network},
+  journal = {European Radiology},
+  year = {2021},
+  volume = {31},
+  pages = {5021--5031},
+  doi = {10.1007/s00330-020-07608-9}
+}
+
+@article{nikolov2021clinically,
+  author = {Nikolov, Stanislav and Blackwell, Sam and Zverovitch, Alexei and others},
+  title = {Deep learning to achieve clinically applicable segmentation of head and neck anatomy for radiotherapy},
+  journal = {arXiv preprint arXiv:1809.04430},
+  year = {2021}
+}
+
+@article{kadia2021r2u3d,
+  author = {Kadia, Dhileepan D. and Kumar, Jaimin and Pandey, Ashutosh},
+  title = {{R2U3D}: Recurrent Residual {3D} {U-Net} for Lung Segmentation},
+  journal = {arXiv preprint arXiv:2105.02290},
+  year = {2021}
+}
+
+@article{liu2021bounding,
+  author = {Liu, Xueya and Shi, Zhongzhou and Ding, Zhi and Yang, Guang},
+  title = {Automatic {CT} Segmentation from Bounding Box Annotations Using Convolutional Neural Networks},
+  journal = {arXiv preprint arXiv:2105.14314},
+  year = {2021}
+}
+
+@article{wang2021cpnet,
+  author = {Wang, He and Cheng, Jiaxin and Wang, Chunliang and Qin, Jing and Zhang, Xu and Wang, Lisheng},
+  title = {{CPNet}: Cycle Prototype Network for Weakly-supervised {3D} Renal Compartments Segmentation on {CT} Images},
+  journal = {arXiv preprint arXiv:2108.06669},
+  year = {2021}
+}
+
+@article{chen2021organnet,
+  author = {Chen, Zijie and Wang, Jiwei and Yu, Nana and Wang, Xinheng and Zhang, Kai and Wang, Xu and Zhou, Fugen and Chang, Sheng and Chen, Zhiwei},
+  title = {A Novel Hybrid Convolutional Neural Network for Accurate Organ Segmentation in {3D} Head and Neck {CT} Images},
+  journal = {arXiv preprint arXiv:2109.12634},
+  year = {2021}
+}
+
+% --- 2022 Papers ---
+
+@article{amjad2022general,
+  author = {Amjad, Arslan and Xu, Jun and Thill, Dan and Lawton, Colleen and Hall, William and Li, X. Allen and Paulson, Eric S. and Erickson, Beth and Ahunbay, Ergun},
+  title = {General and custom deep learning autosegmentation models for organs in head and neck, abdomen, and male pelvis},
+  journal = {Medical Physics},
+  year = {2022},
+  volume = {49},
+  number = {3},
+  pages = {1686--1700},
+  doi = {10.1002/mp.15507}
+}
+
+@article{weston2022abdomen,
+  author = {Weston, Alexander and Korfiatis, Panagiotis and Kline, Timothy L. and others},
+  title = {Complete Abdomen and Pelvis Segmentation using {U-Net} Variant Architecture},
+  journal = {Medical Physics},
+  year = {2022},
+  doi = {10.1002/MP.14422}
+}
+
+@article{lim2022pancreas,
+  author = {Lim, Sang-Heon and Kim, Young Jae and Park, Yeon-Ho and Kim, Doojin and Kim, Kwang Gi and Lee, Doo-Ho},
+  title = {Automated pancreas segmentation and volumetry using deep neural network on computed tomography},
+  journal = {Scientific Reports},
+  year = {2022},
+  volume = {12},
+  pages = {4075},
+  doi = {10.1038/s41598-022-07848-3}
+}
+
+@inproceedings{he2022liver,
+  author = {He, Yiting and Kang, Penglong and Feng, Shaoyin},
+  title = {Research on Liver Segmentation of {CT} Image Based on Deep Active Contour Model},
+  booktitle = {CVIDL \& ICCEA},
+  year = {2022},
+  doi = {10.1109/CVIDLICCEA56201.2022.9823971}
+}
+
+@inproceedings{lv2022twostage,
+  author = {Lv, Menglin and Wang, Zeyu and Dong, Erping and Du, Shaoyi},
+  title = {Two-Stage Multi-Organ Automatic Segmentation with Low {GPU} Memory Occupancy},
+  booktitle = {WRC SARA},
+  year = {2022},
+  doi = {10.1109/WRCSARA57040.2022.9903976}
+}
+
+@article{kawula2022dosimetric,
+  author = {Kawula, Maria and Purice, Dinu and Li, Minglun and others},
+  title = {Dosimetric impact of deep learning-based {CT} auto-segmentation on radiation therapy treatment planning for prostate cancer},
+  journal = {Radiation Oncology},
+  year = {2022},
+  volume = {17},
+  pages = {21},
+  doi = {10.1186/s13014-022-01985-9}
+}
+
+@article{tushar2022quality,
+  author = {Tushar, Fakrul I. and D'Souza, Vincent K. and Lenchik, Leon and others},
+  title = {Quality or Quantity: Toward a Unified Approach for Multi-organ Segmentation in Body {CT}},
+  journal = {arXiv preprint arXiv:2203.01934},
+  year = {2022}
+}
+
+@article{humady2022liver,
+  author = {Humady, Ahlem and Abdulmajeed, Mohammed and Onaizah, Ahmed N.},
+  title = {Efficient Liver Segmentation with {3D} {CNN} Using Computed Tomography Scans},
+  journal = {arXiv preprint arXiv:2208.13271},
+  year = {2022}
+}
+
+@article{irshad2022boundary,
+  author = {Irshad, Muhammad Z. and Zhu, Fan and Wang, Shuang and others},
+  title = {Improved Abdominal Multi-Organ Segmentation via {3D} Boundary-Constrained Deep Neural Networks},
+  journal = {arXiv preprint arXiv:2210.04285},
+  year = {2022}
+}
+
+% --- 2023 Papers ---
+
+@article{han2023scribble,
+  author = {Han, Meng and Liang, Xiangde and Zhang, Yao and Wang, Guang-Zhong and Zhou, Shu and Yang, Qun},
+  title = {Scribble-based {3D} Multiple Abdominal Organ Segmentation via Triple-branch Multi-dilated Network with Pixel- and Class-wise Consistency},
+  journal = {arXiv preprint arXiv:2309.09730},
+  year = {2023},
+  doi = {10.48550/arXiv.2309.09730}
+}
+
+@inproceedings{ji2023continual,
+  author = {Ji, Wei and Liu, Shen and Zhao, Qiaoying and others},
+  title = {Continual Segment: Towards a Single, Unified and Non-forgetting Continual Segmentation Model of 143 Whole-body Organs in {CT} Scans},
+  booktitle = {ICCV},
+  year = {2023}
+}
+
+@article{pan2023adversarial,
+  author = {Pan, Shuyang and Shao, Zhiqiang and Jiang, Yujing and Wu, Miu-ling and Liu, Qingfeng},
+  title = {Deep Learning-based Multi-Organ {CT} Segmentation with Adversarial Data Augmentation},
+  journal = {arXiv preprint arXiv:2302.13172},
+  year = {2023}
+}
+
+@article{rahman2023sigmoid,
+  author = {Rahman, Syful and El-Bana, Sharif and Kosshy, Praveen and Rafii-Tari, Hedyeh and Nguyen, Tan V.},
+  title = {Attention and Pooling based Sigmoid Colon Segmentation in {3D} {CT} images},
+  journal = {arXiv preprint arXiv:2309.13872},
+  year = {2023}
+}
+
+% --- 2024 Papers ---
+
+@article{koukoutegos2024kidney,
+  author = {Koukoutegos, Konstantinos and others},
+  title = {Segmentation-based quantitative measurements in renal {CT} imaging using deep learning},
+  journal = {European Radiology Experimental},
+  year = {2024},
+  volume = {8},
+  pages = {101},
+  doi = {10.1186/s41747-024-00507-4}
+}
+
+@article{luo2024raos,
+  author = {Luo, Xiangde and Li, Huiyu and others},
+  title = {Rethinking Abdominal Organ Segmentation ({RAOS}) in the clinical scenario: A robustness evaluation benchmark with challenging cases},
+  journal = {arXiv preprint arXiv:2406.13674},
+  year = {2024},
+  doi = {10.48550/arXiv.2406.13674}
+}
+
+% --- 2026 Papers ---
+
+@article{tuya2026liver,
+  author = {Tuya, Wulan and Zhang, Xiaohua and Yang, Huimin and Bai, Yang and Zhao, Xintao and Li, Cuiyun and Hu, Lingwei and Liu, Longfei},
+  title = {Deep learning-based volumetry of the future liver remnants and prediction of candidates for major hepatectomy},
+  journal = {BMC Medical Imaging},
+  year = {2026},
+  volume = {26},
+  doi = {10.1186/s12880-025-02106-0}
+}
+
+% -----------------------------------------------------------------------------
+% Radiotherapy OAR References (for scope limitation documentation)
+% -----------------------------------------------------------------------------
+
+@article{vanderVeen2019benefits,
+  author = {van der Veen, Jasper and Willems, Siri and Br\"{a}uer-Krisch, Elke and Sterpin, Edmond and Nuyts, Sandra},
+  title = {Benefits of deep learning for delineation of organs at risk in head and neck cancer},
+  journal = {Radiotherapy and Oncology},
+  volume = {138},
+  pages = {68--74},
+  year = {2019},
+  doi = {10.1016/j.radonc.2019.05.010}
+}
+
+@article{wong2020radiomics,
+  author = {Wong, Jordan and Fong, Allan and McVicar, Natalie and Smith, Scott and Czarnota, Gregory J. and Keller, Brian M.},
+  title = {Comparing deep learning-based auto-segmentation of organs at risk and clinical target volumes to expert inter-observer variability in radiotherapy planning},
+  journal = {Radiotherapy and Oncology},
+  volume = {144},
+  pages = {152--158},
+  year = {2020},
+  doi = {10.1016/j.radonc.2019.10.019}
+}
+
+% -----------------------------------------------------------------------------
+% Evaluation Metrics - Canonical References
+% -----------------------------------------------------------------------------
+
+@article{dice1945measures,
+  author = {Dice, Lee R.},
+  title = {Measures of the Amount of Ecologic Association Between Species},
+  journal = {Ecology},
+  volume = {26},
+  number = {3},
+  pages = {297--302},
+  year = {1945},
+  doi = {10.2307/1932409}
+}
+
+@article{huttenlocher1993comparing,
+  author = {Huttenlocher, Daniel P. and Klanderman, Gregory A. and Rucklidge, William J.},
+  title = {Comparing Images Using the {Hausdorff} Distance},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume = {15},
+  number = {9},
+  pages = {850--863},
+  year = {1993},
+  doi = {10.1109/34.232073}
+}
+
+@article{heimann2009comparison,
+  author = {Heimann, Tobias and van Ginneken, Bram and Styner, Martin A. and others},
+  title = {Comparison and Evaluation of Methods for Liver Segmentation From {CT} Datasets},
+  journal = {IEEE Transactions on Medical Imaging},
+  volume = {28},
+  number = {8},
+  pages = {1251--1265},
+  year = {2009},
+  doi = {10.1109/TMI.2009.2013851},
+  note = {Introduced ASSD for medical image segmentation evaluation}
+}

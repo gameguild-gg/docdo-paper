@@ -1,0 +1,331 @@
+# ============================================================================
+# .gitignore — Research Repository
+# ============================================================================
+# This file prevents accidental commits of:
+# - Large data files (use DVC instead)
+# - Sensitive/private content
+# - Build artifacts and caches
+# - Environment-specific files
+# ============================================================================
+
+# ============================================================================
+# Python
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Virtual environments
+.env
+.env.local
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Jupyter
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# Translations
+*.mo
+*.pot
+
+# Django
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+.pdm-python
+.pdm-build/
+pdm.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mkdocs
+/site
+
+# Cython
+cython_debug/
+
+# PyCharm
+.idea/
+
+# ============================================================================
+# Node.js
+# ============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ============================================================================
+# OS / Editor
+# ============================================================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/settings.json
+.vscode/launch.json
+
+# ============================================================================
+# ARTIFACTS/DATA — Privacy & Size Protection
+# ============================================================================
+# The following rules protect against accidental commits of:
+# - Large binary files (should use DVC)
+# - Private/restricted third-party content
+# - Intermediate processing outputs
+
+# --------------------------------------------------------------------------
+# External data (third-party, often restricted)
+# --------------------------------------------------------------------------
+# Staging = ephemeral partial downloads
+artifacts/data/external/staging/**
+!artifacts/data/external/staging/.gitkeep
+!artifacts/data/external/staging/README.md
+
+# Large dumps/snapshots (always use DVC)
+artifacts/data/external/**/dumps/**
+artifacts/data/external/**/snapshots/**
+artifacts/data/external/**/pages/**
+
+# Media files (huge + often non-redistributable)
+artifacts/data/**/media/**
+artifacts/data/**/recordings/**
+
+# --------------------------------------------------------------------------
+# Evidence pipeline (internal processing)
+# --------------------------------------------------------------------------
+# Raw evidence (may contain PII, always private)
+artifacts/data/evidence/raw/**
+!artifacts/data/evidence/raw/.gitkeep
+!artifacts/data/evidence/raw/**/README.md
+
+# Interim processing (not validated)
+artifacts/data/evidence/interim/**
+!artifacts/data/evidence/interim/.gitkeep
+!artifacts/data/evidence/interim/**/README.md
+
+# Processed outputs (large, use DVC)
+artifacts/data/evidence/processed/**
+!artifacts/data/evidence/processed/.gitkeep
+!artifacts/data/evidence/processed/**/README.md
+# Allow small validated summaries
+!artifacts/data/evidence/processed/summaries/**
+
+# --------------------------------------------------------------------------
+# Public releases (protect large payloads)
+# --------------------------------------------------------------------------
+# Allow metadata files (small, should be in git)
+!artifacts/data/public/**/dataset_card.md
+!artifacts/data/public/**/LICENSE-DATASET
+!artifacts/data/public/**/checksums.sha256
+!artifacts/data/public/**/README.md
+
+# Ignore large data payloads (use DVC or external hosting)
+artifacts/data/public/**/data/**
+!artifacts/data/public/**/data/.gitkeep
+
+# --------------------------------------------------------------------------
+# Large binary formats (always DVC-track these)
+# --------------------------------------------------------------------------
+*.parquet
+*.arrow
+*.feather
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# ============================================================================
+# CORE/GOVERNANCE — Always keep in Git
+# ============================================================================
+# These are small and critical for reproducibility
+!core/governance/**
+!core/governance/evidence/**
+!core/governance/registry/**
+!core/governance/legal/**
+
+# ============================================================================
+# Reports (generated outputs)
+# ============================================================================
+# By default, allow reports (usually small)
+# If your reports are large, DVC-track them
+# artifacts/reports/**
+
+# ============================================================================
+# Operations
+# ============================================================================
+# Trained models (large)
+operations/tools/models/**/*.bin
+operations/tools/models/**/*.pt
+operations/tools/models/**/*.onnx
+!operations/tools/models/**/*.yaml
+!operations/tools/models/**/README.md
+
+# ============================================================================
+# Secrets (NEVER commit)
+# ============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+*.secret
+
+# ============================================================================
+# Temporary files
+# ============================================================================
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
+*.log
+
+# ============================================================================
+# LaTeX Build Artifacts
+# ============================================================================
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+work/projects/papers/**/build/
+
+# ============================================================================
+# Large PDFs (evidence — track with DVC if needed)
+# ============================================================================
+artifacts/data/evidence/pdfs/**
+!artifacts/data/evidence/pdfs/.gitkeep
+!artifacts/data/evidence/pdfs/README.md
+artifacts/data/evidence/supplementary/S10_pdfs_open/**
+!artifacts/data/evidence/supplementary/S10_pdfs_open/.gitkeep
+
+# ============================================================================
+# DVC
+# ============================================================================
+# DVC cache (local)
+.dvc/cache/
+.dvc/tmp/
+
+# Allow DVC config and pointer files
+!.dvc/config
+!.dvc/config.local
+!**/*.dvc
+!.dvcignore
+
+*.pdf

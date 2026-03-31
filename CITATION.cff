@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use materials from this repository, please cite it as below."
+type: dataset
+title: "Deep Learning for 3D CT Organ Segmentation: A Systematic Review"
+abstract: >-
+  A comprehensive systematic literature review of deep learning methods
+  for 3D organ segmentation from computed tomography (CT) scans,
+  following PRISMA 2020 guidelines. Covers 52 peer-reviewed papers (2015-2025).
+authors:
+  - family-names: "Martins"
+    given-names: "Matheus"
+repository-code: https://github.com/game-guild/docdo-paper-research
+license: MIT
+date-released: 2025-01-01
+keywords:
+  - systematic-review
+  - deep-learning
+  - organ-segmentation
+  - computed-tomography
+  - PRISMA

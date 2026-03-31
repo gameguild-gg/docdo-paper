@@ -1,0 +1,51 @@
+field_id,field_name,field_type,required,description,valid_values,extraction_notes
+F01,study_id,text,yes,Unique identifier for the study,S001-S999,Format: S followed by 3-digit number
+F02,doi,text,yes,Digital Object Identifier,Valid DOI format,Include full DOI starting with 10.
+F03,pmid,integer,no,PubMed ID if available,Positive integer,Leave blank if not indexed in PubMed
+F04,title,text,yes,Full title of the publication,Free text,Include complete title as published
+F05,first_author,text,yes,Last name of first author,Free text,Use family name only
+F06,year,integer,yes,Publication year,2015-2025,Year of first publication (preprint counts)
+F07,journal,text,yes,Journal or venue name,Free text,Use standard abbreviation if available
+F08,study_type,categorical,yes,Type of study,"method, benchmark, review, framework, application",Select primary type
+F09,architecture_family,categorical,yes,Primary architecture family,"CNN, Transformer, Hybrid, Foundation, SSM, Classical, N/A",N/A for reviews/benchmarks
+F10,architecture_name,text,no,Specific architecture name,Free text,e.g. nnU-Net or Swin UNETR
+F11,encoder_type,categorical,no,Encoder architecture type,"ResNet, VGG, Swin, ViT, ConvNeXt, Custom, N/A",N/A if not applicable
+F12,decoder_type,categorical,no,Decoder architecture type,"U-Net, FPN, MLP, Upsampling, Custom, N/A",N/A if not applicable
+F13,attention_mechanism,categorical,no,Type of attention used,"Self, Cross, Channel, Spatial, Multi-head, None",None if no attention
+F14,skip_connections,categorical,no,Skip connection type,"Standard, Dense, Nested, Full-scale, None",None if no skip connections
+F15,loss_function,text,no,Primary loss function used,Free text,e.g. Dice+CE or Focal
+F16,organ_focus,text,yes,Target organ(s) for segmentation,Free text,Use semicolon separator for multiple
+F17,num_organs,integer,no,Number of organs segmented,Positive integer,Count unique anatomical structures
+F18,modality,categorical,yes,Imaging modality,"CT, MRI, CT/MRI, Multi-modal, N/A",N/A for reviews
+F19,dimensionality,categorical,yes,Input dimensionality,"2D, 2.5D, 3D, N/A",N/A for reviews
+F20,dataset_name,text,no,Primary dataset used,Free text,Use standard names (e.g. BTCV)
+F21,dataset_size,integer,no,Number of training samples,Positive integer,Training set size only
+F22,dice_mean,decimal,no,Mean Dice score reported,0.0-1.0,Overall mean across organs
+F23,dice_std,decimal,no,Standard deviation of Dice,0.0-0.5,If reported
+F24,hd95_mean,decimal,no,Mean 95% Hausdorff distance,Positive decimal,In millimeters
+F25,hd95_std,decimal,no,Standard deviation of HD95,Positive decimal,If reported
+F26,nsd_mean,decimal,no,Mean Normalized Surface Dice,0.0-1.0,If reported
+F27,assd_mean,decimal,no,Mean ASSD,Positive decimal,In millimeters
+F28,inference_time,decimal,no,Inference time per volume,Positive decimal,In seconds
+F29,gpu_memory,decimal,no,GPU memory required,Positive decimal,In GB
+F30,num_parameters,decimal,no,Model parameters,Positive decimal,In millions (M)
+F31,flops,decimal,no,Computational cost,Positive decimal,In GFLOPs
+F32,training_time,text,no,Training duration,Free text,e.g. 24 hours on 4xV100
+F33,data_augmentation,text,no,Augmentation techniques,Free text,Semicolon separated list
+F34,preprocessing,text,no,Preprocessing steps,Free text,e.g. resampling; normalization
+F35,postprocessing,text,no,Postprocessing steps,Free text,e.g. CRF; connected components
+F36,code_available,boolean,yes,Is code publicly available,yes/no,Must be accessible link
+F37,code_url,text,no,URL to code repository,Valid URL,GitHub or similar
+F38,pretrained_available,boolean,no,Pretrained weights available,yes/no,Downloadable weights
+F39,framework,categorical,no,Deep learning framework,"PyTorch, TensorFlow, MONAI, nnU-Net, Other",Primary framework used
+F40,clinical_validation,boolean,no,Clinical validation performed,yes/no,Tested on clinical cases
+F41,external_validation,boolean,no,External dataset validation,yes/no,Tested on separate institution data
+F42,comparison_methods,text,no,Methods compared against,Free text,Semicolon separated
+F43,ablation_study,boolean,no,Ablation study included,yes/no,Component analysis performed
+F44,key_contribution,text,yes,Primary contribution,Free text,Brief summary (max 50 words)
+F45,limitations,text,no,Stated limitations,Free text,As reported by authors
+F46,clinical_application,text,no,Proposed clinical use,Free text,Intended clinical workflow
+F47,extraction_date,date,yes,Date of data extraction,YYYY-MM-DD,When data was extracted
+F48,extractor_initials,text,yes,Extractor identifier,2-3 letters,Initials of person extracting
+F49,verification_status,categorical,yes,Verification status,"pending, verified, discrepancy",Track extraction quality
+F50,notes,text,no,Additional notes,Free text,Any clarifications needed

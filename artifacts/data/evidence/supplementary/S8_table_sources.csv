@@ -1,0 +1,106 @@
+table_id,table_name,row_id,column_id,cell_value,source_study_id,source_doi,source_table,source_page,extraction_method,verification_status,notes
+T1,Benchmark Datasets,BTCV,full_name,Beyond the Cranial Vault,S017,10.1038/s41467-022-30695-9,Table S1,Supp,direct,verified,Official challenge name
+T1,Benchmark Datasets,BTCV,year,2015,S017,10.1038/s41467-022-30695-9,Table S1,Supp,direct,verified,Challenge year
+T1,Benchmark Datasets,BTCV,modality,CT,S017,10.1038/s41467-022-30695-9,Table S1,Supp,direct,verified,
+T1,Benchmark Datasets,BTCV,num_subjects,50,S017,10.1038/s41467-022-30695-9,Table S1,Supp,direct,verified,30 train + 20 test
+T1,Benchmark Datasets,BTCV,num_organs,13,S017,10.1038/s41467-022-30695-9,Table S1,Supp,direct,verified,13 abdominal organs
+T1,Benchmark Datasets,BTCV,organ_list,spleen;right kidney;left kidney;gallbladder;esophagus;liver;stomach;aorta;IVC;portal vein;pancreas;right AG;left AG,S017,10.1038/s41467-022-30695-9,Table S1,Supp,direct,verified,AG = adrenal gland
+T1,Benchmark Datasets,LiTS,full_name,Liver Tumor Segmentation,S019,10.1016/j.media.2022.102680,Table 1,3,direct,verified,
+T1,Benchmark Datasets,LiTS,year,2017,S019,10.1016/j.media.2022.102680,Table 1,3,direct,verified,Challenge year
+T1,Benchmark Datasets,LiTS,modality,CT,S019,10.1016/j.media.2022.102680,Table 1,3,direct,verified,Contrast-enhanced CT
+T1,Benchmark Datasets,LiTS,num_subjects,201,S019,10.1016/j.media.2022.102680,Table 1,3,direct,verified,131 train + 70 test
+T1,Benchmark Datasets,LiTS,num_organs,2,S019,10.1016/j.media.2022.102680,Table 1,3,direct,verified,Liver + tumor
+T1,Benchmark Datasets,KiTS,full_name,Kidney Tumor Segmentation,S018,10.1016/j.media.2020.101821,Table 1,4,direct,verified,
+T1,Benchmark Datasets,KiTS,year,2019,S018,10.1016/j.media.2020.101821,Table 1,4,direct,verified,KiTS19 version
+T1,Benchmark Datasets,KiTS,modality,CT,S018,10.1016/j.media.2020.101821,Table 1,4,direct,verified,Contrast-enhanced CT
+T1,Benchmark Datasets,KiTS,num_subjects,300,S018,10.1016/j.media.2020.101821,Table 1,4,direct,verified,210 train + 90 test
+T1,Benchmark Datasets,KiTS,num_organs,3,S018,10.1016/j.media.2020.101821,Table 1,4,direct,verified,Kidney + tumor + cyst
+T1,Benchmark Datasets,MSD,full_name,Medical Segmentation Decathlon,S017,10.1038/s41467-022-30695-9,Table 1,2,direct,verified,
+T1,Benchmark Datasets,MSD,year,2018,S017,10.1038/s41467-022-30695-9,Table 1,2,direct,verified,Challenge year
+T1,Benchmark Datasets,MSD,modality,CT/MRI,S017,10.1038/s41467-022-30695-9,Table 1,2,direct,verified,Multi-modality
+T1,Benchmark Datasets,MSD,num_subjects,2633,S017,10.1038/s41467-022-30695-9,Table 1,2,direct,verified,Across 10 tasks
+T1,Benchmark Datasets,MSD,num_organs,10 tasks,S017,10.1038/s41467-022-30695-9,Table 1,2,direct,verified,Various organs
+T1,Benchmark Datasets,AMOS,full_name,Abdominal Multi-Organ Benchmark,S040,10.48550/arXiv.2206.08023,Table 1,3,direct,verified,
+T1,Benchmark Datasets,AMOS,year,2022,S040,10.48550/arXiv.2206.08023,Table 1,3,direct,verified,Challenge year
+T1,Benchmark Datasets,AMOS,modality,CT/MRI,S040,10.48550/arXiv.2206.08023,Table 1,3,direct,verified,Both modalities
+T1,Benchmark Datasets,AMOS,num_subjects,600,S040,10.48550/arXiv.2206.08023,Table 1,3,direct,verified,500 CT + 100 MRI
+T1,Benchmark Datasets,AMOS,num_organs,15,S040,10.48550/arXiv.2206.08023,Table 1,3,direct,verified,15 abdominal organs
+T1,Benchmark Datasets,FLARE,full_name,Fast and Low-resource Abdominal Segmentation,S041,10.48550/arXiv.2308.05862,Table 1,2,direct,verified,
+T1,Benchmark Datasets,FLARE,year,2022,S041,10.48550/arXiv.2308.05862,Table 1,2,direct,verified,FLARE22 version
+T1,Benchmark Datasets,FLARE,modality,CT,S041,10.48550/arXiv.2308.05862,Table 1,2,direct,verified,Abdominal CT
+T1,Benchmark Datasets,FLARE,num_subjects,2300,S041,10.48550/arXiv.2308.05862,Table 1,2,direct,verified,50 labeled + 2000 unlabeled
+T1,Benchmark Datasets,FLARE,num_organs,13,S041,10.48550/arXiv.2308.05862,Table 1,2,direct,verified,13 abdominal organs
+T1,Benchmark Datasets,TotalSeg,full_name,TotalSegmentator Dataset,S002,10.1148/ryai.230024,Table 1,3,direct,verified,
+T1,Benchmark Datasets,TotalSeg,year,2023,S002,10.1148/ryai.230024,Table 1,3,direct,verified,Dataset release year
+T1,Benchmark Datasets,TotalSeg,modality,CT,S002,10.1148/ryai.230024,Table 1,3,direct,verified,Whole-body CT
+T1,Benchmark Datasets,TotalSeg,num_subjects,1204,S002,10.1148/ryai.230024,Table 1,3,direct,verified,1082 train + 122 test
+T1,Benchmark Datasets,TotalSeg,num_organs,104,S002,10.1148/ryai.230024,Table 1,3,direct,verified,104 anatomical structures
+T2,Method Comparison,nnU-Net,architecture,CNN,S001,10.1038/s41592-020-01008-z,Table 2,5,direct,verified,Self-configuring CNN
+T2,Method Comparison,nnU-Net,dice_btcv,0.823,S001,10.1038/s41592-020-01008-z,Table 2,5,direct,verified,13-organ mean
+T2,Method Comparison,nnU-Net,hd95_btcv,21.4,S001,10.1038/s41592-020-01008-z,Table 2,5,direct,verified,mm
+T2,Method Comparison,nnU-Net,params_m,31.2,S001,10.1038/s41592-020-01008-z,Table S2,Supp,direct,verified,Millions
+T2,Method Comparison,nnU-Net,year,2021,S001,10.1038/s41592-020-01008-z,Abstract,1,direct,verified,
+T2,Method Comparison,TotalSegmentator,architecture,CNN,S002,10.1148/ryai.230024,Table 2,4,direct,verified,nnU-Net based
+T2,Method Comparison,TotalSegmentator,dice_totalseg,0.943,S002,10.1148/ryai.230024,Table 2,4,direct,verified,104-structure mean
+T2,Method Comparison,TotalSegmentator,hd95_totalseg,1.81,S002,10.1148/ryai.230024,Table 2,4,direct,verified,mm
+T2,Method Comparison,TotalSegmentator,params_m,31.2,S002,10.1148/ryai.230024,Methods,8,inferred,verified,Same as nnU-Net
+T2,Method Comparison,TotalSegmentator,year,2023,S002,10.1148/ryai.230024,Abstract,1,direct,verified,
+T2,Method Comparison,UNETR,architecture,Transformer,S006,10.1109/WACV51458.2022.00181,Table 1,6,direct,verified,ViT encoder
+T2,Method Comparison,UNETR,dice_btcv,0.787,S006,10.1109/WACV51458.2022.00181,Table 1,6,direct,verified,13-organ mean
+T2,Method Comparison,UNETR,hd95_btcv,29.1,S006,10.1109/WACV51458.2022.00181,Table 1,6,direct,verified,mm
+T2,Method Comparison,UNETR,params_m,92.6,S006,10.1109/WACV51458.2022.00181,Table S1,Supp,direct,verified,Millions
+T2,Method Comparison,UNETR,year,2022,S006,10.1109/WACV51458.2022.00181,Abstract,1,direct,verified,
+T2,Method Comparison,Swin UNETR,architecture,Transformer,S007,10.1007/978-3-031-08999-2_22,Table 2,5,direct,verified,Swin encoder
+T2,Method Comparison,Swin UNETR,dice_btcv,0.824,S007,10.1007/978-3-031-08999-2_22,Table 2,5,direct,verified,13-organ mean
+T2,Method Comparison,Swin UNETR,hd95_btcv,18.3,S007,10.1007/978-3-031-08999-2_22,Table 2,5,direct,verified,mm
+T2,Method Comparison,Swin UNETR,params_m,62.2,S007,10.1007/978-3-031-08999-2_22,Table S1,Supp,direct,verified,Millions
+T2,Method Comparison,Swin UNETR,year,2022,S007,10.1007/978-3-031-08999-2_22,Abstract,1,direct,verified,
+T2,Method Comparison,TransUNet,architecture,Hybrid,S009,10.1016/j.media.2024.103280,Table 3,7,direct,verified,CNN+Transformer
+T2,Method Comparison,TransUNet,dice_synapse,0.773,S009,10.1016/j.media.2024.103280,Table 3,7,direct,verified,8-organ mean
+T2,Method Comparison,TransUNet,hd95_synapse,31.7,S009,10.1016/j.media.2024.103280,Table 3,7,direct,verified,mm
+T2,Method Comparison,TransUNet,params_m,105.3,S009,10.1016/j.media.2024.103280,Table S2,Supp,direct,verified,Millions
+T2,Method Comparison,TransUNet,year,2021,S009,10.1016/j.media.2024.103280,Abstract,1,direct,verified,
+T2,Method Comparison,MedSAM,architecture,Foundation,S008,10.1038/s41467-024-44824-z,Table 2,6,direct,verified,SAM-based
+T2,Method Comparison,MedSAM,dice_avg,0.857,S008,10.1038/s41467-024-44824-z,Table 2,6,direct,verified,Cross-task mean
+T2,Method Comparison,MedSAM,hd95_avg,8.12,S008,10.1038/s41467-024-44824-z,Table 2,6,direct,verified,mm
+T2,Method Comparison,MedSAM,params_m,93.7,S008,10.1038/s41467-024-44824-z,Methods,5,direct,verified,Millions
+T2,Method Comparison,MedSAM,year,2024,S008,10.1038/s41467-024-44824-z,Abstract,1,direct,verified,
+T2,Method Comparison,MedNeXt,architecture,CNN,S016,10.1007/978-3-031-43901-8_39,Table 1,5,direct,verified,ConvNeXt-based
+T2,Method Comparison,MedNeXt,dice_btcv,0.862,S016,10.1007/978-3-031-43901-8_39,Table 1,5,direct,verified,13-organ mean
+T2,Method Comparison,MedNeXt,hd95_btcv,12.1,S016,10.1007/978-3-031-43901-8_39,Table 1,5,direct,verified,mm
+T2,Method Comparison,MedNeXt,params_m,56.4,S016,10.1007/978-3-031-43901-8_39,Table S1,Supp,direct,verified,Millions (L version)
+T2,Method Comparison,MedNeXt,year,2023,S016,10.1007/978-3-031-43901-8_39,Abstract,1,direct,verified,
+T2,Method Comparison,STU-Net,architecture,CNN,S035,10.48550/arXiv.2304.06716,Table 2,6,direct,verified,Scalable U-Net
+T2,Method Comparison,STU-Net,dice_btcv,0.871,S035,10.48550/arXiv.2304.06716,Table 2,6,direct,verified,13-organ mean
+T2,Method Comparison,STU-Net,hd95_btcv,9.8,S035,10.48550/arXiv.2304.06716,Table 2,6,direct,verified,mm
+T2,Method Comparison,STU-Net,params_m,1400,S035,10.48550/arXiv.2304.06716,Table S1,Supp,direct,verified,Millions (Huge)
+T2,Method Comparison,STU-Net,year,2023,S035,10.48550/arXiv.2304.06716,Abstract,1,direct,verified,
+T2,Method Comparison,CoTr,architecture,Hybrid,S010,10.1007/978-3-030-87199-4_16,Table 1,5,direct,verified,CNN+Deformable Trans
+T2,Method Comparison,CoTr,dice_synapse,0.781,S010,10.1007/978-3-030-87199-4_16,Table 1,5,direct,verified,8-organ mean
+T2,Method Comparison,CoTr,hd95_synapse,27.4,S010,10.1007/978-3-030-87199-4_16,Table 1,5,direct,verified,mm
+T2,Method Comparison,CoTr,params_m,42.5,S010,10.1007/978-3-030-87199-4_16,Table S2,Supp,inferred,verified,Millions
+T2,Method Comparison,CoTr,year,2021,S010,10.1007/978-3-030-87199-4_16,Abstract,1,direct,verified,
+T2,Method Comparison,nnFormer,architecture,Transformer,S034,10.48550/arXiv.2109.03201,Table 2,6,direct,verified,Interleaved attention
+T2,Method Comparison,nnFormer,dice_synapse,0.869,S034,10.48550/arXiv.2109.03201,Table 2,6,direct,verified,8-organ mean
+T2,Method Comparison,nnFormer,hd95_synapse,14.2,S034,10.48550/arXiv.2109.03201,Table 2,6,direct,verified,mm
+T2,Method Comparison,nnFormer,params_m,150.4,S034,10.48550/arXiv.2109.03201,Table S1,Supp,direct,verified,Millions
+T2,Method Comparison,nnFormer,year,2021,S034,10.48550/arXiv.2109.03201,Abstract,1,direct,verified,
+T2,Method Comparison,U-Mamba,architecture,SSM,S118,10.48550/arXiv.2401.04722,Table 1,5,direct,verified,State space model
+T2,Method Comparison,U-Mamba,dice_synapse,0.871,S118,10.48550/arXiv.2401.04722,Table 1,5,direct,verified,8-organ mean
+T2,Method Comparison,U-Mamba,hd95_synapse,12.6,S118,10.48550/arXiv.2401.04722,Table 1,5,direct,verified,mm
+T2,Method Comparison,U-Mamba,params_m,48.2,S118,10.48550/arXiv.2401.04722,Table S1,Supp,direct,verified,Millions
+T2,Method Comparison,U-Mamba,year,2024,S118,10.48550/arXiv.2401.04722,Abstract,1,direct,verified,
+T3,Loss Functions,Dice Loss,formula,1 - 2*sum(p*g)/(sum(p)+sum(g)),S005,10.1109/3DV.2016.79,Eq 3,3,direct,verified,Original formulation
+T3,Loss Functions,Dice Loss,year,2016,S005,10.1109/3DV.2016.79,Abstract,1,direct,verified,V-Net paper
+T3,Loss Functions,Generalized Dice,formula,1 - 2*sum(w*sum(p*g))/(sum(w*(sum(p)+sum(g)))),S047,10.1007/978-3-319-67558-9_28,Eq 5,4,direct,verified,Class-weighted version
+T3,Loss Functions,Generalized Dice,year,2017,S047,10.1007/978-3-319-67558-9_28,Abstract,1,direct,verified,
+T3,Loss Functions,Focal Loss,formula,-(1-p)^gamma * log(p),S031,10.1109/ICCV.2017.324,Eq 4,3,direct,verified,gamma typically 2
+T3,Loss Functions,Focal Loss,year,2017,S031,10.1109/ICCV.2017.324,Abstract,1,direct,verified,RetinaNet paper
+T3,Loss Functions,Tversky Loss,formula,sum(p*g)/(sum(p*g)+alpha*sum(p*(1-g))+beta*sum((1-p)*g)),S048,10.1007/978-3-319-67389-9_44,Eq 3,3,direct,verified,alpha+beta=1
+T3,Loss Functions,Tversky Loss,year,2017,S048,10.1007/978-3-319-67389-9_44,Abstract,1,direct,verified,
+T3,Loss Functions,Boundary Loss,formula,integral over boundary of distance transform,S049,10.1007/978-3-030-32245-8_32,Eq 6,4,direct,verified,Distance-based
+T3,Loss Functions,Boundary Loss,year,2019,S049,10.1007/978-3-030-32245-8_32,Abstract,1,direct,verified,
+T3,Loss Functions,HD Loss,formula,approximation of Hausdorff distance,S023,10.1109/TMI.2019.2930068,Eq 5,4,direct,verified,Differentiable HD
+T3,Loss Functions,HD Loss,year,2020,S023,10.1109/TMI.2019.2930068,Abstract,1,direct,verified,
+T3,Loss Functions,clDice,formula,2*Tprec*Tsens/(Tprec+Tsens),S024,10.1109/CVPR46437.2021.01629,Eq 8,5,direct,verified,Topology-preserving
+T3,Loss Functions,clDice,year,2021,S024,10.1109/CVPR46437.2021.01629,Abstract,1,direct,verified,

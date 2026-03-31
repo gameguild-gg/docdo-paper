@@ -1,0 +1,99 @@
+# ============================================================================
+# YAML Validation
+# ============================================================================
+# Validates YAML syntax for registry and configuration files.
+# Runs on changes to any YAML file.
+# ============================================================================
+
+name: YAML Validation
+
+on:
+  push:
+    paths:
+      - '**/*.yaml'
+      - '**/*.yml'
+  pull_request:
+    paths:
+      - '**/*.yaml'
+      - '**/*.yml'
+
+jobs:
+  validate-yaml:
+    name: Validate YAML Files
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Create yamllint config
+        run: |
+          cat > .yamllint.yml << 'EOF'
+          extends: default
+          rules:
+            line-length:
+              max: 120
+              level: warning
+            document-start: disable
+            truthy:
+              check-keys: false
+            comments:
+              min-spaces-from-content: 1
+            indentation:
+              spaces: 2
+              indent-sequences: consistent
+          EOF
+
+      - name: Validate YAML syntax
+        run: |
+          echo "Validating YAML files..."
+          
+          # Find all YAML files
+          yaml_files=$(find . -type f \( -name "*.yaml" -o -name "*.yml" \) -not -path "./.git/*" -not -path "./node_modules/*")
+          
+          errors=0
+          for file in $yaml_files; do
+            if yamllint -c .yamllint.yml "$file" 2>&1; then
+              echo "✅ $file"
+            else
+              echo "❌ $file has issues"
+              errors=1
+            fi
+          done
+          
+          if [ $errors -eq 1 ]; then
+            echo "Some YAML files have validation issues"
+            exit 1
+          fi
+          
+          echo "✅ All YAML files are valid"
+
+      - name: Validate registry schema
+        run: |
+          echo "Validating registry file structure..."
+          
+          # Check sources.yaml structure
+          if [ -f "core/governance/registry/sources.yaml" ]; then
+            echo "Checking sources.yaml..."
+            # Verify it has the expected top-level keys
+            if grep -q "^sources:" core/governance/registry/sources.yaml; then
+              echo "  ✅ Has 'sources' key"
+            else
+              echo "  ⚠️ Missing 'sources' key"
+            fi
+          fi
+          
+          # Check datasets.yaml structure
+          if [ -f "core/governance/registry/datasets.yaml" ]; then
+            echo "Checking datasets.yaml..."
+            if grep -q "^datasets:" core/governance/registry/datasets.yaml; then
+              echo "  ✅ Has 'datasets' key"
+            else
+              echo "  ⚠️ Missing 'datasets' key"
+            fi
+          fi
+          
+          echo "✅ Registry structure check complete"

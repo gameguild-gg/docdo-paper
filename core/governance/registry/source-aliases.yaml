@@ -1,0 +1,19 @@
+# =============================================================================
+# Source Aliases — DocDo Systematic Review
+# =============================================================================
+# Maps source_id → common aliases
+# =============================================================================
+
+sources:
+  pubmed:
+    aliases: ["PubMed", "MEDLINE", "pubmed", "ncbi"]
+    notes: "Primary bibliographic database for biomedical literature"
+  arxiv:
+    aliases: ["arXiv", "arxiv.org", "preprints"]
+    notes: "Open-access preprint server for CS/ML papers"
+  semantic-scholar:
+    aliases: ["Semantic Scholar", "S2", "s2"]
+    notes: "AI-powered academic search engine"
+  unpaywall:
+    aliases: ["Unpaywall", "OA", "open-access"]
+    notes: "Open access discovery service for PDFs"

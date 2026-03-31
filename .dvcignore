@@ -1,0 +1,30 @@
+# .dvcignore
+# -------------------------------------------------------------------
+# DVC Ignore Rules (recommended defaults)
+# - Similar to .gitignore, but for DVC tracking
+# - Files matching these patterns are excluded from DVC operations
+# -------------------------------------------------------------------
+
+# Ignore OS/editor noise
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+__pycache__/
+*.tmp
+*.log
+
+# If you generate caches locally, ignore them
+**/.cache/
+**/cache/
+**/.pytest_cache/
+
+# Temporary processing artifacts
+*.tmp
+*.temp
+*.bak
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo

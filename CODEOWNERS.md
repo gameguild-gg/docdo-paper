@@ -1,0 +1,5 @@
+# CODEOWNERS
+
+# Repository ownership
+
+* @thiagomvas
