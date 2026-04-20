@@ -821,7 +821,7 @@ Dense 3D annotation requires 15-45 minutes per organ per volume~\cite{sharma2010
 
 \textbf{Performance across 52 studies (Table~\ref{tab:synthesized_dice}):} Mean reported Dice scores varied by organ complexity. Liver segmentation achieved the highest accuracy (mean: 94.2\%, range: 89.0--97.1\%, n=16), followed by spleen (93.1\%, range: 84.0--97.0\%, n=9), kidney (92.1\%, range: 78.3--98.4\%, n=16), and pancreas (78.1\%, range: 72.0--86.1\%, n=8). Challenging structures like pancreas showed lower performance due to high anatomical variability and small size~\cite{oktay2018attention, gibson2018densevnet}. Overall Dice scores (n=36 studies reporting) ranged from 78\% to 98\%.
 
-\textbf{Individual study results:} Per-study performance data for all 52 included studies, including all reported Dice, HD95, and ASSD values with precision measures (standard deviations or confidence intervals where provided by original authors), are presented in Supplementary Table S1. Statistical precision measures (standard deviations or confidence intervals) were reported by 35 of 52 studies (67.3\%); formal confidence intervals or comparative hypothesis tests were present in 16 (30.8\%). The remaining 17 studies (32.7\%) reported point estimates only, a limitation common across computational benchmarking literature. Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present representative per-method results for key benchmarks.
+\textbf{Individual study results:} Per-study performance data for all 52 included studies, including all reported Dice, HD95, and ASSD values with precision measures (standard deviations or confidence intervals where provided by original authors), are presented in Supplementary Table S2. Statistical precision measures (standard deviations or confidence intervals) were reported by 35 of 52 studies (67.3\%); formal confidence intervals or comparative hypothesis tests were present in 16 (30.8\%). The remaining 17 studies (32.7\%) reported point estimates only, a limitation common across computational benchmarking literature. Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present representative per-method results for key benchmarks.
 
 \begin{table}[!htb]
 \centering
@@ -869,11 +869,11 @@ Stratification by architecture family revealed systematic performance difference
 
 \subsection{Quality Assessment Results}
 
-Of the 52 included studies, 13 (25.0\%) were rated high quality (total score $\geq$24), 38 (73.1\%) moderate quality (score 15--23), and 1 (1.9\%) low quality (score $<$15). Code availability (partial or full implementation publicly released) was confirmed for 15 studies (28.8\%) based on Q10 scores from the quality assessment pipeline. Among the 26 studies contributing quantitative results to benchmark-specific synthesis tables, the quality distribution was: high 19\% (5 studies), moderate 81\% (21 studies), reflecting the general moderate-quality skew of the full corpus. Per-study quality ratings are provided in Supplementary Table S1.
+Of the 52 included studies, 10 (19.2\%) were rated high quality (total score $\geq$24), 41 (78.8\%) moderate quality (score 15--23), and 1 (1.9\%) low quality (score $<$15). Code availability (partial or full implementation publicly released) was confirmed for 13 studies (25.0\%) based on Q10 scores from the quality assessment pipeline. Among the 26 studies contributing quantitative results to benchmark-specific synthesis tables, the quality distribution was: high 19\% (5 studies), moderate 81\% (21 studies), reflecting the general moderate-quality skew of the full corpus. Per-study quality ratings are provided in Supplementary Table S2.
 
 \subsection{Sensitivity Analysis Results}
 
-Restricting the synthesis to the 29 studies with verified DOIs and peer-reviewed publication status (excluding preprints and unverified sources), the key findings remained consistent: auto-configured CNNs maintained the highest BTCV Dice scores, the transformer--CNN performance gap persisted, and architectural rankings were unchanged. The proportion of high-quality studies in the DOI subset was 34.5\% (10 of 29), compared with 25.0\% overall---a modest increase consistent with the expectation that peer-reviewed publications apply slightly more rigorous evaluation protocols. This sensitivity analysis confirms that the inclusion of preprints and non-peer-reviewed sources did not materially alter the review's conclusions.
+Restricting the synthesis to the 29 studies with verified DOIs and peer-reviewed publication status (excluding preprints and unverified sources), the key findings remained consistent: auto-configured CNNs maintained the highest BTCV Dice scores, the transformer--CNN performance gap persisted, and architectural rankings were unchanged. The proportion of high-quality studies in the DOI subset was 34.5\% (10 of 29), compared with 19.2\% overall---a modest increase consistent with the expectation that peer-reviewed publications apply slightly more rigorous evaluation protocols. This sensitivity analysis confirms that the inclusion of preprints and non-peer-reviewed sources did not materially alter the review's conclusions.
 
 \subsection{Reporting Bias Results}
 
@@ -987,7 +987,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{Dual evidence streams:} Benchmark validation (multi-dataset, ablations, cross-validation) is necessary but insufficient; clinical validation (prospective multi-site studies, workflow integration, failure mode characterization, reader studies) is rarely reported (2.4\% of surveyed papers). This gap explains why benchmark leaders often fail in deployment.
 
-\textbf{Reproducibility:} Of 52 studies: only 28.8\% (15/52) released source code, despite 92.3\% (48/52) describing reproducible methods, 94.2\% (49/52) documenting preprocessing steps, and 67.3\% (35/52) performing statistical analysis.
+\textbf{Reproducibility:} Of 52 studies: only 25.0\% (13/52) released source code, despite 92.3\% (48/52) describing reproducible methods, 94.2\% (49/52) documenting preprocessing steps, and 67.3\% (35/52) performing statistical analysis.
 
 \textbf{Continual learning:} Deployed systems encounter distribution drift. Strategies include elastic weight consolidation, replay buffers, and domain-incremental adaptation. Only 2/52 papers (3.8\%) addressed this despite its importance for production systems.
 
@@ -999,7 +999,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{RQ3 (Training strategies):} nnU-Net~\cite{isensee2021nnunet} pipeline establishes baseline: percentile clipping, z-score normalization, isotropic resampling, Dice+CE loss, aggressive augmentation. Domain randomization reduces cross-institution degradation by 40--60\%~\cite{isensee2021nnunet, wasserthal2023totalsegmentator}.
 
-\textbf{RQ4 (Clinical gaps):} Five critical barriers impede clinical translation: the \emph{vascular segmentation gap} (65--75\% vs.\ 90--96\% Dice for parenchymal organs), a \emph{reproducibility crisis} (only 28.8\% of studies released source code), \emph{domain generalization failure} (5--15\% degradation on external data), insufficient \emph{uncertainty quantification} ($<$20\% of studies address this), and unclear \emph{regulatory pathways} requiring documented failure mode characterization.
+\textbf{RQ4 (Clinical gaps):} Five critical barriers impede clinical translation: the \emph{vascular segmentation gap} (65--75\% vs.\ 90--96\% Dice for parenchymal organs), a \emph{reproducibility crisis} (only 25.0\% of studies released source code), \emph{domain generalization failure} (5--15\% degradation on external data), insufficient \emph{uncertainty quantification} ($<$20\% of studies address this), and unclear \emph{regulatory pathways} requiring documented failure mode characterization.
 
 %==============================================================================
 \section{Limitations}
@@ -1063,7 +1063,7 @@ From 52 included studies, we draw four conclusions:
     
     \item Foundation models (MedSAM) show promise for reducing annotation burden but currently lag 6 to 7\% behind supervised methods (as of January 2026).
     
-    \item Critical gaps remain in vascular segmentation (65 to 75\% vs.\ 90 to 96\% Dice), reproducibility (28.8\% code availability), and domain generalization (5 to 15\% accuracy degradation) that must be addressed for widespread surgical planning deployment.
+    \item Critical gaps remain in vascular segmentation (65 to 75\% vs.\ 90 to 96\% Dice), reproducibility (25.0\% code availability), and domain generalization (5 to 15\% accuracy degradation) that must be addressed for widespread surgical planning deployment.
 \end{enumerate}
 
 For surgical planning platforms that currently rely on manual segmentation, we recommend a phased adoption strategy: (1) deploy TotalSegmentator~\cite{wasserthal2023totalsegmentator} or nnU-Net~\cite{isensee2021nnunet} as automatic initialization, (2) implement uncertainty-guided review for critical structures, and (3) explore MedSAM~\cite{ma2024medsam} for interactive refinement. The estimated integration effort (3 to 6 months for production deployment) should be factored into adoption planning.
