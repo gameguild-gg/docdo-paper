@@ -19,7 +19,7 @@ def load_studies(path: Path | None = None) -> pd.DataFrame:
         if candidates:
             path = candidates[0]
         else:
-            path = config.SUPPLEMENTARY_DIR / "S2_included_studies.csv"
+            path = config.SUPPLEMENTARY_DIR / "S2_final_included_studies.csv"
     df = pd.read_csv(path)
     print(f"  Loaded {len(df)} studies from {path.name}")
     return df

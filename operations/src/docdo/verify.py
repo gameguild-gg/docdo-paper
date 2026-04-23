@@ -109,7 +109,7 @@ def verify_traceability(
     Returns ``(found_count, not_found_count, traceability_level)``.
     """
     s1_path = s1_path or config.S1_RAW
-    s2_path = s2_path or config.SUPPLEMENTARY_DIR / "S2_included_studies.csv"
+    s2_path = s2_path or config.SUPPLEMENTARY_DIR / "S2_final_included_studies.csv"
 
     # Build S1 indexes
     s1_records = read_csv(s1_path)

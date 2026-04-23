@@ -36,7 +36,7 @@ data/
 │   │
 │   └── supplementary/        # PRISMA supplementary materials (S0–S12)
 │       ├── S0_data_provenance.md
-│       ├── S2_included_studies.csv
+│       ├── S2_final_included_studies.csv
 │       ├── S3_search_protocol.md
 │       ├── S4_ai_screening_protocol.md
 │       └── ...
@@ -73,7 +73,7 @@ data/
 | `evidence/interim/S1_search_results_deduplicated.csv` | ~1,400 | After DOI + title dedup |
 | `evidence/processed/S2_elasticsearch_filtered.csv` | ~640 | After Elasticsearch pre-filter |
 | `evidence/processed/final_results/final_included_papers_*.csv` | ~50 | 3-model consensus INCLUDEs |
-| `evidence/supplementary/S2_included_studies.csv` | ~50 | Final included studies list |
+| `evidence/supplementary/S2_final_included_studies.csv` | 52 | Final included-studies identifier list (full extraction in `pipeline_outputs/s3_extracted_data_full_*.csv`) |
 
 ---
 

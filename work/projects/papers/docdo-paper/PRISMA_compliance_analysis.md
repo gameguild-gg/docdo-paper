@@ -1,437 +1,204 @@
-# PRISMA 2020 Compliance Analysis — Deep Comparison
+# PRISMA 2020 Compliance Analysis
 
-**Paper:** _3D Organ Segmentation from CT Scans: An Agentic Structured Survey of Deep Learning Approaches for Surgical Planning_
+**Paper:** *3D Organ Segmentation from CT Scans: An Agentic Structured Survey of Deep Learning Approaches for Surgical Planning*
+**Manuscript audited:** [work/projects/papers/docdo-paper/main.tex](work/projects/papers/docdo-paper/main.tex) (1082 lines, single source — no `_compliance` variant exists in the repository)
+**Audit date:** 2026-04-23 (revision 2026-04-23d: a deep cross-check of every numeric claim in `main.tex` against [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv), [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/qa_parsed_results.json), and [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv) surfaced **six paper-side numeric discrepancies** that prior revisions of this audit had not detected. All six were patched in `main.tex` in the same revision — see new §5.6 for the before/after table. Inventory row counts in §2 were also rewritten to use *true CSV row counts* (excluding header) and to correct `excluded_no_fulltext.csv` from 103 to 98. With the §5.6 patches applied, items 17, 19, 20a, 21, 27 remain ✅ — every quantitative claim in §IV–§VII of `main.tex` is now independently reproducible from `pipeline_outputs/s3_extracted_data_full.csv` and `pipeline_outputs/qa_summary.csv`. Revision 2026-04-23c (prior to this) had closed the three remaining open items and performed a naming-cleanup pass — the `recovered/` folder was renamed to `pipeline_outputs/`, per-file date stamps (`_20260122_215847`, `_20260122_233013`, `_20260123_075645`) were stripped, and the disjoint 127-row legacy `S2_included_studies.csv` (briefly renamed `S2_legacy_screened_draft.csv`) was deleted outright — git history retains it.)
+**Auditor scope:** PRISMA 2020 (Page et al., *BMJ* 2021;372:n71), 27 items / 39 sub-items per [work/projects/papers/docdo-paper/PRISMA_checklist.md](work/projects/papers/docdo-paper/PRISMA_checklist.md).
 
-**Original Analysis Date:** March 13, 2026  
-**Comparison Date:** March 15, 2026
-
-**Important context:** This paper is a **structured survey**, not a formal systematic review. It was not prospectively registered, does not perform meta-analysis, and honestly acknowledges this throughout. The PRISMA 2020 checklist was designed for systematic reviews and meta-analyses. Some items are structurally impossible to fully meet for a structured survey, and forcing compliance would be dishonest. This analysis is transparent about that.
-
----
-
-## Summary Scorecard
-
-|                  | main.tex | main_prisma-compliance.tex |
-|------------------|----------|---------------------------|
-| Fully Met        | 15       | 22                        |
-| Partially Met    | 14       | 13                        |
-| Not Met          | 10       | 4                         |
-| **Total**        | **39**   | **39**                    |
+> This analysis was rewritten from scratch on 2026-04-22 because the previous version referenced a nonexistent `main_prisma-compliance.tex` and cited several data files (`qa_summary_*.csv`, `s3_extracted_data_full_*.csv`, `all_papers_data_*.csv`, `final_screening_summary*.json`) that do not exist anywhere in the repository (verified by recursive `find`). All claims below cite the actual `main.tex` and the actual files under [artifacts/data/evidence/supplementary/](artifacts/data/evidence/supplementary/).
 
 ---
 
-## Side-by-Side Comparison
+## 1. Framing
 
-### TITLE
+The paper self-declares (`main.tex` L80, L249, L292) as a **structured survey adapted from PRISMA 2020**, not a formal systematic review. PRISMA 2020 was designed for prospectively-registered reviews with statistical pooling; several items (24a registration, 11/18 risk-of-bias, 12/19/20b pooled effect estimates) are structurally inapplicable. The paper acknowledges this and reports absence rather than fabricating compliance — that posture is appropriate, and this audit grades each item against what a structured survey can honestly deliver, flagging items where the paper's claims do not match the evidence in the repository.
 
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 1 | Identify as systematic review | **Partially Met** | **Partially Met** | Both use "Agentic Structured Survey." This is **correct and honest** — the paper is not a systematic review and should not claim to be one. PRISMA strictly requires "systematic review" in the title, but meeting this item would be dishonest. **Cannot be fixed without misrepresenting the work.** |
+## 2. Repository inventory used in this audit
 
-### ABSTRACT
+Files actually present in [artifacts/data/evidence/supplementary/](artifacts/data/evidence/supplementary/) (CSV row counts exclude header; markdown/txt counts are line counts):
 
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 2 | PRISMA for Abstracts structured format | **Partially Met** | **Fully Met** | main.tex has a narrative abstract. compliance.tex restructures it with all 8 PRISMA headings (Background, Objectives, Data Sources, Eligibility, Synthesis, Results, Limitations, Conclusions, Registration). **Genuine improvement** — all added information was already in the paper, just reorganized. |
+| File | Rows | Role |
+|---|---:|---|
+| [S0_data_provenance.md](artifacts/data/evidence/supplementary/S0_data_provenance.md) | 314 | Provenance & S-numbering map |
+| [S1_search_results_REAL.csv](artifacts/data/evidence/supplementary/S1_search_results_REAL.csv) | 200 | Raw search hits (sample only — not the 2,821 actually processed; see §5.1 #3) |
+| [S1b_citation_tracking.csv](artifacts/data/evidence/supplementary/S1b_citation_tracking.csv) | 56 | Forward/backward citation records |
+| [S2_final_included_studies.csv](artifacts/data/evidence/supplementary/S2_final_included_studies.csv) | 52 | Per-study identifier list for the included synthesis |
+| [S3_search_protocol.md](artifacts/data/evidence/supplementary/S3_search_protocol.md) | 343 | Search queries & eligibility codes |
+| [S4_ai_screening_protocol.md](artifacts/data/evidence/supplementary/S4_ai_screening_protocol.md) | 387 | AI screening protocol |
+| [S4_screening_criteria.md](artifacts/data/evidence/supplementary/S4_screening_criteria.md) | 203 | Inclusion/exclusion operationalization |
+| [S5_screening_decisions.csv](artifacts/data/evidence/supplementary/S5_screening_decisions.csv) | 110 (100 INCLUDE / 10 EXCLUDE) | AI screening log |
+| [S6_validation_report.md](artifacts/data/evidence/supplementary/S6_validation_report.md) | 233 | Human-AI agreement audit (rewritten 2026-04-23 v2.0; predecessor in `S6_validation_report.md.bak`) |
+| [S6b_batch_processing_log.md](artifacts/data/evidence/supplementary/S6b_batch_processing_log.md) | 169 | Batch run log |
+| [S7_extraction_template.csv](artifacts/data/evidence/supplementary/S7_extraction_template.csv) | 50 | Extraction *form* (template, not results) |
+| [S8_table_sources.csv](artifacts/data/evidence/supplementary/S8_table_sources.csv) | 105 | Cell-level provenance for benchmark tables |
+| [S10_verified_statistics.md](artifacts/data/evidence/supplementary/S10_verified_statistics.md) | 103 | Traceability for paper statistics |
+| [S11_paywalled_access.md](artifacts/data/evidence/supplementary/S11_paywalled_access.md) | 121 | Access guidance for paywalled items |
+| [S11_per_organ_source_tracking.md](artifacts/data/evidence/supplementary/S11_per_organ_source_tracking.md) | 76 | Source tracking for per-organ Dice |
+| [S12_per_organ_statistics.md](artifacts/data/evidence/supplementary/S12_per_organ_statistics.md) | 54 | Per-organ summary stats |
+| [S1_S2_traceability_report.txt](artifacts/data/evidence/supplementary/S1_S2_traceability_report.txt) | 473 | S1↔S2 cross-walk (frozen historical artifact — references the deleted 127-row draft) |
+| [pipeline_outputs/PROVENANCE.md](artifacts/data/evidence/supplementary/pipeline_outputs/PROVENANCE.md) | — | Manifest for the vendored pipeline outputs |
+| [pipeline_outputs/S1_evidence_report.md](artifacts/data/evidence/supplementary/pipeline_outputs/S1_evidence_report.md) | — | Per-source breakdown (PubMed/arXiv/SemanticScholar) |
+| [pipeline_outputs/S1_search_results_deduplicated.csv](artifacts/data/evidence/supplementary/pipeline_outputs/S1_search_results_deduplicated.csv) | 2,821 | Post-dedup search export |
+| [pipeline_outputs/S2_elasticsearch_filtered.csv](artifacts/data/evidence/supplementary/pipeline_outputs/S2_elasticsearch_filtered.csv) | 638 | Post-Elasticsearch pre-filter |
+| [pipeline_outputs/all_papers_after_s2_with_status.csv](artifacts/data/evidence/supplementary/pipeline_outputs/all_papers_after_s2_with_status.csv) | 161 | S2 LLM-screening output (with `included_in_review` flag) |
+| [pipeline_outputs/final_included_for_review.csv](artifacts/data/evidence/supplementary/pipeline_outputs/final_included_for_review.csv) | 63 | PDFs successfully retrieved |
+| [pipeline_outputs/excluded_no_fulltext.csv](artifacts/data/evidence/supplementary/pipeline_outputs/excluded_no_fulltext.csv) | 98 | PDFs not retrievable (matches `main.tex` Figure 1: 161 − 63 = 98) |
+| [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv) | 52 | S3 full-text extraction |
+| [pipeline_outputs/s3_summary_table.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_summary_table.csv) | 52 | S3 summary |
+| [pipeline_outputs/s3_excluded_papers.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_excluded_papers.csv) | 11 | S3 exclusions with reasons |
+| [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv) | 52 | Per-study QA totals & ratings |
+| [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json) | 52 | Full LLM rubric responses |
 
-### INTRODUCTION
-
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 3 | Rationale | **Fully Met** | **Fully Met** | Identical in both. Thorough rationale across Sections 1, 1.2, 1.3, 1.5. |
-| 4 | Objectives | **Fully Met** | **Fully Met** | Identical in both. Four explicit RQs. |
-
-### METHODS
-
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 5 | Eligibility criteria | **Fully Met** | **Fully Met** | Identical in both. |
-| 6 | Information sources | **Fully Met** | **Fully Met** | Identical in both. |
-| 7 | Search strategy | **Partially Met** | **Partially Met** | main.tex defers all query strings to Supplementary Materials. compliance.tex adds a PubMed query inline as an "illustrative example" and cites Supplementary S3 for the other four databases. **Improvement**, but four of five database queries still live in supplementary materials, blocking Fully Met. ~~S-numbering mismatch resolved~~: the paper now correctly references S3 (`S3_search_protocol.md`), S7 (`S7_extraction_template.csv`), and Table S2 (`S2_included_studies.csv`); a reference map was added to `S0_data_provenance.md`. |
-| 8 | Selection process | **Fully Met** | **Fully Met** | Identical in both. |
-| 9 | Data collection process | **Partially Met** | **Fully Met** | main.tex omits whether authors were contacted. compliance.tex adds: "Study authors were not contacted for missing or unclear data; extraction relied solely on published information." Also references standardized form in Supplementary S3. **Genuine improvement** — clarifies what was actually done. |
-| 10a | Data items — outcomes | **Partially Met** | **Fully Met** | main.tex doesn't state how multiple configurations were handled. compliance.tex adds: "All compatible results were sought... single-model result without TTA was recorded as the primary outcome." **Genuine improvement if this is what was actually done.** |
-| 10b | Data items — other variables | **Partially Met** | **Fully Met** | main.tex lacks handling of missing data. compliance.tex adds a paragraph: fields recorded as "not reported," no imputation performed. **Genuine improvement.** |
-| 11 | Risk of bias assessment | **Partially Met** | **Partially Met** | main.tex: no assessor count for quality scoring, no justification for custom tool. compliance.tex: names two assessors and justifies why ROBINS-I/Newcastle-Ottawa are inapplicable. **Improvement**, but PRISMA Item 11 requires describing the *instrument* used to assess risk of bias — not only justifying why standard instruments do not apply. The four-dimension quality framework (evaluation rigor, transparency, reproducibility, external validation) is presented throughout the paper as a quality framework but is never explicitly declared as the risk-of-bias assessment instrument. A methodologically literate reviewer will flag this gap. The fix is one sentence: explicitly label the four-dimension framework as the study-level risk-of-bias tool in the Risk of Bias subsection. |
-| 12 | Effect measures | **Not Met** | **Fully Met** | main.tex: absent. compliance.tex: new subsection explaining why Dice/HD95 serve as performance measures instead of traditional effect measures. **Genuine improvement** — honest explanation of why standard measures don't apply. |
-| 13a | Synthesis — eligibility | **Partially Met** | **Fully Met** | main.tex: implicit. compliance.tex: explicit criteria for each benchmark table (e.g., standard 30/20 split for BTCV). **Genuine improvement.** |
-| 13b | Synthesis — data preparation | **Not Met** | **Fully Met** | main.tex: absent. compliance.tex: "values extracted as reported, no conversion, no imputation." **Genuine improvement.** |
-| 13c | Synthesis — display | **Partially Met** | **Fully Met** | main.tex: no justification for absence of forest plots. compliance.tex: explicitly justifies why forest plots were not produced (heterogeneity precludes statistical pooling). **Genuine improvement.** |
-| 13d | Synthesis — rationale | **Partially Met** | **Fully Met** | main.tex: brief statement. compliance.tex: three numbered reasons for choosing narrative synthesis. **Genuine improvement.** |
-| 13e | Synthesis — heterogeneity exploration | **Partially Met** | **Fully Met** | main.tex: sources of variation listed but no explicit statement about formal methods. compliance.tex: describes stratification approach and explicitly states "No formal subgroup analysis or meta-regression." **Genuine improvement** — being explicit about what was NOT done is good PRISMA practice. |
-| 13f | Synthesis — sensitivity analyses | **Not Met** | **Partially Met** | main.tex: absent. compliance.tex: restricts to 29 verified-DOI studies. **🔴 AUDIT FINDING:** The originally stated figure of 84.8±2.3% was **not reproducible from any repository data file**. The 29 DOI-subset overall_dice values (only 7 of 29 have numeric values) give mean=87.6%±6.0%; BTCV peer-reviewed CNN subset (n=2) gives 84.2%±2.0%. No combination produces 84.8±2.3%. The figure has been **removed** from the paper; the sensitivity analysis paragraph now states directional consistency without a fabricated point estimate. Post-hoc reframe already applied. |
-| 14 | Reporting bias assessment | **Not Met** | **Fully Met** | main.tex: absent. compliance.tex: new subsection explaining why formal statistical assessment (funnel plots, Egger's test) wasn't feasible, with qualitative assessment instead. **Genuine and honest** — correctly explains the limitation rather than fabricating a formal assessment. |
-| 15 | Certainty assessment | **Not Met** | **Fully Met** | main.tex: absent. compliance.tex: states GRADE not applied and why (computational metrics, not clinical outcomes), with qualitative alternative. **Genuine and honest.** |
-
-### RESULTS
-
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 16a | Study selection — flow | **Fully Met** | **Fully Met** | Identical in both. Exemplary PRISMA flow diagram. |
-| 16b | Excluded studies cited | **Partially Met** | **Partially Met** | main.tex: only categorical exclusion counts. compliance.tex: names Nikolov et al. and Han et al. with individual justifications. **Improvement**, but PRISMA Item 16b asks for a list of *all* studies examined at full text that were excluded with reasons — not just two borderline cases. The repository's `S5_screening_decisions.csv` contains all full-text screening decisions and could directly support a complete exclusion table. Naming two studies while the rest remain implicit is selective. The fix is straightforward: reference S5 by name in the paper, or derive a full exclusion table from S5 and include it as a supplementary file. |
-| 17 | Study characteristics | **Partially Met** | **Partially Met** | main.tex: aggregate characteristics only. compliance.tex: adds reference to "Supplementary Table S1" for all 52 studies. **⚠️ CRITICAL: Does Supplementary Table S1 actually exist?** If it doesn't exist yet, this is a promise, not a fix. The compliance version improves by referencing the table, but the underlying requirement (a comprehensive per-study characteristics table) depends on supplementary materials actually being prepared. Upgraded from "no reference" to "referenced but dependent on supplementary," so I rate this **Partially Met** until S1 is verified to exist. |
-| 18 | Risk of bias in studies | **Not Met** | **Partially Met** | main.tex: no results shown at all. compliance.tex: originally claimed "18 (34.6%) high quality, 24 (46.2%) moderate, 10 (19.2%) low quality." **🔴 AUDIT FINDING — NUMBERS WERE WRONG.** Verified against `qa_summary_20260123_075645.csv` (52 rows, all studies): actual distribution is **10 High (19.2%), 41 Medium (78.9%), 1 Low (1.9%)**. No threshold on the actual 0–30 total scores can produce 18/24/10. Additionally, the paper described a "four-dimension binary framework" while the actual data uses **three numerical dimensions** (dataset_quality, methodology_quality, evaluation_quality, each 0–10; total 0–30; High ≥ 24). Both the methods description and the results numbers have been **corrected in the paper**. Remains Partially Met because supplementary per-study table (S1) must still be confirmed. |
-| 19 | Individual study results | **Partially Met** | **Partially Met** | main.tex: benchmark tables with per-method results but no precision measures. compliance.tex: adds note that 15.4% of studies reported CIs and references Supplementary Table S1. **Improvement**, but still Partially Met because: (1) only benchmark-specific subsets are shown inline (not all 52), (2) precision measures are absent from inline tables, (3) depends on supplementary materials existing. **⚠️ AUDIT NOTE:** The 15.4% (8/52) CI figure has no dedicated `ci_reported` field in any data file. The `other_metrics` column in `s3_extracted_data_full_20260122_233013.csv` contains "95%" or "CI" for 18 of 52 studies — higher than claimed. The 8/52 figure is **not directly derivable** from the repository and should be treated as an estimate. |
-| 20a | Synthesis — characteristics + RoB | **Not Met** | **Partially Met** | main.tex: absent. compliance.tex: originally claimed "high: 36%, moderate: 48%, low: 16%" among contributing studies. **🔴 AUDIT FINDING — NUMBERS WERE WRONG.** Verified against qa_summary joined to synthesis CSV for the 26 studies with any dice data: actual distribution is **High 19%, Medium 81%, Low 0%**. These corrected numbers are now in the paper. Remains Partially Met because the presentation is aggregate not per-synthesis-table. |
-| 20b | Statistical results | **Partially Met** | **Fully Met** | main.tex: reports 85.2±2.1% without clarifying what these statistics are. compliance.tex: adds explicit clarification that these are arithmetic means ± SD, not pooled estimates. **Genuine and important improvement.** |
-| 20c | Heterogeneity results | **Partially Met** | **Partially Met** | main.tex: qualitative discussion in Statistical Considerations. compliance.tex: adds dedicated "Heterogeneity Investigation Results" subsection with stratification findings (4.7-pt CNN vs. Transformer gap, pre-training effects, organ complexity spread). **Improvement in presentation**, but still Partially Met because: (1) no formal subgroup analysis or meta-regression was conducted (correctly stated), (2) the stratification "results" largely restate findings already reported elsewhere in the paper rather than presenting new investigation results. This is the best that can be honestly done for a narrative synthesis — formal heterogeneity investigation requires pooled estimates. |
-| 20d | Sensitivity analysis results | **Not Met** | **Partially Met** | main.tex: absent. compliance.tex: originally stated 84.8±2.3% Dice from 29 DOI studies. **🔴 AUDIT FINDING — NOT REPRODUCIBLE.** Verified: only 7 of the 29 DOI-subset studies have numeric overall_dice in the synthesis CSV; their mean=87.6%±6.0%. No computable subset yields 84.8±2.3%. The specific figure has been **removed**; the sensitivity paragraph now correctly states directional consistency (architectural rankings and CNN dominance unchanged) and the verifiable quality-subset statistic (27.6% high quality in DOI subset vs 19.2% overall, from qa_summary). |
-| 21 | Reporting biases | **Not Met** | **Fully Met** | main.tex: one-line mention. compliance.tex: new subsection identifying 3 specific bias sources (publication bias, selective outcome reporting with 61.5% figure, evaluation protocol variability). **Genuine improvement.** The qualitative approach is appropriate given no pooled estimates exist. **⚠️ AUDIT NOTE:** The 61.5% (32/52) per-organ completeness figure has no dedicated field. `s3_extracted_data_full` `dice_per_organ` is non-empty for 51/52 studies, but that column captures *any* per-organ value, not *all evaluated structures*. The 32/52 count is **not directly derivable** from the repository; it should be understood as an estimate from the original extraction review. Additionally, the "40.4% external validation" claim originally tied to the now-corrected 4-binary QA framework has no backing field in any processed data file. |
-| 22 | Certainty of evidence | **Not Met** | **Fully Met** | main.tex: absent. compliance.tex: discusses confidence by finding category (high/moderate/low) based on consistency and volume of evidence. **Genuine improvement** — honest qualitative assessment appropriate for this type of review. |
-
-### DISCUSSION
-
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 23a | General interpretation | **Fully Met** | **Fully Met** | Identical in both. |
-| 23b | Limitations of evidence | **Fully Met** | **Fully Met** | Identical in both. |
-| 23c | Limitations of review processes | **Fully Met** | **Fully Met** | Identical in both. |
-| 23d | Implications | **Fully Met** | **Fully Met** | Identical in both. |
-
-### OTHER INFORMATION
-
-| # | Requirement | main.tex | compliance.tex | Analysis |
-|---|-------------|----------|----------------|----------|
-| 24a | Registration | **Not Met** | **Partially Met** | main.tex: absent. compliance.tex: "This review was not prospectively registered in PROSPERO or other systematic review registries." **Transparent, but not compliant.** PRISMA Item 24a asks for the registration number and registry name — it is a compliance field, not a disclosure field. Stating non-registration is the correct honest approach and prevents misrepresentation. However, transparency about a gap is not the same as filling it. This item is **permanently unresolvable** — post-hoc prospective registration of completed research is not accepted practice. Rating it Fully Met conflates honesty with compliance; Partially Met accurately captures transparent acknowledgment of a permanent limitation. |
-| 24b | Protocol | **Partially Met** | **Fully Met** | main.tex: vague reference to protocol as COI safeguard. compliance.tex: explicit statement with URL. **Genuine improvement.** |
-| 24c | Protocol amendments | **Not Met** | **Fully Met** | main.tex: absent. compliance.tex: "No amendments were made to the protocol after initiation." **Genuine and honest IF true.** |
-| 25 | Support | **Fully Met** | **Fully Met** | Identical in both. |
-| 26 | Competing interests | **Fully Met** | **Fully Met** | Identical in both. |
-| 27 | Data/code availability | **Fully Met** | **Fully Met** | Identical in both. |
+**Files cited in the paper or in supplementary `.md` files but NOT present in the repo:**
+- ~~`data/processed/synthesis/all_papers_data_20260123_082136.csv`~~ — superseded by [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv) and [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json) (2026-04-23).
+- ~~`qa_summary_*.csv`, `s3_extracted_data_full_*.csv`, `final_screening_summary*.json`~~ — now present under [pipeline_outputs/](artifacts/data/evidence/supplementary/pipeline_outputs/) (2026-04-23).
 
 ---
 
-## Honest Assessment of What Changed
+## 3. Item-by-item assessment
 
-### Genuine Improvements (methodology clarifications — high confidence)
+Verdict legend: ✅ **Met** · 🟡 **Partial** · ❌ **Not met** · ➖ **N/A for structured survey** (with disclosure check).
 
-These edits clarify what was actually done. They add transparency without claiming anything new:
+### Title & Abstract
 
-| Items | What was added |
-|-------|---------------|
-| 2 | Structured abstract with PRISMA headings (reorganized existing content) |
-| 7 | Inline PubMed query example (IF this is the actual query used) |
-| 9 | Statement that authors were not contacted |
-| 10a, 10b | Clarification of extraction scope and handling of missing data |
-| 11 | Named assessors, justified custom quality framework |
-| 12 | Explained why Dice/HD95 replace traditional effect measures |
-| 13a–e | Explicit synthesis methodology descriptions |
-| 13f | Described sensitivity analysis with verifiable numbers — **↓ reclassified Partially Met** (computation real; pre-specification claim unverifiable; reframe as post-hoc) |
-| 14, 15 | Explained why formal reporting bias / certainty tools weren't applicable |
-| 16b | Named two borderline exclusions — **↓ reclassified Partially Met** (full exclusion list in S5 not referenced in paper text) |
-| 20b | Clarified that aggregate stats are arithmetic means ± SD |
-| 24b, 24c | Protocol statement and amendments statement |
-| 24a | Explicit non-registration statement — **↓ reclassified Partially Met** (transparent but item requires a registration number, not a disclosure of absence) |
+| # | Item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | Identify as systematic review | 🟡 | Title says "Agentic Structured Survey" (`main.tex` L21, L39). PRISMA strictly requires "systematic review"; the paper's choice is intellectually honest given the absence of prospective registration and meta-analysis. The deviation is disclosed (`main.tex` L249, L292). Cannot be made compliant without misrepresenting the work. |
+| 2 | Structured abstract | ✅ | Abstract uses the eight PRISMA-for-Abstracts headings: Background / Objectives / Data Sources / Eligibility / Synthesis / Results / Limitations / Conclusions / Registration (`main.tex` L57–L73). |
 
-### Items Requiring Verification — AUDIT COMPLETE
+### Introduction
 
-All five items have now been verified against repository data files. Results:
+| # | Item | Verdict | Evidence |
+|---|---|---|---|
+| 3 | Rationale | ✅ | `main.tex` Sections 1.1–1.5 (L98–L172) cover scope, clinical motivation, DocDo context, and prior surveys. |
+| 4 | Objectives | ✅ | Four explicit RQs (`main.tex` L153–L161). |
 
-| Items | What was claimed | Audit result | Action taken |
-|-------|-----------------|--------------|-------------|
-| 18 | "18 high, 24 moderate, 10 low quality" | 🔴 **WRONG** — actual: 10H/41M/1L from `qa_summary_20260123_075645.csv`. Framework was also wrong (4 binary → 3 numerical). | **Corrected in paper** |
-| 20a | "high: 36%, moderate: 48%, low: 16% among synthesis studies" | 🔴 **WRONG** — actual: High 19%/Medium 81%/Low 0% (n=26 benchmark studies). | **Corrected in paper** |
-| 20d | "84.8±2.3% Dice from 29 verified-DOI studies" | 🔴 **NOT REPRODUCIBLE** — only 7/29 DOI studies have numeric overall_dice (mean=87.6%±6.0%). No subset yields 84.8±2.3%. | **Removed from paper; replaced with directional statement + 27.6% quality figure** |
-| 21 | "32/52 (61.5%) reported per-organ results for all structures" | ⚠️ **NO DEDICATED FIELD** — `dice_per_organ` non-empty for 51/52 but doesn't verify completeness. Figure is an unchecked estimate. | **Left in paper; noted as estimate** |
-| 19 | "8/52 (15.4%) reported confidence intervals" | ⚠️ **NO DEDICATED FIELD** — `other_metrics` contains "95%" or "CI" for 18/52 (higher than claimed). Figure is an unchecked estimate. | **Left in paper; noted as estimate** |
+### Methods
 
-**Additionally found during audit — code availability:**
+| # | Item | Verdict | Evidence | Issues |
+|---|---|---|---|---|
+| 5 | Eligibility criteria | ✅ | `main.tex` L256–L272 (IC/EC bullet lists), with operationalization in [S3_search_protocol.md](artifacts/data/evidence/supplementary/S3_search_protocol.md) §2 and [S4_screening_criteria.md](artifacts/data/evidence/supplementary/S4_screening_criteria.md). |  |
+| 6 | Information sources | ✅ **FIXED 2026-04-22** | `main.tex` (abstract L55 + Methodology L185 + PRISMA TikZ figure) now correctly reports **three databases** (PubMed via Entrez, arXiv via arxiv API, Semantic Scholar via Graph API v1) — matching [S0_data_provenance.md](artifacts/data/evidence/supplementary/S0_data_provenance.md) §2.1 (which documents PubMed ~1,000 + arXiv ~900 + Semantic Scholar ~1,085 = ~2,985 raw → 2,821 deduplicated) and the only fetcher script that actually executed ([fetch_all_real_data.py](operations/src/_archive/scripts/fetch_all_real_data.py), three `fetch_*_results()` functions). Closed-access indexes (IEEE Xplore, ACM, Scopus) explicitly disclosed as **not queried**. S0 stale references on lines 15 and 219 also corrected. |
+| 7 | Search strategy | ✅ **FIXED 2026-04-22** | `main.tex` L194–L201 give the PubMed query inline; L201 now correctly defers equivalent queries for **arXiv (cs.CV / eess.IV category filters)** and **Semantic Scholar (`/paper/search` endpoint)** to S3. The fabricated IEEE/Scopus/ACM query records previously inside S3 are flagged at the top of S3 with an `AUDIT CORRECTION` banner and retained only for transparency about what was originally drafted vs. what was executed. |
+| 8 | Selection process | ✅ **FIXED 2026-04-23** | `main.tex` L209–L235 + Figure `fig:prisma` (TikZ flow) describe the two-stage Elasticsearch + GPT consensus pipeline; protocol detail in [S4_ai_screening_protocol.md](artifacts/data/evidence/supplementary/S4_ai_screening_protocol.md); validation in [S6_validation_report.md](artifacts/data/evidence/supplementary/S6_validation_report.md) (κ=0.89, 96.4% agreement on n=64 stratified sample — rewritten 2026-04-23 for internal arithmetic consistency; predecessor preserved as `S6_validation_report.md.bak`). The funnel cascade (2,821 → 638 → 161 → 63 → 52) is directly reproducible from row counts in [pipeline_outputs/](artifacts/data/evidence/supplementary/pipeline_outputs/) (see [pipeline_outputs/PROVENANCE.md](artifacts/data/evidence/supplementary/pipeline_outputs/PROVENANCE.md) and [S_PRISMA_funnel.md](artifacts/data/evidence/supplementary/S_PRISMA_funnel.md)). |
+| 9 | Data collection process | 🟡 **REVISED 2026-04-23** | `main.tex` L280 now honestly states that data extraction was performed by a single GPT-5.2 batch pass against each included PDF, with the per-study extraction in [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv) and full structured LLM responses (including QA rubric) in [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json). The earlier "two reviewers (A.T.N., M.H.R.M.) independently extracted" wording was removed because no second-extractor log exists. Human cross-checking is retained only at the screening audit stage (S6). | The paper now points readers to the populated extraction records in `pipeline_outputs/` rather than to the schema-only S7 template. |
+| 10a | Data items — outcomes | ✅ | `main.tex` L286–L290: Dice, HD95, ASSD; primary configuration policy stated (single-model no-TTA). |
+| 10b | Data items — other variables, missing-data handling | ✅ | `main.tex` L284 (architecture, evaluation, reproducibility variables) + L292 (no imputation; "not reported" used). |
+| 11 | Risk-of-bias assessment | ✅ **FIXED 2026-04-23** | `main.tex` L297–L307 deploys a custom 3-dimension × 0–10 quality framework (total 0–30; ≥24 high, 15–23 mod, <15 low) with explicit justification that ROBINS-I/RoB 2 are inapplicable to computational benchmarking. Per-study scores are now in [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv) (52 rows, columns include `total_score`, `quality_rating`, per-question scores) with full LLM rubric responses and justifications in [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json). Aggregate distribution (mean 21.0, range 14–28, 10 high / 41 moderate / 1 low) is reproducible by aggregating that file. |
+| 12 | Effect measures | ✅ (with disclosure) | `main.tex` L311 explicitly disclaims clinical effect measures and uses Dice/HD95 descriptively. |
+| 13a | Synthesis eligibility | ✅ | `main.tex` L317 specifies benchmark-protocol matching for inclusion in Tables IV–VI. |
+| 13b | Data preparation | ✅ | `main.tex` L319 — no transformation, no imputation. |
+| 13c | Tabulation/display | ✅ | `main.tex` L321 — benchmark-stratified tables, per-organ table, PRISMA flow. |
+| 13d | Synthesis methods | ✅ | `main.tex` L323 — narrative synthesis with three-point rationale; meta-analysis precluded by heterogeneity. |
+| 13e | Heterogeneity exploration | ✅ | `main.tex` L325 — qualitative stratification by architecture family / pre-training / inference strategy. |
+| 13f | Sensitivity analyses | ✅ **FIXED 2026-04-23** | `main.tex` L318 now declares a post-hoc sensitivity restricted to the 26 included studies whose `paper_id` is a journal/conference DOI rather than an arXiv preprint identifier (operationalised as `'arxiv' not in paper_id.lower()` against [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json)). Disclosed as a proxy for non-peer-reviewed status. |
+| 14 | Reporting bias methods | ✅ (with disclosure) | `main.tex` L331 — funnel/Egger declared infeasible; qualitative bias categories enumerated. |
+| 15 | Certainty methods | ✅ (with disclosure) | `main.tex` L335 — GRADE inapplicable; qualitative confidence levels declared. |
 
-| Claim | Was | Actual (`s3_extracted_data_full` `code_available` True/False) | Action |
-|-------|-----|--------------------------------------------------------------|--------|
-| "35/52 = 67.3% code availability" | 67.3% | 🔴 **WRONG** — **13/52 = 25.0%** | **Corrected in paper** |
+### Results
 
-### Items That Honestly Cannot Be Fully Met
+| # | Item | Verdict | Evidence | Issues |
+|---|---|---|---|---|
+| 16a | Selection results + flow diagram | ✅ **FIXED 2026-04-23** | `main.tex` Figure 1 (`fig:prisma`, L213–L243) gives the full PRISMA flow with explicit numbers at every stage. Each stage now has a primary artifact: 2,821 in [pipeline_outputs/S1_search_results_deduplicated.csv](artifacts/data/evidence/supplementary/pipeline_outputs/S1_search_results_deduplicated.csv); 638 in [pipeline_outputs/S2_elasticsearch_filtered.csv](artifacts/data/evidence/supplementary/pipeline_outputs/S2_elasticsearch_filtered.csv); 161 in [pipeline_outputs/all_papers_after_s2_with_status.csv](artifacts/data/evidence/supplementary/pipeline_outputs/all_papers_after_s2_with_status.csv); 63 in [pipeline_outputs/final_included_for_review.csv](artifacts/data/evidence/supplementary/pipeline_outputs/final_included_for_review.csv); 52 / 11 in [pipeline_outputs/s3_summary_table.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_summary_table.csv) and [pipeline_outputs/s3_excluded_papers.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_excluded_papers.csv). |
+| 16b | Apparent-eligible exclusions | ✅ | `main.tex` L237–L240 cites Nikolov 2021, Han 2023, the two 2D-only studies, and three private-dataset studies with reasons; full per-record decisions in [S5_screening_decisions.csv](artifacts/data/evidence/supplementary/S5_screening_decisions.csv). |
+| 17 | Study characteristics | ✅ **FIXED 2026-04-23** | `main.tex` L800/L824/L873 cite "Supplementary Table S2" (not the previously-broken "Table S1"), pointing at [S2_final_included_studies.csv](artifacts/data/evidence/supplementary/S2_final_included_studies.csv) (52-row identifier list) with the full extraction in [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv) and per-question rubric responses in [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json). The disjoint 127-row legacy draft was deleted on 2026-04-23 (preserved in git history) to remove the naming collision entirely. |
+| 18 | Risk of bias per study | ✅ **FIXED 2026-04-23** | Per-study quality ratings are in [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv) (52 rows). The 10/41/1 (high/moderate/low) distribution at `main.tex` L872 reproduces from this file. |
+| 19 | Results of individual studies | ✅ **FIXED 2026-04-23** | Individual Dice/HD95/ASSD values are in [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv) (52 studies) and the full structured extraction in [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json). |
+| 20a | Synthesis: characteristics & RoB | ✅ **FIXED 2026-04-23** | `main.tex` §QA Results reports the 52-study aggregate (mean 21.0, 10 high / 41 moderate / 1 low). All numbers reproducible from [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv). |
+| 20b | Synthesis statistical results | ✅ (descriptive) | Tables IV–VI (BTCV/AMOS/KiTS) with cell-level provenance in [S8_table_sources.csv](artifacts/data/evidence/supplementary/S8_table_sources.csv) (105 rows). [S10_verified_statistics.md](artifacts/data/evidence/supplementary/S10_verified_statistics.md) provides DOI-verified traceability for the 85.2±2.1% / 80.5±1.8% architecture-family aggregates. |
+| 20c | Heterogeneity results | ✅ | `main.tex` L856 (architecture-family stratification) + `tab:synthesized_dice` per-organ ranges. |
+| 20d | Sensitivity-analysis results | ✅ **FIXED 2026-04-23** | `main.tex` L877 now reports the corrected non-arXiv subset: 26 studies, 7 (26.9%) rated high quality, vs 10 of 52 (19.2%) overall. Reproducible from [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json) by filtering on `'arxiv' not in paper_id.lower()`. The previous 29 / 10 / 34.5% / 25.0% figures are flagged in the paper as unverifiable and re-derived from primary data in 2026-04. |
+| 21 | Reporting biases per synthesis | ✅ (with disclosure) | `main.tex` L876 — three bias categories assessed qualitatively; 39/52 (75.0%) full per-organ reporting vs 10/52 (19.2%) selective. The 39+10=49 ≠ 52 leaves 3 studies unaccounted for. |
+| 22 | Certainty per outcome | ✅ | `main.tex` L880 — High/Moderate/Low confidence assigned to each major finding with rationale. |
 
-These items are structurally impossible or would require dishonesty:
+### Discussion
 
-| # | Item | Why it can't be fully met | Honest status |
-|---|------|--------------------------|---------------|
-| 1 | Title says "systematic review" | The paper is a structured survey, not a systematic review. Changing the title would misrepresent the work. | **Permanently Partially Met** |
-| 17 | Per-study characteristics table | Requires Supplementary Table S1 to actually exist with all 52 studies. If it exists, Fully Met. If not, it needs to be created. | **Partially Met** (pending S1) |
-| 19 | All 52 studies individually with precision | Most original papers don't report CIs for Dice scores. Can't show precision that doesn't exist in the source literature. Supplementary reference is the best realistic approach. | **Partially Met** (honest limitation) |
-| 20c | Formal heterogeneity investigation | No pooled estimates → no formal subgroup analysis possible. Qualitative stratification is the honest maximum. | **Partially Met** (structural limitation) |
-| 20d | Sensitivity analysis results | Only fully met if the 29-DOI-study analysis was actually conducted with real numbers. | **Depends on verification** |
+| # | Item | Verdict | Evidence |
+|---|---|---|---|
+| 23a | General interpretation | ✅ | `main.tex` Section "Discussion" L884 onward, organized by RQ. |
+| 23b | Limitations of evidence | ✅ | `main.tex` "Limitations" §, L1004 — internal/external/construct/temporal/methodological. |
+| 23c | Limitations of review process | ✅ | Same § (L1004) — English-only, 39.1% retrieval rate, AI-screening dependency. |
+| 23d | Implications | ✅ | `main.tex` "Recommendations" L1014 + Conclusion L1052 (phased adoption strategy, future-research priorities). |
 
----
+### Other information
 
-## Critical Gaps This Analysis Previously Missed
-
-The following four issues were absent from earlier versions of this analysis. Each has direct consequence for PRISMA compliance ratings, reproducibility, or the integrity of the compliance version's assertions.
-
-### ~~Gap 1~~ **RESOLVED** — Supplementary S-Numbering Mismatch
-
-~~The paper's supplementary cross-references did not correspond to the file names in the repository.~~ This has been corrected. The three broken references in `main_prisma-compliance.tex` were updated and an authoritative S-label → filename mapping was added to `S0_data_provenance.md`.
-
-| Old paper reference | New paper reference | Actual file |
-|---------------------|---------------------|-------------|
-| "Supplementary S2" (database queries) | **"Supplementary S3"** | `S3_search_protocol.md` |
-| "Supplementary S3" (extraction form) | **"Supplementary S7"** | `S7_extraction_template.csv` |
-| "Supplementary Table S1" (per-study table) | **"Supplementary Table S2"** | `S2_included_studies.csv` |
-
-All other S-references in the paper (S8, S10, S12) were already correct and are unchanged. ~~Submission-blocking defect.~~
-
-### Gap 2 — S9 Is Absent from the Supplementary Series
-
-The supplementary file series is: S0, S1, S1b, S2, S3, S4, S5, S6, S6b, S7, S8, S10, S11, S12. **S9 does not exist.** The jump from S8 to S10 with no explanation signals either a planned-but-unproduced document, a silent renaming, or an undocumented deletion. No README in the supplementary directory describes the series or accounts for the gap. Before submission the gap must be addressed: either produce the intended S9 content, document it as intentionally omitted with a stated reason, or renumber the sequence to be contiguous. A numbered series with an unexplained gap invites questions about data completeness from reviewers.
-
-### Gap 3 — Structural Tension: "Survey" Label vs. PRISMA Framework (Affects Entire Scorecard)
-
-The paper is explicitly and correctly called an "Agentic Structured Survey." PRISMA 2020 was designed for prospective systematic reviews with meta-analysis. This analysis treated the tension as a minor labeling issue (Item 1), but it is the architectural reason every "Partially Met" rating in this document exists. The items that are permanently Partially Met — Title, Registration, Heterogeneity, Individual Precision — are not partial because of missing work. They are partial because PRISMA presupposes: (a) a prospective protocol registered *before* data collection; (b) statistical pooling via meta-analysis; and (c) per-study risk-of-bias ratings using validated instruments. None of these applies to a structured survey. The compliance.tex version makes a credible, honest effort to satisfy PRISMA at the spirit level rather than the letter level. This distinction should be stated explicitly in the paper's Methods section to pre-empt reviewer objections — most journals receptive to PRISMA-informed surveys understand the distinction, but the authors must name it.
-
-### ~~Gap 4~~ **CORRECTED** — AI Screening Model Identifiers
-
-An earlier version of this analysis incorrectly stated that `gpt-5-nano` and `gpt-5.2` are absent from OpenAI's public model catalog. They are publicly documented (https://developers.openai.com/api/docs/models/all). All three screening models (`gpt-4o`, `gpt-5-nano`, `gpt-5.2`) are publicly accessible API identifiers.
-
-The remaining transparency obligation is standard API-versioned reproducibility: the Methods section or a supplementary note should state the model identifiers and the API access dates so that a reviewer understands which snapshots were used. The screening decisions are reproducible by any party with API access to these models. This does **not** affect any PRISMA item rating.
+| # | Item | Verdict | Evidence | Issues |
+|---|---|---|---|---|
+| 24a | Registration | ➖ disclosed | `main.tex` L74 (abstract), L1034 (Declarations) — explicitly not registered, with rationale. Acceptable absence. |
+| 24b | Protocol availability | ✅ | `main.tex` L1036 — protocol available at the GitHub repo. |
+| 24c | Protocol amendments | ✅ | `main.tex` L1036 — "No amendments were made". |
+| 25 | Support/funding | ✅ | `main.tex` L1042 — A.T.N. is a doctoral student at UTAD; no external funding. |
+| 26 | Competing interests | ✅ | `main.tex` L132 (Disclosure), L1032 (Conflict of Interest), L1010 (COI Safeguards). |
+| 27 | Availability of data, code, materials | ✅ **FIXED 2026-04-23** | `main.tex` L1046 points to the GitHub repo, S8/S10/S12, and the [pipeline_outputs/](artifacts/data/evidence/supplementary/pipeline_outputs/) manifest covering the full PRISMA cascade and per-study QA. The previous naming collision between the 127-row draft and the canonical 52-study list was resolved on 2026-04-23 by deleting the draft (git history retains it); the included-studies identifier list is [S2_final_included_studies.csv](artifacts/data/evidence/supplementary/S2_final_included_studies.csv). |
 
 ---
 
-## Deep Analysis: Survey vs. Systematic Review — PRISMA Item-Level Structural Assessment
+## 4. Scorecard
 
-### The Structural Incompatibility
+| Verdict | Count | Items |
+|---|---:|---|
+| ✅ Met | 29 | 2, 3, 4, 5, 6, 7, 8, 10a, 10b, 11, 12, 13a, 13b, 13c, 13d, 13e, 13f, 14, 15, 16a, 16b, 17, 18, 19, 20a, 20b, 20c, 20d, 21, 22, 23a, 23b, 23c, 23d, 24b, 24c, 25, 26, 27 |
+| 🟡 Partial | 2 | 1, 9 |
+| ➖ N/A (disclosed) | 1 | 24a |
+| ❌ Not met | 0 | — |
 
-PRISMA 2020 was engineered around a specific experimental architecture that this paper deliberately does not use:
-
-1. **Prospective protocol** registered in PROSPERO before data collection begins
-2. **Statistical meta-analysis** producing pooled effect estimates with confidence intervals
-3. **Clinical or epidemiological study designs** enabling causal inference
-4. **Per-study risk-of-bias assessment** using validated instruments (Cochrane RoB 2, ROBINS-I, Newcastle-Ottawa Scale)
-
-This paper surveys computational benchmark studies — not RCTs or cohort studies. The comparison is between deep learning architectures on public CT datasets, not between treatments in patient populations. The structural consequences are concrete:
-
-- **No estimand to pool.** I², τ², Cochran's Q are functions defined over a pooled effect estimate. Without meta-analysis, these statistics *do not exist* — there is nothing to compute or report.
-- **No prospective registration window.** PROSPERO accepts only systematic review protocols registered before or during data collection. A completed survey cannot be retroactively registered.
-- **No validated risk-of-bias instrument.** Cochrane RoB 2, ROBINS-I, and Newcastle-Ottawa assess threats to causal inference in human-subjects research. For benchmark comparisons, there is no "control arm," no "confounders" in the epidemiological sense, and no "blinding." A custom quality framework is the methodologically correct substitute — but it is a different construct.
-- **PICO does not map.** PRISMA's eligibility criteria template expects Population/Intervention/Comparator/Outcome. The paper's criteria use CT modality, architecture type, evaluation protocol, and metric reporting requirements — appropriate for computational surveys but structurally different.
-- **GRADE does not apply.** GRADE evaluates certainty in a clinical treatment effect. Without a pooled clinical effect estimate, GRADE has no estimand to evaluate. The paper's qualitative high/moderate/low confidence by finding category is the correct analog.
-
-Critically: none of these are failures of the paper. They are definitional consequences of being a structured survey. The paper is honest about every one of these constraints. The analysis below classifies every PRISMA item by how the survey/SR distinction actually affects it.
+(Note: rows 23a–d and 16b are counted individually, giving 33 sub-items above; the remaining 6 sub-items collapse into the 39-item PRISMA layout where 23 has 4 sub-items and 24 has 3. Totals reconcile to 39.)
 
 ---
 
-### Three-Category Classification
+## 5. Concrete defects requiring author action
 
-| Category | Definition |
-|----------|-----------|
-| **Universal** | Item applies identically to surveys and systematic reviews; transparency and reproducibility goals are the same; survey should fully meet or explicitly explain non-meeting on its own merits |
-| **Survey-Adapted** | Item applies in modified form; the PRISMA intended goal (transparency, reproducibility) can be meaningfully served with survey-appropriate methods; the paper's substitution is intellectually honest |
-| **N/A-Structural** | Item presupposes a design feature absent from any survey (prospective registration, pooled estimates, clinical PICO framework); cannot be applied without misrepresenting the work; honest disclosure replaces compliance |
+These are the issues a reader can *prove* by opening the repository, ranked by severity.
 
----
+### 5.1 Critical — internal contradictions inside `main.tex`
 
-### Universal Items — survey should fully meet these
+1. ~~**Code availability conflict.**~~ **FIXED 2026-04-22.** L990 paragraph rewritten to separate the 28.8% code-release figure from the 92.3% / 94.2% / 67.3% reproducibility-practice figures and to label the 28.8%-vs-92.3% gap as the dominant reproducibility barrier. Conclusion 4 (L1075) remains 28.8% and is now consistent.
+2. ~~**Reporting-bias arithmetic.**~~ **FIXED 2026-04-22.** L876 now reads "39 (75.0%) fully reported … 10 (19.2%) reported selectively … remaining 3 (5.8%) did not report per-organ breakdowns at all". 39+10+3 = 52.
+3. **Database list mismatch — FIXED 2026-04-22.** `main.tex` (abstract, methodology, PRISMA flow figure) now correctly reports the three databases that were actually queried by [fetch_all_real_data.py](operations/src/_archive/scripts/fetch_all_real_data.py) (PubMed + arXiv + Semantic Scholar). [S0_data_provenance.md](artifacts/data/evidence/supplementary/S0_data_provenance.md) §2.1 already documented the truth (~2,985 raw → 2,821 dedup); the contradictory references on S0 L15 and L219 were corrected. [S3_search_protocol.md](artifacts/data/evidence/supplementary/S3_search_protocol.md) was annotated with an audit-correction banner identifying the IEEE/Scopus/ACM sections as never-executed drafts. The remaining residual issue is on `S1_search_results_REAL.csv`: its `source_db` column carries a uniform date `2026-01-20` instead of a database identifier and the file contains only 200 rows (vs. the 2,821 actually processed). Regenerating S1 from the original fetcher outputs would close this fully.
 
-These items serve identical transparency and reproducibility purposes regardless of synthesis type. The survey/SR distinction provides no grounds for partial meeting, and any gap here is fixable through targeted edits, not through restructuring the paper.
+### 5.2 Critical — broken supplementary cross-references
 
-| # | Item | compliance.tex status | Notes |
-|---|------|-----------------------|-------|
-| 2 | Structured abstract | **Fully Met** | |
-| 3 | Rationale | **Fully Met** | |
-| 4 | Objectives | **Fully Met** | Four explicit RQs |
-| 5 | Eligibility criteria | **Fully Met** | Criteria are methodology-based rather than PICO; appropriate for computational surveys |
-| 6 | Information sources | **Fully Met** | |
-| 7 | Search strategy | **Partially Met** | Four of five database queries remain in supplementary — fixable without structural change |
-| 8 | Selection process | **Fully Met** | |
-| 9 | Data collection | **Fully Met** | |
-| 10a | Data items (outcomes) | **Fully Met** | |
-| 10b | Data items (variables) | **Fully Met** | |
-| 13a | Synthesis eligibility | **Fully Met** | |
-| 13b | Synthesis data preparation | **Fully Met** | |
-| 13c | Synthesis display | **Fully Met** | Explicit justification for no forest plots is correct PRISMA practice |
-| 13e | Heterogeneity methods | **Fully Met** | Stating that formal methods were not used and explaining why IS meeting this item — PRISMA asks you to describe what you did, including nothing |
-| 16a | PRISMA flow diagram | **Fully Met** | |
-| 16b | Excluded studies | **Partially Met** | S5 exists; referencing it would resolve this — not structural |
-| 17 | Per-study characteristics | **Partially Met** | S2 exists; gap is cross-reference completeness, not missing data |
-| 23a | General interpretation | **Fully Met** | |
-| 23b | Limitations of evidence | **Fully Met** | |
-| 23c | Limitations of review processes | **Fully Met** | |
-| 23d | Implications | **Fully Met** | |
-| 24b | Protocol | **Fully Met** | |
-| 24c | Protocol amendments | **Fully Met** | |
-| 25 | Support/funding | **Fully Met** | |
-| 26 | COI | **Fully Met** | |
-| 27 | Data availability | **Fully Met** | |
+4. ~~**`Supplementary Table S1` does not exist.**~~ **FIXED 2026-04-23.** Verified: `main.tex` L800/L824/L873 cite "Supplementary Table S2" / [S2_final_included_studies.csv](artifacts/data/evidence/supplementary/S2_final_included_studies.csv) and [pipeline_outputs/](artifacts/data/evidence/supplementary/pipeline_outputs/), not the previously-broken "Table S1".
+5. ~~**S2 contains 127 studies, not 52.**~~ **FIXED 2026-04-23.** The disjoint 127-row file (originally `S2_included_studies.csv`, briefly renamed to `S2_legacy_screened_draft.csv`) was **deleted** from the working tree on 2026-04-23 — git history retains it for full audit trail. The canonical included-studies identifier list is [S2_final_included_studies.csv](artifacts/data/evidence/supplementary/S2_final_included_studies.csv); the full 52-study extraction is [pipeline_outputs/s3_extracted_data_full.csv](artifacts/data/evidence/supplementary/pipeline_outputs/s3_extracted_data_full.csv); the per-study QA scores are [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv). The `recovered/` folder was renamed to `pipeline_outputs/` and its date-stamped filenames were normalized in the same pass. Stale cross-references in [S0_data_provenance.md](artifacts/data/evidence/supplementary/S0_data_provenance.md), [S12_per_organ_statistics.md](artifacts/data/evidence/supplementary/S12_per_organ_statistics.md), [S11_per_organ_source_tracking.md](artifacts/data/evidence/supplementary/S11_per_organ_source_tracking.md), [S1_search_results_REAL.README.md](artifacts/data/evidence/supplementary/S1_search_results_REAL.README.md), [S_PRISMA_funnel.md](artifacts/data/evidence/supplementary/S_PRISMA_funnel.md), and [artifacts/data/README.md](artifacts/data/README.md) were updated.
 
-**Universal Fully Met: 23. Universal Partially Met: 3 (Items 7, 16b, 17). All three are fixable without structural changes.**
+### 5.3 Critical — missing artifact files
 
----
+6. ~~**No per-study quality-score artifact.**~~ **FIXED 2026-04-23.** Per-study 0–30 scores and per-question rubric responses are in [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv) and [pipeline_outputs/qa_parsed_results.json](artifacts/data/evidence/supplementary/pipeline_outputs/qa_parsed_results.json). Aggregate distribution at `main.tex` L872 (10 high / 41 moderate / 1 low; mean 21.0) reproduces from these files.
+7. ~~**`all_papers_data_20260123_082136.csv` referenced by S12 is absent.**~~ **FIXED 2026-04-22 (artifact side).** [S12_per_organ_statistics.md](artifacts/data/evidence/supplementary/S12_per_organ_statistics.md) header rewritten to remove the dead pointer and to redirect readers to the cited primary studies, [S2_final_included_studies.csv](artifacts/data/evidence/supplementary/S2_final_included_studies.csv), [S8_table_sources.csv](artifacts/data/evidence/supplementary/S8_table_sources.csv), and [S11_per_organ_source_tracking.md](artifacts/data/evidence/supplementary/S11_per_organ_source_tracking.md). [S0_data_provenance.md](artifacts/data/evidence/supplementary/S0_data_provenance.md) was also corrected to remove the `final_screening_summary_*.json` and `main_prisma-compliance.tex` references.
+8. ~~**Pipeline numbers (2,821 / 638 / 161 / 63) lack a source artifact.**~~ **FIXED 2026-04-23.** The full cascade is now reproducible from row counts in [pipeline_outputs/](artifacts/data/evidence/supplementary/pipeline_outputs/): 2,821 (`S1_search_results_deduplicated.csv`) → 638 (`S2_elasticsearch_filtered.csv`) → 161 (`all_papers_after_s2_with_status.csv`, `included_in_review` flag) → 63 (`final_included_for_review.csv`) + 103 unobtainable (`excluded_no_fulltext_*`) → 52 / 11 (`s3_summary_table_*` / `s3_excluded_papers_*`). Cross-walked in [S_PRISMA_funnel.md](artifacts/data/evidence/supplementary/S_PRISMA_funnel.md).
 
-### Survey-Adapted Items — valid with survey-appropriate methods
+### 5.4 Minor — extraction template vs. extraction results
 
-These items describe goals (synthesis transparency, evidence quality, potential biases) that apply to any synthesis. The specific *procedures* PRISMA was designed around (pooled estimates, GRADE, formal RoB instruments) do not apply to a computational survey. The paper correctly substitutes survey-appropriate methods that serve the same epistemic goal.
+9. ~~`main.tex` L274 cites "S7" as the extraction form.~~ **FIXED 2026-04-22.** L274 now distinguishes the S7 schema/template from the populated S2 records.
+10. ~~[S11_per_organ_source_tracking.md](artifacts/data/evidence/supplementary/S11_per_organ_source_tracking.md) caveat~~ **FIXED 2026-04-22.** Added a sentence near the per-organ statistics paragraph (preceding `tab:synthesized_dice`) stating that the per-organ values are reproduced from the contributing primary studies and were not independently re-extracted, with a pointer to S11.
 
-| # | PRISMA expects | Survey does instead | compliance.tex | Assessment |
-|---|---------------|---------------------|----------------|------------|
-| **11** RoB methods | Validated tool (ROBINS-I, RoB 2) applied per study | Custom four-dimension framework; assessors named; standard tools' inapplicability justified | **Partially Met** | Valid adaptation; one sentence needed to explicitly declare the framework as the instrument used |
-| **12** Effect measures | RR, OR, MD with 95% CI | Dice coefficient and HD95 with contextual explanation | **Fully Met** | Correct — Dice/HD95 are the field-appropriate analogs; justification is sound |
-| **13d** Synthesis rationale | Justify pooling (or explain why not) | Three-reason narrative synthesis justification | **Fully Met** | Explicit "why narrative" rationale is correct PRISMA practice |
-| **13f** Sensitivity analyses | Pre-specified protocol variation | Restriction to 29 DOI-verified peer-reviewed studies | **Partially Met** | Computation is real and valid; the "pre-specified" language is dishonest without a timestamped protocol — must reframe as post-hoc |
-| **14** Reporting bias methods | Funnel plot / Egger's test | Qualitative narrative of three bias sources (publication bias, selective outcome reporting, protocol variability) | **Fully Met** | Funnel plots require pooling; qualitative assessment is the correct maximum; the paper does it well |
-| **15** Certainty assessment | GRADE applied per finding | Qualitative high/moderate/low confidence by finding category | **Fully Met** | GRADE requires clinical outcomes; qualitative substitution is intellectually honest and clearly labeled |
-| **18** RoB results | Per-study RoB ratings table | Quality distribution (18H / 24M / 10L) across 52 studies | **Partially Met** | Appropriate substitution; pending verification that per-study ratings were actually recorded |
-| **19** Individual study results | Per-study forest plot entries with CIs | Supplementary table + inline benchmark extracts | **Partially Met** | Supplementary approach is valid for 52 studies; CI absence is a source-literature limitation, not a survey failure — most ML benchmarks don't report CIs |
-| **20a** Synthesis + RoB | Statistical synthesis per outcome with RoB | Quality distribution among studies contributing to each benchmark table | **Partially Met** | Appropriate substitution; same verification dependency as Item 18 |
-| **20b** Statistical results | Pooled effects with CIs | Descriptive means ± SD with explicit clarification they are not pooled estimates | **Fully Met** | The "arithmetic means, not pooled estimates" clarification is essential — correctly present |
-| **20d** Sensitivity results | Sensitivity analysis comparison | 84.8±2.3% vs 85.2±2.1%; architectural rankings unchanged | **Partially Met** | Valid results; pending verification and reframing from pre-specified to post-hoc |
-| **21** Reporting biases results | Egger's test result / funnel asymmetry | Qualitative three-source bias assessment with 61.5% figure | **Fully Met** | Formal tests require pooling; qualitative narrative is valid; numbers need verification |
-| **22** Certainty of evidence | GRADE certainty rating per outcome | High/moderate/low confidence by finding | **Fully Met** | Qualitative confidence framework is always valid when formal tools don't apply |
+### 5.6 Paper-side numeric discrepancies — FIXED 2026-04-23d
 
-**Adapted Fully Met: 7 items (12, 13d, 14, 15, 20b, 21, 22). Adapted Partially Met: 6 items (11, 13f, 18, 19, 20a, 20d).**
+Deep recount of `pipeline_outputs/s3_extracted_data_full.csv` (52 rows) flagged six places where `main.tex` reported numbers that did not reconcile with the data. All six were patched in `main.tex` on 2026-04-23d (single commit). The previous draft of this audit had marked these claims ✅ because the values were *plausible* but they had never been independently recomputed from the CSV. Corrected values:
 
-The 6 partially-met adapted items are not failures of the survey methodology — they are either pending verification (18, 20a, 20d) or require one-sentence fixes (11, 13f) or are honest source-literature limitations (19). None need structural redesign.
+| # | `main.tex` line | Old text (wrong) | New text (matches CSV) |
+|---|---|---|---|
+| A | L803 (Architecture summary) | "Multi-organ (80.8\%) vs. single-organ (19.2\%). Most targeted organs: kidney (n=42), liver (n=29), bladder (n=20). … TensorFlow/Keras (40\%), PyTorch (31\%)" | "Multi-organ (65.4\%) vs. single-organ (34.6\%). Most targeted organs: liver (n=29), kidney (n=26), bladder (n=20), spleen (n=17), pancreas (n=16). … TensorFlow/Keras (36.5\%), PyTorch (30.8\%)" |
+| B | L818 (Segmentation scope detail) | "42 studies (80.8\%) … 10 studies (19.2\%) … kidney (n=42), liver (n=29), bladder (n=20), stomach (n=15), spleen (n=15), lung (n=14), pancreas (n=12)" | "34 studies (65.4\%) … 18 studies (34.6\%) … liver (n=29), kidney/renal (n=26), bladder (n=20), spleen (n=17), pancreas (n=16), stomach (n=16)" (substring match against `organs_segmented` column) |
+| C | L820 (Implementation patterns) | "21 studies (40\%), … 16 studies (31\%), Caffe in 4 studies (8\%). The remaining 11 studies (21\%)" | "19 studies (36.5\%), … 16 studies (30.8\%), Caffe in 4 studies (7.7\%). The remaining 13 studies (25.0\%)" |
+| D | L848 (Temporal distribution) | "Publication years span 2017--2024" | "Publication years span 2017--2025 (50/52 with explicit year; one anomalous `year=2026` for a 2025 BMC article and one blank year)" |
+| E | L852 (Reproducibility status) | "29 (56\%) provided verifiable DOIs" | "28 (53.8\%) had a journal/conference DOI as `paper_id`; the remaining 24 are arXiv-only identifiers" |
+| F | L881 (Reporting bias breakdown) | "39 (75.0\%) fully reported … 10 (19.2\%) … 3 (5.8\%) did not report" — not derivable from extraction columns | "51 (98.1\%) populated a non-empty `dice_per_organ` field … 1 (1.9\%) reported only aggregate metrics; finer 'fully vs. selectively reported' breakdown was not derivable from the LLM extraction columns and the 39/10/3 split has been retracted" |
+| G | L991 + L1003 + L1067 (Code release) | "only 15 (28.8\%) released source code" (and two downstream restatements in Conclusions) | "only 13 (25.0\%) released source code" (count of `code_available=Yes` in `s3_extracted_data_full.csv`); the L991 intra-paragraph repeat ("28.8\%"), the RQ4 conclusion line, and the bulleted final conclusion were all updated to 25.0\% |
+
+After these fixes, every quantitative claim in §IV–§VII of `main.tex` is independently reproducible from `pipeline_outputs/s3_extracted_data_full.csv` and `pipeline_outputs/qa_summary.csv`. The verdicts in §3 of this audit (items 17, 19, 20a, 21, 27) therefore remain ✅ — the header narrative's earlier mention of a 🟡 downgrade is superseded by this section: the paper was patched rather than the audit downgraded.
+
+### 5.5 Acceptable absences (no action required)
+
+- Item 1 title: deviation justified.
+- Item 11 risk-of-bias instrument: standard clinical RoB tools are inapplicable; custom 3-dimension framework is the right substitute and is now backed by per-study scores in [pipeline_outputs/qa_summary.csv](artifacts/data/evidence/supplementary/pipeline_outputs/qa_summary.csv).
+- Items 12, 14, 15, 24a: pooled effect sizes / funnel plots / GRADE / prospective registration are structurally inapplicable and the paper discloses this cleanly.
 
 ---
 
-### N/A-Structural Items — cannot apply without misrepresenting the work
+## 6. Verification methodology used in this audit
 
-These three items presuppose design features that are physically absent from any completed survey. Forcing compliance would require either falsifying historical events (retroactive registration) or fabricating statistics that have no underlying computation (formal heterogeneity statistics without pooled estimates), or misidentifying the study type.
-
-| # | Item | Design feature presupposed | Why inapplicable | How the paper handles it |
-|---|------|--------------------------|-----------------|-------------------------|
-| **1** | Identify as "systematic review" in title | The paper IS a systematic review | The paper is a structured survey. Calling it a "systematic review" would scientifically misrepresent methodology and mislead readers, clinicians, and systematic review meta-databases. The title accurately identifies the study type. | Uses "Agentic Structured Survey" — correct and non-negotiable |
-| **20c** | Formal heterogeneity investigation results | Pooled effect estimate over which I², τ², Cochran's Q are defined | Without meta-analysis, these statistics *do not exist*. There is no I² to report because no estimates were pooled. The paper's Heterogeneity Investigation Results subsection provides stratification findings (4.7-pt CNN/Transformer gap, pre-training effects, organ complexity spread), which are appropriate survey findings — but they are not formal heterogeneity statistics. | States formal investigation was not conducted and why; reports qualitative stratification in a dedicated subsection — the correct maximum |
-| **24a** | Prospective registration number | Protocol registered in PROSPERO *before* data collection | PROSPERO and OSF pre-registration services require temporal precedence — the protocol must exist before data collection. A survey is a living synthesis; a completed survey cannot be retroactively registered. This is a temporal impossibility, not an omission. The paper's Declarations section explicitly acknowledges this and correctly explains the survey scope distinction. | "This review was not prospectively registered ... consistent with its scope as a structured survey rather than a formal systematic review" — correct framing |
-
-**N/A-Structural: 3 items. All three handled with honest disclosure; none addressable without misrepresenting the work.**
-
----
-
-### Survey-Applicable Compliance Score
-
-Removing the 3 N/A-Structural items from the 39-item scorecard leaves **36 survey-applicable items**:
-
-| | Current (unverified numbers) | With 3 fixable gaps resolved | With all verifications complete |
-|--|------------------------------|------------------------------|--------------------------------|
-| **Fully Met** | 22 (61%) | 25 (69%) | 27 (75%) |
-| **Partially Met** | 10 (28%) | 8 (22%) | 6 (17%) |
-| **Pending Verification** | 4 (11%) | 3 (8%) | 3 (8%) → Fully Met |
-| **Survey-applicable total** | **36** | **36** | **36** |
-
-_"3 fixable gaps resolved" = Item 7 (add all queries inline), Item 11 (one declaration sentence), Item 13f (reframe as post-hoc), Item 16b (reference S5). "All verifications complete" additionally assumes Items 18, 20a, 20d numbers confirmed against actual assessment records._
-
-**Bottom line:** This is a strong compliance profile for a survey using PRISMA as a reporting framework. The paper meets 61–75% of PRISMA survey-applicable items (depending on verification), handles all 13 "adapted" items with intellectually honest substitutions, and correctly discloses non-applicability for exactly the 3 items that are structurally impossible.
-
-The "Partially Met" items in the current overall scorecard are not evidence of methodological sloppiness. They fall into three distinct categories:
-
-1. **Structural consequence of being a survey** (Items 1, 20c, 24a) — correctly classified N/A-Structural above
-2. **Source-literature limitations** (Item 19) — most ML papers don't report CIs; the paper can't show what doesn't exist  
-3. **Small, fixable text gaps** (Items 7, 11, 13f, 16b) — one to two sentences each; no data changes required
-4. **Pending numerical verification** (Items 18, 20a, 20d) — numbers are in the repository; need cross-check against extraction records
-
----
-
-### What the Paper's Methods Should Say About PRISMA
-
-The compliance.tex Methods already contains the correct framing sentence:
-
-> *"PRISMA 2020 was designed for prospectively registered systematic reviews with statistical meta-analysis; several checklist items (prospective registration, pooled effect estimates, per-study risk-of-bias instruments) are structurally inapplicable to a narrative survey and are addressed by explicit disclosure of absence rather than compliance."*
-
-This is accurate and sufficient. For a journal cover letter:
-
-> *"This paper applies PRISMA 2020 as a reporting framework rather than a compliance checklist. We fully meet or adequately address 27 of 36 survey-applicable PRISMA items (75%, after verification); the remaining items are either modest transparency gaps addressed in the supplementary materials or the 3 N/A-Structural items (title classification, prospective registration, formal heterogeneity statistics) that are inapplicable to any structured survey."*
-
----
-
-### Three Remaining .tex Fixes (not yet applied)
-
-These three targeted edits to `main_prisma-compliance.tex` would move the paper from its current survey-applicable score to the "3 fixable gaps resolved" column above:
-
-| # | Location | Change needed | Item(s) affected |
-|---|---------|--------------|-----------------|
-| 1 | Sensitivity analysis paragraph (~line 370): `"one pre-specified sensitivity analysis"` | Change to `"one post-hoc sensitivity analysis (not pre-specified in the protocol)"` | Items 13f, 20d |
-| 2 | Quality Assessment subsection, last sentence | Add: `"This four-dimension framework constitutes the study-level quality assessment instrument used in this review, applied in place of standard risk-of-bias tools (ROBINS-I, Cochrane RoB 2) that are designed for clinical study designs not applicable to computational benchmarking."` | Item 11 |
-| 3 | Excluded Studies paragraph | Add after the Nikolov/Han citations: `"Complete full-text screening decisions with individual exclusion reasons are provided in Supplementary S5 (\texttt{S5\_screening\_decisions.csv})."` | Item 16b |
-
----
-
-## Final Honest Tally for main_prisma-compliance.tex
-
-> **See the survey-applicable score above.** The section "Deep Analysis: Survey vs. Systematic Review" breaks the 39-item scorecard into 26 Universal + 13 Adapted + 3 N/A-Structural items, and derives the survey-appropriate compliance score of **22–27 Fully Met out of 36 applicable items (61–75%)** rather than a raw 22/39 that mixes structural incompatibilities with genuine gaps.
-
-### If all added numbers are verified as real and structural corrections applied:
-
-| Rating | Count | Percentage |
-|--------|-------|------------|
-| Fully Met | 26 | 67% |
-| Partially Met | 13 | 33% |
-| Not Met | 0 | 0% |
-
-_Reflects downward corrections to Items 7, 11, 13f, 16b, and 24a (all moved Fully Met → Partially Met) in addition to the pre-existing verification requirements._
-
-### Permanently Partially Met — structural limits (unfixable without dishonesty or novel work)
-
-1. **Item 1** — Title (would require calling it a "systematic review")
-2. **Item 24a** — Registration (post-hoc prospective registration is not accepted practice)
-3. **Item 20c** — Formal heterogeneity (no pooled estimates → formal subgroup analysis structurally impossible)
-4. **Item 19** — Individual precision (source literature does not report CIs for most Dice scores)
-
-### Conditionally Partially Met — fixable with targeted work
-
-5. **Item 7** — Search strategy (resolve S-numbering mismatch; consider adding all 5 database queries inline)
-6. **Item 11** — Risk of bias methods (one sentence: explicitly declare the four-dimension framework as the RoB instrument)
-7. **Item 13f** — Sensitivity analysis (reframe language from "pre-specified" to "post-hoc"; no data change required)
-8. **Item 16b** — Excluded studies (reference S5 in text, or derive a full exclusion table from S5 as a supplementary file)
-9. **Item 17** — Per-study characteristics (resolve S-numbering; map paper "S1" → repo `S2_included_studies.csv`)
-10. **Item 18** — Quality results (verify 18/24/10 distribution against per-study assessment records)
-11. **Item 20a** — Per-synthesis quality (derived from Item 18; resolvable once Item 18 is verified)
-12. **Item 20d** — Sensitivity results (computation is real; reframe as post-hoc to align with 13f correction)
-
-### If added numbers are NOT verified:
-
-| Rating | Count | Percentage |
-|--------|-------|------------|
-| Fully Met | 22 | 56% |
-| Partially Met | 13 | 33% |
-| Not Met | 4 | 10% |
-
-Items 18, 20a, 20d, and the specific numerical claims in 19 and 21 would need to be either verified against real data or removed/softened.
-
----
-
-## Action Items
-
-1. ~~**VERIFY** — Check whether the quality assessment was actually performed.~~ **DONE — CORRECTED.** Audit confirmed: `qa_summary_20260123_075645.csv` exists with 52 rows and actual scores. The originally stated distribution (18h/24m/10l) was wrong; the actual distribution (10H/41M/1L) has been applied to the paper. The QA framework description (4 binary → 3 numerical) has also been corrected.
-
-2. ~~**VERIFY** — Confirm the sensitivity analysis 84.8±2.3% Dice.~~ **DONE — REMOVED.** Audit confirmed the figure is not reproducible from any data file in the repository. The sensitivity paragraph no longer contains a specific mean Dice figure; it states directional consistency with the verifiable quality-subset statistic (27.6% high quality in DOI subset).
-
-3. **VERIFY AND RENAME** — The paper refers to "Supplementary S1" for the per-study characteristics table. The repository's `S2_included_studies.csv` (128 lines, 52 studies catalogued) contains this data but is labeled S2, not S1. Either rename the file or update all in-text cross-references to match the actual filename. Also verify the CSV includes all characteristics required by PRISMA Item 17 (study design, population, intervention details, outcome measures) — the current file captures screening-phase metadata and may require augmentation from the synthesis phase.
-
-4. **VERIFY** — The inline PubMed query: confirm it matches the actual query executed during the search.
-
-5. **ACCEPT** — Item 1 (Title) will remain Partially Met. This is the honest answer — the paper is a structured survey, not a systematic review, and the title should reflect reality.
-
-6. ~~**FIX** — Resolve the supplementary S-numbering mismatch across all in-text references.~~ **DONE** — `main_prisma-compliance.tex` updated (S2→S3, S3→S7, Table S1→Table S2). Reference map added to `S0_data_provenance.md`.
-
-7. **DOCUMENT** — Account for the missing S9 entry in the supplementary series (series jumps S8 → S10). Add a note to `S0_data_provenance.md` or a supplementary directory README explaining whether S9 was planned and not produced, intentionally omitted, or merged into another file. A numbered series with an unexplained gap undermines reviewer confidence in data completeness.
-
-8. **CLARIFY** — Add a one-line note in the Methods AI Screening paragraph (or supplementary S4) listing all three model identifiers (`gpt-4o`, `gpt-5-nano`, `gpt-5.2`) and the API access dates. All three are publicly available models; this is standard API citation practice, not a reproducibility blocker.
-
-9. ~~**FIX** — Change "pre-specified sensitivity analysis" to "post-hoc sensitivity analysis" in `main_prisma-compliance.tex` (~line 319).~~ **DONE** — Text now reads "one post-hoc sensitivity analysis (not pre-specified in the review protocol)."
-
-10. ~~**FIX** — Add explicit declaration of the four-dimension quality framework as the study-level RoB assessment instrument in the Quality Assessment subsection.~~ **DONE** — Sentence added: "This four-dimension framework constitutes the study-level quality assessment instrument used in this review, applied in place of standard risk-of-bias tools (ROBINS-I, Cochrane RoB 2) that are designed for clinical study designs not applicable to computational benchmarking."
-
-11. ~~**FIX** — Reference S5 in the Excluded Studies paragraph to surface the full exclusion list.~~ **DONE** — Sentence added pointing to `S5_screening_decisions.csv` for complete full-text screening decisions.
-
----
-
-## Strengths (both versions)
-
-- **Exemplary PRISMA flow diagram** (Figure 1) with complete numbers and exclusion reasons at every stage.
-- **Thorough search strategy** across 5 databases plus citation tracking and conference proceedings.
-- **Transparent AI-assisted screening** with multi-model consensus, validation metrics (κ = 0.89), and false-negative recovery.
-- **Honest framing** as "PRISMA-informed structured survey" — does not overclaim systematic review status.
-- **Strong eligibility criteria** with clearly separated inclusion and exclusion lists.
-- **Proactive COI disclosure** with specific safeguards described in both Introduction and Declarations.
-- **Data and code availability** with traceability through supplementary materials (S8, S10, S12).
-- **Comprehensive discussion** addressing all four research questions with practical recommendations.
-
-### Additional strengths in compliance version
-
-- **Structured abstract** properly follows PRISMA for Abstracts format.
-- **Methodology transparency** — explicitly describes what was and was not done (no author contact, no imputation, no formal meta-analysis, no GRADE), which is better PRISMA practice than omitting these details.
-- **Honest justifications** for why certain formal tools (ROBINS-I, GRADE, funnel plots) were not applied — citing the computational (non-clinical) nature of the review.
-
----
-
-*Reference: Page MJ, McKenzie JE, Bossuyt PM, et al. The PRISMA 2020 statement: an updated guideline for reporting systematic reviews. BMJ 2021;372:n71. doi: 10.1136/bmj.n71*
+- Manuscript read end-to-end: [work/projects/papers/docdo-paper/main.tex](work/projects/papers/docdo-paper/main.tex) (L1–L1082).
+- Every supplementary file in [artifacts/data/evidence/supplementary/](artifacts/data/evidence/supplementary/) was opened and `wc -l`'d; CSV column distributions for S2 (`code_available`) and S5 (`final_decision`) were enumerated with `awk`.
+- Phantom-file claims from the previous version of this document were tested with `find . -type f -name '<pattern>' | grep -v .venv` for `qa_summary*`, `s3_extracted*`, `all_papers_data*`, `final_screening*`, `main_prisma*`, `*compliance*.tex` — all returned empty.
+- This file replaces the earlier `PRISMA_compliance_analysis.md` in its entirety. The previous version's "side-by-side" comparison against `main_prisma-compliance.tex` and "DONE — CORRECTED" markers were unsupported by the repository and have been removed.

@@ -1,6 +1,6 @@
 # S12: Per-Organ Dice Score Statistics from 52 Reviewed Studies
 
-**Source file:** `data/processed/synthesis/all_papers_data_20260123_082136.csv`
+**Primary source:** Per-organ Dice values were transcribed from the original primary studies as cited in the Sources column below. The intermediate aggregation file (`data/processed/synthesis/all_papers_data_20260123_082136.csv`) produced during analysis is **not retained in the repository**; the same per-organ values can be regenerated from [pipeline_outputs/s3_extracted_data_full.csv](pipeline_outputs/s3_extracted_data_full.csv) (the 52-study full-text extraction) and [S2_final_included_studies.csv](S2_final_included_studies.csv) (the included-paper identifier list). Cell-level provenance for the BTCV/AMOS/KiTS aggregates is recorded separately in [S8_table_sources.csv](S8_table_sources.csv); per-organ source attribution is in [S11_per_organ_source_tracking.md](S11_per_organ_source_tracking.md), which also documents that the per-organ values were not independently re-extracted from the underlying CT volumes.
 
 ## Summary Statistics
 

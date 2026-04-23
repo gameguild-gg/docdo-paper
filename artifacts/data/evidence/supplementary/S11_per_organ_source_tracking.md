@@ -27,7 +27,7 @@ This document tracks the source of per-organ Dice scores cited in the main paper
 
 ### Gibson et al. (2018) - DenseVNet
 - **Source**: \cite{gibson2018densevnet}
-- **Study ID**: S015 (in S2_included_studies.csv)
+- **Study ID**: S015 (see `S2_final_included_studies.csv` for the 52-study synthesis)
 - **Verified overall Dice**: 90.7% (from S2 extraction)
 - **Per-organ values from paper**:
   - Liver: ~96.0%

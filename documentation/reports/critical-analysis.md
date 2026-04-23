@@ -276,5 +276,5 @@ Remaining areas for improvement focus on statistical confidence intervals, quali
 ---
 
 **Report prepared by:** Systematic Review Analysis  
-**Based on:** qa_summary_20260123_075645.csv, all_papers_data_20260123_082136.csv  
+**Based on:** qa_summary.csv, all_papers_data_20260123_082136.csv  
 **Papers analyzed:** 52 peer-reviewed studies (2017–2024)

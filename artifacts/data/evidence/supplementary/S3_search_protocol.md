@@ -1,5 +1,7 @@
 # S3: Complete Search Protocol and Query Strings
 
+> **AUDIT CORRECTION (2026-04-22).** Sections 3.2 (IEEE Xplore), 3.4 (Scopus), 3.5 (ACM Digital Library) and the corresponding rows of the §5 Search Results Summary table describe queries that were **NOT actually executed**. Verification against the fetcher source code ([operations/src/_archive/scripts/fetch_all_real_data.py](operations/src/_archive/scripts/fetch_all_real_data.py)) confirms only three databases were queried programmatically: **PubMed** (Entrez E-utilities, ~1,000 records), **arXiv** (arxiv API, ~900 records), and **Semantic Scholar** (Graph API v1, ~1,085 records). These three sources produced ~2,985 raw records that deduplicated to the 2,821 unique records reported throughout the paper and in [S0_data_provenance.md](S0_data_provenance.md). The IEEE/Scopus/ACM query strings and counts below are retained for transparency about what was originally drafted but must not be cited as evidence of executed searches. The paper's main.tex was corrected on 2026-04-22 to disclose the three-database scope and explicitly note that closed-access indexes were not queried.
+
 ## 1. Search Objective
 
 Comprehensive identification of studies addressing 3D organ segmentation from CT scans using deep learning methods, including foundational architectures, benchmark datasets, specialized loss functions, and clinical applications.

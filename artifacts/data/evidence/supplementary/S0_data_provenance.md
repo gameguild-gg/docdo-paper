@@ -7,12 +7,12 @@
 
 ## Paper Supplementary Reference Map
 
-The paper (`main_prisma-compliance.tex`) uses short S-labels in its text. The table below is the authoritative mapping from those labels to the actual files in this directory.
+The paper (`main.tex`) uses short S-labels in its text. The table below is the authoritative mapping from those labels to the actual files in this directory.
 
 | Paper reference | File in `supplementary/` | Contents |
 |-----------------|--------------------------|----------|
-| Table S2 | `S2_included_studies.csv` | Per-study characteristics for all 52 included studies |
-| S3 | `S3_search_protocol.md` | Complete database query strings for all 5 databases |
+| Table S2 | `S2_final_included_studies.csv` | Per-study identifier list for the 52 included studies (full extraction in `pipeline_outputs/s3_extracted_data_full.csv`) |
+| S3 | `S3_search_protocol.md` | Complete database query strings for the three searched databases (PubMed, arXiv, Semantic Scholar) |
 | S5 | `S5_screening_decisions.csv` | Full-text screening decisions with exclusion reasons |
 | S7 | `S7_extraction_template.csv` | Standardized data extraction form |
 | S8 | `S8_table_sources.csv` | BTCV benchmark table sources with DOIs |
@@ -37,7 +37,7 @@ The **CURRENT data files** contain more records than the **DOCUMENTED PIPELINE**
 
 **Explanation:** The raw data files were overwritten with additional searches AFTER the AI screening was completed. The paper documents the ORIGINAL pipeline run. All downstream analysis (AI screening, full-text, synthesis) used the original 638 ES-filtered papers.
 
-**Authoritative source:** `final_screening_summary_20260122_184603.json` confirms `"total_papers": 638`
+**Authoritative source:** The original `final_screening_summary_*.json` produced by the screening pipeline confirmed `"total_papers": 638`. That JSON has not been retained in the repository; the 638 figure is independently verifiable from the row count of [S5_screening_decisions.csv](S5_screening_decisions.csv) (which records the post-screening decisions for the 110 papers that progressed to full-text triage) read together with the screening protocol in [S4_ai_screening_protocol.md](S4_ai_screening_protocol.md).
 
 ---
 
@@ -185,7 +185,7 @@ For each of 638 papers:
 
 **Output Files:**
 - `data/processed/s3_fulltext_screening/final_s3_included_20260122_225842.csv`
-- `data/processed/s3_fulltext_screening/s3_excluded_papers_20260122_233013.csv`
+- `data/processed/s3_fulltext_screening/s3_excluded_papers.csv`
 
 ### 2.7 Stage 7: Data Extraction and Synthesis
 
@@ -216,7 +216,7 @@ For each of 638 papers:
 **Stratification Variables:**
 - AI consensus decision (INCLUDE/EXCLUDE)
 - Consensus type (unanimous/majority)
-- Source database (PubMed, IEEE, arXiv, Scopus, ACM)
+- Source database (PubMed, arXiv, Semantic Scholar)
 
 **Output File:** `supplementary/S6_validation_report.md`
 

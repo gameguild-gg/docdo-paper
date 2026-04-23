@@ -1,0 +1,64 @@
+paper_id,title,path,pdf_status,included_in_review
+10.1109/WRCSARA57040.2022.9903976,Two-Stage Multi-Organ Automatic Segmentation with Low GPU Memory Occupancy,10.1109_WRCSARA57040.2022.9903976.pdf,available,True
+10.1109/TMI.2018.2806309,Automatic Multi-Organ Segmentation on Abdominal CT With Dense V-Networks,10.1109_TMI.2018.2806309.pdf,available,True
+http://arxiv.org/abs/2302.13172v1,Deep Learning-based Multi-Organ CT Segmentation with Adversarial Data Augmentation,http___arxiv.org_abs_2302.13172v1.pdf,available,True
+arXiv:1908.00360,A Method of Rapid Quantification of Patient-Specific Organ Dose for CT Using Coupled Deep Multi-Organ Segmentation Algorithms and GPU-accelerated Monte Carlo Dose Computing Code,arXiv_1908.00360.pdf,available,True
+arXiv:1704.06382,Hierarchical 3D fully convolutional networks for multi-organ segmentation,arXiv_1704.06382.pdf,available,True
+10.1109/SPS.2019.8882073,Segmentation of Organs at Risk in Chest Cavity Using 3D Deep Neural Network,10.1109_SPS.2019.8882073.pdf,available,True
+http://arxiv.org/abs/1710.05379v1,Towards Automatic Abdominal Multi-Organ Segmentation in Dual Energy CT using Cascaded 3D Fully Convolutional Network,http___arxiv.org_abs_1710.05379v1.pdf,available,True
+http://arxiv.org/abs/2210.04285v1,Improved Abdominal Multi-Organ Segmentation via 3D Boundary-Constrained Deep Neural Networks,http___arxiv.org_abs_2210.04285v1.pdf,available,True
+10.1002/mp.14386,CT-based Multi-organ Segmentation using a 3D Self-attention U-Net Network for Pancreatic Radiotherapy.,10.1002_mp.14386.pdf,available,True
+10.1038/s41598-020-63285-0,Abdominal multi-organ auto-segmentation using 3D-patch-based deep convolutional neural network,10.1038_s41598-020-63285-0.pdf,available,True
+10.1002/mp.13950,Automatic Multi-organ Segmentation in Dual Energy CT (DECT) with Dedicated 3D Fully Convolutional DECT Networks.,10.1002_mp.13950.pdf,available,True
+http://arxiv.org/abs/2503.10717v1,Deep Learning-Based Automated Workflow for Accurate Segmentation and Measurement of Abdominal Organs in CT Scans,http___arxiv.org_abs_2503.10717v1.pdf,available,True
+10.1007/978-3-319-67558-9_26,3D FCN Feature Driven Regression Forest-Based Pancreas Localization and Segmentation,10.1007_978-3-319-67558-9_26.pdf,available,True
+10.1088/1361-6560/aaf11c,Fully Automated Organ Segmentation in Male Pelvic CT Images,10.1088_1361-6560_aaf11c.pdf,available,True
+10.1109/ACCESS.2020.3024277,Automatic Segmentation Using a Hybrid Dense Network Integrated With an 3D-Atrous Spatial Pyramid Pooling Module for Computed Tomography (CT) Imaging,10.1109_ACCESS.2020.3024277.pdf,available,True
+10.11409/mit.36.63,Deep learning and its application to medical image segmentation,10.11409_mit.36.63.pdf,available,True
+http://arxiv.org/abs/1801.05912v1,On the influence of Dice loss function in multi-class organ segmentation of abdominal CT using 3D fully convolutional networks,http___arxiv.org_abs_1801.05912v1.pdf,available,True
+http://arxiv.org/abs/1909.06684v1,3D Kidneys and Kidney Tumor Semantic Segmentation using Boundary-Aware Networks,http___arxiv.org_abs_1909.06684v1.pdf,available,True
+10.1002/mp.14422,Complete Abdomen and Pelvis Segmentation using U-Net Variant Architecture.,10.1002_mp.14422.pdf,available,True
+http://arxiv.org/abs/2212.13034v1,Kidney and Kidney Tumour Segmentation in CT Images,http___arxiv.org_abs_2212.13034v1.pdf,available,True
+10.1109/ICIEAM48468.2020.9111950,Hybrid 3D-ResNet Deep Learning Model for Automatic Segmentation of Thoracic Organs at Risk in CT Images,10.1109_ICIEAM48468.2020.9111950.pdf,available,True
+10.2214/AJR.20.24415,"Liver Steatosis Categorization on Contrast-Enhanced CT Using a Fully-Automated Deep Learning Volumetric Segmentation Tool: Evaluation in 1,204 Heathy Adults Using Unenhanced CT as Reference Standard.",10.2214_AJR.20.24415.pdf,available,True
+10.1016/j.compmedimag.2018.03.001,An application of cascaded 3D fully convolutional networks for medical image segmentation,10.1016_j.compmedimag.2018.03.001.pdf,available,True
+10.48550/arXiv.2406.13674,Rethinking Abdominal Organ Segmentation (RAOS) in the clinical scenario: A robustness evaluation benchmark with challenging cases,10.48550_arXiv.2406.13674.pdf,available,True
+http://arxiv.org/abs/1811.11226v1,"CT organ segmentation using GPU data augmentation, unsupervised labels and IOU loss",http___arxiv.org_abs_1811.11226v1.pdf,available,True
+10.1002/mp.15525,Evaluating the clinical acceptability of deep learning contours of prostate and organs-at-risk in an automated prostate treatment planning process.,10.1002_mp.15525.pdf,available,True
+10.1002/mp.12480,Deep learning of the sectional appearances of 3D CT images for anatomical structure segmentation based on an FCN voting method,10.1002_mp.12480.pdf,available,True
+10.1002/mp.15083,Multitask 3D CBCT-to-CT Translation and Organs-at-Risk Segmentation Using Physics-Based Data Augmentation,10.1002_mp.15083.pdf,available,True
+arXiv:1809.04430,Deep learning to achieve clinically applicable segmentation of head and neck anatomy for radiotherapy,arXiv_1809.04430.pdf,available,True
+10.1007/s00330-020-07608-9,Automated segmentation of kidney and renal mass and automated detection of renal mass in CT urography using 3D U-Net-based deep convolutional neural network,10.1007_s00330-020-07608-9.pdf,available,True
+10.1186/s13014-022-01985-9,Dosimetric impact of deep learning-based CT auto-segmentation on radiation therapy treatment planning for prostate cancer,10.1186_s13014-022-01985-9.pdf,available,True
+http://arxiv.org/abs/2003.07923v1,3D medical image segmentation with labeled and unlabeled data using autoencoders at the example of liver segmentation in CT images,http___arxiv.org_abs_2003.07923v1.pdf,available,True
+10.1186/s41747-024-00507-4,Segmentation-based quantitative measurements in renal CT imaging using deep learning.,10.1186_s41747-024-00507-4.pdf,available,True
+10.1038/s41598-019-40584-9,Dual-energy CT for automatic organs-at-risk segmentation in brain-tumor patients using a multi-atlas and deep-learning approach,10.1038_s41598-019-40584-9.pdf,available,True
+10.3390/app10031154,Cross-Domain Data Augmentation for Deep-Learning-Based Male Pelvic Organ Segmentation in Cone Beam CT,10.3390_app10031154.pdf,available,True
+http://arxiv.org/abs/1909.07480v2,Z-Net: an Anisotropic 3D DCNN for Medical CT Volume Segmentation,http___arxiv.org_abs_1909.07480v2.pdf,available,True
+http://arxiv.org/abs/2105.14314v3,Automatic CT Segmentation from Bounding Box Annotations using Convolutional Neural Networks,http___arxiv.org_abs_2105.14314v3.pdf,available,True
+10.3389/fonc.2018.00215,Deep Learning Renal Segmentation for Fully Automated Radiation Dose Estimation in Unsealed Source Therapy,10.3389_fonc.2018.00215.pdf,available,True
+http://arxiv.org/abs/2109.12634v1,A Novel Hybrid Convolutional Neural Network for Accurate Organ Segmentation in 3D Head and Neck CT Images,http___arxiv.org_abs_2109.12634v1.pdf,available,True
+10.1088/1361-6560/ab6f99,Interactive 3D U-net for the segmentation of the pancreas in computed tomography scans,10.1088_1361-6560_ab6f99.pdf,available,True
+http://arxiv.org/abs/1809.02268v1,Computation of Total Kidney Volume from CT images in Autosomal Dominant Polycystic Kidney Disease using Multi-Task 3D Convolutional Neural Networks,http___arxiv.org_abs_1809.02268v1.pdf,available,True
+10.1002/mp.13438,U‐Net based deep learning bladder segmentation in CT urography,10.1002_mp.13438.pdf,available,True
+10.1109/TRPMS.2021.3059780,DefED-Net: Deformable Encoder-Decoder Network for Liver and Liver Tumor Segmentation,10.1109_TRPMS.2021.3059780.pdf,available,True
+http://arxiv.org/abs/2309.13872v1,Attention and Pooling based Sigmoid Colon Segmentation in 3D CT images,http___arxiv.org_abs_2309.13872v1.pdf,available,True
+10.1002/mp.13300,AnatomyNet: Deep learning for fast and fully automated whole‐volume segmentation of head and neck anatomy,10.1002_mp.13300.pdf,available,True
+http://arxiv.org/abs/1809.00960v2,Organ at Risk Segmentation in Head and Neck CT Images by Using a Two-Stage Segmentation Framework Based on 3D U-Net,http___arxiv.org_abs_1809.00960v2.pdf,available,True
+10.1038/s41598-022-07848-3,Automated pancreas segmentation and volumetry using deep neural network on computed tomography,10.1038_s41598-022-07848-3.pdf,available,True
+10.1109/WACV.2019.00020,Semi-Supervised 3D Abdominal Multi-Organ Segmentation Via Deep Multi-Planar Co-Training,10.1109_WACV.2019.00020.pdf,available,True
+http://arxiv.org/abs/2302.00162v4,"Continual Segment: Towards a Single, Unified and Accessible Continual Segmentation Model of 143 Whole-body Organs in CT Scans",http___arxiv.org_abs_2302.00162v4.pdf,available,True
+10.48550/arXiv.2309.09730,Scribble-based 3D Multiple Abdominal Organ Segmentation via Triple-branch Multi-dilated Network with Pixel- and Class-wise Consistency,10.48550_arXiv.2309.09730.pdf,available,True
+http://arxiv.org/abs/1707.08037v1,Automatic Liver Segmentation Using an Adversarial Image-to-Image Network,http___arxiv.org_abs_1707.08037v1.pdf,available,True
+10.1002/mp.15507,"General and custom deep learning auto-segmentation models for organs in head and neck, abdomen, and male pelvis.",10.1002_mp.15507.pdf,available,True
+10.1016/j.imu.2020.100357,Multi-Scale Supervised 3D U-Net for Kidneys and Kidney Tumor Segmentation,10.1016_j.imu.2020.100357.pdf,available,True
+10.1186/s12880-025-02106-0,Deep learning-based volumetry of the future liver remnants and prediction of candidates for major hepatectomy.,10.1186_s12880-025-02106-0.pdf,available,True
+http://arxiv.org/abs/2203.01934v1,Quality or Quantity: Toward a Unified Approach for Multi-organ Segmentation in Body CT,http___arxiv.org_abs_2203.01934v1.pdf,available,True
+10.1007/978-3-030-00937-3_49,3D U-JAPA-Net: Mixture of Convolutional Networks for Abdominal Multi-organ CT Segmentation,10.1007_978-3-030-00937-3_49.pdf,available,True
+http://arxiv.org/abs/2105.02290v1,R2U3D: Recurrent Residual 3D U-Net for Lung Segmentation,http___arxiv.org_abs_2105.02290v1.pdf,available,True
+10.1007/978-3-030-00934-2_94,3D Anisotropic Hybrid Network: Transferring Convolutional Features from 2D Images to 3D Anisotropic Volumes,10.1007_978-3-030-00934-2_94.pdf,available,True
+http://arxiv.org/abs/2009.09571v4,Semi-supervised Semantic Segmentation of Prostate and Organs-at-Risk on 3D Pelvic CT Images,http___arxiv.org_abs_2009.09571v4.pdf,available,True
+http://arxiv.org/abs/2001.09647v1,Basic Ensembles of Vanilla-Style Deep Learning Models Improve Liver Segmentation From CT Images,http___arxiv.org_abs_2001.09647v1.pdf,available,True
+http://arxiv.org/abs/2108.06669v1,CPNet: Cycle Prototype Network for Weakly-supervised 3D Renal Compartments Segmentation on CT Images,http___arxiv.org_abs_2108.06669v1.pdf,available,True
+10.1109/cvidliccea56201.2022.9823971,Research on Liver Segmentation of CT Image Based on Deep Active Contour Model,10.1109_cvidliccea56201.2022.9823971.pdf,available,True
+http://arxiv.org/abs/2208.13271v1,Efficient liver segmentation with 3D CNN using computed tomography scans,http___arxiv.org_abs_2208.13271v1.pdf,available,True
