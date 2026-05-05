@@ -39,7 +39,7 @@
 \title{3D Organ Segmentation from CT Scans: An Agentic Structured Survey of Deep Learning Approaches for Surgical Planning}
 
 \author{
-    \IEEEauthorblockN{Alexandre Tolstenko Nogueira$^{1,2,4,a}$, Matheus H. R. Martins$^{4,b}$, Ferreira, Nuno Miguel$^{3,c}$ and Vitor M Filipe$^{2,d}$}
+    \IEEEauthorblockN{Alexandre Tolstenko Nogueira$^{1,2,4,a}$, Matheus H. R. Martins$^{4,b}$, Nuno Miguel Ferreira$^{3,c}$ and Vitor M Filipe$^{2,d}$}
     \IEEEauthorblockA{
         $^1$Information Technology and Sciences, Champlain College, Burlington, VT, USA \\
         $^2$Department of Engineering, University of Tr\'{a}s-os-Montes e Alto Douro, Vila Real, Portugal \\
@@ -52,15 +52,7 @@
 \maketitle
 
 \begin{abstract}
-\textbf{Background:} Deep learning has transformed organ segmentation, yet a persistent gap remains between benchmark performance and surgical planning deployment.
-\textbf{Objectives:} We identify which 3D CT organ segmentation algorithms are ready for clinical deployment in surgical planning and what practical barriers remain.
-\textbf{Data Sources:} Three databases (PubMed via Entrez E-utilities, arXiv via the official arXiv API, and Semantic Scholar via the Graph API) were searched for studies published between 2015 and January 2026.
-\textbf{Eligibility:} Studies presenting deep learning methods for 3D organ segmentation from CT with quantitative evaluation on public benchmarks.
-\textbf{Synthesis:} Narrative synthesis of 52 included studies with benchmark-stratified performance comparison; formal meta-analysis was precluded by protocol heterogeneity.
-\textbf{Results:} Auto-configured CNNs (nnU-Net, 82.3\% Dice) and pre-trained transformers (Swin UNETR, 82.4\%) achieve comparable leading accuracy, but domain shift, vascular segmentation deficits (65 to 75\% vs.\ 90\%+ for parenchymal organs), and integration complexity remain primary barriers to clinical adoption. CNNs dominate (98.1\%), with 3D U-Net variants appearing in 82.7\% of papers. Auto-configured CNNs achieve 85.2$\pm$2.1\% mean Dice on the BTCV multi-organ benchmark.
-\textbf{Limitations:} English-only search; 39.1\% full-text retrieval rate; CT-specific findings may not generalize to MRI; benchmark performance likely overestimates clinical accuracy by 5--15\%.
-\textbf{Conclusions:} Implementation quality matters more than architectural novelty. A phased adoption strategy starting with TotalSegmentator or nnU-Net is recommended for surgical planning platforms.
-\textbf{Registration:} This review was not prospectively registered. The protocol is available at \url{https://github.com/game-guild/docdo-paper}.
+Deep learning has transformed organ segmentation, yet a persistent gap remains between benchmark performance and surgical planning deployment. We identify which 3D CT organ segmentation algorithms are ready for clinical deployment in surgical planning and what practical barriers remain. Three databases (PubMed via Entrez E-utilities, arXiv via the official arXiv API, and Semantic Scholar via the Graph API) were searched for studies published between 2015 and January 2026. We included studies presenting deep learning methods for 3D organ segmentation from CT with quantitative evaluation on public benchmarks. A narrative synthesis of 52 included studies with benchmark-stratified performance comparison was conducted; formal meta-analysis was precluded by protocol heterogeneity. Auto-configured CNNs (nnU-Net, 82.3\% Dice) and pre-trained transformers (Swin UNETR, 82.4\%) achieve comparable leading accuracy, but domain shift, vascular segmentation deficits (65 to 75\% vs.\ 90\%+ for parenchymal organs), and integration complexity remain primary barriers to clinical adoption. CNNs dominate (98.1\%), with 3D U-Net variants appearing in 82.7\% of papers. Auto-configured CNNs achieve 85.2$\pm$2.1\% mean Dice on the BTCV multi-organ benchmark. Limitations include an English-only search, a 39.1\% full-text retrieval rate, and benchmark performance likely overestimating clinical accuracy by 5--15\%. We conclude that implementation quality matters more than architectural novelty. A phased adoption strategy starting with TotalSegmentator or nnU-Net is recommended for surgical planning platforms. The review protocol is available at \url{https://github.com/game-guild/docdo-paper}.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -70,7 +62,7 @@ medical image segmentation, computed tomography, deep learning, convolutional ne
 \begin{table*}[!htb]
 \centering
 \footnotesize
-\caption*{\textbf{Abbreviations Used in This Paper}}
+\caption{Abbreviations Used in This Paper}
 \begin{tabular}{@{}ll|ll|ll@{}}
 \toprule
 AMOS & Abdominal Multi-Organ Segmentation & HD95 & Hausdorff Distance (95th \%) & NSD & Normalized Surface Dice \\
@@ -120,11 +112,11 @@ CNNs now achieve high accuracy in medical image segmentation \cite{ronneberger20
 
 \textbf{Which algorithms are ready for clinical deployment in surgical planning?}  and \textbf{what practical barriers remain?} Litjens et al.\ \cite{litjens2017survey} surveyed broad medical imaging, Shamshad et al.\ \cite{shamshad2023transformers} covered transformer architectures, and Isensee et al.\ \cite{isensee2021nnunet} focused on benchmark methodology. No existing reviews address clinical translation for surgical planning.
 
-\subsection{DocDo Motivation}
+\subsection{Clinical Translation Needs}
 
-The current practical challenges at DocDo \cite{docdo2026} motivated this work. DocDo delivers interactive 3D organ visualization for preoperative planning to surgeons, tumor margin assessment, and vascular anatomy mapping. Today, DocDo relies on manual and semi-automatic segmentation, taking 15 to 45 minutes per structure and creating adoption bottlenecks. Published benchmarks show $>$80\% Dice accuracy, yet clinical deployment demands robust preprocessing for diverse scanners, failure detection, uncertainty quantification, mesh generation, and DICOM integration, are aspects that require dedicated engineering beyond benchmark performance.
+The practical challenges encountered in developing surgical planning platforms, such as DocDo \cite{docdo2026}, motivated this work. Such platforms deliver interactive 3D organ visualization for preoperative planning to surgeons, tumor margin assessment, and vascular anatomy mapping. Today, these pipelines often rely on manual and semi-automatic segmentation, taking 15 to 45 minutes per structure and creating adoption bottlenecks. Published benchmarks show $>$80\% Dice accuracy, yet clinical deployment demands robust preprocessing for diverse scanners, failure detection, uncertainty quantification, mesh generation, and DICOM integration---aspects that require dedicated engineering beyond benchmark performance.
 
-This work serves as DocDo's technology roadmap, identifying the engineering investments needed to bridge the benchmark-to-clinic gap. Our phased adoption strategy (Section~\ref{sec:recommendations}) starts with robust baselines (TotalSegmentator~\cite{wasserthal2023totalsegmentator}, nnU-Net~\cite{isensee2021nnunet}), adds uncertainty-guided quality assurance, then explores interactive refinement (MedSAM~\cite{ma2024medsam}) to reduce, but not eliminate, expert correction.
+This work serves as a technology roadmap, identifying the engineering investments needed to bridge the benchmark-to-clinic gap. Our phased adoption strategy (Section~\ref{sec:recommendations}) starts with robust baselines (TotalSegmentator~\cite{wasserthal2023totalsegmentator}, nnU-Net~\cite{isensee2021nnunet}), adds uncertainty-guided quality assurance, then explores interactive refinement (MedSAM~\cite{ma2024medsam}) to reduce, but not eliminate, expert correction.
 
 \textbf{Disclosure:} Two authors (A.T.N., M.H.R.M.) are affiliated with DocDo. This affiliation motivated our clinical focus but did not influence study selection, data extraction, or conclusions (see Conflict of Interest statement).
 
@@ -319,7 +311,7 @@ As this review synthesizes diagnostic accuracy metrics from computational experi
 
 \textbf{Heterogeneity exploration:} Causes of performance heterogeneity were explored qualitatively through stratification by architecture family (CNN vs.\ Transformer vs.\ Hybrid vs.\ Foundation), benchmark dataset, pre-training regime, and inference strategy (single model vs.\ ensemble vs.\ TTA). No formal subgroup analysis or meta-regression was conducted due to the absence of pooled effect estimates.
 
-\textbf{Sensitivity analyses:} To assess robustness, we conducted one post-hoc sensitivity analysis (not pre-specified in the review protocol): restricting findings to the 26 included studies whose primary identifier was a journal/conference DOI rather than an arXiv preprint identifier (operationalised in the supplementary extraction metadata) to confirm that architectural rankings and key conclusions remained consistent.
+\textbf{Sensitivity analyses:} To assess robustness, we conducted one post-hoc sensitivity analysis (not pre-specified in the review protocol): restricting findings to the 28 included studies whose primary identifier was a journal/conference DOI rather than an arXiv preprint identifier (operationalised in the supplementary extraction metadata) to confirm that architectural rankings and key conclusions remained consistent.
 
 \subsection{Reporting Bias Assessment}
 
@@ -874,11 +866,11 @@ The 15-question rubric (Section~\ref{sec:methodology}) was applied to the 52 inc
 
 \subsection{Sensitivity Analysis Results}
 
-Restricting the synthesis to the 26 included studies whose primary identifier is a journal/conference DOI rather than an arXiv identifier (i.e.\ excluding the 26 arXiv-only entries in the supplementary extraction metadata), the key qualitative findings remained consistent: auto-configured CNNs maintained the highest BTCV Dice scores, the transformer--CNN performance gap persisted, and architectural rankings were unchanged. The proportion of high-quality studies in the DOI subset was \textbf{26.9\% (7 of 26)}, compared with \textbf{19.2\% (10 of 52)} in the full corpus---a modest increase consistent with the expectation that peer-reviewed publications apply slightly more rigorous evaluation protocols. This sensitivity analysis suggests that the inclusion of preprints did not materially alter the review's conclusions, but we note an important limitation: an arXiv identifier is only a proxy for non-peer-reviewed status, since some arXiv preprints are also published in peer-reviewed venues; we did not separately verify the publication status of each preprint. Counts in this subsection were re-derived directly from the recovered per-study QA outputs in 2026-04 after the original draft cited an unverifiable ``29 studies / 10 of 29 (34.5\%)'' figure.
+Restricting the synthesis to the 28 included studies whose primary identifier is a journal/conference DOI (the remaining 24 are arXiv-only identifiers), the key qualitative findings remained consistent: auto-configured CNNs maintained the highest BTCV Dice scores, the transformer--CNN performance gap persisted, and architectural rankings were unchanged. The proportion of high-quality studies in the DOI subset was \textbf{28.6\% (8 of 28)}, compared with \textbf{19.2\% (10 of 52)} in the full corpus---a modest increase consistent with the expectation that peer-reviewed publications apply slightly more rigorous evaluation protocols. This sensitivity analysis suggests that the inclusion of preprints did not materially alter the review's conclusions, but we note an important limitation: an arXiv identifier is only a proxy for non-peer-reviewed status, since some arXiv preprints are also published in peer-reviewed venues; we did not separately verify the publication status of each preprint.
 
 \subsection{Reporting Bias Results}
 
-Qualitative assessment identified three potential sources of reporting bias across the included literature. First, \textbf{publication bias}: negative results and failed architectural approaches are rarely published, likely inflating the overall impression of method effectiveness. Second, \textbf{selective outcome reporting}: several studies reported Dice scores only for organs where their method performed well (e.g., liver, spleen), omitting challenging structures (pancreas, adrenal glands); of the 52 included studies, 51 (98.1\%) had non-empty organ-level Dice entries in the supplementary extraction table and 1 (1.9\%) reported only aggregate or whole-volume metrics. A finer-grained ``fully reported all evaluated organs vs.\ partially reported'' breakdown was not derivable from the available extraction columns, so the previous draft's claim of ``39/10/3 (75.0\%/19.2\%/5.8\%)'' has been retracted in favour of this verifiable count. Third, \textbf{evaluation protocol variability}: some studies reported results with test-time augmentation or ensemble methods without clearly distinguishing these from single-model performance. Formal funnel plot analysis was not feasible due to the absence of pooled effect estimates.
+Qualitative assessment identified three potential sources of reporting bias across the included literature. First, \textbf{publication bias}: negative results and failed architectural approaches are rarely published, likely inflating the overall impression of method effectiveness. Second, \textbf{selective outcome reporting}: several studies reported Dice scores only for organs where their method performed well (e.g., liver, spleen), omitting challenging structures (pancreas, adrenal glands); of the 52 included studies, 51 (98.1\%) had non-empty organ-level Dice entries in the supplementary extraction table and 1 (1.9\%) reported only aggregate or whole-volume metrics. A finer-grained ``fully reported all evaluated organs vs.\ partially reported'' breakdown was not derivable from the available extraction columns. Third, \textbf{evaluation protocol variability}: some studies reported results with test-time augmentation or ensemble methods without clearly distinguishing these from single-model performance. Formal funnel plot analysis was not feasible due to the absence of pooled effect estimates.
 
 \subsection{Certainty of Evidence}
 
@@ -1049,11 +1041,11 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 % Appendix and Supplementary Materials available in online repository
 
 %==============================================================================
-\section{\textnormal{Conclusion}}
+\section{Conclusion}
 \label{sec:conclusion}
 %==============================================================================
 
-The central finding: \emph{implementation quality matters more than architectural novelty}. The 6.3 Dice point gap between optimized and unoptimized CNNs (Cohen's $d$ = 2.1) exceeds the 1.3 point gap between CNNs and transformers ($d$ = 0.5). Researchers should benchmark against properly-tuned baselines; practitioners should optimize systematically before chasing novel architectures.
+Confirming the foundational work of Isensee et al.~\cite{isensee2021nnunet}, our central observation is that \emph{implementation quality matters more than architectural novelty}. On BTCV, the mean Dice gap between auto-configured and earlier non-auto-configured CNNs (e.g.\ nnU-Net/MedNeXt/STU-Net at 85.2$\pm$2.1\%, $n$=3, vs.\ 3D U-Net/V-Net/Attention~U-Net at $\approx$75.7\%, $n$=3) exceeds the gap between auto-configured CNNs and pre-trained transformers (UNETR/Swin~UNETR at 80.5$\pm$1.8\%, $n$=2). These descriptive comparisons are drawn from a small number of methods per family and should not be interpreted as pooled effect sizes. Researchers should benchmark against properly-tuned baselines; practitioners should optimize systematically before chasing novel architectures.
 
 From 52 included studies, we draw four conclusions:
 
