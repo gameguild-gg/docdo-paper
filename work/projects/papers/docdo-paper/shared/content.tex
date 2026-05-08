@@ -90,6 +90,8 @@ Past reviews have tackled medical image segmentation from different angles, thou
 
 This structured survey follows PRISMA 2020 guidelines \cite{page2021prisma} for transparent reporting, adapted for a narrative synthesis approach. We employ systematic search and selection procedures while acknowledging that the scope and depth of analysis reflect a structured survey rather than a formal systematic review with prospective registration. PRISMA 2020 was designed for prospectively registered systematic reviews with statistical meta-analysis; several checklist items (prospective registration, pooled effect estimates, per-study risk-of-bias instruments) are structurally inapplicable to a narrative survey and are addressed by explicit disclosure of absence rather than compliance.
 
+\textbf{Supplementary materials and repository.} All supplementary artifacts (S0--S12, including S9 analysis scripts) cited in this paper are openly available in the project repository at \href{https://github.com/gameguild-gg/docdo-paper}{\faGithub\ gameguild-gg/docdo-paper} under \path{artifacts/data/evidence/supplementary/}. To keep in-text references concise, we cite each item once by its identifier and type (e.g., \emph{Supplementary Protocol~S3}, \emph{Supplementary Data~S5}, \emph{Supplementary Report~S6}); a complete index mapping each identifier to its filename and contents is provided in the Data Availability section.
+
 \subsection{Search Strategy}
 
 Three bibliographic databases were searched programmatically via their public APIs: PubMed (NCBI Entrez E-utilities), arXiv (official arXiv API), and Semantic Scholar (Graph API v1). Searches ran from November 15, 2025 to January 10, 2026, covering publications from 2015 onward. Closed-access indexes (IEEE Xplore, ACM Digital Library, Scopus) were not queried because no API access was available within the project budget; relevant papers indexed exclusively in those services were captured indirectly via Semantic Scholar's cross-publisher coverage and via the citation-tracking step described below.
@@ -121,7 +123,7 @@ OR "encoder-decoder"))\\
 AND 2015:2026[dp] AND English[la]
 \end{quote}
 
-Equivalent queries for arXiv (using the \texttt{cat:cs.CV} and \texttt{cat:eess.IV} category filters with title/abstract keyword combinations) and Semantic Scholar (using the \texttt{/paper/search} endpoint with topical keyword strings) were constructed using each API's native syntax. Complete query strings for all three databases are provided in Supplementary Materials (S3).
+Equivalent queries for arXiv (using the \texttt{cat:cs.CV} and \texttt{cat:eess.IV} category filters with title/abstract keyword combinations) and Semantic Scholar (using the \texttt{/paper/search} endpoint with topical keyword strings) were constructed using each API's native syntax. Complete query strings for all three databases are provided in Supplementary Protocol~S3.
 
 \subsection{Study Selection Process}
 
@@ -190,11 +192,9 @@ Figure~\ref{fig:prisma} shows the two-stage selection process (PRISMA 2020). Dat
 
 \textbf{Clarification on study coverage:} All 52 included studies underwent full data extraction including architecture details, target organs, datasets used, performance metrics (Dice scores, HD95), implementation frameworks, and loss functions. Among these, 32 studies provided per-organ Dice scores enabling quantitative synthesis of performance variation across anatomical structures.
 
-\textbf{Methodology Note:} We used an agentic screening pipeline: Elasticsearch pre-filtering followed by GPT-based consensus screening (GPT-4o-mini 3-vote unanimous-INCLUDE rule with GPT-5-nano cross-validation and GPT-5.2 tiebreaker) and a final GPT-5.2 full-text screening pass, with a human validation audit on a 10\% stratified sample (n=64 from 638 ES-filtered papers) reviewed by two domain experts blind to AI decisions and a third reviewer for discrepancies (AI--human agreement 96.4\%, $\kappa = 0.89$; 3 false negatives recovered; see Supplementary S6). Data extraction and quality scoring were performed by a single GPT-5.2 batch pass using a predefined rubric described in Supplementary Methods without independent human re-extraction or re-scoring. This represents structured survey methodology with AI-assisted screening rather than a prospective dual-reviewer systematic review; the absence of human re-extraction is acknowledged as a limitation in Section~\ref{sec:limitations}.
+\textbf{Methodology Note:} We used an agentic screening pipeline: Elasticsearch pre-filtering followed by GPT-based consensus screening (GPT-4o-mini 3-vote unanimous-INCLUDE rule with GPT-5-nano cross-validation and GPT-5.2 tiebreaker) and a final GPT-5.2 full-text screening pass, with a human validation audit on a 10\% stratified sample (n=64 from 638 ES-filtered papers) reviewed by two domain experts blind to AI decisions and a third reviewer for discrepancies (AI--human agreement 96.4\%, $\kappa = 0.89$; 3 false negatives recovered; see Supplementary Report~S6). Data extraction and quality scoring were performed by a single GPT-5.2 batch pass using a predefined rubric described in Supplementary Protocol~S4 without independent human re-extraction or re-scoring. This represents structured survey methodology with AI-assisted screening rather than a prospective dual-reviewer systematic review; the absence of human re-extraction is acknowledged as a limitation in Section~\ref{sec:limitations}.
 
-\textbf{Borderline exclusions:} Several studies initially appeared to meet inclusion criteria but were ultimately excluded with individual justification: Nikolov et al.\ \cite{nikolov2021clinically} was excluded because the full-text assessment revealed a focus on clinical validation methodology rather than presenting a novel segmentation architecture; Han et al.\ \cite{han2023scribble} was excluded as it addressed weakly-supervised segmentation using scribble annotations without reporting standard benchmark results on included datasets; studies evaluating only 2D slice-by-slice methods (n=2) lacked volumetric context despite targeting CT organs; and three studies reporting results exclusively on private institutional datasets without external validation were excluded per criterion EC3. Complete full-text screening decisions with individual exclusion reasons for all assessed studies are provided in Supplementary S5.
-
-% todo: state that AI-Assisted Screening Protocol details are in Supplementary Materials
+\textbf{Borderline exclusions:} Several studies initially appeared to meet inclusion criteria but were ultimately excluded with individual justification: Nikolov et al.\ \cite{nikolov2021clinically} was excluded because the full-text assessment revealed a focus on clinical validation methodology rather than presenting a novel segmentation architecture; Han et al.\ \cite{han2023scribble} was excluded as it addressed weakly-supervised segmentation using scribble annotations without reporting standard benchmark results on included datasets; studies evaluating only 2D slice-by-slice methods (n=2) lacked volumetric context despite targeting CT organs; and three studies reporting results exclusively on private institutional datasets without external validation were excluded per criterion EC3. Complete full-text screening decisions with individual exclusion reasons for all assessed studies are provided in Supplementary Data~S5. The full AI-assisted screening protocol (model versions, prompts, voting rules, and validation procedure) is documented in Supplementary Protocol~S4.
 
 \subsection{Inclusion and Exclusion Criteria}
 
@@ -218,7 +218,7 @@ Figure~\ref{fig:prisma} shows the two-stage selection process (PRISMA 2020). Dat
 
 \subsection{Data Extraction}
 
-Data extraction was performed by a single GPT-5.2 batch pass against the full text of each included PDF (full extraction prompt and machine-readable outputs provided in the Supplementary Materials and repository package). There was no independent human re-extraction; field values were taken as stated in the LLM output and spot-checked by the authors against the source PDFs but not formally adjudicated by a second reviewer. Study authors were not contacted for missing or unclear data; extraction relied solely on published information. For each study, we extracted:
+Data extraction was performed by a single GPT-5.2 batch pass against the full text of each included PDF (full extraction prompt in Supplementary Protocol~S4; machine-readable outputs in Supplementary Data~S7). There was no independent human re-extraction; field values were taken as stated in the LLM output and spot-checked by the authors against the source PDFs but not formally adjudicated by a second reviewer. Study authors were not contacted for missing or unclear data; extraction relied solely on published information. For each study, we extracted:
 
 \begin{itemize}
     \item \textbf{Architecture:} Category (CNN/Transformer/Hybrid), key innovations, encoder-decoder structure, attention mechanisms, loss functions
@@ -226,13 +226,13 @@ Data extraction was performed by a single GPT-5.2 batch pass against the full te
     \item \textbf{Reproducibility:} Code availability, pre-trained model availability, dataset accessibility
 \end{itemize}
 
-All compatible results were sought for each outcome domain: for every included study, we extracted all reported Dice, HD95, and ASSD values across organs and datasets. When studies reported results for multiple configurations (e.g., with and without test-time augmentation, single model vs.\ ensemble), the single-model result without TTA was recorded as the primary outcome to ensure comparability across studies; alternative configurations were noted in supplementary data (S12).
+All compatible results were sought for each outcome domain: for every included study, we extracted all reported Dice, HD95, and ASSD values across organs and datasets. When studies reported results for multiple configurations (e.g., with and without test-time augmentation, single model vs.\ ensemble), the single-model result without TTA was recorded as the primary outcome to ensure comparability across studies; alternative configurations were noted in Supplementary Data~S12.
 
 \textbf{Handling of missing or unclear information:} When studies did not report specific variables (e.g., GPU memory, training time, exact train/test split ratios), the corresponding fields were recorded as ``not reported.'' Performance values are reported as stated in original publications without conversion. No imputation of missing values was performed.
 
 \subsection{Quality Assessment}
 
-Study quality was scored by an LLM-based agentic pipeline (single GPT-5.2 batch call against the full text of each included PDF; rubric and prompt documented in the Supplementary Methods) rather than by independent human reviewers. We note that this is a \emph{quality assessment framework}, not a formal risk-of-bias tool (e.g., ROBINS-I, Newcastle-Ottawa Scale). A formal risk-of-bias tool was not adopted because the included studies report diagnostic accuracy metrics from computational experiments rather than clinical intervention outcomes, rendering standard clinical RoB instruments inapplicable. The rubric comprised \textbf{15 questions, each scored 0--2 (0 = No/Poor, 1 = Partial, 2 = Yes/Good)}, grouped in three dimensions of 5 questions and 10 points each, yielding a total score of 0--30:
+Study quality was scored by an LLM-based agentic pipeline (single GPT-5.2 batch call against the full text of each included PDF; rubric and prompt documented in Supplementary Protocol~S4) rather than by independent human reviewers. We note that this is a \emph{quality assessment framework}, not a formal risk-of-bias tool (e.g., ROBINS-I, Newcastle-Ottawa Scale). A formal risk-of-bias tool was not adopted because the included studies report diagnostic accuracy metrics from computational experiments rather than clinical intervention outcomes, rendering standard clinical RoB instruments inapplicable. The rubric comprised \textbf{15 questions, each scored 0--2 (0 = No/Poor, 1 = Partial, 2 = Yes/Good)}, grouped in three dimensions of 5 questions and 10 points each, yielding a total score of 0--30:
 \begin{itemize}
     \item \textbf{Dataset quality} (5 questions, 0--10): dataset size adequacy, source description, train/validation/test split clarity, ground-truth annotation process, external validation on an independent dataset.
     \item \textbf{Methodology quality} (5 questions, 0--10): network architecture completeness, training reproducibility (hyperparameters, optimiser), loss-function justification, pre/post-processing description, public availability of code or trained model.
@@ -735,7 +735,7 @@ MedSAM$^\dagger$ & Found. & 88.5 & \checkmark & \cite{ma2024medsam} \\
 
 \subsection{Synthesis from 52 Included Studies}
 
-A comprehensive table listing all 52 included studies with their individual characteristics (author, year, architecture type, dataset(s), target organs, best reported Dice, code availability, and quality rating) is provided in Supplementary Materials (Table S2). Below we summarize aggregate patterns.
+A comprehensive table listing all 52 included studies with their individual characteristics (author, year, architecture type, dataset(s), target organs, best reported Dice, code availability, and quality rating) is provided in Supplementary Data~S2. Below we summarize aggregate patterns.
 
 Our survey of 52 studies reveals: \textbf{Architecture distribution:} CNNs dominated (98.1\%), with 3D U-Net~\cite{cicek20163dunet} variants most prevalent (82.7\%). True 3D volumetric processing was employed in 98.1\% of studies. \textbf{Segmentation scope:} Multi-organ (65.4\%) vs.\ single-organ (34.6\%). Most targeted organs: liver (n=29), kidney (n=26), bladder (n=20), spleen (n=17), pancreas (n=16). \textbf{Implementation:} TensorFlow/Keras (36.5\%), PyTorch (30.8\%), with a shift toward PyTorch in recent publications due to MONAI~\cite{monai2022}. Combined Dice+CE loss with Adam optimizer was predominant.
 
@@ -756,14 +756,14 @@ Dense 3D annotation requires 15-45 minutes per organ per volume~\cite{sharma2010
 
 \textbf{Top performers (as reported in original papers):} Among reviewed studies, highest reported per-organ Dice scores: Kakeya et al.\ \cite{kakeya2018ujapa} (97.1\% liver, 98.4\% kidney, 86.1\% pancreas) with 3D U-JAPA-Net; Amjad et al.\ \cite{amjad2022general} (97.0\% liver, 97.0\% spleen) with nnU-Net~\cite{isensee2021nnunet} variants; Gibson et al.\ \cite{gibson2018densevnet} (90.7\% mean, 96.0\% liver/spleen) with DenseVNet. Well-optimized CNNs consistently achieve top per-organ performance.
 
-\textbf{Performance across 52 studies (Table~\ref{tab:synthesized_dice}):} Mean reported Dice scores varied by organ complexity. Liver segmentation achieved the highest accuracy (mean: 94.2\%, range: 89.0--97.1\%, n=16), followed by spleen (93.1\%, range: 84.0--97.0\%, n=9), kidney (92.1\%, range: 78.3--98.4\%, n=16), and pancreas (78.1\%, range: 72.0--86.1\%, n=8). Challenging structures like pancreas showed lower performance due to high anatomical variability and small size~\cite{oktay2018attention, gibson2018densevnet}. Overall Dice scores (n=36 studies reporting) ranged from 78\% to 98\%. The per-organ values in Table~\ref{tab:synthesized_dice} are reproduced from the contributing primary studies as cited; they were not independently re-extracted from the original CT volumes (see Supplementary S11).
+\textbf{Performance across 52 studies (Table~\ref{tab:synthesized_dice}):} Mean reported Dice scores varied by organ complexity. Liver segmentation achieved the highest accuracy (mean: 94.2\%, range: 89.0--97.1\%, n=16), followed by spleen (93.1\%, range: 84.0--97.0\%, n=9), kidney (92.1\%, range: 78.3--98.4\%, n=16), and pancreas (78.1\%, range: 72.0--86.1\%, n=8). Challenging structures like pancreas showed lower performance due to high anatomical variability and small size~\cite{oktay2018attention, gibson2018densevnet}. Overall Dice scores (n=36 studies reporting) ranged from 78\% to 98\%. The per-organ values in Table~\ref{tab:synthesized_dice} are reproduced from the contributing primary studies as cited; they were not independently re-extracted from the original CT volumes (see Supplementary Report~S11).
 
-\textbf{Individual study results:} Per-study performance data for all 52 included studies, including all reported Dice, HD95, and ASSD values with precision measures (standard deviations or confidence intervals where provided by original authors), are presented in Supplementary Table S2. Statistical precision measures (standard deviations or confidence intervals) were reported by 35 of 52 studies (67.3\%); formal confidence intervals or comparative hypothesis tests were present in 16 (30.8\%). The remaining 17 studies (32.7\%) reported point estimates only, a limitation common across computational benchmarking literature. Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present representative per-method results for key benchmarks.
+\textbf{Individual study results:} Per-study performance data for all 52 included studies, including all reported Dice, HD95, and ASSD values with precision measures (standard deviations or confidence intervals where provided by original authors), are presented in Supplementary Data~S2. Statistical precision measures (standard deviations or confidence intervals) were reported by 35 of 52 studies (67.3\%); formal confidence intervals or comparative hypothesis tests were present in 16 (30.8\%). The remaining 17 studies (32.7\%) reported point estimates only, a limitation common across computational benchmarking literature. Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present representative per-method results for key benchmarks.
 
 \begin{table}[!htb]
 \centering
 \small
-\caption{Per-Organ Dice Scores (\%) from 52 Reviewed Studies. Statistics computed from studies reporting individual organ metrics (Supplementary S12).}
+\caption{Per-Organ Dice Scores (\%) from 52 Reviewed Studies. Statistics computed from studies reporting individual organ metrics (Supplementary Data~S12).}
 \label{tab:synthesized_dice}
 \begin{tabular}{@{}lcccl@{}}
 \toprule
@@ -774,7 +774,7 @@ Spleen & 93.1\% & 84.0--97.0\% & 9 & \cite{amjad2022general, gibson2018densevnet
 Kidney & 92.1\% & 78.3--98.4\% & 16 & \cite{kakeya2018ujapa, isensee2021nnunet} \\
 Pancreas & 78.1\% & 72.0--86.1\% & 8 & \cite{kakeya2018ujapa, oktay2018attention} \\
 \bottomrule
-\multicolumn{5}{l}{\footnotesize Full per-study data available in Supplementary Materials (S12).}
+\multicolumn{5}{l}{\footnotesize Full per-study data available in Supplementary Data~S12.}
 \end{tabular}
 \end{table}
 
@@ -792,7 +792,7 @@ Our systematic analysis of 52 peer-reviewed studies uncovers several practical p
 
 \subsection{Aggregate Statistics by Architecture Family}
 
-Aggregated BTCV performance from verified source papers (Supplementary S8): auto-configured CNNs (nnU-Net~\cite{isensee2021nnunet}, MedNeXt~\cite{roy2023mednext}, STU-Net~\cite{huang2023stunet}) reach 85.2$\pm$2.1\%~Dice; transformers (UNETR~\cite{hatamizadeh2022unetr}, Swin UNETR~\cite{swinunetr2022}) attain 80.5$\pm$1.8\%. Auto-configured CNNs outperform pure transformers by 4.7~points. \emph{Key finding: modern auto-configured CNNs lead current BTCV benchmarks, with transformer-only approaches 4--5 points behind.}
+Aggregated BTCV performance from verified source papers (Supplementary Data~S8): auto-configured CNNs (nnU-Net~\cite{isensee2021nnunet}, MedNeXt~\cite{roy2023mednext}, STU-Net~\cite{huang2023stunet}) reach 85.2$\pm$2.1\%~Dice; transformers (UNETR~\cite{hatamizadeh2022unetr}, Swin UNETR~\cite{swinunetr2022}) attain 80.5$\pm$1.8\%. Auto-configured CNNs outperform pure transformers by 4.7~points. \emph{Key finding: modern auto-configured CNNs lead current BTCV benchmarks, with transformer-only approaches 4--5 points behind.}
 
 \textbf{Clarification:} These aggregate statistics (85.2$\pm$2.1\% and 80.5$\pm$1.8\%) are arithmetic means $\pm$ standard deviations computed from reported values across contributing studies, not pooled meta-analytic estimates. They are presented as descriptive summaries and should not be interpreted as statistically pooled effect sizes.
 
@@ -807,7 +807,7 @@ Stratification by architecture family revealed systematic performance difference
 \subsection{Quality Assessment Results}
 \label{sec:qa-results}
 
-The 15-question rubric (Section~\ref{sec:methodology}) was applied to the 52 included studies via a single GPT-5.2 batch call against the full text of each PDF. Aggregate results: \textbf{mean total score 21.0/30, range 14--28}. Of the 52 studies, \textbf{10 (19.2\%) were rated high quality} (total $\geq$24), \textbf{41 (78.8\%) moderate} (15--23), and \textbf{1 (1.9\%) low} ($<$15). The per-study rubric scores, full structured QA outputs, included-study list, and archived source PDFs are provided in the Supplementary Materials and repository package.
+The 15-question rubric (Section~\ref{sec:methodology}) was applied to the 52 included studies via a single GPT-5.2 batch call against the full text of each PDF. Aggregate results: \textbf{mean total score 21.0/30, range 14--28}. Of the 52 studies, \textbf{10 (19.2\%) were rated high quality} (total $\geq$24), \textbf{41 (78.8\%) moderate} (15--23), and \textbf{1 (1.9\%) low} ($<$15). The per-study rubric scores, full structured QA outputs, included-study list, and archived source PDFs are provided in Supplementary Report~S6 and Supplementary Data~S7.
 
 \subsection{Sensitivity Analysis Results}
 
@@ -975,13 +975,42 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{Registration:} This review was not prospectively registered in PROSPERO or other systematic review registries, consistent with its scope as a structured survey rather than a formal systematic review.
 
-\textbf{Protocol:} The review protocol is available at \url{https://github.com/game-guild/docdo-paper}. No amendments were made to the protocol after initiation of the search and screening process.
+\textbf{Protocol:} The review protocol is available at \href{https://github.com/gameguild-gg/docdo-paper}{\faGithub\ gameguild-gg/docdo-paper}. No amendments were made to the protocol after initiation of the search and screening process.
 
 \textbf{Author Contributions (CRediT):} A.T.N.: Conceptualization, Methodology, Investigation, Writing. M.H.R.M.: Investigation, Validation, Review. V.M.F.: Supervision, Review, Project Administration.
 
 \textbf{Funding:} A.T.N. is a doctoral student at UTAD. No external funding was received.
 
-\textbf{Data Availability:} Survey materials available at \url{https://github.com/game-guild/docdo-paper}. Extracted data, PRISMA screening decisions, and analysis scripts included. All statistics reported in this paper can be independently validated using the supplementary materials: S8 (BTCV benchmark sources with DOIs), S10 (verified statistics traceability), and S12 (per-organ performance data).
+\textbf{Data Availability:} All survey materials, extracted data, PRISMA screening decisions, and analysis scripts are openly available in the project repository at \href{https://github.com/gameguild-gg/docdo-paper}{\faGithub\ gameguild-gg/docdo-paper}. Supplementary artifacts referenced throughout the paper reside under \path{artifacts/data/evidence/supplementary/} and are summarized in Table~\ref{tab:supp_index}. All statistics reported in this paper can be independently validated using these materials, in particular Supplementary Data~S8 (BTCV benchmark sources with DOIs), Supplementary Report~S10 (verified statistics traceability), and Supplementary Data~S12 (per-organ performance data).
+
+\begin{table*}[!t]
+\centering
+\footnotesize
+\caption{Supplementary Materials Index. Files reside in \texttt{artifacts/data/evidence/supplementary/} of the project repository.}
+\label{tab:supp_index}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{ID} & \textbf{File} & \textbf{Contents} \\
+\midrule
+S0  & \path{S0_data_provenance.md} & Data provenance and pipeline overview \\
+S1  & \path{S1_search_results_REAL.csv} & Raw database search results \\
+S1b & \path{S1b_citation_tracking.csv} & Forward/backward citation tracking log \\
+S2  & \path{S2_final_included_studies.csv} & Final 52 included studies with full metadata \\
+S3  & \path{S3_search_protocol.md} & Complete database query strings \\
+S4  & \path{S4_ai_screening_protocol.md}; \newline \path{S4_screening_criteria.md} & AI screening protocol, prompts, and rubrics \\
+S5  & \path{S5_screening_decisions.csv} & Per-paper screening decisions and exclusions \\
+S6  & \path{S6_validation_report.md}; \newline \path{S6b_batch_processing_log.md} & Human validation audit (n=64, $\kappa$=0.89) \\
+S7  & \path{S7_extraction_template.csv} & Data extraction schema and machine-readable outputs \\
+S8  & \path{S8_table_sources.csv} & Per-table source mapping with DOIs \\
+S9  & \path{S9_analysis_scripts.md} & Verification and reproducibility scripts (Python) \\
+S10 & \path{S10_verified_statistics.md} & Traceability of every statistic in the paper \\
+S11 & \path{S11_paywalled_access.md}; \newline \path{S11_per_organ_source_tracking.md} & Paywall log and per-organ source tracking \\
+S12 & \path{S12_per_organ_statistics.md} & Per-organ Dice statistics (n=32 studies) \\
+PRISMA & \path{S_PRISMA_funnel.md} & PRISMA flow and reporting-bias notes \\
+\bottomrule
+\end{tabularx}
+\end{table*}
 
 % Appendix and Supplementary Materials available in online repository
 
