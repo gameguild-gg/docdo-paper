@@ -1,26 +1,39 @@
 # Makefile for LaTeX document compilation
 # Systematic Review: Deep Learning for 3D CT Organ Segmentation
 
-MAIN = main
+TARGETS = ieeetran ieeeaccess
 BIB_DIR = ../../../../scholar/bib
 LATEX = pdflatex -interaction=nonstopmode -halt-on-error
+# ieeeaccess requires TEXINPUTS=.: for bundled fonts; pgfmath preload in ieeeaccess.tex fixes pgf/xcolor conflict
+LATEX_ACCESS = pdflatex -interaction=nonstopmode -halt-on-error
 BIBTEX = bibtex
 BUILD_DIR = build
 
-# Default target
-all: $(MAIN).pdf
+SHARED_DEPS = $(wildcard shared/*.tex) $(BIB_DIR)/references.bib
 
-# Build PDF with bibliography
-$(MAIN).pdf: $(MAIN).tex $(BIB_DIR)/references.bib
-	$(LATEX) $(MAIN)
-	-$(BIBTEX) $(MAIN)
-	$(LATEX) $(MAIN)
-	$(LATEX) $(MAIN)
-	@echo "Build complete: $(MAIN).pdf"
+# Default target: build all PDFs
+all: $(addsuffix .pdf,$(TARGETS))
+
+# IEEE ACCESS: explicit TEXINPUTS so pdflatex finds the bundled fonts/cls
+ieeeaccess.pdf: ieeeaccess.tex $(SHARED_DEPS)
+	TEXINPUTS=.: $(LATEX_ACCESS) ieeeaccess
+	-TEXINPUTS=.: $(BIBTEX) ieeeaccess
+	TEXINPUTS=.: $(LATEX_ACCESS) ieeeaccess
+	TEXINPUTS=.: $(LATEX_ACCESS) ieeeaccess
+	@echo "Build complete: $@"
+
+# Generic rule for other targets (e.g. ieeetran)
+%.pdf: %.tex $(SHARED_DEPS)
+	$(LATEX) $*
+	-$(BIBTEX) $*
+	$(LATEX) $*
+	$(LATEX) $*
+	@echo "Build complete: $@"
 
 # Quick build without bibliography update
 quick:
-	$(LATEX) $(MAIN)
+	TEXINPUTS=.: $(LATEX_ACCESS) ieeeaccess
+	$(LATEX) ieeetran
 	@echo "Quick build complete"
 
 # Move build artifacts to build directory

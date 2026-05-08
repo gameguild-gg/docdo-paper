@@ -1,64 +1,3 @@
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
-\raggedbottom
-
-\usepackage{cite}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmic}
-\usepackage{graphicx}
-\usepackage{textcomp}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{hyperref}
-\usepackage{url}
-\usepackage{seqsplit}
-\usepackage{cleveref}
-\usepackage{array}
-\usepackage{tabularx}
-\usepackage{tikz}
-\usepackage{placeins}  % For \FloatBarrier
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
-
-\hypersetup{
-    pdftitle={3D Organ Segmentation from CT Scans: An Agentic Structured Survey of Deep Learning Approaches for Surgical Planning},
-    pdfauthor={Nogueira, Martins, Filipe},
-    pdfkeywords={segmentation, deep learning, CT, medical imaging},
-    pdfsubject={Agentic Structured Survey of Deep Learning for CT Organ Segmentation with AI-Assisted Screening},
-    colorlinks=true,
-    linkcolor=blue,
-    citecolor=blue,
-    urlcolor=blue
-}
-
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-
-\begin{document}
-
-\title{3D Organ Segmentation from CT Scans: An Agentic Structured Survey of Deep Learning Approaches for Surgical Planning}
-
-\author{
-    \IEEEauthorblockN{Alexandre Tolstenko Nogueira$^{1,2,4,a}$, Matheus H. R. Martins$^{4,b}$, Nuno Miguel Ferreira$^{3,c}$ and Vitor M Filipe$^{2,d}$}
-    \IEEEauthorblockA{
-        $^1$Information Technology and Sciences, Champlain College, Burlington, VT, USA \\
-        $^2$Department of Engineering, University of Tr\'{a}s-os-Montes e Alto Douro, Vila Real, Portugal \\
-        $^3$Coimbra Polytechnic - ISEC, Coimbra, Portugal\\
-        $^4$DocDo - InfiniBrains, São Paulo, Brazil \\
-        $^a$tolstenko@gmail.com, $^b$contact@matheusmartins.com, $^c$nunomig@isec.pt, $^d$vfilipe@utad.pt
-    }
-}
-
-\maketitle
-
-\begin{abstract}
-Deep learning has transformed organ segmentation, yet a persistent gap remains between benchmark performance and surgical planning deployment. We identify which 3D CT organ segmentation algorithms are ready for clinical deployment in surgical planning and what practical barriers remain. Three databases (PubMed via Entrez E-utilities, arXiv via the official arXiv API, and Semantic Scholar via the Graph API) were searched for studies published between 2015 and January 2026. We included studies presenting deep learning methods for 3D organ segmentation from CT with quantitative evaluation on public benchmarks. A narrative synthesis of 52 included studies with benchmark-stratified performance comparison was conducted; formal meta-analysis was precluded by protocol heterogeneity. Auto-configured CNNs (nnU-Net, 82.3\% Dice) and pre-trained transformers (Swin UNETR, 82.4\%) achieve comparable leading accuracy, but domain shift, vascular segmentation deficits (65 to 75\% vs.\ 90\%+ for parenchymal organs), and integration complexity remain primary barriers to clinical adoption. CNNs dominate (98.1\%), with 3D U-Net variants appearing in 82.7\% of papers. Auto-configured CNNs achieve 85.2$\pm$2.1\% mean Dice on the BTCV multi-organ benchmark. Limitations include an English-only search, a 39.1\% full-text retrieval rate, and benchmark performance likely overestimating clinical accuracy by 5--15\%. We conclude that implementation quality matters more than architectural novelty. A phased adoption strategy starting with TotalSegmentator or nnU-Net is recommended for surgical planning platforms. The review protocol is available at \url{https://github.com/game-guild/docdo-paper}.
-\end{abstract}
-
-\begin{IEEEkeywords}
-medical image segmentation, computed tomography, deep learning, convolutional neural networks, vision transformers, 3D volumetric segmentation, organ segmentation, surgical planning, clinical deployment
-\end{IEEEkeywords}
-
 \begin{table*}[!htb]
 \centering
 \footnotesize
@@ -167,11 +106,19 @@ We also performed forward and backward citation tracking on 12 seminal papers (U
 
 \textbf{Database-specific queries:} Boolean queries were adapted per database syntax. As an illustrative example, the PubMed query was:
 
-\pagebreak
-
 \begin{quote}
-\small
-\texttt{(("computed tomography"[MeSH] OR "CT"[tiab]) AND ("image segmentation"[MeSH] OR "segmentation"[tiab]) AND ("3D" OR "volumetric" OR "organ" OR "multi-organ" OR "abdominal") AND ("deep learning"[MeSH] OR "neural network*" OR "convolutional" OR "U-Net" OR "transformer" OR "encoder-decoder")) AND 2015:2026[dp] AND English[la]}
+\scriptsize\ttfamily
+(("computed tomography"[MeSH]\\
+OR "CT"[tiab])\\
+AND ("image segmentation"[MeSH]\\
+OR "segmentation"[tiab])\\
+AND ("3D" OR "volumetric" OR "organ"\\
+OR "multi-organ" OR "abdominal")\\
+AND ("deep learning"[MeSH]\\
+OR "neural network*" OR "convolutional"\\
+OR "U-Net" OR "transformer"\\
+OR "encoder-decoder"))\\
+AND 2015:2026[dp] AND English[la]
 \end{quote}
 
 Equivalent queries for arXiv (using the \texttt{cat:cs.CV} and \texttt{cat:eess.IV} category filters with title/abstract keyword combinations) and Semantic Scholar (using the \texttt{/paper/search} endpoint with topical keyword strings) were constructed using each API's native syntax. Complete query strings for all three databases are provided in Supplementary Materials (S3).
@@ -236,8 +183,6 @@ Equivalent queries for arXiv (using the \texttt{cat:cs.CV} and \texttt{cat:eess.
 \end{figure}
 
 Figure~\ref{fig:prisma} shows the two-stage selection process (PRISMA 2020). Database searches yielded 2,821 records after deduplication. Screening combined keyword-based filtering with AI-assisted assessment.
-
-\pagebreak
 
 \textbf{Stage 1: Elasticsearch Pre-filtering.} To efficiently filter the large initial pool, we indexed all abstracts in Elasticsearch, a distributed search engine using inverted (reverse) indexing for full-text queries across documents, and applied strict Boolean queries enforcing our inclusion criteria. This filter required papers to explicitly mention deep learning terms (CNN, U-Net, transformer, neural network), 3D/volumetric processing terminology (3D, volumetric, volume, V-Net), CT imaging modality, anatomical organ targets, and method/approach terminology indicating original research. Papers were excluded if they mentioned only non-CT modalities, non-organ targets (tumors, vessels, bones exclusively), or lacked explicit 3D methodology. This reduced 2,821 records to 638 candidates (77.4\% reduction), with detailed exclusion reasons logged for each paper.
 
@@ -1071,5 +1016,3 @@ This survey aims to help researchers and practitioners bridge the gap between be
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
-
-\end{document}

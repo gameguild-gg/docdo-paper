@@ -1,0 +1,59 @@
+% Pre-load pgfmath before ieeeaccess.cls to prevent pgf random seed catcode
+% conflict with LaTeX3 mark update routines (\@expl@@@mark@update@dblcol@structures@@)
+% Without this, Extra \else errors corrupt the twocolumn output routine, causing blank page 2.
+% Using pgfmath (not pgf) avoids loading xcolor early, which would break spotcolor/accessblue.
+\RequirePackage{pgfmath}
+\documentclass{ieeeaccess}
+% Suppress blank even pages inserted by the twoside default
+\let\cleardoublepage\clearpage
+
+\input{shared/packages}
+% Redefine accessblue using xcolor-native CMYK because xcolor (loaded above) marks
+% spotcolor-defined colors as "Incompatible color definition" and renders them transparent.
+% CMYK equivalent from ieeeaccess.cls spotcolor definition: C=1 M=0.3 Y=0 K=0.2
+\definecolor{accessblue}{cmyk}{1,0.3,0,0.2}
+
+\begin{document}
+
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/ACCESS.2024.0000000}
+
+\input{shared/title}
+
+
+\author{
+    \uppercase{Alexandre Tolstenko Nogueira}\authorrefmark{1}\authorrefmark{2}\authorrefmark{3}\authorrefmark{4}\authorrefmark{a},
+    \uppercase{Matheus H. R. Martins}\authorrefmark{4}\authorrefmark{b},
+    \uppercase{Nuno Miguel Ferreira}\authorrefmark{3}\authorrefmark{c},
+    and \uppercase{Vitor M. Filipe}\authorrefmark{2}\authorrefmark{d}
+}
+
+\address[1]{Information Technology and Sciences, Champlain College, Burlington, VT 05402, USA}
+\address[2]{Department of Engineering, University of Tr\'{a}s-os-Montes e Alto Douro, Vila Real, Portugal}
+\address[3]{Coimbra Polytechnic, ISEC, Coimbra, Portugal}
+\address[4]{DocDo - DocDo Corp., Burlington, VT, USA}
+\address[a]{tolstenko@gmail.com, \textsuperscript{b}contact@matheusmartins.com, \textsuperscript{c}nunomig@isec.pt, \textsuperscript{d}vfilipe@utad.pt}
+
+
+\markboth
+{Nogueira \headeretal: 3D Organ Segmentation from CT Scans}
+{Nogueira \headeretal: 3D Organ Segmentation from CT Scans}
+
+\corresp{Corresponding author: Alexandre Tolstenko Nogueira (e-mail: tolstenko@gmail.com).}
+
+\begin{abstract}
+\input{shared/abstract-text}
+\end{abstract}
+
+\begin{keywords}
+\input{shared/keywords-text}
+\end{keywords}
+
+\titlepgskip=-21pt
+
+\maketitle
+
+\input{shared/content}
+% Required by ieeeaccess.cls at end of last paragraph/reference
+\EOD
+\end{document}
