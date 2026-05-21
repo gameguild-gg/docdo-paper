@@ -211,13 +211,6 @@
 \begin{document}
 \begin{frame}[t]
 \vspace{0.05cm}
-{\centering\scriptsize\textcolor{utadnavy!60}{\textbf{%
-  \textcircled{1}~Background \& Methods
-  ~$\longrightarrow$~
-  \textcircled{2}~Results \& Evidence
-  ~$\longrightarrow$~
-  \textcircled{3}~Implications \& Recommendations}}\par}
-\vspace{0.05cm}
 \begin{columns}[t,totalwidth=\textwidth]
 
 % =============================================================================
@@ -228,17 +221,17 @@
 %--- Motivation & Clinical Need ----------------------------------------------
 \begin{pblock}{Motivation \& Clinical Need}
 \RaggedRight
-A \textbf{persistent gap} exists between benchmark performance and clinical deployment
+A gap remains between benchmark performance and clinical deployment
 of 3D CT organ segmentation for surgical planning:
 
 \begin{itemize}\setlength\itemsep{2pt}
-  \item Manual segmentation bottleneck: \textbf{15--45 min/structure}
+  \item Manual segmentation: \textbf{15--45 min/structure}
   \item EAU recommends 3D reconstruction for complex renal tumours but cites
         lack of \textit{``standardised, rapid segmentation tools''}
   \item 3D preoperative planning \textbf{reduces positive surgical margins by
         23--47\%} in partial nephrectomy
   \item Survey of N=387 surgeons: \textbf{68\%} cite
-        \textit{``time-intensive preparation''} as the primary barrier
+        \textit{``time-intensive preparation''} as the main barrier
 \end{itemize}
 
 \vspace{0.2em}
@@ -353,7 +346,7 @@ of 3D CT organ segmentation for surgical planning:
 \begin{column}{0.315\textwidth}
 
 %--- Key Results: BTCV -------------------------------------------------------
-\begin{pblock}{Key Results: BTCV Multi-Organ Benchmark (13 Organs)}
+\begin{pblock}{Results: BTCV Multi-Organ Benchmark (13 Organs)}
 \vspace{0.4em}
 {\small
 \begin{tabular}{@{}llccc@{}}
@@ -429,9 +422,9 @@ Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
 \vspace{0.4em}
 \begin{notebox}[utadred]
   {\small
-    \textbf{Critical gap:} Vascular structures score \textbf{65--75\%} Dice
-    vs.\ \textbf{90\%+} for large parenchymal organs ---
-    a primary barrier to surgical navigation deployment.
+    Vascular structures score \textbf{65--75\%} Dice versus
+    \textbf{90\%+} for large parenchymal organs --- a known
+    obstacle to surgical-navigation deployment.
   }
 \end{notebox}
 \end{pblock}
@@ -451,24 +444,21 @@ Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
     {\color{cnnblue!70!black}\large\bfseries CNN}\\[3pt]
     \small nnU-Net, MedNeXt, STU-Net\\
     Dice: \textbf{82--87\%}, Params: 26--58\,M\\
-    No pre-training, Fast inference\\
-    \textit{Best efficiency--accuracy ratio}
+    No pre-training, Fast inference
   };
 
   \node[arch, fill=transgreen!12, draw=transgreen, line width=1.8pt] (tr) at (11,0) {
     {\color{transgreen!60!black}\large\bfseries Transformer}\\[3pt]
     \small UNETR, Swin UNETR\\
     Dice: \textbf{79--82\%}, Params: 62--93\,M\\
-    Pre-training required (5{,}050 CTs)\\
-    \textit{1.5--3$\times$ slower inference}
+    Pre-training required (5{,}050 CTs)
   };
 
   \node[arch, fill=foundorange!12, draw=foundorange, line width=1.8pt] (fo) at (22,0) {
     {\color{foundorange!80!black}\large\bfseries Foundation}\\[3pt]
     \small MedSAM, SAM-Med3D\\
     Dice: \textbf{76--86\%}, Params: 94\,M\\
-    Interactive prompts, Zero-shot\\
-    \textit{Expert-guided refinement}
+    Interactive prompts, zero-shot capable
   };
 
   \draw[barr] (cnn.east) --
@@ -498,9 +488,10 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \vspace{0.2em}
 \begin{notebox}[utadnavy]
   {\footnotesize
-    \textbf{Finding:} Architecture type matters less than training protocol ---
-    nnFormer (Hybrid, 86.9\%) matches STU-Net-L (CNN, 87.1\%).
-    Auto-configured nnU-Net (31\,M params) rivals Swin UNETR (62\,M, pre-trained).
+    Architecture type matters less than training protocol: nnFormer
+    (Hybrid, 86.9\%) matches STU-Net-L (CNN, 87.1\%), and
+    auto-configured nnU-Net (31\,M params) rivals Swin UNETR
+    (62\,M, pre-trained).
   }
 \end{notebox}
 \end{pblock}
@@ -517,10 +508,49 @@ Foundation model       & 76--86\% & 3.8\%  \\
         clinical accuracy by \textbf{5--15\%} due to controlled splits,
         test-time augmentation, and ensembling
   \item \textbf{Single-centre dominance:} only 4/52 studies (7.7\%)
-        include multi-centre or prospective validation --- the primary
-        obstacle to deployment-readiness
+        include multi-centre or prospective validation
 \end{itemize}
 \end{pblock}
+
+%--- Glossary / Abbreviations -----------------------------------------------
+\begin{tcolorbox}[
+  title={Glossary \& Abbreviations},
+  colbacktitle=utadred,
+  coltitle=white,
+  colback=utadgray!22,
+  colframe=utadnavy!85!black,
+  fonttitle=\large\bfseries,
+  boxrule=1.5pt,
+  arc=5pt,
+  lefttitle=7pt,
+  toptitle=2pt,
+  bottomtitle=2pt,
+  top=4pt, bottom=4pt, left=6pt, right=6pt,
+  before={\vskip2pt},
+  after={\vskip2pt},
+  enhanced,
+  drop shadow={utadnavy!25!white,opacity=0.5},
+]
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.0}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.72\linewidth}@{}}
+\textbf{BTCV}       & Beyond Cranial Vault, 30-scan 13-organ benchmark \\
+\textbf{CNN}        & Convolutional Neural Network \\
+\textbf{CT / 3D}    & Computed tomography volume \\
+\textbf{Dice}       & $2|A\cap B|/(|A|+|B|)$; 1.0\,=\,perfect \\
+\textbf{EAU}        & European Assoc.\ of Urology \\
+\textbf{HD95}       & 95th-\%ile Hausdorff dist.\ (mm) \\
+\textbf{$\kappa$}   & Inter-rater agreement (Cohen's) \\
+\textbf{MC-Drop.}   & Monte-Carlo Dropout \\
+\textbf{nnU-Net}    & Self-config.\ U-Net (Isensee et al.) \\
+\textbf{Params (M)} & Model parameters (millions) \\
+\textbf{Pre-train}  & Training on external data \\
+\textbf{PRISMA}     & Systematic review standard \\
+\textbf{TotalSeg.}  & TotalSegmentator, 117-class nnU-Net \\
+\textbf{TTA}        & Test-Time Augmentation \\
+\end{tabular}
+\end{tcolorbox}
 
 \end{column}
 \hfill
@@ -530,21 +560,21 @@ Foundation model       & 76--86\% & 3.8\%  \\
 % =============================================================================
 \begin{column}{0.315\textwidth}
 
-%--- Clinical Deployment Barriers --------------------------------------------
+%--- Clinical Deployment Barriers (RQ4) ------------------------------------
 \begin{pblock}{Clinical Deployment Barriers (RQ4)}
-\begin{enumerate}\setlength\itemsep{3pt}
-  \item \textbf{Domain shift:} Scanner heterogeneity degrades Dice by
+\begin{enumerate}\setlength\itemsep{2pt}
+  \item \textbf{Domain shift:} scanner heterogeneity degrades Dice by
         \textbf{5--15\%} across institutions; only 4/52 studies (7.7\%)
         include multi-centre validation
   \item \textbf{Vascular deficit:} 65--75\% Dice for vessels vs.\
-        90\%+ for parenchymal organs --- critical gap for surgical navigation
-  \item \textbf{Integration complexity:} Deployment requires preprocessing
+        90\%+ for parenchymal organs
+  \item \textbf{Integration complexity:} deployment requires preprocessing
         robustness, uncertainty quantification, mesh generation, and DICOM
-        integration --- all absent from benchmark evaluations
-  \item \textbf{Benchmark overestimation:} Published Dice likely
+        integration, none of which are evaluated in benchmarks
+  \item \textbf{Benchmark overestimation:} published Dice likely
         overestimates clinical accuracy by \textbf{5--15\%} (controlled splits,
         TTA, ensembling)
-  \item \textbf{Annotation bottleneck:} Dense 3D labelling costs
+  \item \textbf{Annotation bottleneck:} dense 3D labelling costs
         15--45 min/organ; weak/semi-supervised methods needed for scaling
 \end{enumerate}
 \end{pblock}
@@ -552,23 +582,21 @@ Foundation model       & 76--86\% & 3.8\%  \\
 %--- Recommendations ---------------------------------------------------------
 \begin{pblock}{Phased Adoption Strategy for Surgical Planning Platforms}
 
-\begin{tcolorbox}[colback=cnnblue!10,colframe=cnnblue,arc=4pt,boxrule=1.2pt,
-  top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
-  {\normalsize\bfseries\color{cnnblue!70!black} Phase 1 — Baseline Segmentation}\\[2pt]
-  {\small TotalSegmentator \textbf{or} nnU-Net, Robust multi-organ
-  segmentation out-of-the-box}
-\end{tcolorbox}
-\vskip3pt\centerline{$\downarrow$}\vskip3pt
 \begin{tcolorbox}[colback=utadnavy!10,colframe=utadnavy,arc=4pt,boxrule=1.2pt,
   top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
-  {\normalsize\bfseries\color{utadnavy} Phase 2 — Uncertainty-Guided QA}\\[2pt]
+  {\normalsize\bfseries\color{utadnavy!80!black} 1. Baseline Segmentation}\\[2pt]
+  {\small TotalSegmentator or nnU-Net for robust multi-organ segmentation
+  without site-specific tuning}
+\end{tcolorbox}
+\begin{tcolorbox}[colback=utadnavy!10,colframe=utadnavy,arc=4pt,boxrule=1.2pt,
+  top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
+  {\normalsize\bfseries\color{utadnavy!80!black} 2. Uncertainty-Guided QA}\\[2pt]
   {\small MC-Dropout / TTA disagreement, Flag low-confidence cases for
   expert review}
 \end{tcolorbox}
-\vskip3pt\centerline{$\downarrow$}\vskip3pt
-\begin{tcolorbox}[colback=foundorange!10,colframe=foundorange,arc=4pt,boxrule=1.2pt,
+\begin{tcolorbox}[colback=utadnavy!10,colframe=utadnavy,arc=4pt,boxrule=1.2pt,
   top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
-  {\normalsize\bfseries\color{foundorange!80!black} Phase 3 — Interactive Refinement}\\[2pt]
+  {\normalsize\bfseries\color{utadnavy!80!black} 3. Interactive Refinement}\\[2pt]
   {\small MedSAM with bounding-box prompts, Surgeon-guided correction of
   uncertain regions}
 \end{tcolorbox}
@@ -576,7 +604,7 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \vspace{0.4em}
 \begin{notebox}[utadnavy]
   {\small
-    \textbf{Key insight:} \emph{Implementation quality matters more than
+    \emph{Implementation quality matters more than
     architectural novelty.} nnU-Net without modifications outperforms many
     specialised methods on standard benchmarks.
   }
@@ -586,7 +614,7 @@ Foundation model       & 76--86\% & 3.8\%  \\
 %--- Conclusions -------------------------------------------------------------
 \begin{pblock}{Conclusions}
 \begin{enumerate}\setlength\itemsep{2pt}
-  \item \textbf{CNNs dominate} (98.1\%); nnU-Net is the strongest clinical
+  \item \textbf{CNNs dominate} (98.1\%); nnU-Net is the strongest reported
         baseline (82.3\% Dice on BTCV, no pre-training)
   \item \textbf{Auto-CNNs outperform transformers} on BTCV:
         $85.2 \pm 2.1$\% vs.\ $80.5 \pm 1.8$\%;
@@ -601,8 +629,8 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \end{enumerate}
 \end{pblock}
 
-%--- References --------------------------------------------------------------
-\begin{pblock}{Key References}
+%--- Key References ----------------------------------------------------------
+\begin{pblock}{References}
 {\footnotesize
 \begin{enumerate}\setlength\itemsep{2pt}
   \item[{[1]}] Isensee et al.\ \emph{nnU-Net.} Nat.\ Methods, 2021.
