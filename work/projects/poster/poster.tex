@@ -1,0 +1,624 @@
+% =============================================================================
+% Vertical A0 Scientific Poster
+% Title: 3D Organ Segmentation from CT Scans
+% Framework: beamerposter + tcolorbox | Size: A0 (841 x 1189 mm) | 3 columns
+% UTAD Brand Colors: navy RGB(25,34,71) | red RGB(190,29,44) | gray RGB(198,198,198)
+% Compile with: pdflatex poster.tex
+% =============================================================================
+\documentclass[final,t]{beamer}
+
+% A0 poster — portrait (841 × 1189 mm). scale=1.4 → ~15 pt body.
+% orientation=portrait must be explicit; default is landscape.
+% Do NOT override \textheight: beamer measures the headline/footline
+% templates and computes frametextheight = textheight - head - foot.
+% Overriding causes double-subtraction and a 14 cm frame-too-small bug.
+\usepackage[size=a0,orientation=portrait,scale=1.4]{beamerposter}
+
+% --------------------------------------------------------------------------
+% Packages
+% --------------------------------------------------------------------------
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{colortbl}          % \rowcolor in tables (avoids xcolor option conflict)
+\usepackage{array}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,fit,backgrounds,calc}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{qrcode}
+\usepackage{ragged2e}          % \RaggedRight, \justifying
+\usepackage{calc}
+\usepackage{url}
+
+% --------------------------------------------------------------------------
+% UTAD Brand Colors
+% --------------------------------------------------------------------------
+\definecolor{utadnavy}{RGB}{25,34,71}
+\definecolor{utadred}{RGB}{190,29,44}
+\definecolor{utadgray}{RGB}{198,198,198}
+\definecolor{utadlightbg}{RGB}{237,241,250}
+
+% Semantic colors for architecture comparison
+\definecolor{cnnblue}{RGB}{41,128,185}
+\definecolor{transgreen}{RGB}{39,174,96}
+\definecolor{foundorange}{RGB}{200,90,0}
+
+% --------------------------------------------------------------------------
+% Beamer Setup (minimal)
+% --------------------------------------------------------------------------
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle}{}
+\setbeamercolor{background canvas}{bg=white}
+
+% --------------------------------------------------------------------------
+% tcolorbox: poster section block
+% --------------------------------------------------------------------------
+\newtcolorbox{pblock}[1]{%
+  title={#1},
+  colbacktitle=utadnavy,
+  coltitle=white,
+  colback=utadlightbg,
+  colframe=utadnavy,
+  fonttitle=\large\bfseries,
+  boxrule=1.5pt,
+  arc=5pt,
+  lefttitle=7pt,
+  toptitle=2pt,
+  bottomtitle=2pt,
+  top=4pt, bottom=4pt, left=9pt, right=9pt,
+  before={\vskip2pt},
+  after={\vskip2pt},
+  enhanced,
+  drop shadow={utadnavy!25!white,opacity=0.5},
+}
+
+% --------------------------------------------------------------------------
+% tcolorbox: key-stat chip (used in 2×2 grid)
+% --------------------------------------------------------------------------
+\newtcolorbox{statchip}[1]{%
+  title={#1},
+  colbacktitle=utadnavy,
+  coltitle=white,
+  colback=utadred!88!black,
+  colframe=utadnavy,
+  colupper=white,
+  fonttitle=\small\bfseries,
+  fontupper=\huge\bfseries,
+  boxrule=0pt,
+  arc=8pt,
+  lefttitle=0pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  halign=center,
+  halign title=center,
+  height=5.5cm,
+  valign=center,
+  top=0pt, bottom=0pt, left=4pt, right=4pt,
+  before={\vskip0pt},
+  after={\vskip0pt},
+  enhanced,
+}
+
+% --------------------------------------------------------------------------
+% Highlight box (inline note)
+% --------------------------------------------------------------------------
+\newtcolorbox{notebox}[1][utadnavy]{%
+  colback=#1!8,
+  colframe=#1,
+  arc=4pt,
+  boxrule=1pt,
+  top=4pt, bottom=4pt, left=7pt, right=7pt,
+  before={\vskip4pt},
+  after={\vskip4pt},
+}
+
+% --------------------------------------------------------------------------
+% Headline (title banner)  — A0 = 84.1 cm wide
+% Layout:  [logos 20cm] [2cm gap] [title 40cm centered] [2cm gap] [QR 18cm]
+% --------------------------------------------------------------------------
+\setbeamertemplate{headline}{%
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth]{headline}
+  \begin{tikzpicture}
+    % Background fill — 18 cm tall header
+    \fill[utadnavy] (0,0) rectangle (\paperwidth,7cm);
+    % Thin red accent at the bottom of the header
+    \fill[utadred]  (0,0) rectangle (\paperwidth,0.6cm);
+
+    % ---- Left: Institution logos ----------------------------------------
+    % TODO: Replace fcolorbox placeholders with actual logo files.
+    %       Create a logos/ subfolder next to this file and add:
+    %         logos/champlain.png  logos/utad.png  logos/isec.png  logos/docdo.png
+    %       Then replace each \fcolorbox block with \includegraphics[height=3cm]{logos/xx.png}
+    % \node[anchor=north west, inner sep=0pt] at (1.5cm, 17.5cm) {%
+    %   \begin{minipage}[c][16cm][c]{19cm}
+    %     \centering
+    %     \fcolorbox{utadgray}{utadnavy!70!black}{%
+    %       \parbox[c][3cm][c]{4.2cm}{\centering\color{white}\footnotesize\bfseries
+    %         Champlain College}}\\[4pt]
+    %     \fcolorbox{utadgray}{utadnavy!70!black}{%
+    %       \parbox[c][3cm][c]{4.2cm}{\centering\color{white}\footnotesize\bfseries
+    %         UTAD\\Portugal}}\\[4pt]
+    %     \fcolorbox{utadgray}{utadnavy!70!black}{%
+    %       \parbox[c][3cm][c]{4.2cm}{\centering\color{white}\footnotesize\bfseries
+    %         ISEC\\Coimbra}}\\[4pt]
+    %     \fcolorbox{utadgray}{utadnavy!70!black}{%
+    %       \parbox[c][3cm][c]{4.2cm}{\centering\color{white}\footnotesize\bfseries
+    %         DocDo Corp.}}
+    %   \end{minipage}%
+    % };
+
+    % ---- Center: Title, subtitle, authors, affiliations ------------------
+    \node[anchor=north, inner sep=0pt, text width=44cm, align=center]
+      at (0.5\paperwidth, 6cm) {%
+        {\color{white}\fontsize{52}{60}\selectfont\bfseries
+          3D Organ Segmentation from CT Scans}\\[6pt]
+        {\color{utadgray}\fontsize{29}{36}\selectfont
+          An Agentic Structured Survey of Deep Learning
+          Approaches for Surgical Planning}\\[10pt]
+        {\color{white}\fontsize{22}{29}\selectfont
+          A.\,T.\,Nogueira$^{1,2,3,4}$\enspace
+          M.\,H.\,R.\,Martins$^{4}$\enspace
+          N.\,M.\,Ferreira$^{3}$\enspace
+          V.\,M.\,Filipe$^{2}$}\\[4pt]
+        {\color{utadgray}\fontsize{17}{22}\selectfont
+          $^{1}$Champlain College, USA\quad
+          $^{2}$UTAD, Portugal\quad
+          $^{3}$ISEC, Portugal\quad
+          $^{4}$DocDo Corp., USA}
+    };
+
+    % ---- Right: QR code -------------------------------------------------
+    % Header is 7 cm tall. anchor=center keeps QR fully inside the navy band.
+    \node[anchor=center, inner sep=0pt]
+      at (\dimexpr\paperwidth-5cm, 3.8cm) {%
+        \begin{minipage}[c][4.5cm][c]{4.5cm}
+          \centering
+          \color{white}
+          \qrcode[hyperlink,height=4.5cm]{https://github.com/gameguild-gg/docdo-paper}
+        \end{minipage}%
+    };
+
+  \end{tikzpicture}%
+  \end{beamercolorbox}%
+}
+
+% --------------------------------------------------------------------------
+% Footline
+% --------------------------------------------------------------------------
+\setbeamertemplate{footline}{%
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth]{footline}
+  \begin{tikzpicture}
+    \fill[utadnavy] (0,0) rectangle (\paperwidth,3.2cm);
+    \fill[utadred]  (0,2.9cm) rectangle (\paperwidth,3.2cm);
+    \node[anchor=center] at (0.5\paperwidth, 1.6cm) {%
+      {\color{white}\fontsize{19}{25}\selectfont
+        \faEnvelope\ tolstenko@gmail.com
+        \quad\textbf{|}\quad
+        \faGithub\ https://github.com/gameguild-gg/docdo-paper
+      }
+    };
+  \end{tikzpicture}
+  \end{beamercolorbox}%
+}
+
+% =============================================================================
+\begin{document}
+\begin{frame}[t]
+\vspace{0.05cm}
+{\centering\scriptsize\textcolor{utadnavy!60}{\textbf{%
+  \textcircled{1}~Background \& Methods
+  ~$\longrightarrow$~
+  \textcircled{2}~Results \& Evidence
+  ~$\longrightarrow$~
+  \textcircled{3}~Implications \& Recommendations}}\par}
+\vspace{0.05cm}
+\begin{columns}[t,totalwidth=\textwidth]
+
+% =============================================================================
+%  COLUMN 1 — Motivation, Research Questions, Methodology
+% =============================================================================
+\begin{column}{0.315\textwidth}
+
+%--- Motivation & Clinical Need ----------------------------------------------
+\begin{pblock}{Motivation \& Clinical Need}
+\RaggedRight
+A \textbf{persistent gap} exists between benchmark performance and clinical deployment
+of 3D CT organ segmentation for surgical planning:
+
+\begin{itemize}\setlength\itemsep{2pt}
+  \item Manual segmentation bottleneck: \textbf{15--45 min/structure}
+  \item EAU recommends 3D reconstruction for complex renal tumours but cites
+        lack of \textit{``standardised, rapid segmentation tools''}
+  \item 3D preoperative planning \textbf{reduces positive surgical margins by
+        23--47\%} in partial nephrectomy
+  \item Survey of N=387 surgeons: \textbf{68\%} cite
+        \textit{``time-intensive preparation''} as the primary barrier
+\end{itemize}
+
+\vspace{0.2em}
+% Key-stat chips (2 × 2 grid)
+\begin{center}
+  \begin{minipage}[t]{0.48\linewidth}
+    \begin{statchip}{Studies Reviewed (2015--2026)}
+      52
+    \end{statchip}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \begin{statchip}{BTCV Dice --- nnU-Net}
+      82.3\%
+    \end{statchip}
+  \end{minipage}\\[0.5em]
+  \begin{minipage}[t]{0.48\linewidth}
+    \begin{statchip}{CNN Dominance in Literature}
+      98.1\%
+    \end{statchip}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \begin{statchip}{Best Auto-CNN on BTCV}
+      85.2\%
+    \end{statchip}
+  \end{minipage}
+\end{center}
+\end{pblock}
+
+%--- Research Questions ------------------------------------------------------
+\begin{pblock}{Research Questions}
+\begin{enumerate}\setlength\itemsep{5pt}
+  \item[\textbf{1}] What \textbf{architectural paradigms} dominate 3D CT organ
+        segmentation? How do design principles, inductive biases, and
+        computational costs differ?
+  \item[\textbf{2}] Which \textbf{datasets and metrics} are standard?
+        What are their biases and generalisation implications?
+  \item[\textbf{3}] What are the \textbf{accuracy vs.\ cost vs.\ annotation}
+        trade-offs? How well do methods generalise across domains?
+  \item[\textbf{4}] What \textbf{gaps block clinical deployment}: reproducibility,
+        domain shift, regulatory hurdles, integration complexity?
+\end{enumerate}
+\end{pblock}
+
+%--- Methodology -------------------------------------------------------------
+\begin{pblock}{Methodology\newline(PRISMA 2020 Adapted)}
+\begin{center}
+\resizebox{0.87\columnwidth}{!}{%
+\begin{tikzpicture}[node distance=0.35cm,
+  mbox/.style={rectangle, draw=utadnavy, fill=utadlightbg,
+               text width=10.5cm, minimum height=1.2cm, align=center,
+               font=\normalsize\bfseries, rounded corners=3pt, line width=1.3pt,
+               inner sep=4pt},
+  ebox/.style={rectangle, draw=utadred, fill=utadred!6,
+               text width=8.5cm, minimum height=0.9cm, align=center,
+               font=\small, rounded corners=3pt, line width=0.9pt,
+               inner sep=3pt},
+  ibox/.style={rectangle, draw=utadgray!70!black, fill=utadgray!25,
+               text width=8.5cm, minimum height=0.9cm, align=center,
+               font=\small, rounded corners=3pt, line width=0.9pt,
+               inner sep=3pt},
+  farrow/.style={->, >=stealth, thick, utadnavy},
+  earrow/.style={->, >=stealth, thick, utadred},
+  iarrow/.style={->, >=stealth, thick, utadgray!70!black}]
+
+  \node[mbox] (db) {Records Identified (n\,=\,2{,}821)\\
+                    \small PubMed, arXiv, Semantic Scholar};
+  \node[ebox, right=0.8cm of db] (src) {Nov\,2025 -- Jan\,2026\\
+                                         DOI\, and title dedup,\\
+                                         citation tracking};
+  \node[mbox, below=of db] (es) {Elasticsearch Pre-filter (n\,=\,638)\\
+                                  \small Boolean IC queries on abstracts};
+  \node[ebox, right=0.8cm of es] (ex0) {Excluded n\,=\,2{,}183\\
+                                         No 3D/organ/DL keyword};
+  \node[mbox, below=of es] (ai) {AI-Assisted Screening (n\,=\,161)\\
+                                  \small GPT-4o-mini, GPT-5-nano, GPT-5.2};
+  \node[ebox, right=0.8cm of ai] (ex1) {Excluded n\,=\,477\\
+                                         No 3D DL, non-CT};
+  \node[mbox, below=of ai] (ft) {Full-text Assessed (n\,=\,63)\\
+                                  \small 98 not retrieved (paywalled / no PDF)};
+  \node[ebox, right=0.8cm of ft] (ex2) {Excluded n\,=\,11\\
+                                         Off-topic, no method};
+  \node[mbox, below=of ft,
+        fill=utadnavy!12, draw=utadnavy, line width=2pt] (inc)
+    {\textbf{Included: n\,=\,52}\\
+     \small Synthesis (n=52), Per-organ (n=32)};
+
+  \draw[farrow] (db) -- (es);
+  \draw[farrow] (es) -- (ai);
+  \draw[farrow] (ai) -- (ft);
+  \draw[farrow] (ft) -- (inc);
+  \draw[earrow] (db.east)  -- (src.west);
+  \draw[earrow] (es.east)  -- (ex0.west);
+  \draw[earrow] (ai.east)  -- (ex1.west);
+  \draw[earrow] (ft.east)  -- (ex2.west);
+\end{tikzpicture}%
+}
+\end{center}
+\vspace{0.3em}
+{\small
+  \textbf{Search period:} 2015 -- January 2026\quad
+  \textbf{Full-text retrieval:} 39.1\%\\
+  \textbf{Human audit:} $\kappa = 0.89$ (10\% stratified sample, n=64,
+  two domain experts blind to AI decisions)
+}
+\end{pblock}
+
+\end{column}
+\hfill
+
+% =============================================================================
+%  COLUMN 2 — Results, Per-Organ, Architecture
+% =============================================================================
+\begin{column}{0.315\textwidth}
+
+%--- Key Results: BTCV -------------------------------------------------------
+\begin{pblock}{Key Results: BTCV Multi-Organ Benchmark (13 Organs)}
+\vspace{0.4em}
+{\small
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Method} & \textbf{Type} &
+  \textbf{Dice\,\%} & \textbf{HD95\,mm} & \textbf{Pre-train} \\
+\midrule
+\rowcolor{cnnblue!10}
+3D U-Net        & CNN     & 74.2 & 18.4 & ---         \\
+\rowcolor{cnnblue!10}
+V-Net           & CNN     & 75.8 & 16.7 & ---         \\
+\rowcolor{cnnblue!10}
+Att.\ U-Net     & CNN     & 77.1 & 14.2 & ---         \\
+\rowcolor{cnnblue!20}
+nnU-Net         & \textbf{CNN}  & \textbf{82.3} & 21.4 & --- \\
+\rowcolor{cnnblue!20}
+MedNeXt         & \textbf{CNN}  & \textbf{86.2} & 12.1 & --- \\
+\rowcolor{cnnblue!20}
+STU-Net-L       & \textbf{CNN}  & \textbf{87.1} & \textbf{9.8} & --- \\
+\midrule
+\rowcolor{transgreen!10}
+UNETR           & Trans.  & 78.7 & 29.1 & \checkmark  \\
+\rowcolor{transgreen!10}
+Swin UNETR      & Trans.  & 82.4 & 18.3 & \checkmark  \\
+\midrule
+\rowcolor{utadgray!20}
+TransUNet       & Hybrid  & 77.3 & 31.7 & \checkmark  \\
+\rowcolor{utadgray!20}
+nnFormer        & Hybrid  & 86.9 & 14.2 & ---         \\
+\midrule
+\rowcolor{foundorange!10}
+MedSAM$^\dagger$ & Found. & 85.7 &  8.1 & \checkmark  \\
+\bottomrule
+\end{tabular}
+}
+\vspace{0.3em}
+
+{\footnotesize
+  $^\dagger$Zero-shot with bounding-box prompts.\quad Pre-train: external data required.\\
+  \textcolor{cnnblue!80!black}{$\blacksquare$}\,CNN\quad
+  \textcolor{transgreen!70!black}{$\blacksquare$}\,Transformer\quad
+  \textcolor{utadgray!60!black}{$\blacksquare$}\,Hybrid\quad
+  \textcolor{foundorange!80!black}{$\blacksquare$}\,Foundation
+}
+
+\vspace{0.5em}
+\begin{notebox}[utadnavy]
+  {\small
+    \textbf{Auto-configured CNNs} (nnU-Net, MedNeXt, STU-Net):\quad
+    $\mathbf{85.2 \pm 2.1}$\textbf{\% Dice. 4.7 pts ahead, no pre-training}\\[2pt]
+    \textbf{Transformers} (UNETR, Swin UNETR):\quad
+    $\mathbf{80.5 \pm 1.8}$\textbf{\% Dice. Requires 5{,}000+ CT pre-training}
+  }
+\end{notebox}
+\end{pblock}
+
+%--- Per-Organ ---------------------------------------------------------------
+\begin{pblock}{Per-Organ Dice Scores \newline (from 52 Reviewed Studies)}
+\vspace{0.4em}
+{\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Organ} & \textbf{Mean} & \textbf{Range} & \textbf{n} &
+  \textbf{Challenge} \\
+\midrule
+Liver        & 94.2\% & 89.0--97.1\% & 16 & Large, well-defined  \\
+Spleen       & 93.1\% & 84.0--97.0\% &  9 & Consistent shape     \\
+Kidney       & 92.1\% & 78.3--98.4\% & 16 & Bilateral, variable  \\
+Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
+\bottomrule
+\end{tabular}
+}
+\vspace{0.4em}
+\begin{notebox}[utadred]
+  {\small
+    \textbf{Critical gap:} Vascular structures score \textbf{65--75\%} Dice
+    vs.\ \textbf{90\%+} for large parenchymal organs ---
+    a primary barrier to surgical navigation deployment.
+  }
+\end{notebox}
+\end{pblock}
+
+%--- Architecture Landscape --------------------------------------------------
+\begin{pblock}{Architecture Landscape}
+\vspace{0.5em}
+\begin{center}
+\resizebox{0.96\columnwidth}{!}{%
+\begin{tikzpicture}[
+  arch/.style={rectangle, rounded corners=5pt, text width=9.5cm,
+               minimum height=4.0cm, align=center, font=\normalsize,
+               inner sep=7pt},
+  barr/.style={->, >=stealth, thick, gray!55, line width=1.5pt}]
+
+  \node[arch, fill=cnnblue!12, draw=cnnblue, line width=1.8pt] (cnn) at (0,0) {
+    {\color{cnnblue!70!black}\large\bfseries CNN}\\[3pt]
+    \small nnU-Net, MedNeXt, STU-Net\\
+    Dice: \textbf{82--87\%}, Params: 26--58\,M\\
+    No pre-training, Fast inference\\
+    \textit{Best efficiency--accuracy ratio}
+  };
+
+  \node[arch, fill=transgreen!12, draw=transgreen, line width=1.8pt] (tr) at (11,0) {
+    {\color{transgreen!60!black}\large\bfseries Transformer}\\[3pt]
+    \small UNETR, Swin UNETR\\
+    Dice: \textbf{79--82\%}, Params: 62--93\,M\\
+    Pre-training required (5000+ CTs)\\
+    \textit{1.5--3$\times$ slower inference}
+  };
+
+  \node[arch, fill=foundorange!12, draw=foundorange, line width=1.8pt] (fo) at (22,0) {
+    {\color{foundorange!80!black}\large\bfseries Foundation}\\[3pt]
+    \small MedSAM, SAM-Med3D\\
+    Dice: \textbf{76--86\%}, Params: 94\,M\\
+    Interactive prompts, Zero-shot\\
+    \textit{Expert-guided refinement}
+  };
+
+  \draw[barr] (cnn.east) --
+    node[midway, font=\footnotesize\bfseries, text=gray!60, rotate=90, fill=white, inner sep=2pt] {global context}
+    (tr.west);
+  \draw[barr] (tr.east) --
+    node[midway, font=\footnotesize\bfseries, text=gray!60, rotate=90, fill=white, inner sep=2pt] {generalisation}
+    (fo.west);
+\end{tikzpicture}%
+}
+\end{center}
+
+\vspace{0.4em}
+{\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Family} & \textbf{BTCV Dice} & \textbf{Share of 52 Studies} \\
+\midrule
+CNN (all)              & 82--87\% & 98.1\% \\
+\quad 3D U-Net variants & 74--87\% & 82.7\% \\
+Transformer (pure)     & 79--82\% & 9.6\%  \\
+Hybrid (CNN+Trans.)    & 77--87\% & 7.7\%  \\
+Foundation model       & 76--86\% & 3.8\%  \\
+\bottomrule
+\end{tabular}
+}
+\vspace{0.2em}
+\begin{notebox}[utadnavy]
+  {\footnotesize
+    \textbf{Finding:} Architecture type matters less than training protocol ---
+    nnFormer (Hybrid, 86.9\%) matches STU-Net-L (CNN, 87.1\%).
+    Auto-configured nnU-Net (31\,M params) rivals Swin UNETR (62\,M, pre-trained).
+  }
+\end{notebox}
+\end{pblock}
+
+%--- Survey Scope & Limitations ---------------------------------------------
+\begin{pblock}{Survey Scope \& Limitations}
+\small
+\begin{itemize}\setlength\itemsep{1pt}
+  \item \textbf{English-only search:} may under-represent
+        non-English-language publications (e.g.\ Chinese-language journals)
+  \item \textbf{PDF availability:} only 39.1\% of meeting papers had
+        accessible full-text; 98/161 candidate papers remain paywalled
+  \item \textbf{Benchmark gap:} reported Dice likely overestimates
+        clinical accuracy by \textbf{5--15\%} due to controlled splits,
+        test-time augmentation, and ensembling
+  \item \textbf{Single-centre dominance:} only 4/52 studies (7.7\%)
+        include multi-centre or prospective validation --- the primary
+        obstacle to deployment-readiness
+\end{itemize}
+\end{pblock}
+
+\end{column}
+\hfill
+
+% ===
+%  COLUMN 3 — Barriers, Recommendations, Conclusions, References
+% =============================================================================
+\begin{column}{0.315\textwidth}
+
+%--- Clinical Deployment Barriers --------------------------------------------
+\begin{pblock}{Clinical Deployment Barriers (RQ4)}
+\begin{enumerate}\setlength\itemsep{3pt}
+  \item \textbf{Domain shift:} Scanner heterogeneity degrades Dice by
+        \textbf{5--15\%} across institutions; only 4/52 studies (7.7\%)
+        include multi-centre validation
+  \item \textbf{Vascular deficit:} 65--75\% Dice for vessels vs.\
+        90\%+ for parenchymal organs --- critical gap for surgical navigation
+  \item \textbf{Integration complexity:} Deployment requires preprocessing
+        robustness, uncertainty quantification, mesh generation, and DICOM
+        integration --- all absent from benchmark evaluations
+  \item \textbf{Benchmark overestimation:} Published Dice likely
+        overestimates clinical accuracy by \textbf{5--15\%} (controlled splits,
+        TTA, ensembling)
+  \item \textbf{Annotation bottleneck:} Dense 3D labelling costs
+        15--45 min/organ; weak/semi-supervised methods needed for scaling
+\end{enumerate}
+\end{pblock}
+
+%--- Recommendations ---------------------------------------------------------
+\begin{pblock}{Phased Adoption Strategy for Surgical Planning Platforms}
+
+\begin{tcolorbox}[colback=cnnblue!10,colframe=cnnblue,arc=4pt,boxrule=1.2pt,
+  top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
+  {\normalsize\bfseries\color{cnnblue!70!black} Phase 1 — Baseline Segmentation}\\[2pt]
+  {\small TotalSegmentator \textbf{or} nnU-Net, Robust multi-organ
+  segmentation out-of-the-box}
+\end{tcolorbox}
+\vskip3pt\centerline{$\downarrow$}\vskip3pt
+\begin{tcolorbox}[colback=transgreen!10,colframe=transgreen,arc=4pt,boxrule=1.2pt,
+  top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
+  {\normalsize\bfseries\color{transgreen!60!black} Phase 2 — Uncertainty-Guided QA}\\[2pt]
+  {\small MC-Dropout / TTA disagreement, Flag low-confidence cases for
+  expert review}
+\end{tcolorbox}
+\vskip3pt\centerline{$\downarrow$}\vskip3pt
+\begin{tcolorbox}[colback=foundorange!10,colframe=foundorange,arc=4pt,boxrule=1.2pt,
+  top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
+  {\normalsize\bfseries\color{foundorange!80!black} Phase 3 — Interactive Refinement}\\[2pt]
+  {\small MedSAM with bounding-box prompts, Surgeon-guided correction of
+  uncertain regions}
+\end{tcolorbox}
+
+\vspace{0.4em}
+\begin{notebox}[utadnavy]
+  {\small
+    \textbf{Key insight:} \emph{Implementation quality matters more than
+    architectural novelty.} nnU-Net without modifications outperforms many
+    specialised methods on standard benchmarks.
+  }
+\end{notebox}
+\end{pblock}
+
+%--- Conclusions -------------------------------------------------------------
+\begin{pblock}{Conclusions}
+\begin{enumerate}\setlength\itemsep{2pt}
+  \item \textbf{CNNs dominate} (98.1\%); nnU-Net is the strongest clinical
+        baseline (82.3\% Dice on BTCV, no pre-training)
+  \item \textbf{Auto-CNNs outperform transformers} on BTCV:
+        $85.2 \pm 2.1$\% vs.\ $80.5 \pm 1.8$\%;
+        MedNeXt (86.2\%) leads without any pre-training
+  \item \textbf{Transformers are complementary:} Swin UNETR (82.4\%) matches
+        nnU-Net when pre-trained on 5,050 CT volumes
+  \item \textbf{Foundation models} enable interactive refinement
+        (MedSAM 85.7\% fine-tuned); zero-shot ($\sim$76\%) still trails
+        supervised methods
+  \item \textbf{Phased adoption} (TotalSegmentator $\to$ QA $\to$ MedSAM)
+        is the recommended strategy for surgical planning platforms
+\end{enumerate}
+\end{pblock}
+
+%--- References --------------------------------------------------------------
+\begin{pblock}{Key References}
+{\footnotesize
+\begin{enumerate}\setlength\itemsep{2pt}
+  \item[{[1]}] Isensee et al.\ \emph{nnU-Net.} Nat.\ Methods, 2021.
+  \item[{[2]}] Tang et al.\ \emph{Swin UNETR.} MICCAI WS, 2022.
+  \item[{[3]}] Wasserthal et al.\ \emph{TotalSegmentator.} Radiol.\ AI, 2023.
+  \item[{[4]}] Ronneberger et al.\ \emph{U-Net.} MICCAI, 2015.
+  \item[{[5]}] \c{C}i\c{c}ek et al.\ \emph{3D U-Net.} MICCAI, 2016.
+  \item[{[6]}] Ma et al.\ \emph{Segment Anything in Medical Imaging.} Nat.\ Commun., 2024.
+  \item[{[7]}] Roy et al.\ \emph{MedNeXt.} MICCAI, 2023.
+  \item[{[8]}] Hatamizadeh et al.\ \emph{UNETR.} WACV, 2022.
+\end{enumerate}
+}
+\end{pblock}
+
+\end{column}
+\end{columns}
+\end{frame}
+\end{document}
