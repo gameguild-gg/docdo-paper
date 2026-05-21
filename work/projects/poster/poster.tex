@@ -278,7 +278,7 @@ of 3D CT organ segmentation for surgical planning:
 %--- Methodology -------------------------------------------------------------
 \begin{pblock}{Methodology\newline(PRISMA 2020 Adapted)}
 \begin{center}
-\resizebox{0.87\columnwidth}{!}{%
+\resizebox{0.79\columnwidth}{!}{%
 \begin{tikzpicture}[node distance=0.35cm,
   mbox/.style={rectangle, draw=utadnavy, fill=utadlightbg,
                text width=10.5cm, minimum height=1.2cm, align=center,
@@ -329,12 +329,31 @@ of 3D CT organ segmentation for surgical planning:
 }
 \end{center}
 \vspace{0.3em}
-{\small
-  \textbf{Literature window:} 2015 -- 2025\quad
-  \textbf{Full-text retrieval:} 39.1\%\\
-  \textbf{Human audit:} $\kappa = 0.89$ (10\% stratified sample, n=64,
-  two domain experts blind to AI decisions)
+{\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}ll@{}}
+  \textbf{Literature window:}    & 2015--2025 \\
+  \textbf{Full-text retrieval:}  & 39.1\% \\
+  \textbf{Human audit:}          & $\kappa=0.89$, n\,=\,64, 10\% stratified \\
+                                 & 2 domain experts, blind to AI decisions \\
+\end{tabular}
 }
+\vspace{0.2em}
+\begin{notebox}[utadred]
+{\footnotesize
+\textbf{PRISMA 2020 Adaptations}\\[3pt]
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{0.9}
+\begin{tabular}{@{}p{0.45\linewidth}p{0.55\linewidth}@{}}
+\textit{Standard} & \textit{This survey} \\
+\midrule
+Prospective SR & Structured survey, no registration \\
+Dual human reviewers       & Elasticsearch + GPT-4o/5 pipeline \\
+ROBINS-I / RoB~2           & Custom 3D quality rubric (0--30) \\
+Dual independent extraction & Single GPT-5.2 batch pass per PDF \\
+Pooled effect sizes         & Narrative synthesis only, Dice/HD95 \\
+\end{tabular}
+}
+\end{notebox}
 \end{pblock}
 
 \end{column}
