@@ -245,7 +245,7 @@ of 3D CT organ segmentation for surgical planning:
 % Key-stat chips (2 × 2 grid)
 \begin{center}
   \begin{minipage}[t]{0.48\linewidth}
-    \begin{statchip}{Studies Reviewed (2015--2026)}
+    \begin{statchip}{Studies Reviewed (2017--2025)}
       52
     \end{statchip}
   \end{minipage}\hfill
@@ -260,8 +260,8 @@ of 3D CT organ segmentation for surgical planning:
     \end{statchip}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.48\linewidth}
-    \begin{statchip}{Best Auto-CNN on BTCV}
-      85.2\%
+    \begin{statchip}{Top BTCV Dice --- STU-Net-L}
+      87.1\%
     \end{statchip}
   \end{minipage}
 \end{center}
@@ -305,21 +305,21 @@ of 3D CT organ segmentation for surgical planning:
 
   \node[mbox] (db) {Records Identified (n\,=\,2{,}821)\\
                     \small PubMed, arXiv, Semantic Scholar};
-  \node[ebox, right=0.8cm of db] (src) {Nov\,2025 -- Jan\,2026\\
-                                         DOI\, and title dedup,\\
-                                         citation tracking};
+  \node[ebox, right=0.8cm of db] (src) {Search executed Nov\,2025\,--\,Jan\,2026\\
+                                         DOI + title dedup,\\
+                                         citation tracking on 12 seminal papers};
   \node[mbox, below=of db] (es) {Elasticsearch Pre-filter (n\,=\,638)\\
                                   \small Boolean IC queries on abstracts};
   \node[ebox, right=0.8cm of es] (ex0) {Excluded n\,=\,2{,}183\\
                                          No 3D/organ/DL keyword};
-  \node[mbox, below=of es] (ai) {AI-Assisted Screening (n\,=\,161)\\
+  \node[mbox, below=of es] (ai) {AI Screening: 638 $\to$ 161\\
                                   \small GPT-4o-mini, GPT-5-nano, GPT-5.2};
   \node[ebox, right=0.8cm of ai] (ex1) {Excluded n\,=\,477\\
                                          No 3D DL, non-CT};
   \node[mbox, below=of ai] (ft) {Full-text Assessed (n\,=\,63)\\
                                   \small 98 not retrieved (paywalled / no PDF)};
   \node[ebox, right=0.8cm of ft] (ex2) {Excluded n\,=\,11\\
-                                         Off-topic, no method};
+                                         Final full-text screen};
   \node[mbox, below=of ft,
         fill=utadnavy!12, draw=utadnavy, line width=2pt] (inc)
     {\textbf{Included: n\,=\,52}\\
@@ -329,7 +329,6 @@ of 3D CT organ segmentation for surgical planning:
   \draw[farrow] (es) -- (ai);
   \draw[farrow] (ai) -- (ft);
   \draw[farrow] (ft) -- (inc);
-  \draw[earrow] (db.east)  -- (src.west);
   \draw[earrow] (es.east)  -- (ex0.west);
   \draw[earrow] (ai.east)  -- (ex1.west);
   \draw[earrow] (ft.east)  -- (ex2.west);
@@ -338,7 +337,7 @@ of 3D CT organ segmentation for surgical planning:
 \end{center}
 \vspace{0.3em}
 {\small
-  \textbf{Search period:} 2015 -- January 2026\quad
+  \textbf{Literature window:} 2015 -- 2025\quad
   \textbf{Full-text retrieval:} 39.1\%\\
   \textbf{Human audit:} $\kappa = 0.89$ (10\% stratified sample, n=64,
   two domain experts blind to AI decisions)
@@ -404,15 +403,15 @@ MedSAM$^\dagger$ & Found. & 85.7 &  8.1 & \checkmark  \\
 \begin{notebox}[utadnavy]
   {\small
     \textbf{Auto-configured CNNs} (nnU-Net, MedNeXt, STU-Net):\quad
-    $\mathbf{85.2 \pm 2.1}$\textbf{\% Dice. 4.7 pts ahead, no pre-training}\\[2pt]
+    $\mathbf{85.2 \pm 2.1}$\textbf{\% Dice --- 4.7 pts ahead, no pre-training}\\[2pt]
     \textbf{Transformers} (UNETR, Swin UNETR):\quad
-    $\mathbf{80.5 \pm 1.8}$\textbf{\% Dice. Requires 5{,}000+ CT pre-training}
+    $\mathbf{80.5 \pm 1.8}$\textbf{\% Dice --- only reach 82\% with 5{,}050 CT pre-training}
   }
 \end{notebox}
 \end{pblock}
 
 %--- Per-Organ ---------------------------------------------------------------
-\begin{pblock}{Per-Organ Dice Scores \newline (from 52 Reviewed Studies)}
+\begin{pblock}{Per-Organ Dice Scores \newline (from 32 of 52 studies reporting)}
 \vspace{0.4em}
 {\small
 \begin{tabular}{@{}lcccc@{}}
@@ -460,7 +459,7 @@ Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
     {\color{transgreen!60!black}\large\bfseries Transformer}\\[3pt]
     \small UNETR, Swin UNETR\\
     Dice: \textbf{79--82\%}, Params: 62--93\,M\\
-    Pre-training required (5000+ CTs)\\
+    Pre-training required (5{,}050 CTs)\\
     \textit{1.5--3$\times$ slower inference}
   };
 
@@ -488,7 +487,7 @@ Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
 \toprule
 \textbf{Family} & \textbf{BTCV Dice} & \textbf{Share of 52 Studies} \\
 \midrule
-CNN (all)              & 82--87\% & 98.1\% \\
+CNN (all)              & 74--87\% & 98.1\% \\
 \quad 3D U-Net variants & 74--87\% & 82.7\% \\
 Transformer (pure)     & 79--82\% & 9.6\%  \\
 Hybrid (CNN+Trans.)    & 77--87\% & 7.7\%  \\
@@ -512,8 +511,8 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \begin{itemize}\setlength\itemsep{1pt}
   \item \textbf{English-only search:} may under-represent
         non-English-language publications (e.g.\ Chinese-language journals)
-  \item \textbf{PDF availability:} only 39.1\% of meeting papers had
-        accessible full-text; 98/161 candidate papers remain paywalled
+  \item \textbf{PDF availability:} only 39.1\% of 161 AI-screened
+        candidates had retrievable full-text; 98 remain paywalled
   \item \textbf{Benchmark gap:} reported Dice likely overestimates
         clinical accuracy by \textbf{5--15\%} due to controlled splits,
         test-time augmentation, and ensembling
@@ -560,9 +559,9 @@ Foundation model       & 76--86\% & 3.8\%  \\
   segmentation out-of-the-box}
 \end{tcolorbox}
 \vskip3pt\centerline{$\downarrow$}\vskip3pt
-\begin{tcolorbox}[colback=transgreen!10,colframe=transgreen,arc=4pt,boxrule=1.2pt,
+\begin{tcolorbox}[colback=utadnavy!10,colframe=utadnavy,arc=4pt,boxrule=1.2pt,
   top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
-  {\normalsize\bfseries\color{transgreen!60!black} Phase 2 — Uncertainty-Guided QA}\\[2pt]
+  {\normalsize\bfseries\color{utadnavy} Phase 2 — Uncertainty-Guided QA}\\[2pt]
   {\small MC-Dropout / TTA disagreement, Flag low-confidence cases for
   expert review}
 \end{tcolorbox}
