@@ -238,7 +238,7 @@ of 3D CT organ segmentation for surgical planning:
 % Key-stat chips (2 × 2 grid)
 \begin{center}
   \begin{minipage}[t]{0.48\linewidth}
-    \begin{statchip}{Studies Reviewed (2017--2025)}
+    \begin{statchip}{Studies Reviewed (2015--2025)}
       52
     \end{statchip}
   \end{minipage}\hfill
@@ -533,22 +533,28 @@ Foundation model       & 76--86\% & 3.8\%  \\
 ]
 \footnotesize
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.0}
-\begin{tabular}{@{}p{0.22\linewidth}p{0.72\linewidth}@{}}
-\textbf{BTCV}       & Beyond Cranial Vault, 30-scan 13-organ benchmark \\
-\textbf{CNN}        & Convolutional Neural Network \\
-\textbf{CT / 3D}    & Computed tomography volume \\
-\textbf{Dice}       & $2|A\cap B|/(|A|+|B|)$; 1.0\,=\,perfect \\
-\textbf{EAU}        & European Assoc.\ of Urology \\
-\textbf{HD95}       & 95th-\%ile Hausdorff dist.\ (mm) \\
-\textbf{$\kappa$}   & Inter-rater agreement (Cohen's) \\
-\textbf{MC-Drop.}   & Monte-Carlo Dropout \\
-\textbf{nnU-Net}    & Self-config.\ U-Net (Isensee et al.) \\
-\textbf{Params (M)} & Model parameters (millions) \\
-\textbf{Pre-train}  & Training on external data \\
-\textbf{PRISMA}     & Systematic review standard \\
-\textbf{TotalSeg.}  & TotalSegmentator, 117-class nnU-Net \\
-\textbf{TTA}        & Test-Time Augmentation \\
+\renewcommand{\arraystretch}{0.9}
+\begin{tabular}{@{}p{0.2\linewidth}p{0.78\linewidth}@{}}
+\textbf{BTCV}        & Beyond the Cranial Vault, 30-scan 13-organ benchmark\\
+\textbf{CNN}         & Convolutional Neural Network \\
+\textbf{CT / 3D}     & Computed tomography volume \\
+\textbf{Dice}        & $2|A\cap B|/(|A|+|B|)$; 1.0\,=\,perfect \\
+\textbf{DICOM}       & Clinical imaging file/transport standard \\
+\textbf{DL}          & Deep Learning \\
+\textbf{EAU}         & European Assoc.\ of Urology \\
+\textbf{Foundation}  & Large pre-trained, promptable model (e.g.\ MedSAM) \\
+\textbf{HD95}        & 95th-\%ile Hausdorff dist.\ (mm) \\
+\textbf{$\kappa$}    & Inter-rater agreement (Cohen's) \\
+\textbf{MC-Drop.}    & Monte-Carlo Dropout \\
+\textbf{MedSAM}      & Fine-tuned SAM for medical image segmentation \\
+\textbf{nnU-Net}     & Self-config.\ U-Net \\
+\textbf{Params (M)}  & Model parameters (millions) \\
+\textbf{Pre-train}   & Training on external data \\
+\textbf{PRISMA}      & Systematic review standard \\
+\textbf{TotalSeg.}   & TotalSegmentator, 117-class nnU-Net \\
+\textbf{Transformer} & Self-attention model (UNETR, Swin UNETR) \\
+\textbf{TTA}         & Test-Time Augmentation \\
+\textbf{U-Net}       & Encoder-decoder with skip connections \\
 \end{tabular}
 \end{tcolorbox}
 
@@ -561,7 +567,7 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \begin{column}{0.315\textwidth}
 
 %--- Clinical Deployment Barriers (RQ4) ------------------------------------
-\begin{pblock}{Clinical Deployment Barriers (RQ4)}
+\begin{pblock}{Clinical Deployment Barriers}
 \begin{enumerate}\setlength\itemsep{2pt}
   \item \textbf{Domain shift:} scanner heterogeneity degrades Dice by
         \textbf{5--15\%} across institutions; only 4/52 studies (7.7\%)
@@ -580,7 +586,7 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \end{pblock}
 
 %--- Recommendations ---------------------------------------------------------
-\begin{pblock}{Phased Adoption Strategy for Surgical Planning Platforms}
+\begin{pblock}{Phased Adoption Strategy for \newline Surgical Planning Platforms}
 
 \begin{tcolorbox}[colback=utadnavy!10,colframe=utadnavy,arc=4pt,boxrule=1.2pt,
   top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
@@ -590,7 +596,7 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \end{tcolorbox}
 \begin{tcolorbox}[colback=utadnavy!10,colframe=utadnavy,arc=4pt,boxrule=1.2pt,
   top=4pt,bottom=4pt,left=7pt,right=7pt,before={\vskip0pt},after={\vskip0pt}]
-  {\normalsize\bfseries\color{utadnavy!80!black} 2. Uncertainty-Guided QA}\\[2pt]
+  {\normalsize\bfseries\color{utadnavy!80!black} 2. Uncertainty-Guided Quality Assurance}\\[2pt]
   {\small MC-Dropout / TTA disagreement, Flag low-confidence cases for
   expert review}
 \end{tcolorbox}
@@ -630,18 +636,32 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \end{pblock}
 
 %--- Key References ----------------------------------------------------------
-\begin{pblock}{References}
-{\footnotesize
-\begin{enumerate}\setlength\itemsep{2pt}
-  \item[{[1]}] Isensee et al.\ \emph{nnU-Net.} Nat.\ Methods, 2021.
-  \item[{[2]}] Tang et al.\ \emph{Swin UNETR.} MICCAI WS, 2022.
-  \item[{[3]}] Wasserthal et al.\ \emph{TotalSegmentator.} Radiol.\ AI, 2023.
-  \item[{[4]}] Ronneberger et al.\ \emph{U-Net.} MICCAI, 2015.
-  \item[{[5]}] \c{C}i\c{c}ek et al.\ \emph{3D U-Net.} MICCAI, 2016.
-  \item[{[6]}] Ma et al.\ \emph{Segment Anything in Medical Imaging.} Nat.\ Commun., 2024.
-  \item[{[7]}] Roy et al.\ \emph{MedNeXt.} MICCAI, 2023.
-  \item[{[8]}] Hatamizadeh et al.\ \emph{UNETR.} WACV, 2022.
-\end{enumerate}
+\begin{pblock}{Key References}
+{\small
+\setlength{\leftmargini}{1em}
+\begin{itemize}\setlength\itemsep{-2pt}\setlength\topsep{0pt}\setlength\parsep{0pt}
+  \item Ronneberger et al.\ \emph{U-Net.} MICCAI, 2015.
+  \item Landman et al.\ \emph{BTCV Challenge.} MICCAI WS, 2015.
+  \item He et al.\ \emph{ResNet.} CVPR, 2016.
+  \item Milletari et al.\ \emph{V-Net.} 3DV, 2016.
+  \item Litjens et al.\ \emph{Survey DL Med.\ Imaging.} Med.\ Image Anal., 2017.
+  \item Oktay et al.\ \emph{Attention U-Net.} MIDL, 2018.
+  \item Gibson et al.\ \emph{Dense V-Net Multi-Organ.} IEEE TMI, 2018.
+  \item Porpiglia et al.\ \emph{3D Virtual Renal Imaging.} BJU Int., 2018.
+  \item Isensee et al.\ \emph{nnU-Net.} Nat.\ Methods, 2021.
+  \item Liu et al.\ \emph{Swin Transformer.} ICCV, 2021.
+  \item Page et al.\ \emph{PRISMA 2020.} BMJ, 2021.
+  \item Hatamizadeh et al.\ \emph{UNETR.} WACV, 2022.
+  \item Hatamizadeh et al.\ \emph{Swin UNETR.} MICCAI WS, 2022.
+  \item Roy et al.\ \emph{MedNeXt.} MICCAI, 2023.
+  \item Wasserthal et al.\ \emph{TotalSegmentator.} Radiol.\ AI, 2023.
+  \item Huang et al.\ \emph{STU-Net.} arXiv, 2023.
+  \item Kirillov et al.\ \emph{Segment Anything.} arXiv, 2023.
+  \item Shamshad et al.\ \emph{Transformers in Med.\ Imaging.} Med.\ Image Anal., 2023.
+  \item {European Assoc.\ Urology.} \emph{EAU Guidelines RCC.} Eur.\ Urol., 2023.
+  \item Chen et al.\ \emph{TransUNet.} Med.\ Image Anal., 2024.
+  \item Ma et al.\ \emph{MedSAM.} Nat.\ Commun., 2024.
+\end{itemize}
 }
 \end{pblock}
 
