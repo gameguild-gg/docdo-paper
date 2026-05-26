@@ -1,0 +1,459 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric}
+\usepackage{qrcode}
+
+\title[Planejamento da RSL]{Planejamento e Execução de uma Revisão Sistemática}
+\subtitle{Pipeline reprodutível: APIs $\to$ Elasticsearch $\to$ LLMs\\DOUTORAMENTO EM INFORMÁTICA (UTAD)}
+\author{Alexandre T. Nogueira}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\vspace{-1.2em}
+\begin{center}
+\qrcode[hyperlink,height=2cm]{https://github.com/gameguild-gg/docdo-paper}
+\end{center}
+\end{frame}
+
+\begin{frame}{Roteiro}
+\begin{columns}[t]
+\column{0.48\textwidth}
+\tableofcontents[hideallsubsections,sections={1-6}]
+\column{0.48\textwidth}
+\tableofcontents[hideallsubsections,sections={7-12}]
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Visão Geral do Pipeline}
+\begin{frame}{1. Visão geral do pipeline}
+\centering\vspace{-0.2em}
+\begin{tikzpicture}[
+	node distance=0.25cm and 0.18cm,
+	stage/.style={rectangle, draw, rounded corners, align=center,
+	              minimum width=1.75cm, minimum height=0.75cm,
+	              inner sep=2pt, fill=blue!8, font=\small},
+	tool/.style={rectangle, draw, dashed, align=center,
+	             minimum width=1.75cm, minimum height=0.55cm,
+	             inner sep=2pt, fill=gray!10, font=\tiny},
+	arr/.style={-{Stealth[length=2mm]}, thick},
+	cnt/.style={font=\tiny\bfseries, text=blue!70!black}
+]
+	% Row 1 (left): S1 -> Dedup -> S2a -> S2b
+	\node[stage] (s1)  {Coleta};
+	\node[stage, right=of s1]  (dd)  {Dedup};
+	\node[stage, right=of dd]  (es)  {Elasticsearch};
+	\node[stage, right=of es]  (llm) {LLM};
+
+	% Row 1 (right): PDF -> S3 -> QA  (same y as s1 group, placed right of llm)
+	\node[stage, right=of llm] (pdf) {PDFs};
+	\node[stage, right=of pdf] (s3)  {Full-text};
+	\node[stage, right=of s3]  (qa)  {QA};
+
+	% Tool labels (row 2)
+	\node[tool, below=of s1]  (t1) {Python\\APIs REST};
+	\node[tool, below=of dd]  (t2) {DOI+título};
+	\node[tool, below=of es]  (t3) {Título+Resumo};
+	\node[tool, below=of llm] (t4) {GPT-4o-mini\\×3 votos};
+	\node[tool, below=of pdf] (t5) {Unpaywall\\+manual};
+	\node[tool, below=of s3]  (t6) {GPT-5.2\\batch};
+	\node[tool, below=of qa]  (t7) {Rubrica\\15Q×3};
+
+	% Counts (row 3)
+	\node[cnt, below=0.08cm of t1] {2.985};
+	\node[cnt, below=0.08cm of t2] {2.821};
+	\node[cnt, below=0.08cm of t3] {638};
+	\node[cnt, below=0.08cm of t4] {161};
+	\node[cnt, below=0.08cm of t5] {63};
+	\node[cnt, below=0.08cm of t6] {52};
+	\node[cnt, below=0.08cm of t7] {52};
+
+	% Arrows
+	\draw[arr] (s1)--(dd); \draw[arr] (dd)--(es); \draw[arr] (es)--(llm);
+	\draw[arr] (llm)--(pdf); \draw[arr] (pdf)--(s3); \draw[arr] (s3)--(qa);
+\end{tikzpicture}
+
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Coleta via APIs}
+\begin{frame}{2. Coleta de registros via APIs}
+\small
+Três bases consultadas programaticamente (sem dependência de portais web):
+\begin{table}
+\centering
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{6cm} r}
+\toprule
+\textbf{Base} & \textbf{API / método} & \textbf{Registros} \\
+\midrule
+PubMed & Entrez E-utilities (NCBI) --- \texttt{esearch} + \texttt{efetch} XML & 997 \\
+arXiv & API oficial do arXiv (Atom XML), categoria \texttt{cs.CV} (Computer Vision) & 904 \\
+Semantic Scholar & Graph API v1, paginação por \texttt{offset/limit} & 1.084 \\
+\midrule
+\textbf{Total} & \textbf{Antes de deduplicação} & \textbf{2.985} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3em}
+\textbf{Artefatos gerados:}
+\begin{itemize}
+	\item \texttt{S1\_search\_results\_REAL.csv} --- 2.985 linhas, metadados brutos.
+	\item \texttt{S1\_evidence\_report.md} --- desagregação por fonte, datas de execução.
+	\item Script: \texttt{fetch\_all\_real\_data.py} (rate limiting + retry exponencial).
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Deduplicação}
+\begin{frame}{3. Deduplicação}
+\small
+\textbf{Deduplicação não é trivial:}
+\begin{itemize}
+	\item Mesmo trabalho aparece em arXiv (preprint) e PubMed (peer-reviewed).
+	\item DOIs nem sempre estão presentes em preprints.
+	\item Variações no título: caixa, hífens, pontuação, acentos.
+\end{itemize}
+
+\textbf{Estratégia em duas chaves:}
+\begin{enumerate}
+	\item \textbf{DOI exato} (quando disponível): chave primária.
+	\item \textbf{Título normalizado}: \texttt{lowercase} $\to$ remover pontuação $\to$ colapsar espaços $\to$ hash.
+\end{enumerate}
+
+\begin{table}
+\centering
+\begin{tabular}{lr}
+\toprule
+Entrada & 2.985 \\
+Duplicatas removidas & 164 \\
+\textbf{Saída} (\texttt{S1\_search\_results\_deduplicated.csv}) & \textbf{2.821} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\footnotesize Script: \texttt{deduplicate\_s1.py}.
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Pré-filtro com Elasticsearch}
+\begin{frame}{4a. Pré-filtro ES --- Inclusão (\texttt{bool must})}
+\small
+\textbf{ES 8.11 (Docker)} --- campo \texttt{combined\_text} = título + resumo; idioma \texttt{english}. \\
+\textbf{Todos os 4 grupos obrigatórios} (\texttt{must}), ao menos 1 termo por grupo:
+
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{DL (IC1):}\\
+\scriptsize\texttt{deep learning, neural network,\\convolutional neural, CNN, U-Net,\\UNet, encoder decoder, transformer,\\ResNet, VNet, attention mechanism,\\fully convolutional, FCN, nnU-Net,\\nnUNet, MONAI, autoencoder}
+
+\smallskip
+\textbf{Segmentação (IC2):}\\
+\scriptsize\texttt{segmentation, segmenting,\\semantic segmentation,\\volumetric segmentation,\\3D segmentation, multi-organ,\\organ segmentation, delineation}
+
+\column{0.48\textwidth}
+\textbf{TC/CT (IC3):}\\
+\scriptsize\texttt{CT, computed tomography,\\CT scan, CT image, CT volume,\\abdominal CT, chest CT,\\contrast-enhanced, CECT}
+
+\smallskip
+\textbf{Órgãos (IC4):}\\
+\scriptsize\texttt{liver, kidney, spleen, pancreas,\\lung, heart, stomach, gallbladder,\\bladder, prostate, colon, esophagus,\\adrenal gland, abdominal organ,\\multi-organ, organs at risk, OAR,\\hepatic, renal, pulmonary, cardiac}
+\end{columns}
+
+\smallskip\small
+\textbf{Pesquisa original com metodologia (IC5)} \textit{(verificado no pós-filtro Python):}\\
+\scriptsize
+Presenta método, arquitetura ou contribuição metodológica própria.
+Exclui: papers só de dataset sem baseline; revisões; notas de aplicação sem metodologia.
+\end{frame}
+
+\begin{frame}{4b. Pré-filtro ES --- Exclusões}
+\small
+\textbf{Nível 1 --- \texttt{must\_not} ES (campo \texttt{title}):}
+\quad\texttt{"systematic review"}, \texttt{"literature review"}, \texttt{"survey of"}, \texttt{"a review"}
+
+\vspace{0.3em}
+\textbf{Nível 2 --- Pós-filtro Python (\texttt{combined\_text} = título + resumo):}
+\begin{table}
+\centering\scriptsize
+\begin{tabular}{l >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{7.5cm}}
+\toprule
+\textbf{EC} & \textbf{Regra} & \textbf{Condição de exclusão} \\
+\midrule
+EC1 & Só detecção/classificação & \texttt{detection, classification, diagnosis} presente \textbf{e} \texttt{segment, contour, mask} ausente \\
+EC2 & Sem CT no texto & Nenhum de: \texttt{ct\textvisiblespace, computed tomography, ct scan, ct image, ct volume, ct data} \\
+EC2 & Modalidade não-TC exclusiva & MRI/US/RX/PET presente \textbf{e} CT ausente \\
+EC3 & Alvo não-órgão exclusivo & Tumor/lesão, vaso, osso, músculo, via aérea, COVID --- sem termo de órgão \\
+EC4 & Sem 3D/volumétrico & Nenhum de: \texttt{3d, 3-d, three-dimensional, volumetric, volume, v-net, 3d u-net, 3d convolution, 3d cnn} \\
+EC5 & Sem deep learning & \texttt{random forest, svm, atlas-based, level set, region growing} sem termos DL \\
+EC6 & Revisão/survey & \texttt{systematic review, meta-analysis, overview of, scoping review} no título \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\centering\small
+\textbf{Resultado: 2.821 $\to$ 638} \quad (\texttt{S2\_elasticsearch\_filtered.csv})
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Triagem LLM (Título+Resumo)}
+\begin{frame}{5. Triagem LLM em cascata}
+\small
+\textbf{Protocolo de consenso para 638 candidatos:}
+
+\begin{table}
+\centering
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{2.8cm} c c >{\raggedright\arraybackslash}p{4.5cm}}
+\toprule
+\textbf{Estágio} & \textbf{Modelo} & \textbf{Runs} & \textbf{Temperature} & \textbf{Função} \\
+\midrule
+Primário & GPT-4o-mini & 3 & 0.3 & Triagem inicial; \textbf{INCLUDE unânime} obrigatório \\
+Validação & GPT-5-nano & 3 & default & Comparação independente \\
+Desempate & GPT-5.2 & 1 & 0.3 & Resolver disagreement (274 papers) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Prompt estruturado:} JSON output com \texttt{decision}, IC1--IC6, EC1--EC6, \texttt{confidence}, \texttt{reasoning}.
+
+\textbf{Regra conservadora:} qualquer divergência entre as 3 chamadas $\to$ desempatador GPT-5.2.
+
+\centering
+\textbf{638 $\to$ 161 incluídos} \quad (\texttt{all\_papers\_after\_s2\_with\_status.csv})
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Validação Humana}
+\begin{frame}{6. Validação humana da triagem LLM}
+\small
+\textbf{Auditoria 10\%}, amostragem estratificada (n = 64 dos 638 pós-Elasticsearch).
+
+\textbf{Estratos:} decisão da IA (INCLUDE/EXCLUDE) $\times$ tipo de consenso (unânime/maioria) $\times$ base de origem.
+
+\begin{table}
+\centering
+\begin{tabular}{lr}
+\toprule
+Concordância IA--humano & \textbf{96,4\%} (62/64) \\
+Cohen's $\kappa$ & \textbf{0,89} \\
+Falsos negativos (IA EXCLUI $\to$ humano INCLUI) & 3 \\
+Falsos positivos (IA INCLUI $\to$ humano EXCLUI) & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\footnotesize Os 3 falsos negativos foram reintroduzidos na triagem de texto completo. Relatório: \texttt{S6\_validation\_report.md}.
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Aquisição de PDFs}
+\begin{frame}{7. Aquisição de texto completo}
+\small
+Dos 161 estudos selecionados em S2b, foi necessário obter o PDF para a triagem de texto completo.
+
+\textbf{Estratégia:}
+\begin{enumerate}
+	\item Tentativa automática via \textbf{Unpaywall} (DOI $\to$ URL open access).
+	\item Captura direta via arXiv (PDF público).
+	% \item Acesso institucional (UTAD/sci-hub apenas para verificação de elegibilidade).
+	\item Registro de falhas em \texttt{excluded\_no\_fulltext.csv}.
+\end{enumerate}
+
+\begin{table}
+\centering
+\begin{tabular}{lr}
+\toprule
+Selecionados em S2b & 161 \\
+PDFs obtidos & \textbf{63} \\
+Sem acesso (paywall ou indisponível) & 98 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\footnotesize Detalhamento em \texttt{S11\_paywalled\_access.md}.
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Triagem de Texto Completo}
+\begin{frame}{8. Triagem de texto completo (LLM batch)}
+\small
+\textbf{Pipeline:}
+\begin{enumerate}
+	\item Extração de texto: \texttt{PyMuPDF} $\to$ \texttt{markdown} normalizado.
+	\item Truncamento controlado para caber na janela do modelo.
+	\item Submissão em lote (\texttt{batch API}) ao \textbf{GPT-5.2}.
+	\item Re-aplicação dos critérios IC1--IC6 / EC1--EC6 sobre o texto completo.
+	\item Extração estruturada: dataset, métricas (Dice/HD), arquitetura, órgãos, dataset, GPU.
+\end{enumerate}
+
+\begin{table}
+\centering
+\begin{tabular}{lr}
+\toprule
+PDFs avaliados & 63 \\
+\textbf{Incluídos na síntese} & \textbf{52} \\
+Excluídos (motivos categorizados) & 11 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\footnotesize Saídas: \texttt{s3\_extracted\_data\_full.csv} (52 linhas, dados extraídos), \texttt{s3\_excluded\_papers.csv} (motivos), \texttt{s3\_summary\_table.csv}.
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Quality Assessment}
+\begin{frame}{9. Quality Assessment (rubrica)}
+\small
+\textbf{Rubrica de 15 questões $\times$ 3 dimensões} (5 questões cada, escala 0--2 pontos; total 0--30):
+
+\begin{itemize}
+	\item \textbf{Rigor metodológico:} clareza do método, baselines, hiperparâmetros, código disponível, ablações.
+	\item \textbf{Reprodutibilidade:} dataset público, código público, seeds, métricas padronizadas, especificação de hardware.
+	\item \textbf{Relevância clínica:} validação externa, comparação com radiologistas, métricas clínicas, tempo de inferência, integração de fluxo.
+\end{itemize}
+
+\textbf{Aplicação:} GPT-5.2 batch sobre os 52 incluídos.
+
+\begin{table}
+\centering
+\begin{tabular}{lr}
+\toprule
+Pontuação média total & \textbf{21,0 / 30} \\
+Amplitude & 14 -- 28 \\
+Alta qualidade ($\geq 24$) & 10 (19,2\%) \\
+Média qualidade (15--23) & 41 (78,8\%) \\
+Baixa qualidade ($<15$) & 1 (1,9\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\footnotesize Per-study scores: \texttt{qa\_summary.csv}; respostas brutas: \texttt{qa\_parsed\_results.json}.
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Artefatos e Rastreabilidade}
+\begin{frame}{10. Artefatos suplementares (S0--S12)}
+\small
+Cada etapa do pipeline gera CSVs/MDs versionados que permitem auditoria:
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Protocolo e critérios:}
+\begin{itemize}
+	\item \texttt{S0\_data\_provenance.md}
+	\item \texttt{S3\_search\_protocol.md}
+	\item \texttt{S4\_ai\_screening\_protocol.md}
+	\item \texttt{S4\_screening\_criteria.md}
+\end{itemize}
+
+\textbf{Dados brutos e filtrados:}
+\begin{itemize}
+	\item \texttt{S1\_search\_results\_REAL.csv} (2.985)
+	\item \texttt{S1\_*\_deduplicated.csv} (2.821)
+	\item \texttt{S2\_elasticsearch\_filtered.csv} (638)
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Decisões e auditoria:}
+\begin{itemize}
+	\item \texttt{S5\_screening\_decisions.csv}
+	\item \texttt{S6\_validation\_report.md}
+	\item \texttt{s3\_excluded\_papers.csv}
+\end{itemize}
+
+\textbf{Síntese final:}
+\begin{itemize}
+	\item \texttt{S2\_final\_included\_studies.csv} (52)
+	\item \texttt{s3\_extracted\_data\_full.csv}
+	\item \texttt{qa\_summary.csv}
+	\item \texttt{S12\_per\_organ\_statistics.md}
+\end{itemize}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Funil PRISMA}
+\begin{frame}{11. Funil de seleção (PRISMA modificado)}
+\centering
+\scriptsize
+\begin{tikzpicture}[
+		node distance=0.45cm,
+		box/.style={rectangle, draw, rounded corners, align=center, minimum width=8.3cm, minimum height=0.55cm, inner sep=2.5pt},
+		side/.style={rectangle, draw, align=center, minimum width=3.6cm, minimum height=0.55cm, inner sep=2pt},
+		arr/.style={-{Stealth[length=2mm]}, thick}
+]
+	\node[box] (s1raw) {S1: Registros identificados (PubMed + arXiv + Semantic Scholar): \textbf{2.985}};
+	\node[box, below=of s1raw] (dedup) {Após deduplicação (DOI + título normalizado): \textbf{2.821}};
+	\node[side, right=0.2cm of dedup] (dedupexc) {Duplicatas removidas: \textbf{164}};
+	\node[box, below=of dedup] (s2) {S2a: Pré-filtro Elasticsearch (título + resumo): \textbf{638}};
+	\node[side, right=0.2cm of s2] (s2exc) {Excluídos no pré-filtro: \textbf{2.183}};
+	\node[box, below=of s2] (llm) {S2b: Triagem LLM (GPT-4o-mini ×3 unânime): \textbf{161}};
+	\node[side, right=0.2cm of llm] (llmexc) {Excluídos via LLM: \textbf{477}};
+	\node[box, below=of llm] (pdf) {Texto completo obtido (PDF): \textbf{63}};
+	\node[side, right=0.2cm of pdf] (nopdf) {Sem PDF: \textbf{98}};
+	\node[box, below=of pdf] (s3) {S3: Triagem de texto completo (GPT-5.2): \textbf{52 incluídos}};
+	\node[side, right=0.2cm of s3] (s3exc) {Excluídos (texto completo): \textbf{11}};
+	\node[box, below=of s3] (final) {Síntese narrativa + QA: \textbf{52 estudos}};
+
+	\draw[arr] (s1raw) -- (dedup);
+	\draw[arr] (dedup) -- (s2);
+	\draw[arr] (s2) -- (llm);
+	\draw[arr] (llm) -- (pdf);
+	\draw[arr] (pdf) -- (s3);
+	\draw[arr] (s3) -- (final);
+	\draw[arr] (dedup.east) -- (dedupexc.west);
+	\draw[arr] (s2.east) -- (s2exc.west);
+	\draw[arr] (llm.east) -- (llmexc.west);
+	\draw[arr] (pdf.east) -- (nopdf.west);
+	\draw[arr] (s3.east) -- (s3exc.west);
+\end{tikzpicture}
+\end{frame}
+
+% ---------------------------------------------------------------
+\section{Reprodutibilidade}
+\begin{frame}{12. Reprodutibilidade e limitações}
+\small
+\textbf{O que é reprodutível bit-a-bit:}
+\begin{itemize}
+	\item Etapa de deduplicação (determinística sobre \texttt{S1\_search\_results\_REAL.csv}).
+	\item Pré-filtro Elasticsearch (consulta + versão do índice fixadas).
+	\item Cálculo das estatísticas e tabelas a partir dos CSVs finais.
+\end{itemize}
+
+\textbf{O que \emph{não} é reprodutível bit-a-bit:}
+\begin{itemize}
+	\item Coleta S1 --- APIs públicas retornam conjuntos diferentes ao longo do tempo.
+	\item Decisões LLM --- modelos não são estritamente determinísticos (mesmo com $T=0$).
+\end{itemize}
+
+\textbf{Mitigação:} todos os artefatos intermediários estão versionados em \texttt{pipeline\_outputs/}, permitindo auditoria do estado em que cada decisão foi tomada.
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Próximos passos e materiais}
+\small
+\begin{columns}[c]
+\column{0.65\textwidth}
+\begin{itemize}
+  \item \textbf{Generalizar} o pipeline como ferramenta reutilizável de RSL assistida por IA.
+  \item \textbf{Comparar} com revisores humanos em outro tópico (validação externa).
+  \item \textbf{Publicar} o protocolo no PROSPERO e o código sob licença aberta.
+  \item \textbf{Integrar} ao fluxo do projeto DocDo (planejamento cirúrgico).
+\end{itemize}
+\column{0.30\textwidth}
+\centering
+\qrcode[hyperlink,height=4.5cm]{https://github.com/gameguild-gg/docdo-paper}\\
+\scriptsize Repositório e artefatos
+\end{columns}
+\end{frame}
+
+\end{document}
