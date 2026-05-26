@@ -1,0 +1,1035 @@
+% !TeX program = pdflatex
+% !TeX spellcheck = en_US
+%==============================================================================
+%  PhD Thesis Research Plan
+%  Programa Doutoral em Inform\'atica -- Universidade de Tr\'as-os-Montes e Alto Douro (UTAD)
+%
+%  Title:   Clinically-Deployable 3D Vascular and Organ Segmentation from CT
+%  Student: Alexandre Tolstenko Nogueira
+%  Year 1 (starting Oct/2025) -- Expected defense: late 2029
+%
+%  This document follows the UTAD ``Plano de Trabalhos'' structure
+%  (planotrabalhos-modelo) adapted to the FCT-NOVA 15--20 page guideline.
+%  Advisor signatures are intentionally left blank for digital signing.
+%==============================================================================
+\documentclass[a4paper,11pt,twoside]{article}
+
+%----- Encoding & language ----------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+%----- Geometry & layout ------------------------------------------------------
+\usepackage[a4paper,top=3.0cm,bottom=2.8cm,left=2.5cm,right=2.5cm,headheight=14pt,headsep=10pt,footskip=30pt]{geometry}
+\usepackage{setspace}
+\setstretch{1.15}
+\usepackage{parskip}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\sffamily}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\sffamily}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\sffamily}{\thesubsubsection}{0.4em}{}
+
+%----- Graphics & color ------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+\definecolor{utadblue}{RGB}{0,46,93}
+\definecolor{accent}{RGB}{200,16,46}
+
+%----- Tables, lists, math, code ----------------------------------------------
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=2pt}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+
+%----- Gantt ------------------------------------------------------------------
+\usepackage{pgfgantt}
+\usepackage{tikz}
+
+%----- Header / footer (UTAD template) -----------------------------------
+\usepackage{fancyhdr}
+
+% Logo height in the header
+\newlength{\utadlogoht}
+\setlength{\utadlogoht}{20pt}
+
+\fancypagestyle{utad}{%
+  \fancyhf{}%
+  % Zero-size anchor; all drawing done in TikZ overlay
+  \fancyhead[C]{%
+    \begin{tikzpicture}[remember picture, overlay]
+      % -- Logo: anchored to top-right corner, inside right margin
+      \node[anchor=north east, inner sep=0pt, outer sep=0pt]
+        (utadlogo)
+        at ([xshift=-2.5cm, yshift=-0.72cm]current page.north east)
+        {\includegraphics[height=\utadlogoht]{utad_azul.png}};
+      % -- University name: right-aligned, just left of logo, vertically centered
+      \node[anchor=east, inner sep=0pt, outer sep=0pt, xshift=-8pt]
+        at (utadlogo.west |- utadlogo.center)
+        {\sffamily\bfseries\footnotesize\color{utadblue}%
+         UNIVERSIDADE DE TR\'AS-OS-MONTES E ALTO DOURO};
+      % -- Line 1: paper left edge to logo NW, at top of logo
+      \draw[utadblue, line width=0.5pt]
+        (current page.north west |- utadlogo.north) -- (utadlogo.north west);
+      % -- Line 2: paper left edge to logo SW, at bottom of logo
+      \draw[utadblue, line width=0.5pt]
+        (current page.north west |- utadlogo.south) -- (utadlogo.south west);
+      % -- Line 3: paper left edge to 6pt past logo SE, 3pt below logo bottom
+      \draw[utadblue, line width=0.5pt]
+        ([yshift=-15pt]current page.north west |- utadlogo.south) --
+        ([xshift=6pt, yshift=-15pt]utadlogo.south east);
+    \end{tikzpicture}%
+  }%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0.6pt}%
+  \fancyfoot[C]{\small\itshape Doutoramento em Inform\'atica}%
+  \fancyfoot[R]{\small\thepage}%
+}
+\pagestyle{utad}
+
+% Dotted form-field box (mimics the Word template input boxes).
+% #1 = optional box height, #2 = caption above box, #3 = box width, #4 = filled content (may be empty)
+\newcommand{\formfield}[4][0.9cm]{%
+  {\scriptsize\itshape #2}\par\nobreak\vspace{-0.2em}%
+  \noindent\begin{tikzpicture}
+    \draw[gray,line width=0.4pt,dotted] (0,0) rectangle (#3,#1);
+    \node[anchor=west,inner xsep=6pt,inner ysep=0pt] at (0,#1/2) {\small #4};
+  \end{tikzpicture}\par
+}
+
+%----- Hyperlinks -------------------------------------------------------------
+\usepackage[hidelinks,colorlinks=true,linkcolor=utadblue,citecolor=utadblue,
+            urlcolor=utadblue]{hyperref}
+
+%==============================================================================
+\begin{document}
+
+%==============================================================================
+%  COVER  (replicates planotrabalhos-modelo.docx)
+%==============================================================================
+\begin{titlepage}
+\thispagestyle{utad}
+\vspace*{1.0cm}
+\begin{center}
+  {\fontsize{24}{28}\selectfont\bfseries Plano de Trabalho\par}
+  \vspace{0.55cm}
+  {\fontsize{20}{24}\selectfont\bfseries de\par}
+  \vspace{0.55cm}
+  {\fontsize{24}{28}\selectfont\bfseries Tese de\par}
+  \vspace{0.55cm}
+  {\fontsize{24}{28}\selectfont\bfseries Doutoramento em Inform\'atica\par}
+
+  \vspace{1.2cm}
+  {\small
+   de acordo com o disposto no\\
+   DR -- I s\'erie -- N\textsuperscript{o} 151, Decreto-Lei n.\textsuperscript{o} 115/2013 de 7 de agosto e no\\
+   Regulamento de Estudos Conducente ao Grau de Doutoramento da UTAD\\
+   DR, 2.\textsuperscript{a} s\'erie - N\textsuperscript{o} 133 de 13 de julho de 2016\par}
+\end{center}
+
+\vspace{0.8cm}
+\noindent\begin{minipage}[t]{0.66\linewidth}
+  \formfield{Nome do Candidato(a)}{\linewidth}{Alexandre Tolstenko Nogueira}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}
+  \formfield{N\'umero do Candidato(a)}{\linewidth}{al2025129951}
+\end{minipage}
+
+\vspace{0.15cm}
+\formfield{T\'itulo provis\'orio}{\linewidth}{Clinically-Deployable 3D Vascular and Organ Segmentation from CT}
+\vspace{0.05cm}
+\formfield{Nome do Orientador(a)}{\linewidth}{Vitor Manuel de Jesus Filipe}
+\vspace{0.05cm}
+\formfield{Nome do Coorientador(a)}{\linewidth}{Nuno Miguel Fonseca Ferreira}
+\vspace{0.05cm}
+\formfield{Nome do Coorientador(a)}{\linewidth}{}
+
+\end{titlepage}
+
+%==============================================================================
+%  ABSTRACT
+%==============================================================================
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+Three-dimensional segmentation of abdominal organs and their vasculature from
+computed tomography (CT) is the foundation of modern image-guided surgical
+planning. Despite a decade of deep-learning progress, a 2025 systematic review
+of 52 representative studies that I co-authored shows that performance has
+plateaued around \textbf{82\,\% Dice} for parenchymal organs (nnU-Net,
+Swin UNETR) and remains markedly lower (\textbf{65--75\,\% Dice}) for vascular
+structures, where topology, sub-voxel geometry, and bifurcations dominate
+clinical utility. In parallel, a decade of deployment at
+\textit{DocDo} (1\,000+ patients, 10+ years) shows that deterministic,
+interaction-driven pipelines built on the Image Foresting Transform
+(Falc\~ao~\textit{et al.}, 2004) and on Aylward's orthogonal vessel tracking
+(2002) remain unmatched in \emph{controllability} and \emph{auditability} for
+surgeons, but are limited by manual cost design and topological fragility.
+
+This thesis proposes a \textbf{hybrid deterministic--learning framework} that
+re-formulates classical seeded-IFT segmentation and orthogonal vessel tracking
+as \emph{differentiable layers} whose cost functions, stopping criteria, and
+geometric priors are learned end-to-end from data, while their algorithmic
+backbone preserves the guarantees and editability surgeons depend on.
+Topology- and geometry-aware losses (clDice, persistent homology)
+are introduced as a supporting work-package targeting the
+vascular gap. An open-source 3D editor coupled to the framework, deployed
+through DocDo as a free SaaS, enables a prospective clinical validation with
+surgeons at Hospital S\~ao Marcos (Teresina, Brazil) measuring
+\emph{time-to-segmentation}, NASA-TLX cognitive load, and System Usability
+Scale (SUS). Foundation-model adaptation (MedSAM, SAM-Med3D), implicit neural
+representations and diffusion-based segmentation are explored as parallel,
+lower-risk avenues.
+
+The plan covers \textbf{48 months} (Oct.~2025 -- Sep.~2029) organized in five
+work packages, targets publications in IEEE Access, Medical Image Analysis and
+MICCAI/MIDL, and culminates in an anonymized public dataset, a peer-reviewed
+clinical validation, and an open-source release.
+
+\medskip\noindent
+\textbf{Keywords:} medical image segmentation; computed tomography; vascular
+segmentation; CNNs; transformers; topology-aware learning; foundation
+models; surgical planning; human--computer interaction; clinical validation.
+
+\newpage
+\tableofcontents
+\newpage
+
+%==============================================================================
+\section{Introduction}
+%==============================================================================
+
+\subsection{Clinical motivation}
+
+Minimally invasive abdominal surgery, partial nephrectomy, hepatic
+resection, pancreatic surgery, splenectomy, depends critically on the
+surgeon's pre-operative understanding of three-dimensional anatomy and, in
+particular, on the spatial relationship between the lesion and the surrounding
+vasculature. Patient-specific 3D models reconstructed from CT have been
+repeatedly shown to reduce intra-operative complications, shorten warm-ischemia
+time and improve resident training; yet the production of such models remains
+a manual, expert-intensive task that does not scale to the volume of cases a
+public hospital handles every week.
+
+\subsection{Industrial context: a decade at DocDo}
+
+The candidate is the founder and lead engineer of \textit{DocDo}, a
+Brazilian medical-imaging company that has, over the last decade, produced
+patient-specific 3D models for more than one thousand surgical cases. The
+production pipeline currently relies on two deterministic algorithms:
+\begin{enumerate}[label=(\roman*), noitemsep, topsep=3pt]
+  \item \emph{Seeded Image Foresting Transform} (Seeded IFT) for organs,
+        regions and -- in current routine practice -- vessels; and
+  \item the \emph{Orthogonal Vessel Tracker} of Aylward and Bullitt,
+        implemented but kept outside the routine pipeline because of
+        stability problems at bifurcations and on elliptical cross-sections.
+\end{enumerate}
+The clinical feedback gathered
+over a decade has shaped a clear set of requirements that no purely
+deep-learning solution currently satisfies:
+\begin{itemize}
+  \item \textbf{Controllability:} a surgeon or operator must be able to correct any
+        output in seconds and the algorithm must respect that correction.
+  \item \textbf{Auditability:} every voxel decision must be traceable to an
+        explicit, inspectable cost.
+  \item \textbf{Robustness to acquisition variability:} the same protocol must
+        run on a low-dose abdominal CT from an entry-level scanner and on a
+        high-resolution multi-phase study.
+  \item \textbf{Sub-voxel geometric accuracy} where it matters most
+        (tumour--vessel margins, ostia, bifurcations).
+\end{itemize}
+
+\subsection{Academic context: a saturated state of the art}
+
+A systematic agentic review of 52 representative studies (2015--Jan.~2026) led by the
+candidate and currently under preparation for publishing shows that:
+\begin{itemize}
+  \item Convolutional architectures dominate the literature (98.1\,\% of
+        reviewed works); 3D U-Net variants appear in 82.7\,\% of studies.
+  \item Performance on parenchymal abdominal organs has saturated around
+        \textbf{Dice~$\approx$~82.3\,\%} (nnU-Net) and
+        \textbf{82.4\,\%} (Swin UNETR), with overlapping confidence intervals.
+  \item Vascular structures lag at \textbf{Dice~$\approx$~65--75\,\%}, with
+        topology errors (missed branches, broken centerlines) that geometric
+        metrics under-report.
+  \item Generalist foundation models (TotalSegmentator, MedSAM, SAM-Med3D)
+        offer remarkable zero-shot coverage but are not yet competitive on
+        vessels nor on surgeon-grade boundary precision.
+\end{itemize}
+
+\subsection{Thesis statement}
+
+The thesis argues that the next clinically meaningful step in 3D abdominal
+segmentation requires a principled \emph{fusion} of the deterministic,
+interaction-aware backbone that already works in production with the
+representational power of modern deep learning, evaluated on both geometric
+overlap and surgeon-rated clinical utility, rather than a larger network or
+a new transformer block.
+
+%==============================================================================
+\section{Research Context and State of the Art}
+%==============================================================================
+
+\subsection{Deterministic backbone}
+
+\textbf{Image Foresting Transform.}
+The IFT~\cite{falcao2004ift} provides a general graph-search framework that
+unifies watershed, fuzzy-connectedness, and seeded region-growing under a
+single optimum-path forest formulation.  Given an image graph $G=(V,E)$ with
+voxel vertices $V$ and neighborhood edges $E$, the seeded variant assigns
+every voxel $t$ the label of its closest seed $s \in S$ under a user-defined
+path-cost function:
+\[
+  \ell(t) = \operatorname*{arg\,min}_{s\in S}\; C^*(s,t), \quad
+  C^*(s,t) = \min_{\pi: s\to t}\, \max_{e\in\pi}\, w(e),
+\]
+where: $\ell(t)$ is the organ-class label assigned to voxel $t$;
+$S$ is the set of user-placed seed voxels (one per foreground class);
+$C^*(s,t)$ is the optimal (minimum bottleneck) path cost from seed $s$ to
+voxel $t$; $\pi\colon s\to t$ denotes a path, i.e.\ an ordered sequence of
+adjacent voxels connecting $s$ to $t$; $e\in\pi$ ranges over every
+edge (adjacency pair) on that path; $w(e)$ encodes the intensity contrast
+between the two endpoints of edge $e$ (a hand-crafted or learned scalar
+greater than zero at strong boundaries); and the innermost $\max_{e\in\pi}$
+selects the \emph{highest-contrast} edge on a given path -- the
+\emph{bottleneck} -- so the algorithm routes labels through the
+lowest-contrast path between seed and target.  Three clinically
+interpretable hyper-parameters govern the DocDo implementation: an
+intensity threshold (suppresses leaks through low-contrast boundaries), a
+path-cost budget (controls expansion radius), and a maximum-iteration ceiling
+(ensures real-time latency).  This design gives an operator direct,
+semantics-rich control -- a property that end-to-end networks do not provide
+by construction.
+
+After a decade of deployment across more than 1\,000 surgical planning cases,
+three operational limits are well-documented:
+\begin{itemize}
+  \item \textbf{Hand-crafted costs.} Edge weights are designed per organ and
+        per contrast phase; every new acquisition protocol requires
+        re-tuning, making large-scale generalization impractical.
+  \item \textbf{Partial-volume sensitivity.} At thin-walled structures
+        (renal papillae, vessel walls, bile duct), the integer-valued
+        boundary metric leaks through sub-voxel transitions.
+  \item \textbf{Multi-class scaling.} Concurrent labelling of seven or more
+        anatomical classes (liver, kidney, pancreas, spleen, and their
+        vasculature) requires sequential or competitive seeding strategies
+        that scale poorly in time and memory.
+\end{itemize}
+
+\textbf{Orthogonal vessel tracking.}
+Aylward and Bullitt~\cite{aylward2002vessel} model vascular centerlines as
+\emph{intensity ridges} in the CT volume.  Starting from a user seed, the
+tracker iteratively:
+\begin{enumerate}[label=(\alph*), noitemsep, topsep=3pt]
+  \item computes the Hessian of the image in the plane orthogonal to the
+        current propagation direction;
+  \item estimates vessel radius and orientation from the dominant eigenvector;
+  \item fits a Gaussian cross-section model; and
+  \item advances the seed along the ridge.
+\end{enumerate}
+The
+algorithm produces a geometrically explicit centerline with per-point radius
+estimates and is surgeon-friendly because every failure mode is
+inspectable in 3D.
+
+Its known failure modes are precisely the structures that dominate
+preoperative planning for partial nephrectomy and right hepatectomy:
+\begin{itemize}
+  \item \textbf{Bifurcations.} The single-ridge model must split;
+        the Hessian eigenstructure becomes ambiguous near branch points,
+        causing the tracker to miss one daughter vessel or to oscillate.
+  \item \textbf{Non-circular cross-sections.} Portal vein and renal vein
+        segments are often elliptical or tortuous; the Gaussian fit
+        diverges, halting propagation prematurely.
+\end{itemize}
+In the DocDo environment the tracker is implemented but excluded from the
+routine pipeline for this reason, falling back to seeded-IFT for vessel
+segmentation at the cost of topological fidelity.
+
+\subsection{Deep-learning backbone}
+
+The systematic review of 52 studies (2015--January~2026) conducted for this
+thesis reveals a field shaped by a small number of architectural archetypes.
+
+\textbf{Convolutional encoder-decoder networks.}
+Ronneberger \textit{et al.}~\cite{ronneberger2015unet} introduced the U-Net
+encoder-decoder with skip connections for 2D biomedical segmentation in 2015;
+\c{c}i\c{c}ek \textit{et al.}~\cite{cicek20163dunet} extended it to full 3D
+volumetric convolutions, and Milletari \textit{et al.}~\cite{milletari2016vnet}
+proposed V-Net with Dice-loss training. The review finds that convolutional
+architectures account for \textbf{98.1\,\%} of included works, with 3D U-Net
+variants present in \textbf{82.7\,\%} of studies.
+
+\textbf{Self-configuring CNNs.}
+nnU-Net~\cite{isensee2021nnunet} eliminates manual architecture search by
+inferring patch size, batch size, network topology, and normalization strategy
+directly from dataset fingerprints.  It achieves \textbf{Dice $\approx$
+82.3\,\%} on the BTCV multi-organ benchmark with no task-specific tuning and
+remains the most reliable single-model baseline across parenchymal organs.
+
+\textbf{Transformer hybrids.}
+UNETR~\cite{hatamizadeh2022unetr} replaces the convolutional encoder with a
+Vision Transformer operating on non-overlapping volume patches.
+Swin UNETR~\cite{hatamizadeh2022swinunetr} introduces shifted-window
+self-attention to reduce the quadratic cost of global attention, reaching
+\textbf{Dice $\approx$ 82.4\,\%} on BTCV -- statistically indistinguishable
+from nnU-Net.  Overlapping confidence intervals between the two paradigms
+suggest a methodological ceiling for parenchymal organ segmentation.
+
+\textbf{Generalist foundation models.}
+TotalSegmentator~\cite{wasserthal2023totalsegmentator} covers 117 anatomical
+structures through large-scale nnU-Net training and offers off-the-shelf
+predictions for gross anatomy.  MedSAM~\cite{ma2024medsam} and
+SAM-Med3D~\cite{wang2024sammed3d} extend the Segment Anything paradigm to
+the medical domain, enabling prompt-driven segmentation without
+organ-specific retraining.  In the reviewed studies these models score
+below 70\,\% Dice on renal vasculature and underperform task-specific
+baselines at margins and bifurcations.
+
+\textbf{Performance ceiling.}
+Across all 52 reviewed studies, parenchymal-organ Dice has saturated near
+82\,\% regardless of architecture family; the vascular gap (65--75\,\% Dice
+for renal and portal vessels) persists across every paradigm. The limiting
+factor appears to be the mismatch between overlap metrics and the clinical
+requirement for topologically correct, surgeon-editable delineations rather
+than representational capacity.
+
+\subsection{Topology- and geometry-aware learning}
+
+Standard overlap metrics (Dice, IoU) are blind to topological errors: a
+method that bridges a tubular branch scores well on Dice while introducing
+a clinically critical false disconnection.  Two families of loss functions
+directly penalize such errors, and their synergy with the deterministic
+backbone is a central hypothesis of this thesis.
+
+\textbf{Skeleton-based losses.}
+clDice~\cite{shit2021cldice} augments the standard Dice loss with a
+soft-skeleton Dice term computed on the morphological skeleton of both
+prediction and ground truth.  It penalizes disconnected centerlines without
+increasing inference cost and reduces connectivity errors by 20--40\,\%
+relative to standard Dice on tubular structures (coronary arteries, retinal
+vessels).  The extension to 3D abdominal vessels is straightforward, yet
+none of the 52 reviewed studies applies clDice to this anatomical target.
+
+\textbf{Persistent homology losses.}
+Hu \textit{et al.}~\cite{hu2019topology} compute a differentiable
+approximation to the Wasserstein distance between the persistence diagrams of
+prediction and ground truth, enforcing the correct Betti numbers:
+$\beta_0$ (connected components) and $\beta_1$ (independent loops).
+Applied to abdominal vasculature these constraints target missed
+bifurcations and spurious bridges.  Only eight of the 52 reviewed studies
+use topology-aware losses, and none targets abdominal vessels --- a gap that
+WP3 of this thesis addresses.
+
+\textbf{Branch-aware centerline losses.}
+A branch-aware centerline term, penalizing missing daughter vessels at
+bifurcation points, can be coupled to the differentiable vessel tracker of
+WP2, which provides explicit centerline and radius estimates as a byproduct
+of its forward pass.
+
+\subsection{Differentiable classical pipelines}
+
+Making classical optimization algorithms end-to-end differentiable is an
+active research direction that provides the theoretical foundation for WP2.
+Graph-cut-based methods have been embedded in neural networks via LP
+relaxations and sub-modular rounding; geodesic shortest paths have been
+differentiated through regularized softmin over path costs; level-set
+evolution has been parameterized as a neural ordinary differential equation.
+These approaches replace discrete combinatorial decisions with continuous,
+temperature-controlled surrogates that admit gradient flow.
+
+For the Seeded IFT, the minimum-cost path value
+$C^*(s,t) = \min_{\pi: s\to t} \max_{e\in\pi} w(e)$, where $w(e)$ is a
+learnable edge weight produced by the CNN feature backbone, can be
+\emph{softened} via an entropy-regularized softmin:
+\[
+  \tilde{C}^\tau(s,t)
+  = -\tau \log \sum_{\pi: s\to t}
+    \exp\!\Bigl(-\tfrac{1}{\tau}\textstyle\sum_{e\in\pi} w(e)\Bigr),
+\]
+where: $\tilde{C}^\tau(s,t)$ is the temperature-regularized (soft)
+approximation to the hard bottleneck cost $C^*(s,t)$; $\tau > 0$ is the
+\emph{temperature} parameter, a positive scalar that controls sharpness ---
+as $\tau \to 0^+$ the $\log\!\sum\!\exp$ expression collapses to the hard
+minimum, exactly recovering $C^*(s,t)$, whereas larger $\tau$ spreads
+credit across all paths and produces a smooth, globally differentiable
+landscape; the outer $\sum_{\pi: s\to t}$ enumerates all paths in the image
+graph from seed $s$ to voxel $t$; $\sum_{e\in\pi} w(e)$ accumulates the edge
+weights along one candidate path; and $\exp(-\cdot/\tau)$ converts each
+path's cumulative cost into a non-negative weight so that low-cost paths
+dominate.  Because $w(e)$ is a learnable output of the CNN feature backbone,
+back-propagating through $\tilde{C}^\tau$ trains the network to produce edge
+weights that minimize the topology-aware loss defined in WP3.  Analogously,
+the Gaussian cross-section fit in the orthogonal vessel tracker can be made
+differentiable with respect to the learned Hessian response by replacing the
+argmax orientation estimate with a soft-attention readout over the
+eigenvector field.
+
+No prior work has applied end-to-end
+differentiation to both the Seeded IFT and the orthogonal vessel tracker.
+This thesis trains their edge-cost networks jointly with the topology-aware
+losses of WP3 and evaluates the resulting segmentations on standardized
+abdominal CT benchmarks.
+
+\subsection{Identified gaps}
+
+\begin{enumerate}
+  \item \textbf{Vascular gap.} Methods saturated at 65--75\,\% Dice with
+        unmeasured topology errors.
+  \item \textbf{Interaction gap.} Deep models are not designed for
+        \emph{controllable} correction; classical pipelines are
+        controllable but not data-driven.
+  \item \textbf{Validation gap.} The literature reports geometric metrics in
+        isolation; clinically meaningful endpoints (time-to-segmentation,
+        cognitive load, specialist confidence) are almost absent.
+  \item \textbf{Real-world generalization gap.} Public benchmarks
+        (KiTS, BTCV, AMOS, MSD) do not reflect the acquisition heterogeneity
+        of a regional Brazilian hospital PACS.
+\end{enumerate}
+
+%==============================================================================
+\section{Research Statement}
+%==============================================================================
+
+\subsection{Research questions}
+
+\begin{description}[leftmargin=1.6em,style=nextline]
+  \item[RQ1] Can a \emph{differentiable} formulation of the Seeded IFT and of
+       orthogonal vessel tracking be trained end-to-end so as to match or
+       exceed nnU-Net and Swin UNETR on abdominal organs while retaining the
+       controllability and auditability of the classical algorithms?
+  \item[RQ2] Do topology- and geometry-aware losses (clDice, persistent
+       homology, branch-aware centerline loss) close a measurable fraction of
+       the 65--75\,\% Dice vascular gap and reduce Betti-number errors on
+       abdominal vasculature?
+  \item[RQ3] Can foundation models (MedSAM, SAM-Med3D) be prompt-adapted to
+       act as zero-shot priors for the hybrid framework, accelerating
+       annotation under an active-learning protocol that compensates for the
+       limited paired DICOM/STL legacy data at DocDo?
+  \item[RQ4] Does the proposed framework, exposed to surgeons through an
+       open-source 3D editor, produce a statistically significant reduction
+       in \emph{time-to-segmentation} and cognitive load (NASA-TLX) relative
+       to the current DocDo deterministic pipeline, while maintaining or
+       improving surgeon-rated segmentation quality?
+\end{description}
+
+\subsection{Hypotheses}
+
+\begin{description}[leftmargin=1.6em]
+  \item[H1] End-to-end learning of IFT cost functions yields equal or better
+       parenchymal Dice than nnU-Net while preserving interactive editability
+       in $\le 2$\,s per correction on commodity hardware.
+  \item[H2] A topology-aware variant of the hybrid framework improves
+       vascular Dice by at least 5\,p.p. and reduces Betti-0/Betti-1 errors
+       by at least 30\,\% on abdominal vasculature.
+  \item[H3] Prompted foundation-model priors reduce the annotation effort
+       (annotator-minutes per case) by at least 40\,\% in an active-learning
+       loop on the prospective S\~ao Marcos cohort.
+  \item[H4] Surgeons using the proposed editor are at least 30\,\% faster
+       than with the current deterministic-only pipeline, with non-inferior
+       surgeon-rated quality (5-point Likert, one-sided non-inferiority
+       margin of $0.5$).
+\end{description}
+
+\subsection{Objectives and contributions}
+
+\begin{enumerate}
+  \item[O1] A \textbf{differentiable Seeded-IFT layer} and a
+        \textbf{differentiable orthogonal vessel tracker} implemented in C++,
+        compiled to WebAssembly with WebGPU compute kernels, with
+        learned costs and stopping criteria.
+  \item[O2] A \textbf{topology- and geometry-aware vascular segmentation
+        method} built on top of O1, evaluated on KiTS, BTCV, AMOS and a
+        prospective S\~ao Marcos cohort.
+  \item[O3] A \textbf{foundation-model adaptation protocol}
+        (MedSAM/SAM-Med3D prompting + active learning) integrated with O1.
+  \item[O4] An \textbf{open-source web-based 3D segmentation/visualization
+        editor} implemented in C++ compiled to WebAssembly with WebGPU
+        compute kernels, packages published on npm and GitHub, delivered as
+        a free SaaS through DocDo, instrumented for clinical evaluation.
+  \item[O5] A \textbf{prospective clinical validation} at Hospital S\~ao
+        Marcos with surgeon-rated endpoints (time-to-segmentation, SUS,
+        NASA-TLX, quality Likert).
+  \item[O6] An \textbf{anonymized public dataset} (S\~ao Marcos subset) and
+        a \textbf{surgical-planning-grade benchmark suite} including clDice,
+        Betti errors and clinically motivated distance metrics.
+\end{enumerate}
+
+\subsection{Scope and out-of-scope}
+
+\textbf{In scope:} abdominal CT (single- and multi-phase); kidney, liver,
+pancreas, spleen and their primary vasculature; adult patients; retrospective
+DocDo cohort (STL-derived weak labels) and prospective S\~ao Marcos cohort.
+\textbf{Out of scope:} MRI, ultrasound, paediatric cases, intra-operative
+imaging, real-time AR overlays, vessel haemodynamics simulation.
+
+%==============================================================================
+\section{Methodology}
+%==============================================================================
+
+\subsection{Overall approach}
+
+The work treats deterministic priors as components of the learning system
+rather than as baselines to defeat. The Seeded IFT and the orthogonal vessel
+tracker are expressed as differentiable computation graphs whose internal
+costs and stopping criteria are learnable parameters, optimized jointly with
+a convolutional / transformer feature extractor under topology-aware losses.
+
+\subsection{Data}
+
+\textbf{Public datasets:} KiTS21/23 (kidney + tumour), BTCV (multi-organ),
+AMOS22 (multi-organ multi-modal), MSD (pancreas, spleen, liver), and
+TotalSegmentator (broad anatomy). These provide the controlled benchmark for
+RQ1--RQ3.
+
+\textbf{Retrospective DocDo cohort:} 1\,000+ patient-specific STL meshes
+produced over ten years. Source DICOM volumes have been deleted for most
+historical cases; therefore this cohort is treated as a \emph{shape prior /
+weak-label} resource (STL re-voxelization, prior distribution over organ
+shapes, weak supervision for the foundation-model adaptation in O3) rather
+than as a paired image--label set.
+
+\textbf{Prospective S\~ao Marcos cohort:} new CT studies acquired and
+anonymized at the source PACS under a formal CEP/CONEP protocol, annotated by
+DocDo specialists in the proposed editor under an active-learning regime.
+Target: at least 150 cases over the project lifetime.
+
+\subsection{Evaluation}
+
+\begin{itemize}
+  \item \textbf{Geometric:} Dice, Jaccard, HD95, average symmetric surface
+        distance.
+  \item \textbf{Topological / vascular:} clDice, Betti-0 / Betti-1 errors,
+        branch detection rate, centerline length recall.
+  \item \textbf{Clinical:} time-to-segmentation, NASA-TLX, SUS,
+        5-point Likert quality, edit-count per case.
+  \item \textbf{Reliability:} test--retest on duplicated cases; inter-rater
+        agreement on the S\~ao Marcos cohort.
+\end{itemize}
+
+\subsection{Computational infrastructure}
+
+Training will use a small-scale cluster of four NVIDIA GB10 nodes available
+through Champlain College, complemented by local workstations for development
+and by the DocDo production cluster for SaaS deployment.
+
+%==============================================================================
+\section{Work Plan}
+%==============================================================================
+
+The work is organized in \textbf{five work packages} over \textbf{48 months}
+(Oct.~2025 -- Sep.~2029).
+
+\subsection{WP1 -- Foundations, data \& ethics (M1--M12)}
+
+\textbf{Tasks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{T1.1} Finalize the systematic review and submit it for
+        publication.
+  \item \textbf{T1.2} Curate and harmonize the public datasets into a single
+        multi-organ training/evaluation split.
+  \item \textbf{T1.3} Re-voxelize the retrospective DocDo STL cohort into a
+        shape-prior dataset.
+  \item \textbf{T1.4} Prepare and submit the CEP/CONEP ethics protocol for the
+        prospective S\~ao Marcos cohort.
+  \item \textbf{T1.5} Specify the editor's data model and annotation schema.
+\end{itemize}
+
+\textbf{Deliverables.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{D1.1} Systematic-review paper submitted.
+  \item \textbf{D1.2} Harmonized public-dataset release script.
+  \item \textbf{D1.3} STL shape-prior dataset (internal).
+  \item \textbf{D1.4} Approved ethics protocol.
+  \item \textbf{D1.5} Annotation schema v1.
+\end{itemize}
+
+\textbf{Risks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item Ethics approval delay -- mitigated by early submission and by the
+        existence of fully public datasets sufficient for RQ1--RQ2.
+\end{itemize}
+
+\subsection{WP2 -- Differentiable hybrid method (M6--M24)}
+
+\textbf{Tasks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{T2.1} C++ implementation of a differentiable Seeded-IFT
+        layer (multi-source shortest-path forest with learnable edge costs and
+        soft relaxations), engineered for high-performance cross-platform
+        deployment.
+  \item \textbf{T2.2} Differentiable orthogonal vessel tracker (learnable ridge
+        response, learnable cross-section regressor, differentiable step
+        control).
+  \item \textbf{T2.3} Coupling with a 3D CNN/transformer feature backbone.
+  \item \textbf{T2.4} Benchmark against nnU-Net and Swin UNETR on multi-organ
+        public data.
+\end{itemize}
+
+\textbf{Deliverables.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{D2.1} Open-source C++ library published as packages on npm
+        and GitHub.
+  \item \textbf{D2.2} First methodological paper (target: \textit{Medical Image
+        Analysis}).
+\end{itemize}
+
+\textbf{Risks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item Numerical instability of the differentiable shortest-path relaxation --
+        mitigated by an entropy-regularized softmin and by gradient clipping;
+        fallback to straight-through estimators.
+\end{itemize}
+
+\subsection{WP3 -- Topology-aware vascular segmentation (M18--M36)}
+
+\textbf{Tasks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{T3.1} Implement clDice and persistent homology losses for 3D
+        vessels.
+  \item \textbf{T3.2} Branch-aware centerline loss exploiting the differentiable
+        tracker of WP2.
+  \item \textbf{T3.3} Evaluation on abdominal vasculature (KiTS renal
+        vasculature; in-house cohorts).
+  \item \textbf{T3.4} Ablations isolating the contribution of each loss term.
+\end{itemize}
+
+\textbf{Deliverables.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{D3.1} Vascular-segmentation paper (target: \textit{MICCAI}).
+  \item \textbf{D3.2} Updated open-source release with topology losses.
+\end{itemize}
+
+\textbf{Risks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item Topology losses are non-convex and slow -- mitigated by hierarchical /
+        patch-wise computation and by curriculum learning.
+\end{itemize}
+
+\subsection{WP4 -- Foundation-model adaptation \& active learning (M24--M36)}
+
+\textbf{Tasks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{T4.1} Prompt-tune MedSAM and SAM-Med3D using clicks/scribbles
+        exported from the editor.
+  \item \textbf{T4.2} Use the foundation model as a zero-shot prior to bootstrap
+        annotation on the S\~ao Marcos cohort.
+  \item \textbf{T4.3} Active-learning loop driven by predictive entropy and
+        topology-error proxies.
+  \item \textbf{T4.4} Compare against direct foundation-model use
+        (TotalSegmentator) and against WP2/WP3 alone.
+\end{itemize}
+
+\textbf{Deliverables.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{D4.1} Active-learning protocol report.
+  \item \textbf{D4.2} Workshop / short paper (target: \textit{MIDL} or
+        \textit{MICCAI} workshop).
+\end{itemize}
+
+\textbf{Risks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item Foundation models may underperform on abdominal vessels -- contingency:
+        restrict O3 to parenchymal organs and report negative findings.
+\end{itemize}
+
+\subsection{WP5 -- Clinical validation, editor, dataset \& dissertation (M30--M48)}
+
+\textbf{Tasks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{T5.1} Release the open-source web-based 3D editor v1.0,
+        implemented in C++ compiled to WebAssembly with WebGPU compute
+        kernels, with the hybrid framework integrated; publish packages on
+        npm and GitHub.
+  \item \textbf{T5.2} Conduct the prospective surgeon study at S\~ao Marcos
+        (time-to-segmentation, NASA-TLX, SUS, quality Likert), pre-registered.
+  \item \textbf{T5.3} Anonymise and release the S\~ao Marcos public dataset.
+  \item \textbf{T5.4} Write and defend the dissertation.
+\end{itemize}
+
+\textbf{Deliverables.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item \textbf{D5.1} Open-source editor release.
+  \item \textbf{D5.2} Clinical validation paper (target: \textit{IEEE Access}
+        or \textit{MedIA}).
+  \item \textbf{D5.3} Dataset paper (target: \textit{Scientific Data}).
+  \item \textbf{D5.4} Dissertation.
+\end{itemize}
+
+\textbf{Risks.}
+\begin{itemize}[noitemsep, topsep=3pt]
+  \item Surgeon recruitment / scheduling -- mitigated by existing DocDo
+        relationship with the hospital and by a small target sample
+        ($n\ge 8$ surgeons, $n\ge 30$ cases) pre-registered.
+\end{itemize}
+
+\subsection{Schedule}
+
+\begin{center}
+\resizebox{\linewidth}{!}{%
+\begin{ganttchart}[
+  hgrid, vgrid,
+  x unit=0.30cm, y unit chart=0.55cm,
+  bar/.append style={fill=utadblue!70, draw=utadblue},
+  bar incomplete/.append style={fill=utadblue!30},
+  group/.append style={fill=accent!70, draw=accent},
+  milestone/.append style={fill=accent!80, draw=accent},
+  title/.style={draw=none, fill=none},
+  title label font=\sffamily\small,
+  bar label font=\sffamily\small,
+  group label font=\sffamily\bfseries\small,
+  milestone label font=\sffamily\small,
+]{1}{48}
+\gantttitle{Months from Oct.\,2025}{48} \\
+\gantttitle{6}{6}\gantttitle{12}{6}\gantttitle{18}{6}\gantttitle{24}{6}\gantttitle{30}{6}\gantttitle{36}{6}\gantttitle{42}{6}\gantttitle{48}{6} \\
+\ganttgroup{WP1 Foundations \& ethics}{1}{12} \\
+\ganttbar{T1.1 Paper submission}{1}{6} \\
+\ganttbar{T1.2 Public-data harmonization}{2}{9} \\
+\ganttbar{T1.3 STL shape-prior dataset}{4}{10} \\
+\ganttbar{T1.4 CEP/CONEP protocol}{1}{12} \\
+\ganttbar{T1.5 Annotation schema}{6}{12} \\
+\ganttgroup{WP2 Differentiable hybrid}{6}{24} \\
+\ganttbar{T2.1 Diff.\ Seeded-IFT}{6}{15} \\
+\ganttbar{T2.2 Diff.\ vessel tracker}{10}{20} \\
+\ganttbar{T2.3 Backbone coupling}{14}{22} \\
+\ganttbar{T2.4 Benchmarks}{18}{24} \\
+\ganttmilestone{Paper submission}{24} \\
+\ganttgroup{WP3 Topology-aware vessels}{18}{36} \\
+\ganttbar{T3.1 clDice / PH losses}{18}{26} \\
+\ganttbar{T3.2 Centerline loss}{22}{30} \\
+\ganttbar{T3.3 Vascular evaluation}{26}{34} \\
+\ganttbar{T3.4 Ablations}{30}{36} \\
+\ganttmilestone{Paper submission}{32} \\
+\ganttgroup{WP4 Foundation models}{24}{36} \\
+\ganttbar{T4.1 Prompt-tuning}{24}{30} \\
+\ganttbar{T4.2 Zero-shot priors}{28}{34} \\
+\ganttbar{T4.3 Active learning}{30}{36} \\
+\ganttbar{T4.4 Comparisons}{32}{36} \\
+\ganttgroup{WP5 Validation \& thesis}{30}{48} \\
+\ganttbar{T5.1 Editor v1.0 release}{30}{38} \\
+\ganttbar{T5.2 Surgeon study}{36}{44} \\
+\ganttbar{T5.3 Dataset release}{40}{46} \\
+\ganttbar{T5.4 Dissertation}{36}{48} \\
+\ganttmilestone{Defense}{48}
+\end{ganttchart}
+}% end resizebox
+\end{center}
+
+\subsection{Milestones and decision points}
+
+\begin{description}[leftmargin=1.6em]
+  \item[M12]  Ethics approved; SLR submitted; data infrastructure in place.
+  \item[M24]  Differentiable hybrid layer benchmarked; methodological paper
+              submitted. \emph{Go/no-go} for the topology-aware extension.
+  \item[M32]  Vascular topology paper submitted. \emph{Go/no-go} for the
+              foundation-model extension.
+  \item[M40]  Editor released; surgeon study underway.
+  \item[M48]  Dissertation defended.
+\end{description}
+
+\subsection{Risk register (summary)}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}lXl@{}}
+\toprule
+Risk & Mitigation & Severity \\
+\midrule
+Ethics delay (S\~ao Marcos)        & Early CEP/CONEP submission; rely on public data for WP1--WP3 & Medium \\
+Diff.\ IFT instability             & Entropy-reg.\ softmin; straight-through fallback & Medium \\
+Foundation models weak on vessels  & Restrict O3 to parenchyma; report negative finding & Low \\
+Surgeon recruitment                & Pre-existing DocDo relationship; small pre-reg sample & Low \\
+Hardware bottleneck                & Mixed-precision; gradient accumulation; cluster scheduling & Low \\
+No scholarship / funding           & Champlain College and DocDo activity sustains the candidate; open-source tooling minimizes cost & Medium \\
+DocDo IP entanglement              & Candidate holds all DocDo IP; explicit licensing of research outputs under permissive OSS & Low \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%==============================================================================
+\section{Expected Contributions and Dissemination}
+%==============================================================================
+
+\textbf{Scientific contributions.}
+\begin{enumerate}[label=(C\arabic*), noitemsep, topsep=3pt]
+  \item A differentiable formulation of the Seeded IFT and of orthogonal
+        vessel tracking that connects the classical literature to end-to-end
+        learning.
+  \item Quantification and reduction of the abdominal vascular gap through
+        topology-aware losses coupled to the differentiable backbone.
+  \item An active-learning protocol that uses foundation models as priors
+        under data-scarcity conditions.
+  \item A surgeon-rated evaluation methodology that complements geometric
+        overlap metrics.
+\end{enumerate}
+
+\textbf{Engineering and clinical contributions.}
+\begin{enumerate}[label=(E\arabic*), noitemsep, topsep=3pt]
+  \item An open-source web-based 3D editor implemented in C++ compiled to
+        WebAssembly with WebGPU, packages published on npm and GitHub,
+        delivered as a free SaaS through DocDo.
+  \item An anonymized public abdominal-CT dataset from a Brazilian regional
+        hospital.
+  \item Integration into DocDo's production pipeline, indirectly benefiting
+        the already-served patient population.
+\end{enumerate}
+
+\textbf{Dissemination plan.}
+\begin{itemize}
+  \item IEEE Access -- systematic review (in preparation, WP1).
+  \item Medical Image Analysis -- differentiable hybrid method (WP2).
+  \item MICCAI -- topology-aware vascular segmentation (WP3).
+  \item MIDL or MICCAI workshop -- foundation-model adaptation (WP4).
+  \item IEEE Access / MedIA -- clinical validation (WP5).
+  \item Scientific Data -- dataset paper (WP5).
+  \item Open-source releases on GitHub, indexed on Zenodo with DOI.
+\end{itemize}
+
+%==============================================================================
+\section{Ethics and Responsible Research}
+%==============================================================================
+
+The research uses retrospective and prospective human CT studies and entails
+no genetic data, no minors, and no other vulnerable populations. The
+prospective component is conducted exclusively in Brazil (Hospital S\~ao
+Marcos, Teresina, Piau\'\i) and follows the CEP/CONEP route; no cross-border
+transfer of identifiable data is foreseen -- only fully anonymized volumes
+and meshes leave the source PACS. The DocDo platform and all related
+intellectual property are owned by the candidate, which removes any third-
+party IP conflict; research outputs derived from DocDo data will be released
+under permissive open-source / open-data licences whenever ethically and
+legally possible. A detailed self-assessment following the UTAD ethics
+template is provided as an annex to this plan upon request.
+
+%==============================================================================
+\section{Relation to Prior Work of the Candidate}
+%==============================================================================
+
+This plan builds on three concrete prior efforts of the candidate:
+\begin{enumerate}[label=(\roman*), noitemsep, topsep=3pt]
+  \item a decade of industrial deployment of the Seeded IFT and the orthogonal
+        vessel tracker at DocDo, documented in an internal technical report;
+  \item a systematic review of 52 representative deep-learning studies on
+        abdominal CT segmentation, currently being finalized for submission; and
+  \item an in-progress literature review on hybrid classical--learning pipelines.
+\end{enumerate}
+The plan therefore inherits a mature problem framing, a working production
+codebase and an existing scientific output, which reduce execution risk in
+the first 12 months.
+
+%==============================================================================
+\begin{thebibliography}{99}
+%==============================================================================
+
+\bibitem{falcao2004ift}
+A.\,X.~Falc\~ao, J.~Stolfi, and R.~de~Alencar~Lotufo,
+``The Image Foresting Transform: theory, algorithms, and applications,''
+\textit{IEEE Trans.\ Pattern Anal.\ Mach.\ Intell.}, vol.~26, no.~1,
+pp.~19--29, 2004.
+
+\bibitem{aylward2002vessel}
+S.\,R.~Aylward and E.~Bullitt,
+``Initialization, noise, singularities, and scale in height ridge traversal
+for tubular object centerline extraction,''
+\textit{IEEE Trans.\ Med.\ Imag.}, vol.~21, no.~2, pp.~61--75, 2002.
+
+\bibitem{ronneberger2015unet}
+O.~Ronneberger, P.~Fischer, and T.~Brox,
+``U-Net: convolutional networks for biomedical image segmentation,''
+in \textit{MICCAI}, 2015.
+
+\bibitem{cicek20163dunet}
+\"O.~\c{C}i\c{c}ek \textit{et al.},
+``3D U-Net: learning dense volumetric segmentation from sparse annotation,''
+in \textit{MICCAI}, 2016.
+
+\bibitem{milletari2016vnet}
+F.~Milletari, N.~Navab, and S.-A.~Ahmadi,
+``V-Net: fully convolutional neural networks for volumetric medical image
+segmentation,'' in \textit{3DV}, 2016.
+
+\bibitem{isensee2021nnunet}
+F.~Isensee, P.\,F.~Jaeger, S.\,A.\,A.~Kohl, J.~Petersen, and K.\,H.~Maier-Hein,
+``nnU-Net: a self-configuring method for deep learning-based biomedical image
+segmentation,'' \textit{Nature Methods}, vol.~18, pp.~203--211, 2021.
+
+\bibitem{hatamizadeh2022unetr}
+A.~Hatamizadeh \textit{et al.}, ``UNETR: Transformers for 3D medical image
+segmentation,'' in \textit{WACV}, 2022.
+
+\bibitem{hatamizadeh2022swinunetr}
+A.~Hatamizadeh \textit{et al.}, ``Swin UNETR: Swin Transformers for semantic
+segmentation of brain tumors in MRI images,'' in \textit{BrainLes@MICCAI},
+2022.
+
+\bibitem{wasserthal2023totalsegmentator}
+J.~Wasserthal \textit{et al.}, ``TotalSegmentator: robust segmentation of 104
+anatomical structures in CT images,''
+\textit{Radiology: Artificial Intelligence}, vol.~5, no.~5, 2023.
+
+\bibitem{ma2024medsam}
+J.~Ma \textit{et al.}, ``Segment anything in medical images,''
+\textit{Nature Communications}, vol.~15, 2024.
+
+\bibitem{wang2024sammed3d}
+H.~Wang \textit{et al.}, ``SAM-Med3D: a vision foundation model for 3D
+medical image segmentation,'' \textit{arXiv:2310.15161}, 2024.
+
+\bibitem{shit2021cldice}
+S.~Shit \textit{et al.}, ``clDice -- a novel topology-preserving loss
+function for tubular structure segmentation,'' in \textit{CVPR}, 2021.
+
+\bibitem{hu2019topology}
+X.~Hu, F.~Li, D.~Samaras, and C.~Chen,
+``Topology-preserving deep image segmentation,'' in \textit{NeurIPS}, 2019.
+
+\bibitem{heller2021kits}
+N.~Heller \textit{et al.}, ``The state of the art in kidney and kidney tumor
+segmentation in contrast-enhanced CT imaging: results of the KiTS19
+challenge,'' \textit{Med.\ Image Anal.}, vol.~67, 2021.
+
+\bibitem{ji2022amos}
+Y.~Ji \textit{et al.}, ``AMOS: a large-scale abdominal multi-organ benchmark
+for versatile medical image segmentation,'' in \textit{NeurIPS Datasets},
+2022.
+
+\bibitem{antonelli2022msd}
+M.~Antonelli \textit{et al.}, ``The Medical Segmentation Decathlon,''
+\textit{Nature Communications}, vol.~13, 2022.
+
+\end{thebibliography}
+
+%==============================================================================
+%  SIGNATURE PAGE  (matches planotrabalhos-modelo final page)
+%==============================================================================
+\clearpage
+\thispagestyle{utad}
+\vspace*{1.5cm}
+\noindent Vila Real, 26 de maio de 2026
+
+\vspace{2.2cm}
+\begin{center}
+  {\bfseries O Orientador(a)}\par
+  \vspace{1.0cm}
+  \rule{0.55\linewidth}{0.4pt}
+
+  \vspace{2.2cm}
+  {\bfseries O Coorientador(a)}\par
+  \vspace{1.0cm}
+  \rule{0.55\linewidth}{0.4pt}
+
+  \vspace{2.2cm}
+  {\bfseries O Coorientador(a)}\par
+  \vspace{1.0cm}
+  \rule{0.55\linewidth}{0.4pt}
+
+  \vspace{2.2cm}
+  {\bfseries O Aluno(a)}\par
+  \vspace{1.0cm}
+  \rule{0.55\linewidth}{0.4pt}
+\end{center}
+
+\end{document}
