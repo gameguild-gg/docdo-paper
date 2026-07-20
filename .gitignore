@@ -329,3 +329,7 @@ artifacts/data/evidence/supplementary/S10_pdfs_open/**
 !.dvcignore
 
 *.pdf
+
+graphify-out/
+
+.omo/
