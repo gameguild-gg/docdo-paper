@@ -50,6 +50,8 @@ dependencies = [
     "requests>=2.28",        # HTTP requests (DOI verification)
     "biopython>=1.80",       # PubMed search via Entrez
     "PyMuPDF>=1.23",         # PDF text extraction (fitz)
+    "PyYAML>=6.0",           # queries_v2.yaml loading (fetch-v2)
+    "scholarly>=1.7",        # Google Scholar scraping lane (v2 supplementary source)
 ]
 
 [project.optional-dependencies]

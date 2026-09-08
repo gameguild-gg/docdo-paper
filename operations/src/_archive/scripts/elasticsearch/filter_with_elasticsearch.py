@@ -7,13 +7,23 @@ This reduces the paper count significantly by:
 1. Indexing all papers in Elasticsearch
 2. Running boolean queries for inclusion/exclusion criteria
 3. Outputting filtered papers for manual review or AI screening
+
+v2 amendment (Task 3, .omo/plans/paper-coverage-gap-update.md):
+pinned framework whitelist. bypass = record matches (a) the explicit
+tool-name list OR (b) framework vocabulary AND a medical-imaging anchor,
+case-insensitive WHOLE-TOKEN on title+abstract only (no substring matches:
+"VISTA" alone must NOT match "VISTAable"). Bypassed records get
+framework_candidate=true and skip the 3D/volumetric/segmentation/CT
+requirement. Lanes are disjoint by construction:
+es_pass_standard = passes standard filter AND NOT framework_candidate;
+the bypass lane = framework_candidate records only.
 """
 
 import csv
 import json
+import re
 import time
 from pathlib import Path
-from elasticsearch import Elasticsearch
 
 # Paths
 INPUT_FILE = Path(__file__).parent.parent.parent.parent / "data" / "interim" / "S1_search_results_deduplicated.csv"
@@ -23,8 +33,100 @@ ES_HOST = "http://localhost:9200"
 INDEX_NAME = "papers"
 
 
+# =============================================================================
+# v2 pinned framework whitelist (whole-token semantics)
+# =============================================================================
+
+FRAMEWORK_TOOL_NAMES = [
+    "MONAI", "Auto3DSeg", "MONAI Label", "MONAI Deploy", "VISTA-3D",
+    "NV-Segment-CT", "nnInteractive", "NVIDIA Clara", "Holoscan",
+]
+FRAMEWORK_VOCABULARY = [
+    "open-source framework", "toolkit", "software framework", "deployment",
+    "microservice", "inference pipeline", "clinical workflow", "PACS",
+    "DICOM", "Grand Challenge",
+]
+FRAMEWORK_VOCAB_STEMS = ["reproducib"]          # reproducib*
+FRAMEWORK_ANCHOR_PHRASES = ["medical imaging"]
+FRAMEWORK_ANCHOR_STEMS = ["radiolog", "tomograph"]  # radiolog* / tomograph*
+FRAMEWORK_ANCHOR_TOKENS = ["ct"]                # CT as an exact token only
+
+_TOKEN_RE = re.compile(r"[a-z0-9]+")
+
+
+def _tokens(text):
+    """Lowercased alphanumeric tokens (hyphens/quotes act as separators)."""
+    return _TOKEN_RE.findall(text.lower())
+
+
+def _has_phrase(tokens, phrase):
+    parts = _TOKEN_RE.findall(phrase.lower())
+    n = len(parts)
+    return any(tokens[i:i + n] == parts for i in range(len(tokens) - n + 1))
+
+
+def _matches_whitelist_term(tokens, term):
+    if term.endswith("*"):
+        return any(t.startswith(term[:-1]) for t in tokens)
+    return _has_phrase(tokens, term)
+
+
+def is_framework_candidate(title, abstract):
+    """Pinned bypass predicate: whole-token matching on title+abstract only."""
+    tokens = _tokens(f"{title} {abstract}")
+    if any(_matches_whitelist_term(tokens, t) for t in FRAMEWORK_TOOL_NAMES):
+        return True
+    vocab = FRAMEWORK_VOCABULARY + [s + "*" for s in FRAMEWORK_VOCAB_STEMS]
+    if any(_matches_whitelist_term(tokens, t) for t in vocab):
+        anchors = (
+            FRAMEWORK_ANCHOR_PHRASES
+            + [s + "*" for s in FRAMEWORK_ANCHOR_STEMS]
+        )
+        return (
+            any(_matches_whitelist_term(tokens, a) for a in anchors)
+            or any(t in FRAMEWORK_ANCHOR_TOKENS for t in tokens)
+        )
+    return False
+
+
+def framework_bypass_query():
+    """Coarse ES-recall clause for the framework whitelist.
+
+    Whole-token precision is enforced Python-side by is_framework_candidate();
+    this clause only guarantees framework papers missing the standard
+    segmentation/CT/organ requirements are still retrieved from the index.
+    """
+    tools = [{"match_phrase": {"combined_text": t}} for t in FRAMEWORK_TOOL_NAMES]
+    vocab = [{"match_phrase": {"combined_text": t}} for t in FRAMEWORK_VOCABULARY]
+    vocab += [{"match": {"combined_text": "reproducibility"}},
+              {"match": {"combined_text": "reproducible"}}]
+    anchor = [
+        {"match_phrase": {"combined_text": "medical imaging"}},
+        {"match": {"combined_text": "radiology"}},
+        {"match": {"combined_text": "radiological"}},
+        {"match": {"combined_text": "tomography"}},
+        {"match": {"combined_text": "tomographic"}},
+        {"match": {"combined_text": "CT"}},
+    ]
+    return {
+        "bool": {
+            "should": [
+                {"bool": {"should": tools, "minimum_should_match": 1}},
+                {"bool": {
+                    "should": vocab,
+                    "minimum_should_match": 1,
+                    "must": [{"bool": {"should": anchor, "minimum_should_match": 1}}],
+                }},
+            ],
+            "minimum_should_match": 1,
+        }
+    }
+
+
 def wait_for_elasticsearch():
     """Wait for Elasticsearch to be ready."""
+    from elasticsearch import Elasticsearch
+
     es = Elasticsearch(ES_HOST)
     print("Waiting for Elasticsearch...")
     for i in range(30):
@@ -112,99 +214,11 @@ def filter_papers(es):
     """
     
     # === INCLUSION QUERY ===
-    # Papers must mention deep learning AND segmentation AND CT AND organs
-    
+    # v2: standard inclusion (all four IC blocks) OR the coarse framework
+    # whitelist recall clause, under one top-level must_not for review titles.
+
     inclusion_query = {
         "bool": {
-            "must": [
-                # IC1: Deep Learning
-                {
-                    "bool": {
-                        "should": [
-                            {"match_phrase": {"combined_text": "deep learning"}},
-                            {"match_phrase": {"combined_text": "neural network"}},
-                            {"match_phrase": {"combined_text": "convolutional neural"}},
-                            {"match": {"combined_text": "CNN"}},
-                            {"match": {"combined_text": "U-Net"}},
-                            {"match": {"combined_text": "UNet"}},
-                            {"match_phrase": {"combined_text": "encoder decoder"}},
-                            {"match": {"combined_text": "transformer"}},
-                            {"match": {"combined_text": "ResNet"}},
-                            {"match": {"combined_text": "VNet"}},
-                            {"match_phrase": {"combined_text": "attention mechanism"}},
-                            {"match_phrase": {"combined_text": "fully convolutional"}},
-                            {"match": {"combined_text": "FCN"}},
-                            {"match": {"combined_text": "nnU-Net"}},
-                            {"match": {"combined_text": "nnUNet"}},
-                            {"match": {"combined_text": "MONAI"}},
-                            {"match": {"combined_text": "autoencoder"}},
-                        ],
-                        "minimum_should_match": 1
-                    }
-                },
-                # IC2: Segmentation (3D preferred)
-                {
-                    "bool": {
-                        "should": [
-                            {"match": {"combined_text": "segmentation"}},
-                            {"match": {"combined_text": "segmenting"}},
-                            {"match_phrase": {"combined_text": "semantic segmentation"}},
-                            {"match_phrase": {"combined_text": "volumetric segmentation"}},
-                            {"match_phrase": {"combined_text": "3D segmentation"}},
-                            {"match_phrase": {"combined_text": "multi-organ"}},
-                            {"match_phrase": {"combined_text": "organ segmentation"}},
-                            {"match": {"combined_text": "delineation"}},
-                        ],
-                        "minimum_should_match": 1
-                    }
-                },
-                # IC3: CT imaging
-                {
-                    "bool": {
-                        "should": [
-                            {"match": {"combined_text": "CT"}},
-                            {"match_phrase": {"combined_text": "computed tomography"}},
-                            {"match_phrase": {"combined_text": "CT scan"}},
-                            {"match_phrase": {"combined_text": "CT image"}},
-                            {"match_phrase": {"combined_text": "CT volume"}},
-                            {"match_phrase": {"combined_text": "abdominal CT"}},
-                            {"match_phrase": {"combined_text": "chest CT"}},
-                            {"match_phrase": {"combined_text": "contrast-enhanced"}},
-                            {"match": {"combined_text": "CECT"}},
-                        ],
-                        "minimum_should_match": 1
-                    }
-                },
-                # IC4: Organs
-                {
-                    "bool": {
-                        "should": [
-                            {"match": {"combined_text": "liver"}},
-                            {"match": {"combined_text": "kidney"}},
-                            {"match": {"combined_text": "spleen"}},
-                            {"match": {"combined_text": "pancreas"}},
-                            {"match": {"combined_text": "lung"}},
-                            {"match": {"combined_text": "heart"}},
-                            {"match": {"combined_text": "stomach"}},
-                            {"match": {"combined_text": "gallbladder"}},
-                            {"match": {"combined_text": "bladder"}},
-                            {"match": {"combined_text": "prostate"}},
-                            {"match": {"combined_text": "colon"}},
-                            {"match": {"combined_text": "esophagus"}},
-                            {"match_phrase": {"combined_text": "adrenal gland"}},
-                            {"match_phrase": {"combined_text": "abdominal organ"}},
-                            {"match_phrase": {"combined_text": "multi-organ"}},
-                            {"match_phrase": {"combined_text": "organs at risk"}},
-                            {"match": {"combined_text": "OAR"}},
-                            {"match": {"combined_text": "hepatic"}},
-                            {"match": {"combined_text": "renal"}},
-                            {"match": {"combined_text": "pulmonary"}},
-                            {"match": {"combined_text": "cardiac"}},
-                        ],
-                        "minimum_should_match": 1
-                    }
-                }
-            ],
             # EXCLUSION: Filter out obvious non-matches
             "must_not": [
                 # Exclude pure review/survey papers
@@ -214,7 +228,102 @@ def filter_papers(es):
                 {"match_phrase": {"title": "a review"}},
                 # Exclude if ONLY mentions non-CT modalities in title
                 # (we keep papers that mention CT + other modalities)
-            ]
+            ],
+            # v2: standard inclusion OR the coarse framework-whitelist recall
+            # clause (precision applied Python-side in apply_exclusion_filters)
+            "should": [
+                {"bool": {"must": [
+                    # IC1: Deep Learning
+                    {
+                        "bool": {
+                            "should": [
+                                {"match_phrase": {"combined_text": "deep learning"}},
+                                {"match_phrase": {"combined_text": "neural network"}},
+                                {"match_phrase": {"combined_text": "convolutional neural"}},
+                                {"match": {"combined_text": "CNN"}},
+                                {"match": {"combined_text": "U-Net"}},
+                                {"match": {"combined_text": "UNet"}},
+                                {"match_phrase": {"combined_text": "encoder decoder"}},
+                                {"match": {"combined_text": "transformer"}},
+                                {"match": {"combined_text": "ResNet"}},
+                                {"match": {"combined_text": "VNet"}},
+                                {"match_phrase": {"combined_text": "attention mechanism"}},
+                                {"match_phrase": {"combined_text": "fully convolutional"}},
+                                {"match": {"combined_text": "FCN"}},
+                                {"match": {"combined_text": "nnU-Net"}},
+                                {"match": {"combined_text": "nnUNet"}},
+                                {"match": {"combined_text": "MONAI"}},
+                                {"match": {"combined_text": "autoencoder"}},
+                            ],
+                            "minimum_should_match": 1
+                        }
+                    },
+                    # IC2: Segmentation (3D preferred)
+                    {
+                        "bool": {
+                            "should": [
+                                {"match": {"combined_text": "segmentation"}},
+                                {"match": {"combined_text": "segmenting"}},
+                                {"match_phrase": {"combined_text": "semantic segmentation"}},
+                                {"match_phrase": {"combined_text": "volumetric segmentation"}},
+                                {"match_phrase": {"combined_text": "3D segmentation"}},
+                                {"match_phrase": {"combined_text": "multi-organ"}},
+                                {"match_phrase": {"combined_text": "organ segmentation"}},
+                                {"match": {"combined_text": "delineation"}},
+                            ],
+                            "minimum_should_match": 1
+                        }
+                    },
+                    # IC3: CT imaging
+                    {
+                        "bool": {
+                            "should": [
+                                {"match": {"combined_text": "CT"}},
+                                {"match_phrase": {"combined_text": "computed tomography"}},
+                                {"match_phrase": {"combined_text": "CT scan"}},
+                                {"match_phrase": {"combined_text": "CT image"}},
+                                {"match_phrase": {"combined_text": "CT volume"}},
+                                {"match_phrase": {"combined_text": "abdominal CT"}},
+                                {"match_phrase": {"combined_text": "chest CT"}},
+                                {"match_phrase": {"combined_text": "contrast-enhanced"}},
+                                {"match": {"combined_text": "CECT"}},
+                            ],
+                            "minimum_should_match": 1
+                        }
+                    },
+                    # IC4: Organs
+                    {
+                        "bool": {
+                            "should": [
+                                {"match": {"combined_text": "liver"}},
+                                {"match": {"combined_text": "kidney"}},
+                                {"match": {"combined_text": "spleen"}},
+                                {"match": {"combined_text": "pancreas"}},
+                                {"match": {"combined_text": "lung"}},
+                                {"match": {"combined_text": "heart"}},
+                                {"match": {"combined_text": "stomach"}},
+                                {"match": {"combined_text": "gallbladder"}},
+                                {"match": {"combined_text": "bladder"}},
+                                {"match": {"combined_text": "prostate"}},
+                                {"match": {"combined_text": "colon"}},
+                                {"match": {"combined_text": "esophagus"}},
+                                {"match_phrase": {"combined_text": "adrenal gland"}},
+                                {"match_phrase": {"combined_text": "abdominal organ"}},
+                                {"match_phrase": {"combined_text": "multi-organ"}},
+                                {"match_phrase": {"combined_text": "organs at risk"}},
+                                {"match": {"combined_text": "OAR"}},
+                                {"match": {"combined_text": "hepatic"}},
+                                {"match": {"combined_text": "renal"}},
+                                {"match": {"combined_text": "pulmonary"}},
+                                {"match": {"combined_text": "cardiac"}},
+                            ],
+                            "minimum_should_match": 1
+                        }
+                    }
+                ]}},
+                framework_bypass_query(),
+            ],
+            "minimum_should_match": 1,
         }
     }
     
@@ -248,6 +357,13 @@ def apply_exclusion_filters(papers):
         abstract = (paper.get('abstract_snippet', '') or paper.get('abstract', '')).lower()
         combined = f"{title} {abstract}"
 
+        # === v2: pinned framework whitelist (whole-token, title+abstract) ===
+        # bypassed records skip the 3D/volumetric/segmentation/CT requirement
+        framework = is_framework_candidate(
+            paper.get('title', ''),
+            paper.get('abstract_snippet', '') or paper.get('abstract', ''))
+        paper['framework_candidate'] = 'true' if framework else 'false'
+
         exclude = False
         reason = None
 
@@ -257,12 +373,12 @@ def apply_exclusion_filters(papers):
             'volumetric segmentation', '3d segmentation', '3d convolution', '3d cnn', '3d network', '3d model', '3d architecture'
         ]
         has_3d = any(term in combined for term in terms_3d)
-        if not has_3d:
+        if not framework and not has_3d:
             exclude = True
             reason = "No explicit 3D/volumetric method"
 
         # === EC2: Non-CT modalities exclusively ===
-        if not exclude:
+        if not exclude and not framework:
             ct_terms = ['ct ', 'ct,', 'ct.', 'computed tomography', 'ct scan', 'ct image', 'ct volume', 'ct data']
             has_ct = any(term in combined for term in ct_terms)
 
@@ -334,7 +450,7 @@ def apply_exclusion_filters(papers):
                 reason = "COVID/infection only"
 
         # === EC1: Detection/classification only (no segmentation) ===
-        if not exclude:
+        if not exclude and not framework:
             seg_terms = ['segment', 'delineat', 'contour', 'boundary', 'mask']
             has_segmentation = any(term in combined for term in seg_terms)
 
@@ -404,7 +520,12 @@ def apply_exclusion_filters(papers):
     print("\n📋 Exclusion summary (STRICT filtering):")
     for reason, count in sorted(excluded_reasons.items(), key=lambda x: -x[1]):
         print(f"   {reason}: {count} papers")
-    
+
+    n_bypass = sum(1 for p in filtered if p.get('framework_candidate') == 'true')
+    print(f"\n🚦 Lane split: es_pass_standard={len(filtered) - n_bypass}  "
+          f"es_pass_framework_bypass={n_bypass}  "
+          f"es_pass_total={len(filtered)}")
+
     return filtered
 
 

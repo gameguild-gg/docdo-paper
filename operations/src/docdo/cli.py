@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import click
@@ -29,7 +28,8 @@ def main() -> None:
 @click.option("-o", "--output", type=click.Path(), default=None)
 def fetch_pubmed(query: str | None, max_results: int, output: str | None) -> None:
     """Fetch papers from PubMed."""
-    from .fetch import fetch_pubmed as _fetch, DEFAULT_PUBMED_QUERY
+    from .fetch import DEFAULT_PUBMED_QUERY
+    from .fetch import fetch_pubmed as _fetch
 
     q = query or DEFAULT_PUBMED_QUERY
     out = Path(output) if output else config.S1_RAW
@@ -64,6 +64,45 @@ def fetch_oa(paywalled_csv: str, pdf_dir: str | None) -> None:
 
     count = fetch_oa_papers(Path(paywalled_csv), pdf_dir=Path(pdf_dir) if pdf_dir else None)
     click.echo(f"Downloaded {count} OA papers")
+
+
+@main.command("fetch-v2")
+@click.option("--queries", "queries_path", type=click.Path(exists=True), default=None,
+              help="Path to queries_v2.yaml (default: pinned archive copy).")
+@click.option("--output-dir", type=click.Path(), default=None,
+              help="Raw output dir (default: artifacts/data/evidence/raw/v2).")
+@click.option("--dry-run", "dry_run", is_flag=True,
+              help="Print per-query estimated API calls without network writes.")
+@click.option("--concat", "do_concat", is_flag=True,
+              help="Regenerate the derived raw/v2/_combined.csv from per-query CSVs.")
+def fetch_v2(queries_path: str | None, output_dir: str | None,
+             dry_run: bool, do_concat: bool) -> None:
+    """Fetch v2 multi-family search results (one raw CSV per database+query)."""
+    from . import fetch_v2 as fv
+    from .fetch_v2 import RAW_V2_DIR, QueriesFileError
+    from .fetch_v2_artifacts import concat_raw
+
+    out_dir = Path(output_dir) if output_dir else RAW_V2_DIR
+    try:
+        if do_concat:
+            combined = concat_raw(out_dir)
+            click.echo(f"Combined CSV → {combined}")
+            return
+        if dry_run:
+            plan, ebsco = fv.dry_run(queries_path)
+            for query_id, db, calls in plan:
+                click.echo(f"{query_id}  {db:<16} est_calls={calls}")
+            for family in sorted(ebsco):
+                query_id, rendered = ebsco[family]
+                click.echo(f"EBSCO render {query_id}: {rendered[:100]}")
+            click.echo("dry-run: no network writes performed")
+            return
+        summary = fv.run_all(queries_path, out_dir)
+        for query_id, info in summary.items():
+            click.echo(f"{query_id}: {info['records']} records ({info['status']})")
+    except QueriesFileError as exc:
+        click.echo(f"ERROR: queries file unusable: {exc}")
+        raise SystemExit(1)
 
 
 # -------------------------------------------------------------------------
@@ -205,7 +244,6 @@ def compile(
     from datetime import datetime
 
     from .io import read_csv, read_jsonl
-    from .openai_utils import extract_batch_content
     from .screening import parse_screening_batch_results, unanimous_vote
 
     out_dir = Path(output_dir) if output_dir else config.FINAL_DIR
