@@ -48,8 +48,8 @@ MAIN_TEX = WORK_DIR / "main.tex"
 # ---------------------------------------------------------------------------
 DEFAULT_MODEL = os.getenv("DOCDO_MODEL", "gpt-4o-mini")
 BATCH_MODEL = os.getenv("DOCDO_BATCH_MODEL", "gpt-4o-mini")
-FULLTEXT_MODEL = os.getenv("DOCDO_FULLTEXT_MODEL", "gpt-4o")
-TIEBREAKER_MODEL = os.getenv("DOCDO_TIEBREAKER_MODEL", "gpt-5.2")
+FULLTEXT_MODEL = os.getenv("DOCDO_FULLTEXT_MODEL", "gpt-4o-mini")
+TIEBREAKER_MODEL = os.getenv("DOCDO_TIEBREAKER_MODEL", "gpt-4o-mini")
 API_TIMEOUT = float(os.getenv("DOCDO_API_TIMEOUT", "60"))
 
 # Screening parameters
