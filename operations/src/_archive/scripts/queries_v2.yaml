@@ -1,0 +1,538 @@
+# =============================================================================
+# queries_v2.yaml — Corrected query set (v2), docdo systematic review
+# Generated: 2026-09-08 (Task 2, .omo/plans/paper-coverage-gap-update.md)
+# =============================================================================
+#
+# CONTRACT (binding — validated by validate_queries_v2.py in this directory)
+#
+# 1. Six EXECUTED families: A, B, C, D, E, G — ONE executed query per family
+#    per database (PubMed, arXiv, Semantic Scholar, Google Scholar).
+#
+# 2. Family F (CT anatomy scope) is a SHARED FRAGMENT, defined ONCE under
+#    shared_fragments.family_F_anatomy and referenced by YAML alias inside
+#    every A/C/D/E/G template. F is NEVER executed standalone: it has no
+#    deep-learning method anchor, and a standalone F query would flood the
+#    raw set with every anatomy+segmentation record.
+#
+# 3. Pinned conjunction template (no executor judgment):
+#      A/C/D/E/G = (family terms)
+#                   AND (segmentation OR "medical imaging")
+#                   AND (family-F anatomy block)
+#      B = (exact tool names: MONAI, Auto3DSeg, MONAI Label, MONAI Deploy,
+#           VISTA-3D, NV-Segment-CT, nnInteractive, NVIDIA Clara, Holoscan)
+#          OR ((framework vocabulary: open-source framework, medical imaging
+#              toolkit, software framework, deployment, microservice,
+#              inference pipeline, clinical workflow, PACS, DICOM,
+#              reproducib*, Grand Challenge)
+#              AND ("medical imaging" OR radiolog* OR tomograph*))
+#      Family B is explicitly NOT ANDed with segmentation, so
+#      deployment-flavored tooling papers enter the raw set.
+#
+# 4. Each query is a LIST of AND-blocks (strings); the executed query string
+#    is " AND ".join(blocks). Template families have exactly three blocks
+#    (family terms; segmentation/medical-imaging; F anatomy). Family B has
+#    exactly one block (a top-level disjunction).
+#
+# 5. Fielded syntax: PubMed uses [tiab] (equivalent to [Title/Abstract] in
+#    S3 §3.1); arXiv uses ti:/abs: pairs (S3 §3.3 precedent). The Semantic
+#    Scholar Graph API relevance-search endpoint has NO fielded search, so
+#    its queries keep the same boolean block structure with quoted phrases
+#    and no field prefixes. Google Scholar blocks are plain quoted phrases —
+#    GS ignores ti:/abs: fielded syntax.
+#
+# 6. Exact-token rule (family C): the bare tokens "SAM" and "SAT" appear ONLY
+#    as quoted exact forms, never as bare substrings.
+#
+# 7. Wildcards: PubMed (Entrez) keeps radiolog*/tomograph*/reproducib*.
+#    arXiv, Semantic Scholar and Google Scholar have no wildcard support —
+#    those blocks expand the wildcards to explicit word forms.
+#
+# 8. Date range 2015-01-01 .. execution date lives in `date_range` below;
+#    the fetcher applies it per database (the query blocks carry no date
+#    clause). Google Scholar has NO query-level date filtering (see
+#    date_range.application.google_scholar).
+# =============================================================================
+
+version: "2"
+generated: "2026-09-08"
+review: "Deep Learning for 3D CT Organ Segmentation — Systematic Review"
+plan_reference: ".omo/plans/paper-coverage-gap-update.md (Task 2, term lists verbatim)"
+
+date_range:
+  start: "2015-01-01"
+  end: "EXECUTION_DATE" # substituted with the actual run date by the Task-3 fetcher
+  application:
+    pubmed: >-
+      Entrez esearch mindate=2015/01/01 maxdate=<execution date> (datetype=pdat);
+      query blocks carry no date clause.
+    arxiv: >-
+      API search_query conjunction with
+      submittedDate:[201501010000 TO <execution date, YYYYMMDDHHMM>].
+    semantic_scholar: >-
+      Graph API paper/search year filter (2015-<execution year>) applied as a
+      request parameter.
+    google_scholar: >-
+      NO query-level date filtering available — pre-2015 records possible;
+      year eligibility enforced downstream at screening (documented limitation).
+
+databases: [pubmed, arxiv, semantic_scholar, google_scholar]
+
+rendering_notes:
+  join_semantics: >-
+    Each query is a list of AND-blocks; the executed query string is
+    " AND ".join(blocks). Family B is a single top-level block.
+  wildcard_expansion: >-
+    PubMed keeps Entrez wildcards (radiolog*, tomograph*, reproducib*).
+    arXiv, Semantic Scholar and Google Scholar lack wildcard support; their
+    family-B blocks expand them to explicit word forms (radiology,
+    radiological, radiologists; tomography, tomographic; reproducibility,
+    reproducible).
+  semantic_scholar_syntax: >-
+    The Semantic Scholar Graph API relevance-search endpoint has no ti:/abs:
+    fielded search; its query blocks keep the pinned boolean structure with
+    quoted phrases and no field prefixes.
+  google_scholar_syntax: >-
+    Google Scholar ignores ti:/abs: fielded syntax; GS blocks are plain
+    quoted phrases only.
+
+# -----------------------------------------------------------------------------
+# Family F — shared fragment (YAML anchors). NEVER executed standalone.
+# -----------------------------------------------------------------------------
+shared_fragments:
+  family_F_anatomy:
+    family: F
+    label: "CT anatomy scope (shared fragment — never executed standalone)"
+    terms: ["abdominal", "thoracic", "multi-organ", "whole-body", "liver", "kidney",
+            "spleen", "pancreas", "lung", "vessel", "vascular", "tubular",
+            "computed tomography", "CT"]
+    blocks:
+      pubmed: &F_PUBMED >-
+        (abdominal[tiab] OR thoracic[tiab] OR multi-organ[tiab] OR whole-body[tiab] OR
+        liver[tiab] OR kidney[tiab] OR spleen[tiab] OR pancreas[tiab] OR lung[tiab] OR
+        vessel[tiab] OR vascular[tiab] OR tubular[tiab] OR "computed tomography"[tiab] OR
+        "CT"[tiab])
+      arxiv: &F_ARXIV >-
+        (ti:"abdominal" OR abs:"abdominal" OR ti:"thoracic" OR abs:"thoracic" OR
+        ti:"multi-organ" OR abs:"multi-organ" OR ti:"whole-body" OR abs:"whole-body" OR
+        ti:"liver" OR abs:"liver" OR ti:"kidney" OR abs:"kidney" OR ti:"spleen" OR
+        abs:"spleen" OR ti:"pancreas" OR abs:"pancreas" OR ti:"lung" OR abs:"lung" OR
+        ti:"vessel" OR abs:"vessel" OR ti:"vascular" OR abs:"vascular" OR
+        ti:"tubular" OR abs:"tubular" OR ti:"computed tomography" OR
+        abs:"computed tomography" OR ti:"CT" OR abs:"CT")
+      semantic_scholar: &F_S2 >-
+        (abdominal OR thoracic OR multi-organ OR whole-body OR liver OR kidney OR
+        spleen OR pancreas OR lung OR vessel OR vascular OR tubular OR
+        "computed tomography" OR "CT")
+      google_scholar: &F_GS >-
+        "abdominal" OR "thoracic" OR "multi-organ" OR "whole-body" OR "liver" OR
+        "kidney" OR "spleen" OR "pancreas" OR "lung" OR "vessel" OR "vascular" OR
+        "tubular" OR "computed tomography" OR "CT"
+
+# -----------------------------------------------------------------------------
+# Executed families — one query per family per database
+# -----------------------------------------------------------------------------
+executed_families:
+
+  A:
+    label: "A. Neuro-symbolic / priors"
+    template: "(family terms) AND (segmentation OR medical imaging) AND F-anatomy"
+    terms: ["neuro-symbolic", "neurosymbolic", "knowledge-guided", "knowledge-based",
+            "knowledge-infused", "domain knowledge", "anatomical prior",
+            "anatomical knowledge", "shape prior", "topological constraint",
+            "topology-aware", "clDice", "rule-based", "logic-based",
+            "constraint-based", "ontology", "RadLex", "knowledge graph",
+            "interpretable segmentation", "explainable", "symbolic"]
+    queries:
+      pubmed:
+        query_id: A-PUB-001
+        blocks:
+          - >-
+            ("neuro-symbolic"[tiab] OR neurosymbolic[tiab] OR "knowledge-guided"[tiab] OR
+            "knowledge-based"[tiab] OR "knowledge-infused"[tiab] OR "domain knowledge"[tiab] OR
+            "anatomical prior"[tiab] OR "anatomical knowledge"[tiab] OR "shape prior"[tiab] OR
+            "topological constraint"[tiab] OR "topology-aware"[tiab] OR clDice[tiab] OR
+            "rule-based"[tiab] OR "logic-based"[tiab] OR "constraint-based"[tiab] OR
+            ontology[tiab] OR RadLex[tiab] OR "knowledge graph"[tiab] OR
+            "interpretable segmentation"[tiab] OR explainable[tiab] OR symbolic[tiab])
+          - >-
+            (segmentation[tiab] OR "medical imaging"[tiab])
+          - *F_PUBMED
+      arxiv:
+        query_id: A-ARX-001
+        blocks:
+          - >-
+            (ti:"neuro-symbolic" OR abs:"neuro-symbolic" OR ti:"neurosymbolic" OR
+            abs:"neurosymbolic" OR ti:"knowledge-guided" OR abs:"knowledge-guided" OR
+            ti:"knowledge-based" OR abs:"knowledge-based" OR ti:"knowledge-infused" OR
+            abs:"knowledge-infused" OR ti:"domain knowledge" OR abs:"domain knowledge" OR
+            ti:"anatomical prior" OR abs:"anatomical prior" OR ti:"anatomical knowledge" OR
+            abs:"anatomical knowledge" OR ti:"shape prior" OR abs:"shape prior" OR
+            ti:"topological constraint" OR abs:"topological constraint" OR
+            ti:"topology-aware" OR abs:"topology-aware" OR ti:"clDice" OR abs:"clDice" OR
+            ti:"rule-based" OR abs:"rule-based" OR ti:"logic-based" OR abs:"logic-based" OR
+            ti:"constraint-based" OR abs:"constraint-based" OR ti:"ontology" OR
+            abs:"ontology" OR ti:"RadLex" OR abs:"RadLex" OR ti:"knowledge graph" OR
+            abs:"knowledge graph" OR ti:"interpretable segmentation" OR
+            abs:"interpretable segmentation" OR ti:"explainable" OR abs:"explainable" OR
+            ti:"symbolic" OR abs:"symbolic")
+          - >-
+            (ti:"segmentation" OR abs:"segmentation" OR ti:"medical imaging" OR
+            abs:"medical imaging")
+          - *F_ARXIV
+      semantic_scholar:
+        query_id: A-S2-001
+        blocks:
+          - >-
+            ("neuro-symbolic" OR neurosymbolic OR "knowledge-guided" OR "knowledge-based" OR
+            "knowledge-infused" OR "domain knowledge" OR "anatomical prior" OR
+            "anatomical knowledge" OR "shape prior" OR "topological constraint" OR
+            "topology-aware" OR clDice OR "rule-based" OR "logic-based" OR
+            "constraint-based" OR ontology OR RadLex OR "knowledge graph" OR
+            "interpretable segmentation" OR explainable OR symbolic)
+          - >-
+            (segmentation OR "medical imaging")
+          - *F_S2
+      google_scholar:
+        query_id: A-GS-001
+        blocks:
+          - >-
+            "neuro-symbolic" OR "neurosymbolic" OR "knowledge-guided" OR "knowledge-based" OR
+            "knowledge-infused" OR "domain knowledge" OR "anatomical prior" OR
+            "anatomical knowledge" OR "shape prior" OR "topological constraint" OR
+            "topology-aware" OR "clDice" OR "rule-based" OR "logic-based" OR
+            "constraint-based" OR "ontology" OR "RadLex" OR "knowledge graph" OR
+            "interpretable segmentation" OR "explainable" OR "symbolic"
+          - >-
+            ("segmentation" OR "medical imaging")
+          - *F_GS
+
+  B:
+    label: "B. Frameworks / tooling (NOT ANDed with segmentation)"
+    template: >-
+      (exact tool names) OR ((framework vocabulary) AND ("medical imaging" OR
+      radiolog* OR tomograph*))
+    terms: ["MONAI", "Auto3DSeg", "MONAI Label", "MONAI Deploy", "VISTA-3D",
+            "NV-Segment-CT", "nnInteractive", "NVIDIA Clara", "Holoscan",
+            "open-source framework", "medical imaging toolkit",
+            "software framework", "deployment", "microservice",
+            "inference pipeline", "clinical workflow", "PACS", "DICOM",
+            "reproducib*", "Grand Challenge", "medical imaging", "radiolog*",
+            "tomograph*"]
+    queries:
+      pubmed:
+        query_id: B-PUB-001
+        blocks:
+          - >-
+            (MONAI[tiab] OR Auto3DSeg[tiab] OR "MONAI Label"[tiab] OR "MONAI Deploy"[tiab] OR
+            "VISTA-3D"[tiab] OR "NV-Segment-CT"[tiab] OR nnInteractive[tiab] OR
+            "NVIDIA Clara"[tiab] OR Holoscan[tiab] OR
+            (("open-source framework"[tiab] OR "medical imaging toolkit"[tiab] OR
+            "software framework"[tiab] OR deployment[tiab] OR microservice[tiab] OR
+            "inference pipeline"[tiab] OR "clinical workflow"[tiab] OR PACS[tiab] OR
+            DICOM[tiab] OR reproducib*[tiab] OR "Grand Challenge"[tiab]) AND
+            ("medical imaging"[tiab] OR radiolog*[tiab] OR tomograph*[tiab])))
+      arxiv:
+        query_id: B-ARX-001
+        blocks:
+          - >-
+            (ti:"MONAI" OR abs:"MONAI" OR ti:"Auto3DSeg" OR abs:"Auto3DSeg" OR
+            ti:"MONAI Label" OR abs:"MONAI Label" OR ti:"MONAI Deploy" OR
+            abs:"MONAI Deploy" OR ti:"VISTA-3D" OR abs:"VISTA-3D" OR
+            ti:"NV-Segment-CT" OR abs:"NV-Segment-CT" OR ti:"nnInteractive" OR
+            abs:"nnInteractive" OR ti:"NVIDIA Clara" OR abs:"NVIDIA Clara" OR
+            ti:"Holoscan" OR abs:"Holoscan" OR
+            ((ti:"open-source framework" OR abs:"open-source framework" OR
+            ti:"medical imaging toolkit" OR abs:"medical imaging toolkit" OR
+            ti:"software framework" OR abs:"software framework" OR ti:"deployment" OR
+            abs:"deployment" OR ti:"microservice" OR abs:"microservice" OR
+            ti:"inference pipeline" OR abs:"inference pipeline" OR
+            ti:"clinical workflow" OR abs:"clinical workflow" OR ti:"PACS" OR
+            abs:"PACS" OR ti:"DICOM" OR abs:"DICOM" OR ti:"reproducibility" OR
+            abs:"reproducibility" OR ti:"reproducible" OR abs:"reproducible" OR
+            ti:"Grand Challenge" OR abs:"Grand Challenge") AND
+            (ti:"medical imaging" OR abs:"medical imaging" OR ti:"radiology" OR
+            abs:"radiology" OR ti:"radiological" OR abs:"radiological" OR
+            ti:"radiologists" OR abs:"radiologists" OR ti:"tomography" OR
+            abs:"tomography" OR ti:"tomographic" OR abs:"tomographic")))
+      semantic_scholar:
+        query_id: B-S2-001
+        blocks:
+          - >-
+            (MONAI OR Auto3DSeg OR "MONAI Label" OR "MONAI Deploy" OR "VISTA-3D" OR
+            "NV-Segment-CT" OR nnInteractive OR "NVIDIA Clara" OR Holoscan OR
+            (("open-source framework" OR "medical imaging toolkit" OR
+            "software framework" OR deployment OR microservice OR
+            "inference pipeline" OR "clinical workflow" OR PACS OR DICOM OR
+            reproducibility OR reproducible OR "Grand Challenge") AND
+            ("medical imaging" OR radiology OR radiological OR radiologists OR
+            tomography OR tomographic)))
+      google_scholar:
+        query_id: B-GS-001
+        blocks:
+          - >-
+            ("MONAI" OR "Auto3DSeg" OR "MONAI Label" OR "MONAI Deploy" OR "VISTA-3D" OR
+            "NV-Segment-CT" OR "nnInteractive" OR "NVIDIA Clara" OR "Holoscan" OR
+            (("open-source framework" OR "medical imaging toolkit" OR
+            "software framework" OR "deployment" OR "microservice" OR
+            "inference pipeline" OR "clinical workflow" OR "PACS" OR "DICOM" OR
+            "reproducibility" OR "reproducible" OR "Grand Challenge") AND
+            ("medical imaging" OR "radiology" OR "radiological" OR "radiologists" OR
+            "tomography" OR "tomographic")))
+
+  C:
+    label: "C. Foundation models / SAM lineage"
+    template: "(family terms) AND (segmentation OR medical imaging) AND F-anatomy"
+    terms: ["Segment Anything", "SAM", "SAM 2", "MedSAM", "MedSAM-2", "SAM-Med3D",
+            "3DSAM-Adapter", "MA-SAM", "SAMed", "MobileSAM", "EfficientSAM",
+            "EdgeSAM", "HQ-SAM", "SegVol", "SAT", "universal model",
+            "foundation model", "vision-language", "promptable",
+            "zero-shot segmentation", "open-vocabulary",
+            "interactive segmentation", "click-based", "point prompt",
+            "label-efficient", "annotation-efficient", "auto-label"]
+    queries:
+      pubmed:
+        query_id: C-PUB-001
+        blocks:
+          - >-
+            ("Segment Anything"[tiab] OR "SAM"[tiab] OR "SAM 2"[tiab] OR "MedSAM"[tiab] OR
+            "MedSAM-2"[tiab] OR "SAM-Med3D"[tiab] OR "3DSAM-Adapter"[tiab] OR
+            "MA-SAM"[tiab] OR "SAMed"[tiab] OR "MobileSAM"[tiab] OR "EfficientSAM"[tiab] OR
+            "EdgeSAM"[tiab] OR "HQ-SAM"[tiab] OR "SegVol"[tiab] OR "SAT"[tiab] OR
+            "Segment Anything with Text"[tiab] OR "universal model"[tiab] OR
+            "foundation model"[tiab] OR "vision-language"[tiab] OR promptable[tiab] OR
+            "zero-shot segmentation"[tiab] OR "open-vocabulary"[tiab] OR
+            "interactive segmentation"[tiab] OR "click-based"[tiab] OR
+            "point prompt"[tiab] OR "label-efficient"[tiab] OR
+            "annotation-efficient"[tiab] OR auto-label[tiab])
+          - >-
+            (segmentation[tiab] OR "medical imaging"[tiab])
+          - *F_PUBMED
+      arxiv:
+        query_id: C-ARX-001
+        blocks:
+          - >-
+            (ti:"Segment Anything" OR abs:"Segment Anything" OR ti:"SAM" OR abs:"SAM" OR
+            ti:"SAM 2" OR abs:"SAM 2" OR ti:"MedSAM" OR abs:"MedSAM" OR ti:"MedSAM-2" OR
+            abs:"MedSAM-2" OR ti:"SAM-Med3D" OR abs:"SAM-Med3D" OR ti:"3DSAM-Adapter" OR
+            abs:"3DSAM-Adapter" OR ti:"MA-SAM" OR abs:"MA-SAM" OR ti:"SAMed" OR
+            abs:"SAMed" OR ti:"MobileSAM" OR abs:"MobileSAM" OR ti:"EfficientSAM" OR
+            abs:"EfficientSAM" OR ti:"EdgeSAM" OR abs:"EdgeSAM" OR ti:"HQ-SAM" OR
+            abs:"HQ-SAM" OR ti:"SegVol" OR abs:"SegVol" OR ti:"SAT" OR abs:"SAT" OR
+            ti:"Segment Anything with Text" OR abs:"Segment Anything with Text" OR
+            ti:"universal model" OR abs:"universal model" OR ti:"foundation model" OR
+            abs:"foundation model" OR ti:"vision-language" OR abs:"vision-language" OR
+            ti:"promptable" OR abs:"promptable" OR ti:"zero-shot segmentation" OR
+            abs:"zero-shot segmentation" OR ti:"open-vocabulary" OR
+            abs:"open-vocabulary" OR ti:"interactive segmentation" OR
+            abs:"interactive segmentation" OR ti:"click-based" OR abs:"click-based" OR
+            ti:"point prompt" OR abs:"point prompt" OR ti:"label-efficient" OR
+            abs:"label-efficient" OR ti:"annotation-efficient" OR
+            abs:"annotation-efficient" OR ti:"auto-label" OR abs:"auto-label")
+          - >-
+            (ti:"segmentation" OR abs:"segmentation" OR ti:"medical imaging" OR
+            abs:"medical imaging")
+          - *F_ARXIV
+      semantic_scholar:
+        query_id: C-S2-001
+        blocks:
+          - >-
+            ("Segment Anything" OR "SAM" OR "SAM 2" OR "MedSAM" OR "MedSAM-2" OR
+            "SAM-Med3D" OR "3DSAM-Adapter" OR "MA-SAM" OR "SAMed" OR "MobileSAM" OR
+            "EfficientSAM" OR "EdgeSAM" OR "HQ-SAM" OR "SegVol" OR "SAT" OR
+            "Segment Anything with Text" OR "universal model" OR "foundation model" OR
+            "vision-language" OR promptable OR "zero-shot segmentation" OR
+            "open-vocabulary" OR "interactive segmentation" OR "click-based" OR
+            "point prompt" OR "label-efficient" OR "annotation-efficient" OR
+            auto-label)
+          - >-
+            (segmentation OR "medical imaging")
+          - *F_S2
+      google_scholar:
+        query_id: C-GS-001
+        blocks:
+          - >-
+            "Segment Anything" OR "SAM" OR "SAM 2" OR "MedSAM" OR "MedSAM-2" OR
+            "SAM-Med3D" OR "3DSAM-Adapter" OR "MA-SAM" OR "SAMed" OR "MobileSAM" OR
+            "EfficientSAM" OR "EdgeSAM" OR "HQ-SAM" OR "SegVol" OR "SAT" OR
+            "Segment Anything with Text" OR "universal model" OR "foundation model" OR
+            "vision-language" OR "promptable" OR "zero-shot segmentation" OR
+            "open-vocabulary" OR "interactive segmentation" OR "click-based" OR
+            "point prompt" OR "label-efficient" OR "annotation-efficient" OR "auto-label"
+          - >-
+            ("segmentation" OR "medical imaging")
+          - *F_GS
+
+  D:
+    label: "D. SOTA architecture families"
+    template: "(family terms) AND (segmentation OR medical imaging) AND F-anatomy"
+    terms: ["Mamba", "state space model", "SSM", "U-Mamba", "SegMamba",
+            "diffusion model", "MedSegDiff", "SegDiff", "denoising",
+            "neural architecture search", "AutoML", "self-supervised",
+            "semi-supervised", "test-time adaptation", "continual learning",
+            "federated", "uncertainty quantification", "ensemble"]
+    queries:
+      pubmed:
+        query_id: D-PUB-001
+        blocks:
+          - >-
+            ("Mamba"[tiab] OR "state space model"[tiab] OR "SSM"[tiab] OR
+            "U-Mamba"[tiab] OR "SegMamba"[tiab] OR "diffusion model"[tiab] OR
+            "MedSegDiff"[tiab] OR "SegDiff"[tiab] OR denoising[tiab] OR
+            "neural architecture search"[tiab] OR AutoML[tiab] OR
+            "self-supervised"[tiab] OR "semi-supervised"[tiab] OR
+            "test-time adaptation"[tiab] OR "continual learning"[tiab] OR
+            federated[tiab] OR "uncertainty quantification"[tiab] OR ensemble[tiab])
+          - >-
+            (segmentation[tiab] OR "medical imaging"[tiab])
+          - *F_PUBMED
+      arxiv:
+        query_id: D-ARX-001
+        blocks:
+          - >-
+            (ti:"Mamba" OR abs:"Mamba" OR ti:"state space model" OR
+            abs:"state space model" OR ti:"SSM" OR abs:"SSM" OR ti:"U-Mamba" OR
+            abs:"U-Mamba" OR ti:"SegMamba" OR abs:"SegMamba" OR ti:"diffusion model" OR
+            abs:"diffusion model" OR ti:"MedSegDiff" OR abs:"MedSegDiff" OR
+            ti:"SegDiff" OR abs:"SegDiff" OR ti:"denoising" OR abs:"denoising" OR
+            ti:"neural architecture search" OR abs:"neural architecture search" OR
+            ti:"AutoML" OR abs:"AutoML" OR ti:"self-supervised" OR
+            abs:"self-supervised" OR ti:"semi-supervised" OR abs:"semi-supervised" OR
+            ti:"test-time adaptation" OR abs:"test-time adaptation" OR
+            ti:"continual learning" OR abs:"continual learning" OR ti:"federated" OR
+            abs:"federated" OR ti:"uncertainty quantification" OR
+            abs:"uncertainty quantification" OR ti:"ensemble" OR abs:"ensemble")
+          - >-
+            (ti:"segmentation" OR abs:"segmentation" OR ti:"medical imaging" OR
+            abs:"medical imaging")
+          - *F_ARXIV
+      semantic_scholar:
+        query_id: D-S2-001
+        blocks:
+          - >-
+            ("Mamba" OR "state space model" OR "SSM" OR "U-Mamba" OR "SegMamba" OR
+            "diffusion model" OR "MedSegDiff" OR "SegDiff" OR denoising OR
+            "neural architecture search" OR AutoML OR "self-supervised" OR
+            "semi-supervised" OR "test-time adaptation" OR "continual learning" OR
+            federated OR "uncertainty quantification" OR ensemble)
+          - >-
+            (segmentation OR "medical imaging")
+          - *F_S2
+      google_scholar:
+        query_id: D-GS-001
+        blocks:
+          - >-
+            "Mamba" OR "state space model" OR "SSM" OR "U-Mamba" OR "SegMamba" OR
+            "diffusion model" OR "MedSegDiff" OR "SegDiff" OR "denoising" OR
+            "neural architecture search" OR "AutoML" OR "self-supervised" OR
+            "semi-supervised" OR "test-time adaptation" OR "continual learning" OR
+            "federated" OR "uncertainty quantification" OR "ensemble"
+          - >-
+            ("segmentation" OR "medical imaging")
+          - *F_GS
+
+  E:
+    label: "E. Benchmark / challenge names"
+    template: "(family terms) AND (segmentation OR medical imaging) AND F-anatomy"
+    terms: ["TotalSegmentator", "AMOS", "FLARE", "KiTS", "LiTS", "BraTS", "BTCV",
+            "AbdomenCT-1K", "Medical Segmentation Decathlon", "challenge",
+            "leaderboard"]
+    queries:
+      pubmed:
+        query_id: E-PUB-001
+        blocks:
+          - >-
+            ("TotalSegmentator"[tiab] OR "AMOS"[tiab] OR "FLARE"[tiab] OR "KiTS"[tiab] OR
+            "LiTS"[tiab] OR "BraTS"[tiab] OR "BTCV"[tiab] OR "AbdomenCT-1K"[tiab] OR
+            "Medical Segmentation Decathlon"[tiab] OR "challenge"[tiab] OR
+            "leaderboard"[tiab])
+          - >-
+            (segmentation[tiab] OR "medical imaging"[tiab])
+          - *F_PUBMED
+      arxiv:
+        query_id: E-ARX-001
+        blocks:
+          - >-
+            (ti:"TotalSegmentator" OR abs:"TotalSegmentator" OR ti:"AMOS" OR abs:"AMOS" OR
+            ti:"FLARE" OR abs:"FLARE" OR ti:"KiTS" OR abs:"KiTS" OR ti:"LiTS" OR
+            abs:"LiTS" OR ti:"BraTS" OR abs:"BraTS" OR ti:"BTCV" OR abs:"BTCV" OR
+            ti:"AbdomenCT-1K" OR abs:"AbdomenCT-1K" OR
+            ti:"Medical Segmentation Decathlon" OR abs:"Medical Segmentation Decathlon" OR
+            ti:"challenge" OR abs:"challenge" OR ti:"leaderboard" OR abs:"leaderboard")
+          - >-
+            (ti:"segmentation" OR abs:"segmentation" OR ti:"medical imaging" OR
+            abs:"medical imaging")
+          - *F_ARXIV
+      semantic_scholar:
+        query_id: E-S2-001
+        blocks:
+          - >-
+            ("TotalSegmentator" OR "AMOS" OR "FLARE" OR "KiTS" OR "LiTS" OR "BraTS" OR
+            "BTCV" OR "AbdomenCT-1K" OR "Medical Segmentation Decathlon" OR
+            "challenge" OR "leaderboard")
+          - >-
+            (segmentation OR "medical imaging")
+          - *F_S2
+      google_scholar:
+        query_id: E-GS-001
+        blocks:
+          - >-
+            "TotalSegmentator" OR "AMOS" OR "FLARE" OR "KiTS" OR "LiTS" OR "BraTS" OR
+            "BTCV" OR "AbdomenCT-1K" OR "Medical Segmentation Decathlon" OR
+            "challenge" OR "leaderboard"
+          - >-
+            ("segmentation" OR "medical imaging")
+          - *F_GS
+
+  G:
+    label: "G. v1 core DL architectures (reproduces v1 PubMed concept block, S3 §3.1)"
+    template: "(family terms) AND (segmentation OR medical imaging) AND F-anatomy"
+    terms: ["deep learning", "neural network", "convolutional", "CNN", "U-Net",
+            "V-Net", "nnU-Net", "ResNet", "encoder-decoder", "transformer",
+            "TransUNet", "Swin"]
+    queries:
+      pubmed:
+        query_id: G-PUB-001
+        blocks:
+          - >-
+            ("deep learning"[tiab] OR "neural network"[tiab] OR convolutional[tiab] OR
+            "CNN"[tiab] OR "U-Net"[tiab] OR "V-Net"[tiab] OR "nnU-Net"[tiab] OR
+            "ResNet"[tiab] OR "encoder-decoder"[tiab] OR transformer[tiab] OR
+            "TransUNet"[tiab] OR "Swin"[tiab])
+          - >-
+            (segmentation[tiab] OR "medical imaging"[tiab])
+          - *F_PUBMED
+      arxiv:
+        query_id: G-ARX-001
+        blocks:
+          - >-
+            (ti:"deep learning" OR abs:"deep learning" OR ti:"neural network" OR
+            abs:"neural network" OR ti:"convolutional" OR abs:"convolutional" OR
+            ti:"CNN" OR abs:"CNN" OR ti:"U-Net" OR abs:"U-Net" OR ti:"V-Net" OR
+            abs:"V-Net" OR ti:"nnU-Net" OR abs:"nnU-Net" OR ti:"ResNet" OR
+            abs:"ResNet" OR ti:"encoder-decoder" OR abs:"encoder-decoder" OR
+            ti:"transformer" OR abs:"transformer" OR ti:"TransUNet" OR
+            abs:"TransUNet" OR ti:"Swin" OR abs:"Swin")
+          - >-
+            (ti:"segmentation" OR abs:"segmentation" OR ti:"medical imaging" OR
+            abs:"medical imaging")
+          - *F_ARXIV
+      semantic_scholar:
+        query_id: G-S2-001
+        blocks:
+          - >-
+            ("deep learning" OR "neural network" OR convolutional OR "CNN" OR
+            "U-Net" OR "V-Net" OR "nnU-Net" OR "ResNet" OR "encoder-decoder" OR
+            transformer OR "TransUNet" OR "Swin")
+          - >-
+            (segmentation OR "medical imaging")
+          - *F_S2
+      google_scholar:
+        query_id: G-GS-001
+        blocks:
+          - >-
+            "deep learning" OR "neural network" OR "convolutional" OR "CNN" OR
+            "U-Net" OR "V-Net" OR "nnU-Net" OR "ResNet" OR "encoder-decoder" OR
+            "transformer" OR "TransUNet" OR "Swin"
+          - >-
+            ("segmentation" OR "medical imaging")
+          - *F_GS

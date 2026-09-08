@@ -57,3 +57,29 @@ Full-text included papers are coded for:
 - **Metrics**: Dice score, HD95, IoU, etc.
 - **3D approach**: True 3D, 2.5D, slice-based + post-processing
 - **Code availability**: Whether source code is publicly released
+
+---
+
+## v2 Amendment (2026-09-08) — Framework/Software Study Type
+
+Appended per the coverage-gap correction (`.omo/plans/paper-coverage-gap-update.md`, Task 2).
+All criteria above (IC1–IC5, EC1–EC6) are unchanged and remain binding for method papers.
+The following study type is **added**; it is not an alteration of any existing criterion.
+
+### Framework/Software (qualitative stratum)
+
+A paper belongs to this stratum when it:
+
+- describes a software framework/tool for 3D medical segmentation;
+- documents components/architecture;
+- reports benchmark reproduction or versioned release.
+
+**Framework/Software papers enter qualitative synthesis ONLY (never the
+quantitative Dice table).**
+
+Papers flagged as framework candidates by the v2 search (family B) are
+screened against this study type rather than the method-paper criteria.
+Rationale and query provenance: the v1 query set and filters excluded
+framework papers by construction; see
+[S3v2_search_protocol_amendment.md](../evidence/supplementary/S3v2_search_protocol_amendment.md).
+

@@ -201,3 +201,40 @@ Respond with JSON only:
 - PRISMA 2020 Guidelines (Page et al., 2021)
 - Survey methodology (Section 2 of main.tex)
 - AI-assisted screening protocol (Section 2.3 of main.tex)
+
+---
+
+## v2 Amendment (2026-09-08) — Framework/Software Study Type (Qualitative Stratum)
+
+Appended per the coverage-gap correction (`.omo/plans/paper-coverage-gap-update.md`,
+Task 2). All criteria above (IC1–IC6, EC1–EC8) are unchanged and remain
+binding for method papers. The following study type is **added**.
+
+### Framework/Software
+
+A paper belongs to this stratum when it:
+
+- describes a software framework/tool for 3D medical segmentation;
+- documents components/architecture;
+- reports benchmark reproduction or versioned release.
+
+**Framework/Software papers enter qualitative synthesis ONLY (never the
+quantitative Dice table).**
+
+Operational notes for v2 screening:
+
+- Papers surfaced by v2 query family B (exact tool names / framework
+  vocabulary; see
+  [S3v2_search_protocol_amendment.md](S3v2_search_protocol_amendment.md))
+  are screened against this study type, not the method-paper criteria.
+- The v2 S2 prompt set carries a `framework_candidate` flag; flagged records
+  route to this stratum.
+- Full provenance of the amended query set and eligibility:
+  [S3v2_search_protocol_amendment.md](S3v2_search_protocol_amendment.md);
+  annotation mirror in
+  [coding-scheme.md](../../annotations/coding-scheme.md) (v2 section).
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 2.0 | 2026-09-08 | Appended Framework/Software study type (qualitative stratum) for the v2 coverage-gap re-search |
+
