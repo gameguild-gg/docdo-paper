@@ -78,6 +78,39 @@ revisions:
     changes:
       - "family B terms += VISTA3D; B-PUB-002/B-ARX-002/B-S2-002/B-GS-002"
       - "family C arXiv query id C-ARX-001 -> C-ARX-002 (query text unchanged; arXiv API parse flakiness resample)"
+  - revision: "r2-pubmed-window-remediation"
+    date: "2026-09-08"
+    task: "paper-coverage-gap-update Task 6 remediation (key-free)"
+    changes:
+      - "supplementary_queries section added (below) — executed ONCE each by the Task-6 remediation driver; NOT part of the executed_families contract and not re-run by docdo fetch-v2 run_all"
+      - "fetch_v2_fetchers.fetch_pubmed_v2 gained sort= (relevance window) and fetch_pubmed_by_pmids (direct efetch) — see operations/tests/test_fetch_v2.py"
+
+# One-shot remediation fetches (Task 6 continuation). These do NOT alter the
+# six-family executed contract above; each was executed once by a targeted
+# driver with provenance rows in raw/v2/_provenance.csv. Block text for
+# G-PUB-002-r is loaded programmatically from executed_families.G (single
+# source of truth — not duplicated here).
+supplementary_queries:
+  - query_id: B-PUB-002-pmid
+    database: pubmed
+    family: B
+    kind: pmid-direct
+    pmids: ["39653370"]
+    reason: >-
+      Seed-oracle recovery: the MONAI Deploy canonical paper (Gupta et al.,
+      JMIR AI 2024, DOI 10.2196/55833) is PubMed-indexed but unreachable via
+      query windows (tiab lacks the tool name; vocabulary arm matches 20,929
+      records; date-descending 1,000-cap window is 2026-dominated).
+  - query_id: G-PUB-002-r
+    database: pubmed
+    family: G
+    kind: relevance-sorted-refetch
+    blocks_source: executed_families.G.queries.pubmed.blocks
+    reason: >-
+      Retention probe: family-G PubMed window under default Entrez ordering
+      is 2026-dominated (995/1000 rows from 2026); this one-shot refetch uses
+      sort=relevance to test whether older v1-core records (26/52 v1 studies
+      missing from the v2 dedup) re-enter the window.
 
 date_range:
   start: "2015-01-01"

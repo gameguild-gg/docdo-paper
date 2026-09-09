@@ -99,7 +99,8 @@ def create_batch_requests(papers, run_number):
         
         prompt = SCREENING_PROMPT.format(
             title=title or "No title",
-            abstract=abstract or "No abstract available"
+            abstract=abstract or "No abstract available",
+            study_type_instructions=""
         )
         
         request = {

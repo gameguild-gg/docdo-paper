@@ -734,3 +734,66 @@ class TestFetchV2CLI:
         )
         assert result.exit_code == 0, result.output
         assert (raw_v2_dir / "_combined.csv").exists()
+
+    def test_pubmed_sort_option_forwarded(self, monkeypatch):
+        import docdo.fetch_v2_fetchers as fvf
+        from Bio import Entrez
+
+        class _Handle:
+            def read(self):
+                return {"IdList": [], "Count": "0"}
+
+            def close(self):
+                pass
+
+        captured = {}
+
+        def fake_esearch(**kwargs):
+            captured.clear()
+            captured.update(kwargs)
+            return _Handle()
+
+        monkeypatch.setattr(Entrez, "esearch", fake_esearch)
+        monkeypatch.setattr(Entrez, "read", lambda h: h.read())
+        fvf.fetch_pubmed_v2("(MONAI[tiab])", date_start="2015-01-01",
+                            date_end="2026-09-08")
+        assert "sort" not in captured  # default: Entrez ordering untouched
+        fvf.fetch_pubmed_v2("(MONAI[tiab])", date_start="2015-01-01",
+                            date_end="2026-09-08", sort="relevance")
+        assert captured["sort"] == "relevance"
+
+    def test_fetch_pubmed_by_pmids_direct_efetch(self, monkeypatch):
+        import docdo.fetch_v2_fetchers as fvf
+        from Bio import Entrez
+
+        class _Handle:
+            def read(self):
+                return {"PubmedArticle": [{
+                    "MedlineCitation": {"PMID": "39653370", "Article": {
+                        "ArticleTitle": "Current State of Community-Driven"
+                                        " Radiological AI Deployment",
+                        "AuthorList": [{"LastName": "Gupta", "Initials": "V"}],
+                        "Journal": {"Title": "JMIR AI",
+                                    "JournalIssue": {"PubDate": {"Year": "2024"}}},
+                        "Abstract": {"AbstractText": ["deployment abstract"]},
+                    }},
+                    "PubmedData": {"ArticleIdList": []},
+                }]}
+
+            def close(self):
+                pass
+
+        captured = {}
+
+        def fake_efetch(**kwargs):
+            captured.update(kwargs)
+            return _Handle()
+
+        monkeypatch.setattr(Entrez, "efetch", fake_efetch)
+        monkeypatch.setattr(Entrez, "read", lambda h: h.read())
+        rows, status = fvf.fetch_pubmed_by_pmids(["39653370"])
+        assert status == "ok" and len(rows) == 1
+        assert rows[0]["title"].startswith("Current State")
+        assert rows[0]["database"] == "PubMed"
+        assert rows[0]["doi"] == "PMID:39653370"
+        assert captured["id"] == ["39653370"]

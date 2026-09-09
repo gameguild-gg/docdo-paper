@@ -113,7 +113,8 @@ def screen_paper_once(client, title, abstract, retries=3):
     """Single screening run for a paper."""
     prompt = SCREENING_PROMPT.format(
         title=title or "No title",
-        abstract=abstract or "No abstract available"
+        abstract=abstract or "No abstract available",
+            study_type_instructions=""
     )
     
     for attempt in range(retries):

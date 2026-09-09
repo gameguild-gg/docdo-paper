@@ -27,11 +27,12 @@ tally, or 10-random-INCLUDE re-check can be reported. Resume instructions in §5
 
 ## 2. Screening input (ready)
 
-- Pool: `pipeline_outputs/S2v2_elasticsearch_filtered.csv` — **901 records**
-  (464 standard lane + 437 framework_candidate bypass lane), post fix-loop.
-  (The task handoff quoted 865 = 466+399; the seed-recall fix loop re-fetch
-  and the tool-name anatomy guard changed the composition — see
-  `S2v2_seed_recall.md` §fix-loop and `S1v2_funnel.md`.)
+- Pool: `pipeline_outputs/S2v2_elasticsearch_filtered.csv` — **1,101 records**
+  (641 standard lane + 460 framework_candidate bypass lane), post fix-loop r1
+  + remediation r2 (seed PMID recovery + relevance-window probe).
+  (The task handoff quoted 865 = 466+399; the seed-recall fix loop and
+  remediation changed the composition — see `S2v2_seed_recall.md` §fix-loop
+  and `S1v2_funnel.md`.)
 - Criteria files in force (v2): `S4_ai_screening_protocol.md`,
   `S4_screening_criteria.md` (v2 section), `coding-scheme.md` (v2),
   `labeling-rules.md`.
@@ -51,27 +52,31 @@ tally, or 10-random-INCLUDE re-check can be reported. Resume instructions in §5
 All four tiers are mini-class; the tiebreaker participates only as a 4th
 audit opinion (unanimous rule is authoritative — `labeling-rules.md`).
 
-## 4. Required prompt amendment (NOT yet applied — screening never ran)
+## 4. Prompt amendment (APPLIED — remediation r2, 2026-09-08)
 
-`operations/src/docdo/screening.py` `SCREENING_PROMPT` still carries the v1
-IC1-IC5 text WITHOUT the v2 Framework/Software study-type instructions and
-without `framework_candidate` routing. Before the screening run, the prompt
-set must be extended per Task-2 v2 criteria so that:
+`operations/src/docdo/screening.py` now implements the v2 two-lane criteria:
 
-- standard-lane records are prompted with IC1-IC6 + EC triggers (v1 text, unchanged semantics);
-- bypass-lane records are prompted with the Framework/Software criteria
-  (describes a software framework/tool for 3D medical segmentation;
-  documents components/architecture; reports benchmark reproduction or
-  versioned release; qualitative-synthesis-only).
-
-The v1 machinery (3 runs, unanimous-INCLUDE, temperature 0.3, JSON schema) is
-unchanged and tested (`screening.py::screen_paper`, `determine_final_decision`,
-`build_screening_batch_requests`, `unanimous_vote`).
+- `SCREENING_PROMPT` carries a `{study_type_instructions}` slot plus a
+  lane-aware DECISION RULE (apply F1-F3/FEC1-FEC3 when the study-type block
+  is present, IC1-IC5 otherwise).
+- `FRAMEWORK_STUDY_TYPE_CRITERIA` (F1 software framework/tool for 3D medical
+  segmentation; F2 documented components/architecture; F3 benchmark
+  reproduction or versioned release; FEC1-FEC3 exclude triggers;
+  qualitative-synthesis-only) is injected for `framework_candidate=true`
+  rows — coerced from bool OR CSV "true"/"false" (`_is_framework_candidate`).
+- Routing wired through `screen_paper_once` / `screen_paper` /
+  `build_screening_batch_requests` / `docdo screen` CLI (per-row flag).
+- Tests: `operations/tests/test_screening.py::TestTwoLaneCriteria` (3,
+  red-first). v1 archive scripts that format `SCREENING_PROMPT` pass
+  `study_type_instructions=""` (v1-equivalent behavior).
+- The v1 machinery is unchanged: 3 runs, unanimous-INCLUDE, temperature 0.3,
+  JSON schema (`screening.py::screen_paper`, `determine_final_decision`,
+  `build_screening_batch_requests`, `unanimous_vote`).
 
 ## 5. Resume procedure (once `OPENAI_API_KEY` is present in `.env`)
 
-1. Amend `SCREENING_PROMPT`/batch builder with the v2 two-lane criteria (§4).
-2. Batch path (901 x 3 = 2,703 requests, mini tier):
+1. ~~Amend `SCREENING_PROMPT`/batch builder with the v2 two-lane criteria~~ — DONE (r2, §4).
+2. Batch path (1,101 x 3 = 3,303 requests, mini tier):
    `docdo screen-batch -i artifacts/data/evidence/supplementary/pipeline_outputs/S2v2_elasticsearch_filtered.csv --output-dir artifacts/data/evidence/processed/batches_v2/`
    then `docdo check-batch <id>` / `docdo download-batch <id>`, votes compiled
    with `screening.unanimous_vote` (unanimous-INCLUDE rule — DO NOT change).

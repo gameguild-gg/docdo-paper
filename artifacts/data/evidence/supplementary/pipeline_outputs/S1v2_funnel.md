@@ -9,11 +9,11 @@
 
 | Stage | N | Authoritative artifact |
 |-------|---|------------------------|
-| Records identified (raw; per-source breakdown below) | **13,546** | `raw/v2/_combined.csv` (concat of 29 immutable per-query CSVs; `S1v2_evidence_report.md`) |
-| Deduplication by DOI + normalised title | **8,161** | `interim/S1v2_search_results_deduplicated.csv` (tracked copy: `pipeline_outputs/S1v2_search_results_deduplicated.csv`); duplicate-DOI rate in output: 0.0000% |
-| Pre-filter, standard lane — passes standard inclusion AND strict exclusions AND NOT `framework_candidate` | **464** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=false`) |
-| Pre-filter, framework bypass lane — `framework_candidate` only | **437** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=true`) |
-| **`es_pass_total`** — records-screened input (= standard + bypass; sole PRISMA "records screened" number) | **901** | checker assert above; this union row is what Task 11's diagram consumes |
+| Records identified (raw; per-source breakdown below) | **14,547** | `raw/v2/_combined.csv` (concat of 31 immutable per-query CSVs; `S1v2_evidence_report.md`) |
+| Deduplication by DOI + normalised title | **8,846** | `interim/S1v2_search_results_deduplicated.csv` (tracked copy: `pipeline_outputs/S1v2_search_results_deduplicated.csv`); duplicate-DOI rate in output: 0.0000% |
+| Pre-filter, standard lane — passes standard inclusion AND strict exclusions AND NOT `framework_candidate` | **641** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=false`) |
+| Pre-filter, framework bypass lane — `framework_candidate` only | **460** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=true`) |
+| **`es_pass_total`** — records-screened input (= standard + bypass; sole PRISMA "records screened" number) | **1,101** | checker assert above; this union row is what Task 11's diagram consumes |
 
 ## 2. Delta vs v1
 
@@ -24,9 +24,9 @@ construction.
 
 | Stage | v1 | v2 | Δ |
 |-------|---:|---:|---:|
-| Raw | 2,985 | 13,546 | +10,561 |
-| Dedup | 2,821 | 8,161 | +5,340 |
-| Pre-filtered (v1: single ES stage; v2: `es_pass_total`) | 638 | 901 | +263 |
+| Raw | 2,985 | 14,547 | +11,562 |
+| Dedup | 2,821 | 8,846 | +6,025 |
+| Pre-filtered (v1: single ES stage; v2: `es_pass_total`) | 638 | 1,101 | +463 |
 
 ## 3. Lane status (documented degradations)
 
@@ -35,7 +35,7 @@ Raw records by source (machine-derived from `raw/v2/_combined.csv`):
 | Source | Raw records |
 |--------|------------:|
 | arXiv | 7,164 |
-| PubMed | 6,044 |
+| PubMed | 7,045 |
 | Google Scholar | 338 |
 
 - **Semantic Scholar: blocked** — all 6 family queries (A/B/C/D/E/G-S2-001)
@@ -56,7 +56,7 @@ an EBSCO harvest landing later re-runs Task 5 cleanly.
 
 Of the v1 52 included studies
 ([`S2_final_included_studies.csv`](../S2_final_included_studies.csv)),
-**26/52** appear in the v2 dedup CSV (2 by DOI, 24 by
+**32/52** appear in the v2 dedup CSV (9 by DOI, 23 by
 normalised title). This sits BELOW the ≥ 30 sanity bar — the absences were
 verified genuine (by de-mangled DOI and normalised title) and are
 explainable, not silent losses: (1) the Semantic Scholar lane was blocked
@@ -73,17 +73,10 @@ lane blocks or cap windows. Misses:
 | S001 | 10.1002/mp.12480 | Deep learning of the sectional appearances of 3D CT images for anatomical struct | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S002 | 10.1002/mp.13300 | AnatomyNet: Deep learning for fast and fully automated whole-volume segmentation | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S003 | 10.1002/mp.13438 | U-Net based deep learning bladder segmentation in CT urography | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S004 | 10.1002/mp.13950 | Automatic multi-organ segmentation in dual-energy CT (DECT) with dedicated 3D fu | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S005 | 10.1002/mp.14386 | CT-based multi-organ segmentation using a 3D self-attention U-net network for pa | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S006 | 10.1002/mp.14422 | Complete Abdomen and Pelvis Segmentation using U-Net Variant Architecture | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S007 | 10.1002/mp.15507 | General and custom deep learning autosegmentation models for organs in head and  | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S008 | 10.1007/978-3-030-00937-3_49 | 3D U-JAPA-Net: Mixture of Convolutional Networks for Abdominal Multi-organ CT Se | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S009 | 10.1007/s00330-020-07608-9 | Automated segmentation of kidney and renal mass and automated detection of renal | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S012 | 10.1038/s41598-019-40584-9 | Dual-energy CT for automatic organs-at-risk segmentation in brain-tumor patients | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S013 | 10.1038/s41598-020-63285-0 | Abdominal multi-organ auto-segmentation using 3D-patch-based deep convolutional  | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S014 | 10.1038/s41598-022-07848-3 | Automated pancreas segmentation and volumetry using deep neural network on compu | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S015 | 10.1088/1361-6560_aaf11c | Fully automated organ segmentation in male pelvic CT images | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
-| S016 | 10.1088/1361-6560_ab6f99 | Interactive 3D U-net for the segmentation of the pancreas in computed tomography | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S017 | 10.1109/ACCESS.2020.3024277 | Automatic Segmentation Using a Hybrid Dense Network Integrated With an 3D-Atrous | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S018 | 10.1109/cvidliccea56201.2022.9823971 | Research on Liver Segmentation of CT Image Based on Deep Active Contour Model | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S019 | 10.1109/ICIEAM48468.2020.9111950 | Hybrid 3D-ResNet Deep Learning Model for Automatic Segmentation of Thoracic Orga | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
@@ -94,6 +87,7 @@ lane blocks or cap windows. Misses:
 | S025 | 10.1186/s41747-024-00507-4 | Segmentation-based quantitative measurements in renal CT imaging using deep lear | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S026 | 10.3389/fonc.2018.00215 | Deep Learning Renal Segmentation for Fully Automated Radiation Dose Estimation i | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S030 | arXiv/1809.04430 | Deep learning to achieve clinically applicable segmentation of head and neck ana | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
+| S031 | arXiv/1908.00360 | A Method of Rapid Quantification of Patient-Specific Organ Dose for CT Using Cou | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S035 | http/__arxiv.org_abs_1809.00960v2 | Organ at Risk Segmentation in Head and Neck CT Images Using a Two-Stage Segmenta | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 | S047 | http/__arxiv.org_abs_2203.01934v1 | Quality or Quantity: Toward a Unified Approach for Multi-organ Segmentation in B | not retrieved by the v2 lanes this run — Semantic Scholar lane blocked; v1's bare organ[tiab] PubMed term has no family-F equivalent; 1,000-record caps select different relevance windows; Task 9 reconciles |
 
@@ -104,7 +98,7 @@ deliverable (`pipeline_outputs/v1_v2_study_reconciliation.csv`).
 ## 5. Provenance
 
 - Dedup: `docdo deduplicate -i raw/v2/_combined.csv -o interim/S1v2_search_results_deduplicated.csv`
-  (13,546 → 8,161; `docdo.dedup` DOI + normalised-title, empty DOIs skipped).
+  (14,547 → 8,846; `docdo.dedup` DOI + normalised-title, empty DOIs skipped).
 - Pre-filter: pure-Python evaluation of the pinned inclusion DSL
   (`filter_with_elasticsearch.inclusion_query()`) with the module's
   exact-token semantics, then `apply_exclusion_filters()` (strict

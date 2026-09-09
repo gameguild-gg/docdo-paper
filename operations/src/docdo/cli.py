@@ -153,7 +153,10 @@ def screen(
     for i, p in enumerate(papers, 1):
         title = p.get("title", "")
         abstract = p.get("abstract_snippet", "") or p.get("abstract", "")
-        decision = screen_paper(title, abstract, model=model, num_runs=num_runs)
+        decision = screen_paper(
+            title, abstract, model=model, num_runs=num_runs,
+            framework_candidate=p.get("framework_candidate", False),
+        )
         row = {**p, **decision}
         results.append(row)
         click.echo(f"  [{i}/{len(papers)}] {decision['final_decision']} | {title[:50]}")

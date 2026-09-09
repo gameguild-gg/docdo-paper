@@ -61,14 +61,22 @@ def fetch_pubmed_v2(
     max_results: int = PUBMED_MAX,
     batch_size: int = PUBMED_BATCH,
     email: str | None = None,
+    sort: str | None = None,
 ) -> tuple[list[dict[str, str]], str]:
+    """Entrez esearch + batched efetch.
+
+    ``sort=None`` keeps Entrez' default id ordering (observed date-descending
+    under datetype filters — the 2026-dominated window that hides older
+    records); ``sort="relevance"`` retrieves the relevance-ranked window
+    instead (Task-6 remediation for high-volume queries).
+    """
     from Bio import Entrez
 
     from . import config
 
     end = date_end or today_iso()
     Entrez.email = email or config.PUBMED_EMAIL
-    handle = Entrez.esearch(
+    esearch_kwargs: dict[str, Any] = dict(
         db="pubmed",
         term=query,
         retmax=max_results,
@@ -76,6 +84,9 @@ def fetch_pubmed_v2(
         mindate=date_start.replace("-", "/"),
         maxdate=end.replace("-", "/"),
     )
+    if sort:
+        esearch_kwargs["sort"] = sort
+    handle = Entrez.esearch(**esearch_kwargs)
     record = Entrez.read(handle)
     handle.close()
     id_list = list(record["IdList"])
@@ -89,6 +100,34 @@ def fetch_pubmed_v2(
                 rows.append(row)
         time.sleep(0.4)  # Entrez courtesy (v1 pattern)
     return rows, "ok"
+
+
+def fetch_pubmed_by_pmids(
+    pmids: list[str],
+    *,
+    batch_size: int = PUBMED_BATCH,
+    email: str | None = None,
+) -> tuple[list[dict[str, str]], str]:
+    """Direct efetch by known PMIDs (seed-oracle recovery path).
+
+    Bypasses esearch entirely — for records verified indexed but unreachable
+    through query windows (e.g. the MONAI Deploy JMIR AI 2024 paper).
+    """
+    from Bio import Entrez
+
+    from . import config
+
+    Entrez.email = email or config.PUBMED_EMAIL
+    rows: list[dict[str, str]] = []
+    for i in range(0, len(pmids), batch_size):
+        records = _efetch_with_retry([str(p) for p in pmids[i : i + batch_size]])
+        for article in records.get("PubmedArticle", []):
+            row = parse_pubmed_article(article)
+            if row:
+                rows.append(row)
+        time.sleep(0.4)  # Entrez courtesy (v1 pattern)
+    status = "ok" if len(rows) == len(pmids) else f"partial: {len(rows)}/{len(pmids)}"
+    return rows, status
 
 
 def _efetch_with_retry(batch: list[str]) -> dict[str, Any]:

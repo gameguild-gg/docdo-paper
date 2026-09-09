@@ -288,3 +288,49 @@ class TestBuildFulltextPrompt:
         prompt = build_fulltext_prompt("p1", "text")
         assert "INCLUDE" in prompt
         assert "EXCLUDE" in prompt
+
+
+# -----------------------------------------------------------------------
+# v2 two-lane criteria: Framework/Software study type routing
+# -----------------------------------------------------------------------
+
+
+class TestTwoLaneCriteria:
+    def test_prompt_carries_study_type_slot_and_framework_criteria(self):
+        from docdo.screening import FRAMEWORK_STUDY_TYPE_CRITERIA
+
+        assert "{study_type_instructions}" in SCREENING_PROMPT
+        assert "Framework/Software" in FRAMEWORK_STUDY_TYPE_CRITERIA
+        assert "F1" in FRAMEWORK_STUDY_TYPE_CRITERIA
+        assert "qualitative synthesis" in FRAMEWORK_STUDY_TYPE_CRITERIA
+
+    def test_screen_paper_once_routes_framework_criteria(self, monkeypatch):
+        import docdo.screening as scr
+
+        captured = {}
+
+        def fake_chat(prompt, *, system="", model=None, **kwargs):
+            captured["prompt"] = prompt
+            return '{"decision": "INCLUDE", "confidence": 90, "rationale": "r"}'
+
+        monkeypatch.setattr(scr, "chat", fake_chat)
+        scr.screen_paper_once("T", "A", framework_candidate=True)
+        assert "STUDY TYPE ROUTING" in captured["prompt"]
+        scr.screen_paper_once("T", "A", framework_candidate="false")
+        assert "STUDY TYPE ROUTING" not in captured["prompt"]
+
+    def test_batch_requests_route_by_framework_flag(self):
+        papers = [
+            {"id": "fw1", "title": "MONAI Label", "abstract_snippet": "x",
+             "framework_candidate": "true"},
+            {"id": "std1", "title": "Liver U-Net", "abstract_snippet": "y",
+             "framework_candidate": "false"},
+        ]
+        requests = build_screening_batch_requests(papers, num_runs=1)
+        by_cid = {r["custom_id"]: r for r in requests}
+        fw_prompt = by_cid["fw1__run1"]["body"]["messages"][1]["content"]
+        std_prompt = by_cid["std1__run1"]["body"]["messages"][1]["content"]
+        assert "STUDY TYPE ROUTING" in fw_prompt
+        assert "STUDY TYPE ROUTING" not in std_prompt
+        assert "IC1" in std_prompt
+        assert "IC1" in fw_prompt  # method criteria remain visible; routing picks

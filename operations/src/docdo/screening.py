@@ -21,7 +21,41 @@ SYSTEM_PROMPT = (
 )
 
 # ---------------------------------------------------------------------------
-# Screening prompt (strict: no UNCERTAIN)
+# v2 Framework/Software study type (qualitative stratum) — appended per the
+# Task-2 v2 amendment (coding-scheme.md / S4_screening_criteria.md v2).
+# Records flagged framework_candidate=true are adjudicated against THIS
+# study type, not the method-paper criteria.
+# ---------------------------------------------------------------------------
+
+FRAMEWORK_STUDY_TYPE_CRITERIA = """\\
+## STUDY TYPE ROUTING — FRAMEWORK/SOFTWARE (v2, qualitative stratum):
+
+THIS record is flagged `framework_candidate=true`. Adjudicate it against the
+**Framework/Software study type** below INSTEAD OF IC1-IC5 above.
+
+**FRAMEWORK/SOFTWARE INCLUDE criteria (ALL must be met):**
+
+**F1 – Software framework/tool:** Describes a software framework, toolkit, or
+platform for 3D medical image segmentation (including deployment, annotation,
+or clinical-workflow tooling around it).
+
+**F2 – Documented components/architecture:** Documents the system's
+components, architecture, or design decisions.
+
+**F3 – Evidence of use/release:** Reports benchmark reproduction or a
+versioned release.
+
+**FRAMEWORK/SOFTWARE EXCLUDE triggers (ANY one excludes):**
+- FEC1: Not a software framework/tool for medical imaging
+- FEC2: No components/architecture documented
+- FEC3: Neither benchmark reproduction nor versioned release reported
+
+Framework/Software papers enter **qualitative synthesis ONLY** (never the
+quantitative Dice table). Do NOT apply IC2/IC3/IC4 to this record.
+"""
+
+# ---------------------------------------------------------------------------
+# Screening prompt (strict: no UNCERTAIN; two-lane v2 criteria routing)
 # ---------------------------------------------------------------------------
 SCREENING_PROMPT = """\
 You are screening papers for a systematic review on \
@@ -29,7 +63,7 @@ You are screening papers for a systematic review on \
 
 ## STRICT DECISION PROTOCOL: NO "UNCERTAIN" — You must decide INCLUDE or EXCLUDE.
 
-## INCLUSION CRITERIA (ALL must be met):
+## INCLUSION CRITERIA (ALL must be met — method papers):
 
 **IC1 – Deep Learning Method:**
 Uses neural networks (CNN, Transformer, U-Net, encoder-decoder, attention mechanisms).
@@ -53,7 +87,7 @@ OK: Organ + tumor together, organs-at-risk for radiotherapy.
 Presents novel method, architecture, training strategy, or benchmark comparison with insights.
 NOT: Pure review/survey papers, dataset-only papers, editorials.
 
-## EXCLUSION TRIGGERS (ANY one excludes):
+## EXCLUSION TRIGGERS (ANY one excludes — method papers):
 - EC1: Detection/classification only (no spatial segmentation)
 - EC2: Non-CT modalities exclusively
 - EC3: Non-organ targets exclusively (tumors, vessels, bones, muscles, COVID lesions)
@@ -61,8 +95,11 @@ NOT: Pure review/survey papers, dataset-only papers, editorials.
 - EC5: Non-deep learning methods
 - EC6: Review papers without novel methodology
 
+{study_type_instructions}
 ## DECISION RULE:
-- If ALL IC1-IC5 are clearly met and NO EC triggers → **INCLUDE**
+- If a Framework/Software study-type block is present above, apply ITS
+  criteria (F1-F3, FEC1-FEC3) instead of IC1-IC5.
+- If ALL required criteria are clearly met and NO EC/FEC triggers → **INCLUDE**
 - If ANY doubt or missing information → **EXCLUDE** (conservative approach)
 - NO "UNCERTAIN" ALLOWED
 
@@ -75,6 +112,19 @@ Return ONLY valid JSON:
 {{"decision": "INCLUDE" | "EXCLUDE", "confidence": 70-95, \
 "rationale": "One sentence", "criteria_met": ["IC1",...], \
 "criteria_failed": ["EC1",...]}}"""
+
+
+def _is_framework_candidate(value: object) -> bool:
+    """Coerce CSV string flags / bools to the framework lane."""
+    return str(value).strip().lower() == "true"
+
+
+def _study_type_instructions(framework_candidate: object) -> str:
+    return (
+        FRAMEWORK_STUDY_TYPE_CRITERIA
+        if _is_framework_candidate(framework_candidate)
+        else ""
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -188,11 +238,17 @@ def screen_paper_once(
     abstract: str,
     *,
     model: str | None = None,
+    framework_candidate: bool | str = False,
 ) -> dict[str, Any]:
-    """Run a single screening pass on one paper."""
+    """Run a single screening pass on one paper.
+
+    ``framework_candidate`` (bool or CSV "true"/"false") routes the record to
+    the Framework/Software study-type criteria instead of IC1-IC5.
+    """
     prompt = SCREENING_PROMPT.format(
         title=title or "No title",
         abstract=abstract or "No abstract available",
+        study_type_instructions=_study_type_instructions(framework_candidate),
     )
     text = chat(prompt, system=SYSTEM_PROMPT, model=model)
     return _parse_screening_result(text)
@@ -239,12 +295,16 @@ def screen_paper(
     *,
     num_runs: int | None = None,
     model: str | None = None,
+    framework_candidate: bool | str = False,
 ) -> dict[str, Any]:
     """Screen a paper with *num_runs* independent passes + unanimous voting."""
     num_runs = num_runs or config.NUM_RUNS
     runs: list[dict[str, Any]] = []
     for _ in range(num_runs):
-        runs.append(screen_paper_once(title, abstract, model=model))
+        runs.append(
+            screen_paper_once(title, abstract, model=model,
+                              framework_candidate=framework_candidate)
+        )
         time.sleep(0.3)
     # Pad missing runs
     while len(runs) < num_runs:
@@ -272,6 +332,9 @@ def build_screening_batch_requests(
         prompt = SCREENING_PROMPT.format(
             title=title or "No title",
             abstract=abstract or "No abstract available",
+            study_type_instructions=_study_type_instructions(
+                paper.get("framework_candidate", False)
+            ),
         )
         for run in range(1, num_runs + 1):
             requests.append(

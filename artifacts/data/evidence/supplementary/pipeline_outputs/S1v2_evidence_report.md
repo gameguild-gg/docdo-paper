@@ -234,3 +234,36 @@ B-PUB-001 rows from 2026). Recovery requires a fetcher-level window fix
 surface — filed for orchestrator sanction.
 
 **Report Version:** 2.1 (addendum)
+
+---
+
+## Addendum r2 — PubMed window remediation + seed PMID recovery (2026-09-08)
+
+Key-free Task-6 continuation. Two bounded supplementary fetches (the complete
+set; documented in `queries_v2.yaml` `supplementary_queries`, validator green
+unweakened; provenance rows in `raw/v2/_provenance.csv`):
+
+| Query id | DB | Records | Status |
+|----------|----|--------:|--------|
+| B-PUB-002-pmid | PubMed (direct efetch) | 1 | seed-oracle PMID recovery: MONAI Deploy canonical (Gupta et al., JMIR AI 2024, PMID 39653370, DOI 10.2196/55833) — dedup R1754, bypass lane |
+| G-PUB-002-r | PubMed (sort=relevance) | 1,000 | retention probe; year spread 2019-2026 (vs 995/1000 rows from 2026 in G-PUB-001's default-ordered window) |
+
+**Fetcher changes** (`operations/src/docdo/fetch_v2_fetchers.py`):
+`fetch_pubmed_v2(sort=...)` (Entrez relevance window option) and
+`fetch_pubmed_by_pmids(...)` (direct efetch by known ids). Red-first tests;
+suite 196 green.
+
+**Retention probe result:** G-PUB-002-r recovered **7 of the 26 v1-missed
+studies** (complete abdomen/pelvis U-Net variant; 3D-patch-based abdominal
+multi-organ; 3D self-attention U-Net multi-organ; DECT multi-organ;
+interactive 3D U-Net pancreas; DNN pancreas segmentation+volumetry;
+kidney+renal-mass segmentation/detection). v1 retention 26/52 -> **32/52**
+(9 DOI + 23 title). The remaining 20 misses are attributed to the family-F
+`organ[tiab]` gap and the blocked S2 lane (unchanged diagnosis; Task 9
+reconciles).
+
+**Funnel after r2:** raw 14,547 (31 immutable per-query CSVs) -> dedup 8,846
+-> `es_pass_total` **1,101** (641 standard + 460 bypass), checker green.
+MONAI Deploy seed: BLOCKED -> in screening pool (see `S2v2_seed_recall.md`).
+
+**Report Version:** 2.2 (addendum r2)
