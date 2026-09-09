@@ -197,27 +197,16 @@ def index_papers(es):
     return papers
 
 
-def filter_papers(es):
-    """
-    Filter papers using Elasticsearch boolean queries.
-    
-    INCLUSION (must have ALL):
-    - Deep learning terms
-    - Segmentation terms  
-    - CT imaging terms
-    - Organ terms
-    
-    EXCLUSION (must NOT have exclusively):
-    - MRI-only, ultrasound-only
-    - Detection/classification only (without segmentation)
-    - Review/survey papers
-    """
-    
-    # === INCLUSION QUERY ===
-    # v2: standard inclusion (all four IC blocks) OR the coarse framework
-    # whitelist recall clause, under one top-level must_not for review titles.
+def inclusion_query():
+    """Top-level ES inclusion DSL (v2).
 
-    inclusion_query = {
+    must_not: review-title phrases; should: the standard 4-block AND
+    (IC1 deep learning, IC2 segmentation, IC3 CT, IC4 organs) OR the
+    coarse framework-whitelist recall clause (precision is Python-side in
+    apply_exclusion_filters). Exposed module-level so the pure-Python
+    fallback path (no live Elasticsearch) evaluates the SAME query.
+    """
+    return {
         "bool": {
             # EXCLUSION: Filter out obvious non-matches
             "must_not": [
@@ -326,11 +315,29 @@ def filter_papers(es):
             "minimum_should_match": 1,
         }
     }
-    
+
+
+def filter_papers(es):
+    """
+    Filter papers using Elasticsearch boolean queries.
+
+    INCLUSION (must have ALL):
+    - Deep learning terms
+    - Segmentation terms
+    - CT imaging terms
+    - Organ terms
+
+    EXCLUSION (must NOT have exclusively):
+    - MRI-only, ultrasound-only
+    - Detection/classification only (without segmentation)
+    - Review/survey papers
+    """
+    inclusion = inclusion_query()
+
     # Execute search - get all matching papers
     result = es.search(
         index=INDEX_NAME,
-        query=inclusion_query,
+        query=inclusion,
         size=10000  # Get all matches
     )
     
