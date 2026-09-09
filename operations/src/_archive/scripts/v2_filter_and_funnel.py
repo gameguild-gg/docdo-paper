@@ -183,6 +183,7 @@ def main() -> int:
     raw_rows = read_rows(RAW_COMBINED)
     dedup_rows = read_rows(DEDUP_CSV)
     n_raw, n_dedup = len(raw_rows), len(dedup_rows)
+    n_raw_files = len([p for p in RAW_COMBINED.parent.glob("*.csv") if not p.name.startswith("_")])
     db_counts = Counter(r.get("database", "Unknown") for r in raw_rows)
 
     # --- recall: evaluate the pinned inclusion DSL per record -------------
@@ -264,7 +265,7 @@ def main() -> int:
 
 | Stage | N | Authoritative artifact |
 |-------|---|------------------------|
-| Records identified (raw; per-source breakdown below) | **{fmt(n_raw)}** | `raw/v2/_combined.csv` (concat of 24 immutable per-query CSVs; `S1v2_evidence_report.md`) |
+| Records identified (raw; per-source breakdown below) | **{fmt(n_raw)}** | `raw/v2/_combined.csv` (concat of {n_raw_files} immutable per-query CSVs; `S1v2_evidence_report.md`) |
 | Deduplication by DOI + normalised title | **{fmt(n_dedup)}** | `interim/S1v2_search_results_deduplicated.csv` (tracked copy: `pipeline_outputs/S1v2_search_results_deduplicated.csv`); duplicate-DOI rate in output: 0.0000% |
 | Pre-filter, standard lane — passes standard inclusion AND strict exclusions AND NOT `framework_candidate` | **{fmt(n_std)}** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=false`) |
 | Pre-filter, framework bypass lane — `framework_candidate` only | **{fmt(n_byp)}** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=true`) |

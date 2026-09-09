@@ -58,6 +58,27 @@ generated: "2026-09-08"
 review: "Deep Learning for 3D CT Organ Segmentation — Systematic Review"
 plan_reference: ".omo/plans/paper-coverage-gap-update.md (Task 2, term lists verbatim)"
 
+# Seed-recall fix loop (Task 6, 2026-09-08) — one sanctioned revision:
+#   1. Family B: added the exact token VISTA3D (all four databases; query ids
+#      bumped to B-*-002). Root cause: the VISTA-3D canonical paper
+#      (arXiv:2406.05285) is titled "VISTA3D: A Unified Segmentation
+#      Foundation Model For 3D Medical Imaging" — no hyphen — so the pinned
+#      hyphenated form cannot match it in any fielded index.
+#   2. Family C arXiv only: query id bumped to C-ARX-002 with the query text
+#      UNCHANGED. Root cause: the arXiv API intermittently degrades the parse
+#      of this ~1.8 KB boolean query (observed totalResults 893 vs 185,098 for
+#      the identical query string on 2026-09-08); the fetch-time sample missed
+#      the canonical SAM-Med3D paper (arXiv:2310.15161), which ranks in the
+#      top 15 under a full parse. Resample under a new immutable query id.
+#   -001 CSVs are immutable and remain the artifacts of the original fetch.
+revisions:
+  - revision: "r1-seed-recall"
+    date: "2026-09-08"
+    task: "paper-coverage-gap-update Task 6 (seed recall oracle fix loop)"
+    changes:
+      - "family B terms += VISTA3D; B-PUB-002/B-ARX-002/B-S2-002/B-GS-002"
+      - "family C arXiv query id C-ARX-001 -> C-ARX-002 (query text unchanged; arXiv API parse flakiness resample)"
+
 date_range:
   start: "2015-01-01"
   end: "EXECUTION_DATE" # substituted with the actual run date by the Task-3 fetcher
@@ -212,6 +233,7 @@ executed_families:
       (exact tool names) OR ((framework vocabulary) AND ("medical imaging" OR
       radiolog* OR tomograph*))
     terms: ["MONAI", "Auto3DSeg", "MONAI Label", "MONAI Deploy", "VISTA-3D",
+            "VISTA3D",
             "NV-Segment-CT", "nnInteractive", "NVIDIA Clara", "Holoscan",
             "open-source framework", "medical imaging toolkit",
             "software framework", "deployment", "microservice",
@@ -220,11 +242,11 @@ executed_families:
             "tomograph*"]
     queries:
       pubmed:
-        query_id: B-PUB-001
+        query_id: B-PUB-002
         blocks:
           - >-
             (MONAI[tiab] OR Auto3DSeg[tiab] OR "MONAI Label"[tiab] OR "MONAI Deploy"[tiab] OR
-            "VISTA-3D"[tiab] OR "NV-Segment-CT"[tiab] OR nnInteractive[tiab] OR
+            "VISTA-3D"[tiab] OR VISTA3D[tiab] OR "NV-Segment-CT"[tiab] OR nnInteractive[tiab] OR
             "NVIDIA Clara"[tiab] OR Holoscan[tiab] OR
             (("open-source framework"[tiab] OR "medical imaging toolkit"[tiab] OR
             "software framework"[tiab] OR deployment[tiab] OR microservice[tiab] OR
@@ -232,12 +254,13 @@ executed_families:
             DICOM[tiab] OR reproducib*[tiab] OR "Grand Challenge"[tiab]) AND
             ("medical imaging"[tiab] OR radiolog*[tiab] OR tomograph*[tiab])))
       arxiv:
-        query_id: B-ARX-001
+        query_id: B-ARX-002
         blocks:
           - >-
             (ti:"MONAI" OR abs:"MONAI" OR ti:"Auto3DSeg" OR abs:"Auto3DSeg" OR
             ti:"MONAI Label" OR abs:"MONAI Label" OR ti:"MONAI Deploy" OR
             abs:"MONAI Deploy" OR ti:"VISTA-3D" OR abs:"VISTA-3D" OR
+            ti:"VISTA3D" OR abs:"VISTA3D" OR
             ti:"NV-Segment-CT" OR abs:"NV-Segment-CT" OR ti:"nnInteractive" OR
             abs:"nnInteractive" OR ti:"NVIDIA Clara" OR abs:"NVIDIA Clara" OR
             ti:"Holoscan" OR abs:"Holoscan" OR
@@ -255,10 +278,11 @@ executed_families:
             ti:"radiologists" OR abs:"radiologists" OR ti:"tomography" OR
             abs:"tomography" OR ti:"tomographic" OR abs:"tomographic")))
       semantic_scholar:
-        query_id: B-S2-001
+        query_id: B-S2-002
         blocks:
           - >-
             (MONAI OR Auto3DSeg OR "MONAI Label" OR "MONAI Deploy" OR "VISTA-3D" OR
+            VISTA3D OR
             "NV-Segment-CT" OR nnInteractive OR "NVIDIA Clara" OR Holoscan OR
             (("open-source framework" OR "medical imaging toolkit" OR
             "software framework" OR deployment OR microservice OR
@@ -267,10 +291,11 @@ executed_families:
             ("medical imaging" OR radiology OR radiological OR radiologists OR
             tomography OR tomographic)))
       google_scholar:
-        query_id: B-GS-001
+        query_id: B-GS-002
         blocks:
           - >-
             ("MONAI" OR "Auto3DSeg" OR "MONAI Label" OR "MONAI Deploy" OR "VISTA-3D" OR
+            "VISTA3D" OR
             "NV-Segment-CT" OR "nnInteractive" OR "NVIDIA Clara" OR "Holoscan" OR
             (("open-source framework" OR "medical imaging toolkit" OR
             "software framework" OR "deployment" OR "microservice" OR
@@ -308,7 +333,7 @@ executed_families:
             (segmentation[tiab] OR "medical imaging"[tiab])
           - *F_PUBMED
       arxiv:
-        query_id: C-ARX-001
+        query_id: C-ARX-002
         blocks:
           - >-
             (ti:"Segment Anything" OR abs:"Segment Anything" OR ti:"SAM" OR abs:"SAM" OR

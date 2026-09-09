@@ -9,11 +9,11 @@
 
 | Stage | N | Authoritative artifact |
 |-------|---|------------------------|
-| Records identified (raw; per-source breakdown below) | **10,644** | `raw/v2/_combined.csv` (concat of 24 immutable per-query CSVs; `S1v2_evidence_report.md`) |
-| Deduplication by DOI + normalised title | **8,147** | `interim/S1v2_search_results_deduplicated.csv` (tracked copy: `pipeline_outputs/S1v2_search_results_deduplicated.csv`); duplicate-DOI rate in output: 0.0000% |
-| Pre-filter, standard lane — passes standard inclusion AND strict exclusions AND NOT `framework_candidate` | **466** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=false`) |
-| Pre-filter, framework bypass lane — `framework_candidate` only | **399** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=true`) |
-| **`es_pass_total`** — records-screened input (= standard + bypass; sole PRISMA "records screened" number) | **865** | checker assert above; this union row is what Task 11's diagram consumes |
+| Records identified (raw; per-source breakdown below) | **13,546** | `raw/v2/_combined.csv` (concat of 29 immutable per-query CSVs; `S1v2_evidence_report.md`) |
+| Deduplication by DOI + normalised title | **8,161** | `interim/S1v2_search_results_deduplicated.csv` (tracked copy: `pipeline_outputs/S1v2_search_results_deduplicated.csv`); duplicate-DOI rate in output: 0.0000% |
+| Pre-filter, standard lane — passes standard inclusion AND strict exclusions AND NOT `framework_candidate` | **464** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=false`) |
+| Pre-filter, framework bypass lane — `framework_candidate` only | **437** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=true`) |
+| **`es_pass_total`** — records-screened input (= standard + bypass; sole PRISMA "records screened" number) | **901** | checker assert above; this union row is what Task 11's diagram consumes |
 
 ## 2. Delta vs v1
 
@@ -24,9 +24,9 @@ construction.
 
 | Stage | v1 | v2 | Δ |
 |-------|---:|---:|---:|
-| Raw | 2,985 | 10,644 | +7,659 |
-| Dedup | 2,821 | 8,147 | +5,326 |
-| Pre-filtered (v1: single ES stage; v2: `es_pass_total`) | 638 | 865 | +227 |
+| Raw | 2,985 | 13,546 | +10,561 |
+| Dedup | 2,821 | 8,161 | +5,340 |
+| Pre-filtered (v1: single ES stage; v2: `es_pass_total`) | 638 | 901 | +263 |
 
 ## 3. Lane status (documented degradations)
 
@@ -34,9 +34,9 @@ Raw records by source (machine-derived from `raw/v2/_combined.csv`):
 
 | Source | Raw records |
 |--------|------------:|
-| arXiv | 5,271 |
-| PubMed | 5,045 |
-| Google Scholar | 328 |
+| arXiv | 7,164 |
+| PubMed | 6,044 |
+| Google Scholar | 338 |
 
 - **Semantic Scholar: blocked** — all 6 family queries (A/B/C/D/E/G-S2-001)
   returned 0 records on 2026-09-08 (sustained rate-limit storm; interactive
@@ -104,7 +104,7 @@ deliverable (`pipeline_outputs/v1_v2_study_reconciliation.csv`).
 ## 5. Provenance
 
 - Dedup: `docdo deduplicate -i raw/v2/_combined.csv -o interim/S1v2_search_results_deduplicated.csv`
-  (10,644 → 8,147; `docdo.dedup` DOI + normalised-title, empty DOIs skipped).
+  (13,546 → 8,161; `docdo.dedup` DOI + normalised-title, empty DOIs skipped).
 - Pre-filter: pure-Python evaluation of the pinned inclusion DSL
   (`filter_with_elasticsearch.inclusion_query()`) with the module's
   exact-token semantics, then `apply_exclusion_filters()` (strict

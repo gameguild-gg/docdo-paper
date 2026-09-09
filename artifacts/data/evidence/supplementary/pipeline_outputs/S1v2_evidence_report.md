@@ -177,3 +177,60 @@ All searches executed 2026-09-08. Counts are data rows per immutable CSV.
 **Report Version:** 2.0
 **Author:** Automated pipeline
 **Date:** 2026-09-08
+
+---
+
+## Addendum — Task 6 seed-recall fix loop (2026-09-08, revision r1)
+
+Appended per the Task-6 binding seed-recall oracle (plan §6). One sanctioned
+query-layer fix loop executed; `-001` CSVs remain immutable.
+
+**Root causes found and fixed:**
+
+1. **VISTA-3D hyphen defect** — the canonical paper (arXiv:2406.05285) is
+   titled "VISTA3D" (unhyphenated); the pinned family-B term "VISTA-3D"
+   cannot match it in any fielded index. Fix: `queries_v2.yaml` r1 adds the
+   exact token `VISTA3D` to family B in all four databases (query ids bumped
+   to `B-PUB-002` / `B-ARX-002` / `B-S2-002` / `B-GS-002`); ES whitelist
+   `FRAMEWORK_TOOL_NAMES` synced (+ "VISTA3D").
+2. **arXiv API parse flakiness** — the family-C arXiv query (~1.8 KB boolean)
+   returned `totalResults` 893 and 185,098 for the identical query string
+   within minutes (2026-09-08); the fetch-time sample missed the SAM-Med3D
+   canonical. Fix: resample under `C-ARX-002` (query text unchanged).
+   Subsequent analysis showed the 893-row parse is stable and the SAM-Med3D
+   miss is template-inherent (canonical abstract has zero family-F anatomy
+   tokens) — see `S2v2_seed_recall.md` row 9.
+3. **Framework tool papers dropped at the pre-filter** — `apply_exclusion_filters`
+   applied the method-paper EC3/organ checks to framework-bypass rows
+   (nnInteractive excluded as "Bone/skeletal only"). Fix: the EC3 and
+   strict-organ checks now skip **tool-name** framework matches only
+   (`is_tool_name_candidate`); vocabulary-only matches remain under the
+   method-paper anatomy criteria (pinned Task-3 behavior preserved for the
+   heuristic lane).
+
+**Fix-loop fetch results (provenance rows in `raw/v2/_provenance.csv`):**
+
+| Query id | DB | Records | Status |
+|----------|----|--------:|--------|
+| B-PUB-002 | PubMed | 999 | ok |
+| B-ARX-002 | arXiv | 1,000 | ok (VISTA3D canonical captured, R0128) |
+| B-S2-002 | Semantic Scholar | 0 | error: HTTP 500 (storm persists; control probes 429 at both spaced retries) |
+| B-GS-002 | Google Scholar | 10 | blocked: MaxTriesExceeded (partial rows kept; informational only) |
+| C-ARX-002 | arXiv | 893 | ok (stable parse; template-inherent miss confirmed) |
+
+**Downstream (idempotent re-runs):** `docdo fetch-v2 --concat` (10,644 →
+13,546 rows over 29 immutable per-query CSVs) → `docdo deduplicate`
+(8,147 → 8,161) → `v2_filter_and_funnel.py` → `S2v2_elasticsearch_filtered.csv`
+**901 rows** (464 standard + 437 bypass), checker green; `S1v2_funnel.md`
+regenerated. Tests: `operations/tests/` 191 passed (3 added:
+VISTA3D bypass sample, tool-name organ-skip, vocab-only counter-test).
+
+**Known unrecovered (documented, not silent):** MONAI Deploy canonical
+(JMIR AI 2024, PMID 39653370) is PubMed-indexed but unreachable — no
+tool-name tiab match, vocabulary arm matches 20,929 records, and the
+1,000-record fetch window is date-descending and 2026-dominated (997/999
+B-PUB-001 rows from 2026). Recovery requires a fetcher-level window fix
+(sort/pagination in `fetch_pubmed_v2`), outside the Task-6 amendable
+surface — filed for orchestrator sanction.
+
+**Report Version:** 2.1 (addendum)

@@ -38,7 +38,7 @@ INDEX_NAME = "papers"
 # =============================================================================
 
 FRAMEWORK_TOOL_NAMES = [
-    "MONAI", "Auto3DSeg", "MONAI Label", "MONAI Deploy", "VISTA-3D",
+    "MONAI", "Auto3DSeg", "MONAI Label", "MONAI Deploy", "VISTA-3D", "VISTA3D",
     "NV-Segment-CT", "nnInteractive", "NVIDIA Clara", "Holoscan",
 ]
 FRAMEWORK_VOCABULARY = [
@@ -71,10 +71,21 @@ def _matches_whitelist_term(tokens, term):
     return _has_phrase(tokens, term)
 
 
+def is_tool_name_candidate(title, abstract):
+    """Whitelist arm (a) only: an explicit framework tool name is present.
+
+    A tool-name match is definitionally a framework paper (the tool is the
+    subject); vocabulary-only matches are a recall heuristic for unnamed
+    frameworks and stay subject to the method-paper anatomy criteria.
+    """
+    tokens = _tokens(f"{title} {abstract}")
+    return any(_matches_whitelist_term(tokens, t) for t in FRAMEWORK_TOOL_NAMES)
+
+
 def is_framework_candidate(title, abstract):
     """Pinned bypass predicate: whole-token matching on title+abstract only."""
     tokens = _tokens(f"{title} {abstract}")
-    if any(_matches_whitelist_term(tokens, t) for t in FRAMEWORK_TOOL_NAMES):
+    if is_tool_name_candidate(title, abstract):
         return True
     vocab = FRAMEWORK_VOCABULARY + [s + "*" for s in FRAMEWORK_VOCAB_STEMS]
     if any(_matches_whitelist_term(tokens, t) for t in vocab):
@@ -370,6 +381,12 @@ def apply_exclusion_filters(papers):
             paper.get('title', ''),
             paper.get('abstract_snippet', '') or paper.get('abstract', ''))
         paper['framework_candidate'] = 'true' if framework else 'false'
+        # Arm (a) only: tool-name matches are definitionally framework papers
+        # and also skip the method-paper anatomy checks below; vocabulary-only
+        # matches stay under the method-paper anatomy criteria.
+        tool = is_tool_name_candidate(
+            paper.get('title', ''),
+            paper.get('abstract_snippet', '') or paper.get('abstract', ''))
 
         exclude = False
         reason = None
@@ -413,7 +430,9 @@ def apply_exclusion_filters(papers):
                 reason = "X-ray-only"
 
         # === EC3: Non-organ targets exclusively ===
-        if not exclude:
+        # Tool-name framework papers route to the Framework/Software study
+        # type at screening — the method-paper anatomy criteria do not apply.
+        if not exclude and not tool:
             organ_terms = ['liver', 'kidney', 'spleen', 'pancreas', 'lung', 'heart',
                            'stomach', 'gallbladder', 'bladder', 'prostate', 'colon',
                            'esophagus', 'adrenal', 'organ', 'hepatic', 'renal', 'pulmonary', 'cardiac',
@@ -509,7 +528,9 @@ def apply_exclusion_filters(papers):
                 reason = "No original method/approach/network/model/algorithm/architecture"
 
         # === Additional strict organ check ===
-        if not exclude:
+        # (tool-name framework papers skip: screened against the
+        # Framework/Software study type, which carries no organ requirement)
+        if not exclude and not tool:
             organ_check = ['liver', 'kidney', 'spleen', 'pancreas', 'lung', 'heart',
                           'stomach', 'gallbladder', 'bladder', 'prostate', 'colon',
                           'esophagus', 'adrenal', 'abdominal', 'thoracic', 'multi-organ', 'oar']

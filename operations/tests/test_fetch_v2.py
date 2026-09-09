@@ -214,6 +214,7 @@ BYPASS_SAMPLES = [
     ("MONAI Label: intelligent annotation for radiology", ""),
     ("monai deploy packaging of inference pipelines", ""),
     ("VISTA-3D: promptable 3D segmentation without finetuning", ""),
+    ("VISTA3D: A Unified Segmentation Foundation Model For 3D Medical Imaging", ""),
     ("NV-Segment-CT industry technical documentation", ""),
     ("nnInteractive: interactive segmentation revisited", ""),
     ("NVIDIA Clara platform overview", ""),
@@ -334,6 +335,38 @@ class TestEsWhitelist:
         filtered = es_filter.apply_exclusion_filters(papers)
         assert [p["id"] for p in filtered] == ["fw-detect"]
         assert filtered[0].get("framework_candidate") == "true"
+
+    def test_framework_candidate_skips_organ_target_checks(self, es_filter):
+        # Framework/tool papers are screened against the Framework/Software
+        # study type, not the method-paper anatomy criteria: a tool paper
+        # whose abstract mentions bones (or lesions) but no organ list entry
+        # must still reach the bypass lane (Task-6 seed-recall regression).
+        papers = [
+            {"id": "fw-bone", "title": "VISTA3D: A Unified Segmentation Foundation Model",
+             "abstract_snippet": "An interactive model for 3D medical image "
+                                 "segmentation covering bone and anatomy; the "
+                                 "software framework approach is evaluated on "
+                                 "volumetric medical images."},
+            {"id": "fw-lesion", "title": "nnInteractive: interactive segmentation",
+             "abstract_snippet": "A software framework for medical imaging; the "
+                                 "model handles lesions and vertebrae prompts."},
+        ]
+        filtered = es_filter.apply_exclusion_filters(papers)
+        by_id = {p["id"]: p for p in filtered}
+        assert "fw-bone" in by_id and by_id["fw-bone"]["framework_candidate"] == "true"
+        assert "fw-lesion" in by_id and by_id["fw-lesion"]["framework_candidate"] == "true"
+
+    def test_vocab_only_candidate_still_needs_organ_target(self, es_filter):
+        # Vocabulary-lane matches are a recall heuristic, not proof of a
+        # framework paper: the method-paper anatomy criteria still apply.
+        papers = [{
+            "id": "vocab-bone", "title": "Vertebrae refinement via deployment pipelines",
+            "abstract_snippet": "A deployment approach for medical imaging; "
+                                "the model processes vertebrae and bone "
+                                "structures without organ delineation.",
+        }]
+        filtered = es_filter.apply_exclusion_filters(papers)
+        assert [p["id"] for p in filtered] == []
 
 
 # ---------------------------------------------------------------------------

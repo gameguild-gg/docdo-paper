@@ -312,6 +312,8 @@ work/projects/papers/**/build/
 artifacts/data/evidence/pdfs/**
 !artifacts/data/evidence/pdfs/.gitkeep
 !artifacts/data/evidence/pdfs/README.md
+!artifacts/data/evidence/pdfs/manual-inbox/
+!artifacts/data/evidence/pdfs/manual-inbox/.gitkeep
 artifacts/data/evidence/supplementary/S10_pdfs_open/**
 !artifacts/data/evidence/supplementary/S10_pdfs_open/.gitkeep
 
