@@ -9,7 +9,7 @@
 
 | Stage | N | Authoritative artifact |
 |-------|---|------------------------|
-| Records identified (raw; per-source breakdown below) | **14,547** | `raw/v2/_combined.csv` (concat of 31 immutable per-query CSVs; `S1v2_evidence_report.md`) |
+| Records identified (raw; per-source breakdown below) | **14,547** | `raw/v2/_combined.csv` (concat of 30 immutable per-query CSVs; `S1v2_evidence_report.md`) |
 | Deduplication by DOI + normalised title | **8,846** | `interim/S1v2_search_results_deduplicated.csv` (tracked copy: `pipeline_outputs/S1v2_search_results_deduplicated.csv`); duplicate-DOI rate in output: 0.0000% |
 | Pre-filter, standard lane — passes standard inclusion AND strict exclusions AND NOT `framework_candidate` | **641** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=false`) |
 | Pre-filter, framework bypass lane — `framework_candidate` only | **460** | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` (`framework_candidate=true`) |

@@ -267,3 +267,47 @@ reconciles).
 MONAI Deploy seed: BLOCKED -> in screening pool (see `S2v2_seed_recall.md`).
 
 **Report Version:** 2.2 (addendum r2)
+
+---
+
+## Addendum r3 — S2 lane recovery attempt (2026-09-08 evening)
+
+**Trigger:** orchestrator control probe returned HTTP 200 with live JSON
+(`paper/search?query=liver+segmentation&limit=2`, total=1,025,418) minutes
+after an evening of 429s + one transient 500 — the lane appeared recovered,
+possibly temporarily.
+
+**Attempt:** the six zero-row S2 stubs (A/B/C/D/E/G-S2-001 + the r1
+B-S2-002 header-only stub; all verified 1-line before deletion) were removed
+and the six cells re-fetched through the package fetcher (built-in
+progressive 429 backoff, 900 s watchdog per cell, targeted driver — NOT
+`docdo fetch-v2` run_all, which would re-fire the EBSCO scripted lane past
+the pinned 1+1 attempt depth).
+
+**Result: lane re-closed — zero cells landed.**
+
+| Cell | Records | Status (provenance row) |
+|------|--------:|-------------------------|
+| A-S2-001 | 0 | blocked: watchdog timeout (900s) — 2026-09-08 |
+| B-S2-002 | 0 | blocked: watchdog timeout (900s) — 2026-09-08 |
+| C-S2-001 | 0 | blocked: watchdog timeout (900s) — 2026-09-08 |
+| D-S2-001 | 0 | blocked: watchdog timeout (900s) — 2026-09-08 |
+| E-S2-001 | 0 | blocked: watchdog timeout (900s) — 2026-09-08 |
+| G-S2-001 | 0 | blocked: watchdog timeout (900s) — 2026-09-08 |
+
+Post-run control probes: two spaced probes both HTTP 429 (45 s apart). Every
+in-fetcher request exhausted its built-in backoff inside the watchdog — the
+200-window the orchestrator observed did not recur for this client during
+the ~90 min attempt. Header-only terminal stubs restored for all six cells
+(B-S2-001 intentionally not recreated: the r1 amendment renamed family B's
+current id to B-S2-002; the original B-S2-001 provenance history stands).
+
+**Impact: none on funnel numbers.** `_combined.csv` re-concatenated
+(14,547 rows over 30 per-query CSVs — the count drop is the retired B-S2-001
+stub), dedup 8,846, `es_pass_total` 1,101 (641 + 460), checker green; v1
+retention unchanged 32/52; all 12 seed states in `S2v2_seed_recall.md`
+re-verified unchanged. The S2 lane remains the single largest known gap
+(v1 drew 1,084 records from S2); a future open window re-runs the same
+driver unchanged.
+
+**Report Version:** 2.3 (addendum r3)
