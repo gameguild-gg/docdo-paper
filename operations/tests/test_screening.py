@@ -334,3 +334,23 @@ class TestTwoLaneCriteria:
         assert "STUDY TYPE ROUTING" not in std_prompt
         assert "IC1" in std_prompt
         assert "IC1" in fw_prompt  # method criteria remain visible; routing picks
+
+
+class TestVoteTokenBudget:
+    def test_screen_paper_once_budgets_for_reasoning(self, monkeypatch):
+        import docdo.screening as scr
+
+        captured = {}
+
+        def fake_chat(prompt, *, system="", model=None, **kwargs):
+            captured.update(kwargs)
+            return '{"decision": "INCLUDE", "confidence": 90, "rationale": "r"}'
+
+        monkeypatch.setattr(scr, "chat", fake_chat)
+        scr.screen_paper_once("T", "A")
+        assert captured.get("max_tokens", 0) >= 512
+
+    def test_batch_requests_budget_for_reasoning(self):
+        papers = [{"id": "p1", "title": "T", "abstract_snippet": "A"}]
+        requests = build_screening_batch_requests(papers, num_runs=1)
+        assert requests[0]["body"]["max_tokens"] >= 512

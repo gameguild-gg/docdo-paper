@@ -6,12 +6,27 @@ import json
 
 import pytest
 
+from docdo import openai_utils
 from docdo.openai_utils import (
     create_batch_request,
     extract_batch_content,
     parse_json_response,
     strip_code_fences,
 )
+
+
+# -----------------------------------------------------------------------
+# get_client (UA header override)
+# -----------------------------------------------------------------------
+
+
+class TestGetClientUserAgent:
+    def test_client_carries_docdo_user_agent(self, monkeypatch):
+        monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+        monkeypatch.setattr(openai_utils, "_client", None)
+        client = openai_utils.get_client()
+        assert client.default_headers.get("User-Agent") == "docdo/1.0"
+        assert client.default_headers.get("Accept-Encoding") == "identity"
 
 
 # -----------------------------------------------------------------------

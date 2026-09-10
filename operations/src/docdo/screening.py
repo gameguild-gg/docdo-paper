@@ -114,6 +114,11 @@ Return ONLY valid JSON:
 "criteria_failed": ["EC1",...]}}"""
 
 
+# Reasoning-capable vote models emit chain-of-thought BEFORE the JSON vote,
+# and reasoning tokens count against max_tokens — 300 truncates to '{"'.
+VOTE_MAX_TOKENS = 2048
+
+
 def _is_framework_candidate(value: object) -> bool:
     """Coerce CSV string flags / bools to the framework lane."""
     return str(value).strip().lower() == "true"
@@ -250,7 +255,12 @@ def screen_paper_once(
         abstract=abstract or "No abstract available",
         study_type_instructions=_study_type_instructions(framework_candidate),
     )
-    text = chat(prompt, system=SYSTEM_PROMPT, model=model)
+    text = chat(
+        prompt,
+        system=SYSTEM_PROMPT,
+        model=model,
+        max_tokens=VOTE_MAX_TOKENS,
+    )
     return _parse_screening_result(text)
 
 
@@ -343,6 +353,7 @@ def build_screening_batch_requests(
                     prompt=prompt,
                     system=SYSTEM_PROMPT,
                     model=model,
+                    max_tokens=VOTE_MAX_TOKENS,
                 )
             )
     return requests

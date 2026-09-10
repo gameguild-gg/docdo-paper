@@ -16,6 +16,14 @@ from . import config
 # Client factory
 # ---------------------------------------------------------------------------
 
+# The proxy WAF 403-blocks the SDK default User-Agent, and the local
+# brotli 1.1.0 build cannot decode httpx2 2.12 responses — send a plain
+# UA and refuse compression at the header level.
+_DEFAULT_HEADERS = {
+    "User-Agent": "docdo/1.0",
+    "Accept-Encoding": "identity",
+}
+
 _client: OpenAI | None = None
 
 
@@ -29,9 +37,13 @@ def get_client() -> OpenAI:
             _client = OpenAI(
                 api_key=config.openai_api_key(),
                 timeout=httpx.Timeout(config.API_TIMEOUT, connect=10.0),
+                default_headers=_DEFAULT_HEADERS,
             )
         except ImportError:
-            _client = OpenAI(api_key=config.openai_api_key())
+            _client = OpenAI(
+                api_key=config.openai_api_key(),
+                default_headers=_DEFAULT_HEADERS,
+            )
     return _client
 
 
