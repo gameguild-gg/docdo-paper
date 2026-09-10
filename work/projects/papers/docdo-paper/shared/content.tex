@@ -53,7 +53,7 @@ CNNs now achieve high accuracy in medical image segmentation \cite{ronneberger20
 
 \subsection{Clinical Translation Needs}
 
-The practical challenges encountered in developing surgical planning platforms, such as DocDo \cite{docdo2026}, motivated this work. Such platforms depend on accurate and efficient organ segmentation as a core component. Today, these pipelines often rely on manual and semi-automatic segmentation, taking 15 to 45 minutes per structure and creating adoption bottlenecks. Published benchmarks show $>$80\% Dice accuracy, yet clinical deployment demands robust preprocessing for diverse scanners, failure detection, uncertainty quantification, mesh generation, and DICOM integration---aspects that require dedicated engineering beyond benchmark performance.
+The practical challenges encountered in developing surgical planning platforms, such as DocDo \cite{docdo2026}, motivated this work. Such platforms depend on accurate and efficient organ segmentation as a core component. Today, these pipelines often rely on manual and semi-automatic segmentation, taking tens of minutes per structure and creating adoption bottlenecks. Published benchmarks show $>$80\% Dice accuracy, yet clinical deployment demands robust preprocessing for diverse scanners, failure detection, uncertainty quantification, mesh generation, and DICOM integration---aspects that require dedicated engineering beyond benchmark performance.
 
 This work serves as a technology roadmap, identifying the engineering investments needed to bridge the benchmark-to-clinic gap. Our phased adoption strategy (Section~\ref{sec:recommendations}) starts with robust baselines (TotalSegmentator~\cite{wasserthal2023totalsegmentator}, nnU-Net~\cite{isensee2021nnunet}), adds uncertainty-guided quality assurance, then explores interactive refinement (MedSAM~\cite{ma2024medsam}) to reduce, but not eliminate, expert correction.
 
@@ -403,7 +403,7 @@ Data augmentation is essential for model generalization, especially for addressi
 \end{equation*}
 where $\mathbf{u}$ is a random displacement field, $\mathbf{G}_\sigma$ is a Gaussian smoothing kernel with standard deviation $\sigma$, and $\alpha$ controls deformation magnitude. nnU-Net~\cite{isensee2021nnunet} uses $\alpha \in [0, 900]$ and $\sigma \in [9, 13]$ voxels, creating realistic organ shape variations.
 
-\emph{Mirroring} (horizontal, vertical, and axial flipping) doubles effective training data and is especially important for distinguishing bilateral structures (left/right kidney, adrenal glands). All leading methods apply mirroring with 50\% probability per axis.
+\emph{Mirroring} (axis flipping) can enlarge the effective training set, but it does not simply double the data: image and mask must be transformed jointly, and left/right organ labels require a class-swap policy consistent with the annotation convention. Whether flipping along a given axis is admissible is task-dependent (lateral flips are inappropriate when laterality is part of the class definition); nnU-Net~\cite{isensee2021nnunet}, for example, applies mirroring along all axes with 50\% probability per axis, but this should not be read as a universal prescription.
 
 \textbf{Intensity transformations} modify voxel values to simulate scanner and protocol variations:
 
@@ -419,7 +419,7 @@ where $\mathbf{u}$ is a random displacement field, $\mathbf{G}_\sigma$ is a Gaus
 
 \textbf{nnU-Net's~\cite{isensee2021nnunet} augmentation pipeline} stands as the most extensively validated configuration, applying rotation/scaling, elastic deformation, mirroring, gamma correction, Gaussian noise/blur, and brightness/contrast adjustments with carefully tuned probabilities. Worth noting: nnU-Net automatically adjusts augmentation parameters based on dataset properties (anisotropy, size).
 
-\textbf{Advanced augmentation:} Mixup~\cite{zhang2018mixup}, CutOut/CutMix, and copy-paste augmentation yield 1--2\% Dice gains at boundaries. Domain randomization (aggressive intensity augmentation) reduces cross-institution performance degradation by 40--60\% \cite{isensee2021nnunet, wasserthal2023totalsegmentator}.
+\textbf{Advanced augmentation:} Mixup~\cite{zhang2018mixup}, CutOut/CutMix, and copy-paste augmentation have been reported to improve boundary accuracy. Domain randomization (aggressive intensity augmentation) is used to mitigate cross-institution performance degradation \cite{isensee2021nnunet, wasserthal2023totalsegmentator}; the magnitude of these benefits varies by task and setup, and we do not attach universal gain percentages.
 
 \FloatBarrier
 
@@ -751,7 +751,7 @@ Beyond architecture type, methods vary across multiple design axes. \textbf{Inpu
 \subsubsection{Supervision Regime Taxonomy}
 \label{sec:supervision_taxonomy}
 
-Dense 3D annotation requires 15-45 minutes per organ per volume~\cite{sharma2010automated}, making large-scale dataset creation prohibitively expensive. Alternative supervision regimes reduce annotation burden: \textbf{Partially supervised} (subset of organs per volume, 30-50\% cost, $-$1-3\% Dice). \textbf{Weakly supervised} (scribbles 5-10\% cost, $-$3--8\% Dice; bounding boxes 2-5\% cost, $-$5-10\% Dice). \textbf{Semi-supervised} (few labels + unlabeled data via pseudo-labeling or consistency regularization, 10-20\% cost, $-$2-5\% Dice). \textbf{Self-supervised pre-training} (no task labels, 0\% label cost, enables 3-5\% Dice improvement over random initialization). For surgical planning platforms deploying to new anatomies with $<$50 annotated cases, semi-supervised or transfer learning approaches are recommended.
+Dense 3D annotation requires 15-45 minutes per organ per volume~\cite{sharma2010automated}, making large-scale dataset creation prohibitively expensive. Alternative supervision regimes reduce annotation burden, but their relative annotation costs and Dice effects are task-, sample-, and protocol-dependent, and we do not attach universal percentages: \textbf{Partially supervised} methods label a subset of organs per volume; \textbf{Weakly supervised} methods use scribbles or bounding boxes instead of dense masks; \textbf{Semi-supervised} methods combine few labels with unlabeled data via pseudo-labeling or consistency regularization, which still requires human oversight of the generated labels; \textbf{Self-supervised pre-training} needs no task labels and provides a better initialization than random. For surgical planning platforms deploying to new anatomies with $<$50 annotated cases, semi-supervised or transfer learning approaches are recommended.
 
 \textbf{Segmentation scope:} Multi-organ segmentation was addressed by 34 studies (65.4\%), while 18 studies (34.6\%) focused on single-organ segmentation. The most frequently targeted organs (whole-word match against the extracted organ-target field in the supplementary data table, with ``bladder'' matched separately from ``gallbladder'') were: liver (n=29), kidney/renal (n=26), spleen (n=17), pancreas (n=16), stomach (n=16), gallbladder (n=13), and bladder (n=11).
 
@@ -801,11 +801,11 @@ Aggregated BTCV performance from verified source papers (Supplementary Data~S8):
 
 \subsection{Statistical Considerations}
 
-Heterogeneity in evaluation protocols precludes formal meta-analysis. Performance differences of 1--3\% Dice should be interpreted cautiously as implementation variance~\cite{isensee2021nnunet}. We have highest confidence in comparisons using identical protocols within the same study. The BTCV benchmark (50 cases) raises overfitting concerns. Sources of variation: pre-training (+2--5\% Dice~\cite{swinunetr2022}), TTA (+1--2\%~\cite{isensee2021nnunet}), ensembling (+1--2\%), and publication bias (negative results rarely published).
+Heterogeneity in evaluation protocols precludes formal meta-analysis. Performance differences of 1--3\% Dice should be interpreted cautiously as implementation variance~\cite{isensee2021nnunet}. We have highest confidence in comparisons using identical protocols within the same study. The BTCV benchmark (50 cases) raises overfitting concerns. Sources of variation: pre-training (+2--5\% Dice~\cite{swinunetr2022}), TTA and ensembling (small, method-dependent reported gains~\cite{isensee2021nnunet}), and publication bias (negative results rarely published).
 
 \subsection{Heterogeneity Investigation Results}
 
-Stratification by architecture family: auto-configured CNNs (n=3 methods on BTCV; 85.2\%, population SD 2.1) reported higher mean Dice than pure transformers (n=2; 80.5\%, population SD 1.8) in this corpus; with 3 versus 2 methods and heterogeneous evaluation splits, this difference does not sustain a general family ranking. Stratification by pre-training regime showed that pre-trained models achieved 2--5\% higher Dice than randomly initialized counterparts within the same architecture family (e.g., Swin UNETR pre-trained: 82.4\% vs.\ from scratch: 78.9\%~\cite{tang2022selfsupervised}). Performance variation across organs: among the 32 per-organ studies, cross-study Dice ranges span 8.1 points (liver, 89.0--97.1\%), 13.0 points (spleen, 84.0--97.0\%), 14.1 points (pancreas, 72.0--86.1\%), and 20.1 points (kidney, 78.3--98.4\%) (Supplementary Data~S12); these ranges aggregate heterogeneous datasets and protocols and are reported as descriptive dispersion only, not as a measure of relative organ difficulty. Stratification by inference strategy showed that test-time augmentation added 1--2\% and ensembling added 1--2\% Dice. No formal subgroup analysis or meta-regression was conducted, as the absence of standardized evaluation conditions and pooled effect estimates rendered such analyses inappropriate.
+Stratification by architecture family: auto-configured CNNs (n=3 methods on BTCV; 85.2\%, population SD 2.1) reported higher mean Dice than pure transformers (n=2; 80.5\%, population SD 1.8) in this corpus; with 3 versus 2 methods and heterogeneous evaluation splits, this difference does not sustain a general family ranking. Stratification by pre-training regime showed that pre-trained models achieved 2--5\% higher Dice than randomly initialized counterparts within the same architecture family (e.g., Swin UNETR pre-trained: 82.4\% vs.\ from scratch: 78.9\%~\cite{tang2022selfsupervised}). Performance variation across organs: among the 32 per-organ studies, cross-study Dice ranges span 8.1 points (liver, 89.0--97.1\%), 13.0 points (spleen, 84.0--97.0\%), 14.1 points (pancreas, 72.0--86.1\%), and 20.1 points (kidney, 78.3--98.4\%) (Supplementary Data~S12); these ranges aggregate heterogeneous datasets and protocols and are reported as descriptive dispersion only, not as a measure of relative organ difficulty. Stratification by inference strategy: test-time augmentation and ensembling were consistently reported to provide small additional gains, though their magnitude varies by method and evaluation protocol and is not uniform across the corpus. No formal subgroup analysis or meta-regression was conducted, as the absence of standardized evaluation conditions and pooled effect estimates rendered such analyses inappropriate.
 
 \subsection{Quality Assessment Results}
 \label{sec:qa-results}
@@ -822,7 +822,7 @@ Qualitative assessment identified three potential sources of reporting bias acro
 
 \subsection{Certainty of Evidence}
 
-Confidence in key findings varies by the consistency and volume of supporting evidence. \textbf{High confidence:} Auto-configured CNNs achieving $>$80\% mean Dice on multi-organ benchmarks (supported by $>$10 independent evaluations with consistent results). \textbf{Moderate confidence:} The 4--5 point gap between optimized CNNs and pure transformers on BTCV (supported by 5--8 studies, but sensitive to pre-training data availability). \textbf{Low confidence:} Foundation model performance estimates (based on $<$5 studies, rapidly evolving methods, and predominantly zero-shot evaluations). The overall body of evidence is limited by the predominance of single-center retrospective evaluations: only 4 of 52 studies (7.7\%) included multi-center or prospective validation.
+What follows is an explicitly non-formal, qualitative appraisal of confidence rather than a formal certainty rating; the per-study counts underlying each finding are available in the supplementary tables (Supplementary Data~S2, S12). \textbf{High confidence:} Auto-configured CNNs achieve $>$80\% mean Dice on multi-organ benchmarks, a pattern consistent across the benchmark results assembled in this review. \textbf{Moderate confidence:} The BTCV benchmark-mean difference between auto-configured CNNs and pure transformers (85.2\% vs.\ 80.5\%; n=3 vs.\ n=2 methods, Section~\ref{sec:synthesis}) is sensitive to pre-training data availability and does not support a general family ranking. \textbf{Low confidence:} Foundation model performance estimates (based on a small number of studies, rapidly evolving methods, and predominantly zero-shot evaluations). The overall body of evidence is limited by the predominance of single-center retrospective evaluations: only 4 of 52 studies (7.7\%) included multi-center or prospective validation.
 
 \begin{table}[!htb]
 \centering
@@ -893,15 +893,15 @@ While existing surveys focus on benchmark accuracy, surgical planning faces requ
 
 Precise vascular segmentation is the most significant unmet need for surgical planning. Current methods achieve 65--75\% Dice for vessels vs.\ 90--96\% for parenchymal organs~\cite{shit2021cldice, wasserthal2023totalsegmentator}.
 
-\textbf{Why vessels are harder:} Thin, elongated geometry (2--8mm diameter, 1:25--1:100 aspect ratio) violates assumptions underlying most loss functions; extensive branching topology; contrast phase dependency; partial volume effects; high anatomical variability (25--45\% variant rates).
+\textbf{Why vessels are harder:} Thin, elongated geometry (2--8mm diameter, 1:25--1:100 aspect ratio) violates assumptions underlying most loss functions; extensive branching topology; contrast phase dependency; partial volume effects; high anatomical variability (common anatomical variants).
 
-\textbf{Specialized methods:} clDice~\cite{shit2021cldice} optimizes topological connectivity (8--12\% improvement~\cite{shit2021cldice}); multi-scale attention (+3--5\%); phase-specific models (+5--8\%). \textbf{Recommendations:} Deploy separate arterial/venous models matched to contrast phase; implement topology-preserving losses; require manual verification; budget 3--5 minutes per case for vessel verification.
+\textbf{Specialized methods:} clDice~\cite{shit2021cldice} optimizes topological connectivity; multi-scale attention and phase-specific models are further reported refinements. \textbf{Recommendations:} Deploy separate arterial/venous models matched to contrast phase; implement topology-preserving losses; require manual verification of vascular segmentations, budgeting review time per case.
 
-\textbf{Clinical impact:} Unidentified accessory renal arteries cause 5--8\% intraoperative bleeding complications; misidentified hepatic vein drainage leads to segment devascularization in 3--5\% of cases. Closing this gap is the highest-impact research direction.
+\textbf{Clinical impact:} Unidentified accessory renal arteries can cause intraoperative bleeding complications, and misidentified hepatic venous drainage can lead to segment devascularization; incidence figures would require dedicated clinical studies, which we do not cite. Closing this gap is the highest-impact research direction.
 
 \subsubsection{Hollow Organs and Boundary-Aware Methods}
 
-Hollow organs (stomach, bowel, bladder) present distinct challenges: variable distension, thin walls (2--4mm), tortuous paths, and adjacency ambiguity. Reported Dice: stomach 81--96\% (mean 89.5\%), bladder 85--95\%, colon/duodenum 70--82\%. In the extraction table, 22 of 52 reviewed studies (42.3\%) included at least one hollow organ (stomach, bowel, bladder, colon, or duodenum) among their segmentation targets (whole-word organ-vocabulary match).
+Hollow organs (stomach, bowel, bladder) present distinct challenges: variable distension, thin walls (2--4mm), tortuous paths, and adjacency ambiguity; their reported Dice tends to be lower and more variable than for large parenchymal organs. In the extraction table, 22 of 52 reviewed studies (42.3\%) included at least one hollow organ (stomach, bowel, bladder, colon, or duodenum) among their segmentation targets (whole-word organ-vocabulary match).
 
 \textbf{Boundary-focused losses:} Boundary loss~\cite{kervadec2019boundary} and Hausdorff distance loss improve surface accuracy, critical for surgical margins. Combining Dice + boundary loss improves HD95 by 15--25\%~\cite{kervadec2019boundary}. Shape priors (statistical shape models, SDF regression, anatomical atlases) regularize predictions for organs with consistent morphology.
 
@@ -909,9 +909,9 @@ Hollow organs (stomach, bowel, bladder) present distinct challenges: variable di
 
 \textbf{Failure detection and uncertainty:} Monte-Carlo dropout estimates epistemic uncertainty (5--10$\times$ inference overhead); TTA disagreement correlates with errors (AUC 0.72--0.85)~\cite{wang2019uncertainty}. Combined epistemic + aleatoric uncertainty achieves better failure detection, but no method achieves $>$90\% sensitivity at clinically acceptable false-positive rates. Recommend displaying high-uncertainty regions (top 5\%) as visual overlays for manual review.
 
-\textbf{Ensembles and calibration:} Cross-validation ensembles (+1--2\% Dice), architecture ensembles (CNN+Transformer, +0.5--1.5\%), temperature scaling for calibration (reduces ECE 50--70\%). Selective prediction at 95\% confidence improves accepted-prediction Dice from 85\% to 92\%.
+\textbf{Ensembles and calibration:} Cross-validation ensembles and architecture ensembles (CNN+Transformer) typically provide small additional Dice gains; temperature scaling for calibration (reduces ECE 50--70\%). Selective prediction at 95\% confidence improves accepted-prediction Dice from 85\% to 92\%.
 
-\textbf{Interactive refinement:} Manual correction takes 5--15 minutes/case; MedSAM~\cite{ma2024medsam}-style prompting reduces to 1--3 minutes/structure.
+\textbf{Interactive refinement:} Manual correction is time-consuming per case; MedSAM~\cite{ma2024medsam}-style prompting is reported to reduce correction time per structure substantially.
 
 \subsubsection{Post-processing Pipelines}
 \label{sec:postprocessing}
@@ -920,7 +920,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \subsubsection{Integration, Regulatory, and Validation}
 
-\textbf{Integration:} DICOM parsing (2--4 weeks), mesh generation optimization, surgical planning tool integration (3--6 months total for production deployment).
+\textbf{Integration:} DICOM parsing (2--4 weeks), mesh generation optimization, and surgical planning tool integration; total production-deployment timelines depend on hardware, integration scope, and validation requirements and are not quantified here.
 
 \textbf{Regulatory:} FDA 510(k) requires documented failure mode characterization; as of 2025, 3 cleared multi-organ CT segmentation devices exist (Synapse, Vitrea, TeraRecon), all requiring radiologist oversight.
 
@@ -936,7 +936,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{RQ2 (Datasets/Metrics):} BTCV~\cite{btcv2015}, AMOS~\cite{amos2022}, MSD~\cite{msd2022} dominate. Dice/DSC is reported by 48 of 52 studies, with the remaining four reporting IoU/Jaccard-type or volumetric measures instead; boundary reporting divides into 10 of 52 (19.2\%) with HD95, 21 of 52 (40.4\%) with other boundary or surface metrics (non-95th-percentile Hausdorff variants, ASSD/ASD, or surface Dice; NSD in only 2 of 52), and 21 of 52 (40.4\%) with overlap metrics only, limiting boundary accuracy assessment.
 
-\textbf{RQ3 (Training strategies):} nnU-Net~\cite{isensee2021nnunet} pipeline establishes baseline: percentile clipping, z-score normalization, isotropic resampling, Dice+CE loss, aggressive augmentation. Domain randomization reduces cross-institution degradation by 40--60\%~\cite{isensee2021nnunet, wasserthal2023totalsegmentator}.
+\textbf{RQ3 (Training strategies):} nnU-Net~\cite{isensee2021nnunet} pipeline establishes baseline: percentile clipping, z-score normalization, isotropic resampling, Dice+CE loss, aggressive augmentation. Domain randomization is used to mitigate cross-institution degradation~\cite{isensee2021nnunet, wasserthal2023totalsegmentator}.
 
 \textbf{RQ4 (Clinical gaps):} Five critical barriers impede clinical translation: the \emph{vascular segmentation gap} (65--75\% vs.\ 90--96\% Dice for parenchymal organs), a \emph{reproducibility crisis} (only 25.0\% of studies released source code), \emph{domain generalization failure} (5--15\% degradation on external data), insufficient \emph{uncertainty quantification} ($<$20\% of studies address this), and unclear \emph{regulatory pathways} requiring documented failure mode characterization.
 
@@ -955,7 +955,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{Methodological:} English-only search; publication bias toward positive results; of the 52-study corpus, only the 32 studies reporting per-organ Dice contributed to the per-organ quantitative synthesis, and the remaining corpus analyses rely on aggregate or benchmark-level reporting.
 
-\textbf{COI Safeguards:} Authors A.T.N.\ and M.H.R.M.\ are DocDo-affiliated. Safeguards include LLM-based extraction (decoupling extraction from author judgement), pre-registered protocol, evidence traceability, and preservation of negative findings.
+\textbf{COI Safeguards:} Authors A.T.N.\ and M.H.R.M.\ are DocDo-affiliated. Safeguards include LLM-based extraction (decoupling extraction from author judgement), a review protocol documented in the supplementary materials with dated repository commits, evidence traceability, and preservation of negative findings.
 
 %==============================================================================
 \section{Recommendations}
@@ -964,9 +964,9 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{Deployment Readiness:} Benchmark accuracy does not imply deployment readiness. We propose a maturity framework: \emph{Research prototypes} lack public code; \emph{Engineering-ready} methods provide open code and models; \emph{Validation-ready} methods have external multi-center validation and domain shift testing; \emph{Clinical-ready} methods add uncertainty quantification, failure detection, and DICOM integration; \emph{Deployment-ready} methods have FDA/CE clearance and prospective validation. As of January 2026, no deployment-ready methods exist for general multi-organ CT; TotalSegmentator~\cite{wasserthal2023totalsegmentator} approaches clinical-ready; nnU-Net~\cite{isensee2021nnunet} and Swin UNETR~\cite{swinunetr2022} are validation-ready.
 
-\textbf{Algorithm Selection:} \emph{Limited GPU ($<$12GB):} nnU-Net~\cite{isensee2021nnunet} 2D/3D\_lowres. \emph{No pre-training data:} nnU-Net, MedNeXt~\cite{roy2023mednext}. \emph{Real-time ($<$5s):} TotalSegmentator~\cite{wasserthal2023totalsegmentator}. \emph{Multi-organ routine:} TotalSegmentator. \emph{Single organ research:} nnU-Net fine-tuned. \emph{Vascular structures:} nnU-Net + clDice~\cite{shit2021cldice}. \emph{Interactive refinement:} MedSAM~\cite{ma2024medsam}. \emph{Clinical pathway:} TotalSegmentator.
+\textbf{Algorithm Selection:} \emph{Limited GPU ($<$12GB):} nnU-Net~\cite{isensee2021nnunet} 2D/3D\_lowres. \emph{No pre-training data:} nnU-Net, MedNeXt~\cite{roy2023mednext}. \emph{Fast inference:} TotalSegmentator~\cite{wasserthal2023totalsegmentator} (runtime depends on GPU, volume size and spacing, and model version; published inference times are not end-to-end times to a clinically approved segmentation). \emph{Multi-organ routine:} TotalSegmentator. \emph{Single organ research:} nnU-Net fine-tuned. \emph{Vascular structures:} nnU-Net + clDice~\cite{shit2021cldice}. \emph{Interactive refinement:} MedSAM~\cite{ma2024medsam}. \emph{Practical default in this corpus:} TotalSegmentator, as a starting point subject to task-specific validation rather than a proven clinical recommendation.
 
-\textbf{For surgical planning platforms:} Start by evaluating TotalSegmentator~\cite{wasserthal2023totalsegmentator} for zero-shot applicability, while planning for accuracy degradation compared to benchmarks. Implement uncertainty visualization for quality control, and budget 3--6 months for DICOM integration and mesh generation. Consider a hybrid workflow combining automatic segmentation with MedSAM~\cite{ma2024medsam} interactive refinement for challenging cases.
+\textbf{For surgical planning platforms:} Start by evaluating TotalSegmentator~\cite{wasserthal2023totalsegmentator} for zero-shot applicability, while planning for accuracy degradation compared to benchmarks. Implement uncertainty visualization for quality control, and budget engineering time for DICOM integration and mesh generation (timelines depend on institution-specific infrastructure and are not quantified here). Consider a hybrid workflow combining automatic segmentation with MedSAM~\cite{ma2024medsam} interactive refinement for challenging cases.
 
 %==============================================================================
 \section*{Declarations}
@@ -976,7 +976,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \textbf{Registration:} This review was not prospectively registered in PROSPERO or other systematic review registries, consistent with its scope as a structured survey rather than a formal systematic review.
 
-\textbf{Protocol:} The review protocol is available at \href{https://github.com/gameguild-gg/docdo-paper}{\faGithub\ gameguild-gg/docdo-paper}. No amendments were made to the protocol after initiation of the search and screening process.
+\textbf{Protocol:} The review protocol is documented in the supplementary materials and in the project repository at \href{https://github.com/gameguild-gg/docdo-paper}{\faGithub\ gameguild-gg/docdo-paper}, with dated repository commits providing a version history. The protocol was subsequently amended: a dated amendment records a corrected, expanded query set (Supplementary Protocol~S3), and the screening adjudication rule was amended as described in Section~\ref{sec:methodology}. Post-hoc analyses are identified as such in the Methods, and their implications are acknowledged in the Limitations.
 
 \textbf{Author Contributions (CRediT):} A.T.N.: Conceptualization, Methodology, Investigation, Writing. M.H.R.M.: Investigation, Validation, Review. V.M.F.: Supervision, Review, Project Administration.
 
@@ -1034,7 +1034,7 @@ From 52 included studies, we draw four conclusions:
     \item Critical gaps remain in vascular segmentation (65 to 75\% vs.\ 90 to 96\% Dice), reproducibility (25.0\% code availability), and domain generalization (5 to 15\% accuracy degradation) that must be addressed for widespread surgical planning deployment.
 \end{enumerate}
 
-For surgical planning platforms that currently rely on manual segmentation, we recommend a phased adoption strategy: (1) deploy TotalSegmentator~\cite{wasserthal2023totalsegmentator} or nnU-Net~\cite{isensee2021nnunet} as automatic initialization, (2) implement uncertainty-guided review for critical structures, and (3) explore MedSAM~\cite{ma2024medsam} for interactive refinement. The estimated integration effort (3 to 6 months for production deployment) should be factored into adoption planning.
+For surgical planning platforms that currently rely on manual segmentation, we recommend a phased adoption strategy: (1) deploy TotalSegmentator~\cite{wasserthal2023totalsegmentator} or nnU-Net~\cite{isensee2021nnunet} as automatic initialization, (2) implement uncertainty-guided review for critical structures, and (3) explore MedSAM~\cite{ma2024medsam} for interactive refinement. The integration effort required for production deployment (hardware-, scope-, and institution-dependent) should be factored into adoption planning.
 
 \textbf{Highest-priority future research directions:} Among the many open challenges, two stand out as most impactful for surgical planning: \emph{(1) Vascular anatomy segmentation}, closing the 20 to 30\% accuracy gap between vessels and parenchymal organs would directly enable safer tumor resection planning, and requires advances in topology-preserving losses and multi-phase training; \emph{(2) Calibrated uncertainty quantification}, achieving $>$90\% failure detection sensitivity would allow surgical teams to trust automatic segmentation for routine cases while focusing manual review on high-risk predictions. Secondary priorities (domain adaptation, efficient inference, regulatory frameworks) become tractable once these foundational challenges are addressed.
 
