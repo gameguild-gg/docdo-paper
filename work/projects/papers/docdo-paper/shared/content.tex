@@ -255,7 +255,7 @@ As this review synthesizes diagnostic accuracy metrics from computational experi
 
 \textbf{Synthesis rationale:} Narrative synthesis was chosen because: (1) reported Dice/HD95 values are not directly comparable across studies due to differences in evaluation splits, preprocessing, post-processing (TTA, ensembling), and label definitions; (2) the absence of standardized evaluation conditions across studies violates assumptions required for formal meta-analysis; and (3) the primary research questions concern qualitative patterns (architectural trends, deployment barriers) rather than pooled effect estimates.
 
-\textbf{Heterogeneity exploration:} Causes of performance heterogeneity were explored qualitatively through stratification by architecture family (CNN vs.\ Transformer vs.\ Hybrid vs.\ Foundation), benchmark dataset, pre-training regime, and inference strategy (single model vs.\ ensemble vs.\ TTA). No formal subgroup analysis or meta-regression was conducted due to the absence of pooled effect estimates.
+\textbf{Heterogeneity exploration:} Causes of performance heterogeneity were explored qualitatively through stratification by architecture family (CNN vs.\ Transformer vs.\ Hybrid, categorized by encoder/backbone; the Foundation designation denotes a training and transfer regime rather than a mutually exclusive architecture family), benchmark dataset, pre-training regime, and inference strategy (single model vs.\ ensemble vs.\ TTA). No formal subgroup analysis or meta-regression was conducted due to the absence of pooled effect estimates.
 
 \textbf{Sensitivity analyses:} To assess robustness, we conducted one post-hoc sensitivity analysis (not pre-specified in the review protocol): restricting findings to the 28 included studies whose primary identifier was a journal/conference DOI rather than an arXiv preprint identifier (operationalised in the supplementary extraction metadata) to confirm that architectural rankings and key conclusions remained consistent.
 
@@ -437,21 +437,21 @@ Public datasets enable objective method comparison. Seven major datasets dominat
 \label{sec:convolutional}
 %==============================================================================
 
-CNNs have dominated medical image segmentation since U-Net (2015) \cite{ronneberger2015unet}. Below we cover the major CNN architectures for 3D CT organ segmentation, their design principles, and trade-offs.
+CNNs have dominated medical image segmentation since U-Net (2015) \cite{ronneberger2015unet}. Throughout the architecture sections, we categorize methods by their encoder/backbone rather than by the mere presence of convolutional components: a \emph{CNN} uses a convolutional encoder, a \emph{transformer} architecture uses a transformer encoder, and a \emph{hybrid} combines convolutional and transformer components in its encoder. Decoder design does not change the category, so an architecture whose encoder is a transformer remains a transformer architecture even when its decoder is convolutional. Below we cover the major CNN architectures for 3D CT organ segmentation, their design principles, and trade-offs.
 
 \subsection{Foundational Architectures}
 
-\emph{U-Net} \cite{ronneberger2015unet} established the encoder-decoder with skip connections that remains the field's backbone. The encoder downsamples through convolution and pooling to capture abstract features; the decoder upsamples to full resolution, concatenating encoder features via skip connections for spatial detail. The architecture balances semantic understanding (deep networks, large receptive fields) against precise localization (spatial preservation).
+\emph{U-Net} \cite{ronneberger2015unet} established the encoder-decoder with skip connections that remains the field's backbone. The encoder downsamples through convolution and pooling to capture abstract features; the decoder upsamples to full resolution, concatenating encoder features via skip connections for spatial detail. The architecture balances semantic understanding (deep networks, large receptive fields) against precise localization (spatial preservation). Originally demonstrated on 2D microscopy images, U-Net is presented here as historical context for the 3D CT architectures derived from it.
 
 The extension to volumetric data came with \emph{3D U-Net} \cite{cicek20163dunet}, which replaced 2D convolutions with 3D convolutions to learn inter-slice context directly. For CT segmentation, where organs span multiple slices, this volumetric awareness is essential. However, 3D convolutions sharply increase computational requirements (memory and FLOPs), motivating subsequent work on efficient 3D architectures.
 
-Two advances came with \emph{V-Net} \cite{milletari2016vnet}: residual connections within encoder and decoder blocks for improved gradient flow, and the Dice loss function, which directly optimizes the overlap coefficient. The latter handles the severe class imbalance inherent in medical segmentation, where organ voxels constitute 1 to 5\% of the volume in multi-organ abdominal scans.
+Two advances came with \emph{V-Net} \cite{milletari2016vnet}: residual connections within encoder and decoder blocks for improved gradient flow, and the Dice loss function, which directly optimizes the overlap coefficient. The latter handles the severe class imbalance inherent in medical segmentation, where organ voxels constitute 1 to 5\% of the volume in multi-organ abdominal scans. V-Net was originally demonstrated on prostate MRI and is included as historical context; 3D CT evaluations appear in this corpus only where the supplementary extraction table records them.
 
 \subsection{Attention-Enhanced Architectures}
 
 \emph{Attention U-Net} \cite{oktay2018attention} introduced attention gates at skip connections, learning to suppress irrelevant regions. The gating signal from decoder features modulates encoder features before concatenation. Attention gates help most for organs with variable position and size (e.g., pancreas).
 
-\emph{U-Net++} \cite{zhou2018unetpp} employs nested, dense pathways with deep supervision at multiple scales, narrowing the encoder-decoder semantic gap. \emph{U-Net 3+} \cite{huang2020unet3plus} uses full-scale skip connections with deep supervision and classification-guided modules.
+\emph{U-Net++} \cite{zhou2018unetpp} employs nested, dense pathways with deep supervision at multiple scales, narrowing the encoder-decoder semantic gap. \emph{U-Net 3+} \cite{huang2020unet3plus} uses full-scale skip connections with deep supervision and classification-guided modules. U-Net++ and U-Net 3+ were originally demonstrated on 2D images and are likewise included as historical context rather than counted as corpus members, except where the supplementary extraction table records a 3D CT evaluation.
 
 \begin{figure*}[t]
 \centering
@@ -533,8 +533,6 @@ Two advances came with \emph{V-Net} \cite{milletari2016vnet}: residual connectio
 \label{fig:architecture}
 \end{figure*}
 
-\textbf{U-Net 3+} \cite{huang2020unet3plus} uses full-scale skip connections: each decoder node receives features from all encoder scales via pooling or upsampling. Deep supervision and a classification-guided module improve boundary accuracy.
-
 \subsection{Residual and Dense Architectures}
 
 \emph{ResUNet} variants incorporate residual connections from ResNet~\cite{he2016resnet} into U-Net, supporting much deeper networks (50+ layers) via identity shortcuts. ResUNet++~\cite{jha2019resunetpp} adds squeeze-and-excitation blocks, ASPP, and attention.
@@ -543,9 +541,9 @@ Two advances came with \emph{V-Net} \cite{milletari2016vnet}: residual connectio
 
 \subsection{Specialized Architectures}
 
-\emph{HighRes3DNet}~\cite{li2017highres3dnet} maintains high resolution throughout using dilated convolutions instead of pooling, expanding the receptive field without reducing spatial resolution---effective for tasks requiring fine spatial precision.
+\emph{HighRes3DNet}~\cite{li2017highres3dnet} maintains high resolution throughout using dilated convolutions instead of pooling, expanding the receptive field without reducing spatial resolution---effective for tasks requiring fine spatial precision. HighRes3DNet was originally demonstrated on whole-brain MRI segmentation and is included as historical context for 3D CT work.
 
-\emph{DeepMedic}~\cite{kamnitsas2017deepmedic} employs parallel pathways at multiple resolutions with a fully connected CRF for boundary refinement.
+\emph{DeepMedic}~\cite{kamnitsas2017deepmedic} employs parallel pathways at multiple resolutions with a fully connected CRF for boundary refinement. DeepMedic was originally demonstrated on multimodal brain-lesion MRI and is likewise included as historical context.
 
 \subsection{Cascade and Coarse-to-Fine Pipelines}
 \label{sec:cascades}
@@ -561,7 +559,7 @@ Multi-stage cascaded architectures decompose segmentation into sequential refine
 \label{sec:transformer}
 %==============================================================================
 
-While CNNs dominated medical image segmentation from 2015 to 2020, Vision Transformers have since emerged as a powerful alternative. Transformers capture long-range dependencies through self-attention mechanisms that CNNs struggle to model with their local receptive fields \cite{shamshad2023transformers}. We review transformer architectures adapted for 3D medical image segmentation.
+While CNNs dominated medical image segmentation from 2015 to 2020, Vision Transformers have since emerged as a powerful alternative. Transformers capture long-range dependencies through self-attention mechanisms that CNNs struggle to model with their local receptive fields \cite{shamshad2023transformers}. Under the encoder/backbone definition (Section~\ref{sec:convolutional}), UNETR and Swin UNETR contain convolutional components---notably in their decoders---but are categorized as transformer architectures because their encoders are transformers; categorizing by ``contains some CNN'' would misclassify them. We review transformer architectures adapted for 3D medical image segmentation.
 
 \subsection{Self-Attention Mechanism}
 
@@ -569,13 +567,13 @@ The core of transformer architectures is self-attention, computing relationships
 
 \subsection{Vision Transformer Adaptations}
 
-\emph{UNETR}~\cite{hatamizadeh2022unetr} applies Vision Transformers to 3D medical segmentation, using a ViT encoder that processes non-overlapping 3D patches through transformer layers, connected to a CNN decoder via skip connections.
+\emph{UNETR}~\cite{hatamizadeh2022unetr} applies Vision Transformers to 3D medical segmentation, using a ViT encoder that processes non-overlapping 3D patches through transformer layers, connected to a CNN decoder via skip connections. UNETR was originally demonstrated on brain-tumor MRI (BraTS) and is included here as historical context; in this corpus, UNETR is evaluated on 3D CT only within the benchmarking study recorded in the supplementary extraction table.
 
-\emph{Swin UNETR}~\cite{swinunetr2022} uses the Swin Transformer's hierarchical architecture with shifted windows~\cite{liu2021swin}. Instead of global self-attention, Swin computes attention within local windows with relative position bias, reducing complexity from $O(n^2)$ to $O(n)$. Swin UNETR reaches 82.4\% mean Dice on BTCV~\cite{tang2022selfsupervised} and benefits from self-supervised pre-training.
+\emph{Swin UNETR}~\cite{swinunetr2022} uses the Swin Transformer's hierarchical architecture with shifted windows~\cite{liu2021swin}. Instead of global self-attention, Swin computes attention within local windows with relative position bias, reducing complexity from $O(n^2)$ to $O(n)$. Swin UNETR reaches 82.4\% mean Dice on BTCV~\cite{tang2022selfsupervised} and benefits from self-supervised pre-training. The Swin UNETR architecture itself was introduced and originally demonstrated on brain-tumor MRI~\cite{swinunetr2022}; its 3D CT results cited here come from the 5,050-CT self-supervised pre-training study~\cite{tang2022selfsupervised}, and corpus evaluations appear via the benchmarking study recorded in the supplementary extraction table.
 
 \subsection{Hybrid CNN-Transformer Architectures}
 
-\emph{TransUNet}~\cite{chen2024transunet} uses CNN layers for initial feature extraction, then transformer layers for global context, pairing CNN inductive biases with transformer global modeling.
+\emph{TransUNet}~\cite{chen2024transunet} uses CNN layers for initial feature extraction, then transformer layers for global context, pairing CNN inductive biases with transformer global modeling. TransUNet was originally demonstrated on 2D images and is included as historical context for the 3D CT systems in this corpus.
 
 \emph{CoTr}~\cite{xie2021cotr} uses deformable self-attention for efficient 3D processing, sampling key positions around references rather than attending to all positions.
 
@@ -590,7 +588,7 @@ Transformers need more resources than CNNs: Swin UNETR~\cite{swinunetr2022} (62M
 \label{sec:hybrid}
 %==============================================================================
 
-CNNs excel at local features and efficiency; transformers excel at global context. Hybrid architectures combine both, while foundation models promise broad generalization with minimal fine-tuning.
+CNNs excel at local features and efficiency; transformers excel at global context. Hybrid architectures combine both, while foundation models promise broad generalization with minimal fine-tuning. ``Foundation'' denotes a training and transfer regime (large-scale pre-training, promptable or instruction-based interfaces), not a mutually exclusive architecture family---a foundation-model entry also has an encoder category.
 
 \textbf{Modern CNNs:} \emph{MedNeXt}~\cite{roy2023mednext} adapts ConvNeXt~\cite{liu2022convnext} for medical imaging with larger kernels (7$\times$7$\times$7), inverted bottleneck blocks, and modern activations. MedNeXt shows that well-designed CNNs outperform transformers while requiring less memory and no pre-training (86.2\% Dice on BTCV~\cite{roy2023mednext}).
 
@@ -740,11 +738,11 @@ MedSAM$^\dagger$ & Found. & 88.5 & \checkmark & \cite{ma2024medsam} \\
 
 A comprehensive table listing all 52 included studies with their individual characteristics (author, year, architecture type, dataset(s), target organs, best reported Dice, code availability, and quality rating) is provided in Supplementary Data~S2. Below we summarize aggregate patterns.
 
-Our survey of 52 studies reveals: \textbf{Architecture distribution:} CNNs dominated (50/52 studies, 96.2\%, used CNN architectures exclusively; the remaining 2 combined CNN and transformer components, and no study used a transformer-only architecture), with U-Net-family architectures~\cite{cicek20163dunet} (including nnU-Net and named U-Net variants) most prevalent (43/52, 82.7\%; see supplementary extraction table). True 3D volumetric processing was employed in 51/52 studies (98.1\%). \textbf{Segmentation scope:} Multi-organ (34/52, 65.4\%) vs.\ single-organ (18/52, 34.6\%). Most targeted organs (whole-word organ-vocabulary match): liver (n=29), kidney/renal (n=26), spleen (n=17), pancreas (n=16), stomach (n=16), gallbladder (n=13), bladder (n=11). \textbf{Implementation:} TensorFlow/Keras (19/52, 36.5\%) and PyTorch (16/52, 30.8\%) were the most frequently reported frameworks; among 2021--2025 publications, PyTorch reports (9) outnumber TensorFlow/Keras reports (5) (year-by-framework counts in the supplementary extraction table), consistent with MONAI's~\cite{monai2022} PyTorch foundation. Combined Dice+CE loss with Adam optimizer was predominant.
+Our survey of 52 studies reveals: \textbf{Architecture distribution:} CNNs dominated (50/52 studies, 96.2\%, used CNN architectures exclusively; the remaining 2 combined CNN and transformer components, and no study used a transformer-only architecture), with U-Net-family architectures~\cite{cicek20163dunet} (including nnU-Net and named U-Net variants) most prevalent (43/52, 82.7\%; see supplementary extraction table). True 3D volumetric processing was employed in 51/52 studies (98.1\%); the single exception is a 2D multi-view FCN with 3D voting (Medical Physics 2017, DOI 10.1002/mp.12480), whose method is not natively 3D-volumetric, retained per the as-employed inclusion criteria and flagged in the supplementary extraction table. \textbf{Segmentation scope:} Multi-organ (34/52, 65.4\%) vs.\ single-organ (18/52, 34.6\%). Most targeted organs (whole-word organ-vocabulary match): liver (n=29), kidney/renal (n=26), spleen (n=17), pancreas (n=16), stomach (n=16), gallbladder (n=13), bladder (n=11). \textbf{Implementation:} TensorFlow/Keras (19/52, 36.5\%) and PyTorch (16/52, 30.8\%) were the most frequently reported frameworks; among 2021--2025 publications, PyTorch reports (9) outnumber TensorFlow/Keras reports (5) (year-by-framework counts in the supplementary extraction table), consistent with MONAI's~\cite{monai2022} PyTorch foundation. Combined Dice+CE loss with Adam optimizer was predominant.
 
 \subsubsection{Multi-Axis Taxonomy}
 
-Beyond architecture type, methods vary across multiple design axes. \textbf{Input dimensionality}: true~3D, 2.5D, or~2D, 98\% of methods use true~3D processing. \textbf{Supervision}: fully, weakly, semi, or self-supervised learning. \textbf{Inference strategy}: single~pass, patch-based, test-time augmentation, ensemble, or cascade. \textbf{Anatomical scope}: single-organ, multi-organ, or whole-body comprehensive segmentation.
+Beyond architecture type, methods vary across multiple design axes; architecture type itself follows the encoder/backbone definition (Section~\ref{sec:convolutional}), with categories defined by the encoder (e.g., convolutional, transformer, or hybrid), while ``foundation'' denotes a training and transfer regime rather than a mutually exclusive architecture family. \textbf{Input dimensionality}: true~3D, 2.5D, or~2D; 51 of 52 studies (98.1\%) use true~3D processing. \textbf{Supervision}: fully, weakly, semi, or self-supervised learning. \textbf{Inference strategy}: single~pass, patch-based, test-time augmentation, ensemble, or cascade. \textbf{Anatomical scope}: single-organ, multi-organ, or whole-body comprehensive segmentation.
 
 \textbf{Key observations:} True~3D processing now dominates, as inter-slice context is essential for CT~organs. Weak and semi-supervised methods are gaining importance for scaling to new anatomies without extensive annotation. Reported Dice scores often conflate single-pass results with test-time augmentation or ensemble performance, obscuring true method differences.
 
