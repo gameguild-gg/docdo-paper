@@ -30,11 +30,11 @@ This review focuses on \textbf{semantic segmentation} (also called voxel-wise se
 \begin{itemize}
     \item \textbf{Multi-class semantic segmentation}: The simultaneous labeling of multiple anatomical structures in a single inference pass (e.g., segmenting kidney parenchyma, renal artery, renal vein, tumor, and background). This is the predominant formulation for abdominal organ segmentation and the primary focus of this review.
     
-    \item \textbf{Instance segmentation}: The differentiation of individual object instances within the same class (e.g., distinguishing left kidney from right kidney, or segmenting individual vertebrae). This requires additional instance-level discrimination beyond class labels and is addressed by methods such as Mask R-CNN adaptations for medical imaging.
+    \item \textbf{Instance segmentation}: Left and right kidneys may be represented as separate semantic classes. Instance segmentation is required when distinct objects sharing the same class label must be individually identified.
     
     \item \textbf{Panoptic segmentation}: Combines semantic and instance segmentation to yield class labels plus instance identities. Medical imaging applications remain limited, though complex anatomical scenes may benefit.
     
-    \item \textbf{Volumetric (3D) segmentation}: Processes the full 3D CT volume to exploit inter-slice context, unlike 2D slice-by-slice or 2.5D methods using a few neighboring slices.
+    \item \textbf{Volumetric (3D) segmentation}: Volumetric segmentation uses three-dimensional spatial context, either through whole-volume processing or through 3D patches combined at inference.
 \end{itemize}
 
 \subsection{Clinical Motivation}
@@ -49,11 +49,11 @@ CNNs now achieve high accuracy in medical image segmentation \cite{ronneberger20
     \item The European Association of Urology recommends 3D reconstruction for complex renal tumors, but notes that ``lack of standardized, rapid segmentation tools'' limits implementation \cite{eau2023guidelines}.
 \end{itemize}
 
-\textbf{Which algorithms are ready for clinical deployment in surgical planning?}  and \textbf{what practical barriers remain?} Litjens et al.\ \cite{litjens2017survey} surveyed broad medical imaging, Shamshad et al.\ \cite{shamshad2023transformers} covered transformer architectures, and Isensee et al.\ \cite{isensee2021nnunet} focused on benchmark methodology. No existing reviews address clinical translation for surgical planning.
+\textbf{Which algorithms are ready for clinical deployment in surgical planning?}  and \textbf{what practical barriers remain?} Litjens et al.\ \cite{litjens2017survey} surveyed broad medical imaging, Shamshad et al.\ \cite{shamshad2023transformers} covered transformer architectures, and Isensee et al.\ \cite{isensee2021nnunet} focused on benchmark methodology. This review focuses on the evidence needed to translate CT segmentation benchmarks into surgical planning workflows; prior-survey absence claims would require an explicit scope-matched search comparison, which we do not assert.
 
 \subsection{Clinical Translation Needs}
 
-The practical challenges encountered in developing surgical planning platforms, such as DocDo \cite{docdo2026}, motivated this work. Such platforms deliver interactive 3D organ visualization for preoperative planning to surgeons, tumor margin assessment, and vascular anatomy mapping. Today, these pipelines often rely on manual and semi-automatic segmentation, taking 15 to 45 minutes per structure and creating adoption bottlenecks. Published benchmarks show $>$80\% Dice accuracy, yet clinical deployment demands robust preprocessing for diverse scanners, failure detection, uncertainty quantification, mesh generation, and DICOM integration---aspects that require dedicated engineering beyond benchmark performance.
+The practical challenges encountered in developing surgical planning platforms, such as DocDo \cite{docdo2026}, motivated this work. Such platforms depend on accurate and efficient organ segmentation as a core component. Today, these pipelines often rely on manual and semi-automatic segmentation, taking 15 to 45 minutes per structure and creating adoption bottlenecks. Published benchmarks show $>$80\% Dice accuracy, yet clinical deployment demands robust preprocessing for diverse scanners, failure detection, uncertainty quantification, mesh generation, and DICOM integration---aspects that require dedicated engineering beyond benchmark performance.
 
 This work serves as a technology roadmap, identifying the engineering investments needed to bridge the benchmark-to-clinic gap. Our phased adoption strategy (Section~\ref{sec:recommendations}) starts with robust baselines (TotalSegmentator~\cite{wasserthal2023totalsegmentator}, nnU-Net~\cite{isensee2021nnunet}), adds uncertainty-guided quality assurance, then explores interactive refinement (MedSAM~\cite{ma2024medsam}) to reduce, but not eliminate, expert correction.
 
@@ -73,7 +73,7 @@ This work serves as a technology roadmap, identifying the engineering investment
 
 \subsection{Prior Surveys}
 
-Past reviews have tackled medical image segmentation from different angles, though none specifically targets the clinical translation requirements for surgical planning that motivate this work.
+Past reviews have tackled medical image segmentation from different angles, though dedicated coverage of the clinical translation requirements for surgical planning that motivate this work remains limited.
 
 \emph{General medical imaging surveys.} Litjens et al.\ \cite{litjens2017survey} wrote a foundational survey of deep learning in medical image analysis covering segmentation, detection, and classification across modalities. While thorough, it predates transformer architectures and does not address 3D CT-specific challenges or deployment considerations.
 
