@@ -427,7 +427,7 @@ where $\mathbf{u}$ is a random displacement field, $\mathbf{G}_\sigma$ is a Gaus
 \label{sec:datasets}
 %==============================================================================
 
-Public datasets enable objective method comparison. Seven major datasets dominate the reviewed literature: BTCV \cite{btcv2015} (50 volumes, 13 organs) remains the most widely used benchmark; AMOS \cite{amos2022} (500 CT + 100 MRI, 15 organs) provides multi-modality evaluation; MSD \cite{msd2022} (2,633 total across 10 tasks) tests generalization; KiTS21 \cite{kits2020} (489 volumes) focuses on kidney tumors; FLARE22 \cite{flare2022} (2,300 volumes) enables semi-supervised research; LiTS \cite{lits2022} (201 volumes) targets liver lesions; and TotalSegmentator \cite{wasserthal2023totalsegmentator} (1,228 volumes, 117 structures) represents the most comprehensive publicly available CT segmentation dataset.
+Public datasets enable objective method comparison. Seven major datasets dominate the reviewed literature: BTCV \cite{btcv2015} (50 volumes, 13 organs) remains the most widely used benchmark; AMOS \cite{amos2022} (500 CT + 100 MRI, 15 organs) provides multi-modality evaluation; MSD \cite{msd2022} (2,633 total across 10 tasks) tests generalization; KiTS19 \cite{kits2020} (300 cases: 210 train / 90 test; its later KiTS21 edition expands the corpus to 489 cases) focuses on kidney and tumor segmentation; FLARE22 \cite{flare2022} (2,300 volumes) enables semi-supervised research; LiTS \cite{lits2022} (201 volumes) targets liver lesions; and TotalSegmentator \cite{wasserthal2023totalsegmentator} (1,204 volumes, 104 structures) provides large-scale whole-body CT annotation.
 
 \FloatBarrier
 
@@ -645,8 +645,8 @@ nnFormer & Hybrid & 86.9 & 14.2 & -- & \cite{zhou2021nnformer} \\
 \midrule
 MedSAM$^\dagger$ & Found. & 85.7 & 8.1 & \checkmark & \cite{ma2024medsam} \\
 \bottomrule
-\multicolumn{6}{l}{\footnotesize $^\dagger$Zero-shot with bounding box prompts.} \\
-\multicolumn{6}{l}{\footnotesize Pretrain: \checkmark = used external pre-training data.}
+\multicolumn{6}{l}{\footnotesize $^\dagger$Fine-tuned, cross-task mean from the original publication (not BTCV-specific).} \\
+\multicolumn{6}{l}{\footnotesize Zero-shot BTCV is lower ($\sim$76\%, Table~\ref{tab:organs}). Pretrain: \checkmark = used external pre-training data.}
 \end{tabular}%
 }
 \end{table}
@@ -663,10 +663,10 @@ MedSAM$^\dagger$ & Found. & 85.7 & 8.1 & \checkmark & \cite{ma2024medsam} \\
 \textbf{Method} & \textbf{Type} & \textbf{Dice} & \textbf{Pre-} & \textbf{Source} \\
  & & \textbf{(\%)} & \textbf{train} & \\
 \midrule
-\multicolumn{5}{l}{\textit{Dataset: AMOS (n=500 CT, 360/72/168 split, 15 organs, mixed contrast)}} \\
+\multicolumn{5}{l}{\textit{Dataset: AMOS2022 (n=500 CT; official CT split 300 train / 100 validation / 100 test;}} \\
+\multicolumn{5}{l}{\textit{full benchmark = 500 CT + 100 MRI; 15 organs, mixed contrast)}} \\
 \midrule
 Attention U-Net & CNN & 74.2 & -- & \cite{swinunetr2022} \\
-nnU-Net & CNN & 79.1 & -- & \cite{isensee2021nnunet} \\
 MedNeXt & CNN & 80.1 & -- & \cite{roy2023mednext} \\
 STU-Net-L & CNN & 80.8 & -- & \cite{huang2023stunet} \\
 \midrule
@@ -695,7 +695,7 @@ MedSAM$^\dagger$ & Found. & 73.1 & \checkmark & \cite{ma2024medsam} \\
 \textbf{Method} & \textbf{Type} & \textbf{Dice} & \textbf{Pre-} & \textbf{Source} \\
  & & \textbf{(\%)} & \textbf{train} & \\
 \midrule
-\multicolumn{5}{l}{\textit{Dataset: KiTS19 (n=300 train / 100 test, 3 classes: kidney/tumor/cyst)}} \\
+\multicolumn{5}{l}{\textit{Dataset: KiTS19 (n=300 total: 210 train / 90 test; classes kidney and tumor, plus background)}} \\
 \midrule
 3D U-Net & CNN & 90.1 & -- & \cite{isensee2021nnunet} \\
 V-Net & CNN & 89.8 & -- & \cite{isensee2021nnunet} \\
@@ -824,7 +824,7 @@ Confidence in key findings varies by the consistency and volume of supporting ev
 \begin{table}[!htb]
 \centering
 \small
-\caption{Organ-Wise Dice Scores (\%) on BTCV Test Set (10 of 13 organs shown). All values from original publications: nnU-Net \cite{isensee2021nnunet}, Swin UNETR \cite{swinunetr2022}, MedNeXt \cite{roy2023mednext}, MedSAM \cite{ma2024medsam}.}
+\caption{Organ-Wise Dice Scores (\%) on BTCV Test Set (10 of 13 organs shown). All values from original publications: nnU-Net \cite{isensee2021nnunet}, Swin UNETR \cite{swinunetr2022}, MedNeXt \cite{roy2023mednext}, MedSAM \cite{ma2024medsam}. Benchmark-level 13-organ mean Dice per method is reported in Table~\ref{tab:btcv_comparison}.}
 \label{tab:organs}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -840,10 +840,8 @@ Pancreas & 78.5 & 80.2 & 79.1 & 68.3 \\
 Gallbladder & 71.2 & 73.5 & 72.4 & 58.2 \\
 R. Adrenal & 68.4 & 70.8 & 69.2 & 52.1 \\
 L. Adrenal & 67.9 & 70.1 & 68.8 & 51.8 \\
-\midrule
-\textbf{Mean (13 organs)} & \textbf{82.3} & \textbf{82.4} & \textbf{86.2} & \textbf{85.7}$^\dagger$ \\
 \bottomrule
-\multicolumn{5}{l}{\footnotesize $^*$Zero-shot with bounding box prompts. $^\dagger$Fine-tuned average.}
+\multicolumn{5}{l}{\footnotesize $^*$Zero-shot with bounding box prompts.}
 \end{tabular}
 \end{table}
 
@@ -881,7 +879,7 @@ Our main contribution identifies specific barriers preventing benchmark success 
 \subsubsection{Domain Shift: The Primary Technical Barrier}
 \label{sec:domain_shift}
 
-Models trained on academic datasets degrade on external clinical data~\cite{tajbakhsh2020embracing}. Performance degradation ($\Delta_{\text{Dice}}$) by corruption type: scanner manufacturer shift (8--15\%), reconstruction protocol shift (3--12\%), contrast phase mismatch (8--18\%), cross-modality (12\% CT$\rightarrow$MRI)~\cite{isensee2021nnunet, wasserthal2023totalsegmentator}. TotalSegmentator~\cite{wasserthal2023totalsegmentator} maintains $<$5\% degradation across 6 institutions by training on 1,228 diverse cases. \textbf{Mitigation:} Domain randomization (nnU-Net's~\cite{isensee2021nnunet} aggressive augmentation) and large-scale diverse training are most validated.
+Models trained on academic datasets degrade on external clinical data~\cite{tajbakhsh2020embracing}. Performance degradation ($\Delta_{\text{Dice}}$) by corruption type: scanner manufacturer shift (8--15\%), reconstruction protocol shift (3--12\%), contrast phase mismatch (8--18\%), cross-modality (12\% CT$\rightarrow$MRI)~\cite{isensee2021nnunet, wasserthal2023totalsegmentator}. TotalSegmentator~\cite{wasserthal2023totalsegmentator} maintains $<$5\% degradation across 6 institutions by training on 1,204 diverse cases. \textbf{Mitigation:} Domain randomization (nnU-Net's~\cite{isensee2021nnunet} aggressive augmentation) and large-scale diverse training are most validated.
 
 \subsubsection{The ``Last Mile'' Problem for Surgical Planning}
 
