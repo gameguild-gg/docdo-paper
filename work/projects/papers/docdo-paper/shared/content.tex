@@ -227,7 +227,7 @@ Data extraction was performed by a single GPT-5.2 batch pass against the full te
     \item \textbf{Reproducibility:} Code availability, pre-trained model availability, dataset accessibility
 \end{itemize}
 
-All compatible results were sought for each outcome domain: for every included study, we extracted all reported Dice, HD95, and ASSD values across organs and datasets. When studies reported results for multiple configurations (e.g., with and without test-time augmentation, single model vs.\ ensemble), the single-model result without TTA was recorded as the primary outcome to ensure comparability across studies; alternative configurations were noted in Supplementary Data~S12.
+All compatible results were sought for each outcome domain: for every included study, we extracted all reported Dice, HD95, and ASSD values across organs and datasets. When studies reported results for multiple configurations (e.g., with and without test-time augmentation, single model vs.\ ensemble), the single-model result without TTA was recorded as the primary outcome to ensure comparability across studies; alternative configurations were noted in Supplementary Data~S12. Leaderboard, ensemble, cross-validation, and non-standard local-split results were not pooled with official test-split results.
 
 \textbf{Handling of missing or unclear information:} When studies did not report specific variables (e.g., GPU memory, training time, exact train/test split ratios), the corresponding fields were recorded as ``not reported.'' Performance values are reported as stated in original publications without conversion. No imputation of missing values was performed.
 
@@ -297,7 +297,7 @@ Preprocessing converts raw DICOM data to standardized deep learning inputs. Prop
     \item \textbf{Soft tissue window:} Clipping to [$-150$, $+250$] HU captures most abdominal organ contrast while excluding air and bone. This is the default for multi-organ segmentation.
     \item \textbf{Liver window:} [$-50$, $+200$] HU optimizes liver-to-lesion contrast for hepatic applications.
     \item \textbf{Kidney window:} [$-30$, $+300$] HU accommodates the wider intensity range of contrast-enhanced renal parenchyma across different phases, from the hypodense medulla to the brightly enhancing cortex.
-    \item \textbf{Multi-window approach:} Using multiple windows as input channels (soft tissue, lung, bone) provides richer information for whole-body segmentation. TotalSegmentator~\cite{wasserthal2023totalsegmentator} employs this strategy.
+    \item \textbf{Multi-window approach:} Using multiple windows as input channels (soft tissue, lung, bone) provides richer information for whole-body segmentation. Multi-window HU inputs have been used for whole-body CT work as a general practice, but this strategy should not be attributed to a specific model without version- and task-specific documentation (see Table~\ref{tab:preprocessing}).
     \item \textbf{Percentile clipping:} Clipping to [0.5, 99.5] percentiles of foreground intensities adapts to dataset-specific distributions, used by nnU-Net~\cite{isensee2021nnunet}.
 \end{itemize}
 
@@ -330,7 +330,7 @@ Table~\ref{tab:preprocessing} summarizes preprocessing configurations used by le
 \begin{table}[!htb]
 \centering
 \small
-\caption{Preprocessing Configurations of Leading Segmentation Methods}
+\caption{Preprocessing Configurations of Leading Segmentation Methods. Entries reflect the configuration described in the cited publication or its version documentation where available, and should be verified against the specific version and task deployed, as configurations vary across releases; for TotalSegmentator~\cite{wasserthal2023totalsegmentator}, the entry summarizes commonly reported toolchain practice rather than preprocessing documented in the cited publication. Verified method-level facts for the cited version are recorded in Supplementary Data~S8.}
 \label{tab:preprocessing}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lcccc@{}}
@@ -373,7 +373,7 @@ ASSD provides a balanced measure of overall boundary accuracy without being domi
 \begin{equation}
 \text{NSD} = \frac{|B_P^\tau| + |B_G^\tau|}{|\partial P| + |\partial G|}
 \end{equation}
-where $B_P^\tau = \{p \in \partial P : d(p, \partial G) \leq \tau\}$ and $B_G^\tau = \{g \in \partial G : d(g, \partial P) \leq \tau\}$. The tolerance $\tau$ is set based on clinical requirements (e.g., $\tau = 2$~mm for radiation therapy planning). Reporting NSD with such clinically-derived tolerances is recommended for validation practice~\cite{maierhein2024metrics}.
+where $B_P^\tau = \{p \in \partial P : d(p, \partial G) \leq \tau\}$ and $B_G^\tau = \{g \in \partial G : d(g, \partial P) \leq \tau\}$. In 3D, the boundary terms $|\cdot|$ denote total surface area, so each term is surface-area weighted; implementations should state how boundary distances are computed, and with anisotropic voxels the distance transform underlying $d(\cdot,\cdot)$ must operate in physical (mm) space rather than voxel units, or NSD is biased by slice spacing~\cite{maierhein2024metrics}. The tolerance $\tau$ is a task- and organ-dependent choice to be justified clinically rather than a universal standard: $\tau = 2$~mm, for example, has been used in radiation therapy planning, while tighter tolerances are appropriate for surgical planning of small structures. Reporting NSD with explicitly justified, clinically derived tolerances is recommended for validation practice~\cite{maierhein2024metrics}.
 
 \subsection{Loss Functions}
 \label{sec:loss_functions}
@@ -594,7 +594,7 @@ CNNs excel at local features and efficiency; transformers excel at global contex
 
 \textbf{Scalable architectures:} \emph{STU-Net}~\cite{huang2023stunet} explores U-Net scaling from 14M to 1.4B parameters, reaching top performance through large-scale pre-training. \emph{Universal Model}~\cite{liu2023universal} uses CLIP-driven alignment of visual and anatomical text features for zero-shot generalization.
 
-\textbf{Foundation models:} \emph{SAM}~\cite{kirillov2023sam} introduced promptable segmentation trained on 1 billion masks. \emph{MedSAM}~\cite{ma2024medsam} adapts SAM for medical imaging via fine-tuning on 1.5M medical image-mask pairs, enabling zero-shot and few-shot segmentation through bounding box prompts. Fine-tuned MedSAM scores 85.7\% mean Dice across tasks~\cite{ma2024medsam}; zero-shot BTCV performance is lower ($\sim$76\%), indicating task-specific fine-tuning boosts accuracy considerably.
+\textbf{Foundation models:} \emph{SAM}~\cite{kirillov2023sam} introduced promptable segmentation trained on 1 billion masks. \emph{MedSAM}~\cite{ma2024medsam} adapts SAM for medical imaging via fine-tuning on 1.5M medical image-mask pairs, enabling zero-shot and few-shot segmentation through bounding box prompts. Fine-tuned MedSAM scores 85.7\% mean Dice across tasks~\cite{ma2024medsam}; zero-shot BTCV performance is lower ($\sim$76\%), indicating task-specific fine-tuning boosts accuracy considerably. Reported MedSAM performance depends on prompt count and type and may be affected by the train/test task overlap noted in the original publication~\cite{ma2024medsam}.
 
 \textbf{For surgical planning:} Foundation models suit automatic segmentation for common structures with interactive refinement for hard cases. A practical workflow: TotalSegmentator~\cite{wasserthal2023totalsegmentator} for initial multi-organ segmentation, then MedSAM~\cite{ma2024medsam} for surgeon-guided refinement of uncertain regions.
 
@@ -730,7 +730,7 @@ MedSAM$^\dagger$ & Found. & 88.5 & \checkmark & \cite{ma2024medsam} \\
 
 \textbf{Modern CNNs remain highly competitive.} MedNeXt~\cite{roy2023mednext} (86.2\% Dice~\cite{roy2023mednext}) outperforms transformers with 26M parameters (vs.\ 62M for Swin UNETR~\cite{swinunetr2022}) and no pre-training.
 
-\textbf{Foundation models get close to supervised methods when fine-tuned.} MedSAM~\cite{ma2024medsam} reports 85.7\%~\cite{ma2024medsam} mean Dice when fine-tuned; zero-shot BTCV performance ($\sim$76\%) trails the benchmark Dice of supervised methods trained on BTCV (Table~\ref{tab:btcv_comparison}) but allows rapid deployment to new tasks.
+\textbf{Foundation models get close to supervised methods when fine-tuned.} MedSAM~\cite{ma2024medsam} reports 85.7\%~\cite{ma2024medsam} mean Dice when fine-tuned; zero-shot BTCV performance ($\sim$76\%) trails the benchmark Dice of supervised methods trained on BTCV (Table~\ref{tab:btcv_comparison}) but allows rapid deployment to new tasks. These values are treated as reported, not reproduced: MedSAM performance depends on the number and type of prompts used, and the original publication notes possible overlap between its training and test task distributions~\cite{ma2024medsam}.
 
 \textbf{Organ-specific performance varies substantially.} Large organs (liver, spleen, kidneys) achieve Dice $>$90\%, while small organs (gallbladder, adrenal glands) and variable structures (pancreas) show 10--20\% lower Dice.
 
@@ -865,7 +865,7 @@ Segmentation research has moved through distinct eras: the \textbf{U-Net era} (2
 
 \subsection{Benchmark and Metric Considerations (RQ2)}
 
-Over-reliance on BTCV (50 cases) raises overfitting concerns. AMOS~\cite{amos2022} and TotalSegmentator~\cite{wasserthal2023totalsegmentator} offer larger, more varied alternatives. We recommend reporting on multiple benchmarks and including boundary metrics (HD95, NSD at $\tau$=2mm for surgical planning) alongside Dice.
+Over-reliance on BTCV (50 cases) raises overfitting concerns. AMOS~\cite{amos2022} and TotalSegmentator~\cite{wasserthal2023totalsegmentator} offer larger, more varied alternatives. We recommend reporting on multiple benchmarks and including boundary metrics (HD95, and NSD at a tolerance justified per organ and task, e.g., $\tau$=2~mm where clinically appropriate for surgical planning) alongside Dice.
 
 \textbf{Metrics for clinical deployment:} Beyond Dice, clinical applications require \emph{surface accuracy} metrics like Normalized Surface Dice (NSD), which directly answers ``what percentage of the boundary is clinically acceptable?'' \emph{Failure rates}---the percentage achieving clinically acceptable Dice and worst-case performance---matter more than mean performance. \emph{Laterality and topology} metrics capture left/right confusion rates for bilateral organs and topology preservation for vessels. \emph{Uncertainty and calibration} through Monte-Carlo dropout, TTA disagreement, and calibration error round out the picture, supporting quality-aware deployment. Future benchmarks should require comprehensive reporting across all these dimensions.
 
@@ -914,7 +914,7 @@ Hollow organs (stomach, bowel, bladder) present distinct challenges: variable di
 \subsubsection{Post-processing Pipelines}
 \label{sec:postprocessing}
 
-Raw network outputs need refinement through several stages. \textbf{Prediction refinement} includes connected component analysis (keeping the largest component), hole filling via morphological closing, CRF refinement for 1--2mm HD95 reduction, and active contour refinement for thin structures. \textbf{Anatomical constraints} enforce mutual exclusion (assigning each voxel to the highest-probability class), containment constraints (tumors within organs), and size filtering to remove anatomically implausible volumes. \textbf{Surface mesh generation} involves marching cubes extraction, quadric edge collapse decimation to 10K--50K triangles, and Laplacian smoothing. Total post-processing time: 6--13 seconds per volume.
+Raw network outputs need refinement through several stages. \textbf{Prediction refinement} includes connected component analysis (keeping the largest component), hole filling via morphological closing, CRF refinement for 1--2mm HD95 reduction, and active contour refinement for thin structures. \textbf{Anatomical constraints} enforce mutual exclusion (assigning each voxel to the highest-probability class), containment constraints (tumors within organs), and size filtering to remove anatomically implausible volumes. \textbf{Surface mesh generation} involves marching cubes extraction, quadric edge collapse decimation to 10K--50K triangles, and Laplacian smoothing. Total post-processing time: 6--13 seconds per volume. These refinements are not automatically safe: keeping only the largest connected component can erase multifocal lesions or branching anatomy, hole filling can close hollow-organ lumens, and decimation or smoothing alters surface distances. Each operation should therefore be validated by quantifying segmentation error before and after its application, and results should be compared at both mask and mesh level with image orientation and physical units preserved.
 
 \subsubsection{Integration, Regulatory, and Validation}
 
