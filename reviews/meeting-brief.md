@@ -1,53 +1,56 @@
-# Meeting brief: reviewer response discussion with Prof. Lio Gonçalves (and DYS4VET)
+# Briefing de reunião: resposta aos revisores com o Prof. Lio Gonçalves (e DYS4VET)
 
-Crib sheet for the author. Meeting runs in Portuguese; terms below stay in English, matching the manuscript.
+Folha de apoio para o autor usar durante a reunião. A conversa é em português; os termos técnicos ficam em inglês, como no manuscrito.
 
-## Status (open with this)
-All 41 comments addressed point by point. Response letter written, quotes every comment verbatim.
-Both PDFs rebuilt clean: ieeetran 21 pp, ieeeaccess 22 pp, zero LaTeX errors, 78 bib entries, none missing.
-Review-fix chain: 17 commits (c2d2cf8..8aa63b1).
+## Status (abrir com isto)
+Todos os 41 comentários respondidos ponto a ponto. Carta de resposta escrita; cita cada comentário integralmente.
+Ambos os PDFs recompilados sem erros: ieeetran 21 pp, ieeeaccess 22 pp, zero erros de LaTeX, 78 entradas na
+bibliografia, nenhuma em falta. Cadeia de correções da revisão: 17 commits (c2d2cf8..8aa63b1).
 
-## Big wins, 30 seconds each
-1. Title is now his literal suggestion. "Agentic" gone from the entire manuscript, grep-verified.
-   Abstract and keywords rewritten around the structured-review framing.
-2. He is on the author list: UTAD Engineering + INESC-TEC. Vitor Filipe also carries INESC-TEC now.
-   Done in both templates and the PDF metadata.
-3. Audit stat corrected from the archived confusion matrix: 61/64 = 95.3%, kappa 0.90 (95% CI 0.79 to 1.00).
-   His arithmetic was right; the old 96.4% matched no integer count and contradicted S6's own matrix.
-4. Dataset facts fixed: KiTS19 210 train / 90 test, no cyst class; TotalSegmentator 1,204 CT / 104 structures;
-   AMOS 500 CT + 100 MRI, official CT split 300/100/100.
-5. Impossible Table VII mean row removed. His impossibility proof was confirmed: the three missing organs
-   would need to sum to 349.2 against a 300 maximum. Verified means survive in Table V.
-6. About 19 unsourced numbers removed or de-quantified: augmentation gains, cost intervals, clinical
-   incidences, "<5 s" inference, fixed deployment timelines, "pre-registered".
-7. Taxonomy recoded by encoder; "Foundation" is now a training regime, not an architecture family.
-8. Every 82.4% BTCV claim now cites Tang 2022 (CVPR, arXiv:2111.14791); swinunetr2022 stays only on
-   brain-MRI architecture claims.
+## Grandes vitórias (30 segundos cada)
+1. O título é agora a sugestão literal dele. "Agentic" desapareceu do manuscrito inteiro (verificado com grep).
+   Resumo e palavras-chave reescritos em torno da revisão estruturada.
+2. Ele está na lista de autores: UTAD, Departamento de Engenharias + INESC-TEC. O Prof. Vitor Filipe passa
+   também a ter a afiliação do INESC-TEC. Feito nos dois templates e nos metadados do PDF.
+3. Estatística da auditoria corrigida a partir da matriz de confusão arquivada: 61/64 = 95,3%, kappa 0,90
+   (IC 95%: 0,79 a 1,00). A aritmética dele estava certa; os antigos 96,4% não correspondiam a nenhum número
+   inteiro e contradiziam a própria matriz do S6.
+4. Factos dos datasets corrigidos: KiTS19 210 de treino / 90 de teste, sem classe para quisto;
+   TotalSegmentator 1.204 CT / 104 estruturas; AMOS 500 CT + 100 MRI, split CT oficial 300/100/100.
+5. Linha de média impossível da Table VII removida. A prova de impossibilidade dele foi confirmada: os três
+   órgãos em falta teriam de somar 349,2 contra um máximo de 300. As médias verificadas ficam na Table V.
+6. Cerca de 19 números sem fonte removidos ou desquantificados: ganhos de augmentation, intervalos de custo,
+   incidências clínicas, inferência "<5 s", prazos fixos de deployment, "pre-registered".
+7. Taxonomia recodificada pelo encoder; "Foundation" é agora um regime de treino, não uma família arquitetural.
+8. Todas as afirmações de 82,4% no BTCV citam agora Tang 2022 (CVPR, arXiv:2111.14791); o swinunetr2022 fica
+   só nas afirmações de arquitetura em MRI cerebral.
 
-## Needs his input (ask in the room)
-1. **The guia.** He referenced it twice (P8 table/bib corrections, P18 post-cutoff candidates). We never
-   received it. Ask him to share it, above all the post-cutoff candidates list. Nothing was guessed:
-   affected items are marked pending in the letter.
-2. MedSAM2, nnU-Net Revisited, AbdomenAtlas, Touchstone, WORD: cite in the running text now, or wait for
-   the corpus update? (MedSAM2, nnU-Net Revisited, nnInteractive are already in references.bib as context
-   refs; AbdomenAtlas, Touchstone, WORD have no entry yet.)
-3. Authorship order: confirm fifth position works for him.
-4. Any comment he feels is not truly resolved. Partial items are labeled honestly in the letter.
+## Precisa da opinião dele (perguntar na reunião)
+1. **O guia.** Ele referiu-o duas vezes (correções de tabelas/bibliografia, P8; candidatos pós-cutoff, P18).
+   Nunca o recebemos. Pedir-lhe que o partilhe, sobretudo a lista de candidatos pós-cutoff. Nada foi
+   adivinhado: os itens afetados estão marcados como pendentes na carta.
+2. MedSAM2, nnU-Net Revisited, AbdomenAtlas, Touchstone, WORD: citar já no texto corrido ou esperar pela
+   atualização do corpus? (MedSAM2, nnU-Net Revisited e nnInteractive já estão na references.bib como
+   referências de contexto; AbdomenAtlas, Touchstone e WORD ainda não têm entrada.)
+3. Ordem de autoria: confirmar que a quinta posição lhe serve.
+4. Algum comentário que ele considere não verdadeiramente resolvido. Os itens parciais estão assinalados na
+   carta com honestidade.
 
-## Honest pending (owned by the coverage update, not this revision)
-1. Corpus re-screening already ran: 288 INCLUDEs. U-Mamba and nnInteractive unanimous INCLUDE;
-   VISTA3D, SegVol, SAM-Med3D excluded with logged reasons.
-2. Full-text extraction and regenerated tables are next (S3v2). Swin UNETR per-value re-extraction flagged.
-3. The live S6 headline still carries the old 96.4% until supplementary regeneration; the manuscript
-   already prints the corrected figures.
+## Pendências (a cargo da atualização de cobertura, não desta revisão)
+1. A retriagem do corpus já correu: 288 INCLUDEs. U-Mamba e nnInteractive INCLUDE unânime; VISTA3D, SegVol
+   e SAM-Med3D excluídos com razões registadas.
+2. A extração de texto integral e as tabelas regeneradas são o próximo passo (S3v2). Reextração valor a valor
+   do Swin UNETR sinalizada.
+3. O título do S6 em vivo ainda carrega os antigos 96,4% até à regeneração do suplemento; o manuscrito já
+   traz os valores corrigidos.
 
-## Cheat sheet
-| Fact | Number |
+## Números-chave
+| Facto | Número |
 |---|---|
-| Corpus size | 52 studies |
-| Audit agreement | 61/64 = 95.3%, kappa 0.90 |
-| CNN-exclusive | 50/52 |
-| U-Net family | 43/52 |
-| BTCV, auto-CNN vs transformer | 85.2 (n=3) vs 80.5 (n=2), population SD |
-| Bladder vs gallbladder | 11 vs 13 studies |
+| Tamanho do corpus | 52 estudos |
+| Acordo da auditoria | 61/64 = 95,3%, kappa 0,90 |
+| Exclusivamente CNN | 50/52 |
+| Família U-Net | 43/52 |
+| BTCV, auto-CNN vs transformer | 85,2 (n=3) vs 80,5 (n=2), DP populacional |
+| Bexiga vs vesícula biliar | 11 vs 13 estudos |
 | Builds | ieeetran 21 pp, ieeeaccess 22 pp |
