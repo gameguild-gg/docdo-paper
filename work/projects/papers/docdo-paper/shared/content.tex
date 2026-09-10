@@ -368,11 +368,11 @@ where $D_P = \{d(p, \partial G) : p \in \partial P\}$ and $D_G = \{d(g, \partial
 \end{equation}
 ASSD provides a balanced measure of overall boundary accuracy without being dominated by outliers.
 
-\textbf{Normalized Surface Dice (NSD):} Introduced by the Medical Segmentation Decathlon~\cite{msd2022}, NSD evaluates the fraction of boundary points within a clinically-relevant tolerance $\tau$:
+\textbf{Normalized Surface Dice (NSD):} Introduced by Nikolov et al.~\cite{nikolov2021clinically}, NSD evaluates the fraction of boundary points within a clinically-relevant tolerance $\tau$:
 \begin{equation}
 \text{NSD} = \frac{|B_P^\tau| + |B_G^\tau|}{|\partial P| + |\partial G|}
 \end{equation}
-where $B_P^\tau = \{p \in \partial P : d(p, \partial G) \leq \tau\}$ and $B_G^\tau = \{g \in \partial G : d(g, \partial P) \leq \tau\}$. The tolerance $\tau$ is set based on clinical requirements (e.g., $\tau = 2$~mm for radiation therapy planning).
+where $B_P^\tau = \{p \in \partial P : d(p, \partial G) \leq \tau\}$ and $B_G^\tau = \{g \in \partial G : d(g, \partial P) \leq \tau\}$. The tolerance $\tau$ is set based on clinical requirements (e.g., $\tau = 2$~mm for radiation therapy planning). Reporting NSD with such clinically-derived tolerances is recommended for validation practice~\cite{maierhein2024metrics}.
 
 \subsection{Loss Functions}
 \label{sec:loss_functions}
@@ -570,7 +570,7 @@ The core of transformer architectures is self-attention, computing relationships
 
 \emph{UNETR}~\cite{hatamizadeh2022unetr} applies Vision Transformers to 3D medical segmentation, using a ViT encoder that processes non-overlapping 3D patches through transformer layers, connected to a CNN decoder via skip connections.
 
-\emph{Swin UNETR}~\cite{swinunetr2022} uses the Swin Transformer's hierarchical architecture with shifted windows~\cite{liu2021swin}. Instead of global self-attention, Swin computes attention within local windows with relative position bias, reducing complexity from $O(n^2)$ to $O(n)$. Swin UNETR reaches 82.4\% mean Dice on BTCV~\cite{swinunetr2022} and benefits from self-supervised pre-training.
+\emph{Swin UNETR}~\cite{swinunetr2022} uses the Swin Transformer's hierarchical architecture with shifted windows~\cite{liu2021swin}. Instead of global self-attention, Swin computes attention within local windows with relative position bias, reducing complexity from $O(n^2)$ to $O(n)$. Swin UNETR reaches 82.4\% mean Dice on BTCV~\cite{tang2022selfsupervised} and benefits from self-supervised pre-training.
 
 \subsection{Hybrid CNN-Transformer Architectures}
 
@@ -725,7 +725,7 @@ MedSAM$^\dagger$ & Found. & 88.5 & \checkmark & \cite{ma2024medsam} \\
 
 \textbf{Auto-configured CNNs deliver consistent top benchmark results.} nnU-Net~\cite{isensee2021nnunet} achieves 82.3\%~\cite{isensee2021nnunet} mean Dice on BTCV and 96.1\%~\cite{isensee2021nnunet} on KiTS without dataset-specific modifications.
 
-\textbf{Transformers excel with pre-training but require more compute.} Swin UNETR~\cite{swinunetr2022} attains 82.4\% on BTCV when pre-trained on 5,050 CT volumes; without pre-training, drops to 78.9\%~\cite{swinunetr2022}.
+\textbf{Transformers excel with pre-training but require more compute.} Swin UNETR~\cite{tang2022selfsupervised} attains 82.4\% on BTCV when pre-trained on 5,050 CT volumes; without pre-training, drops to 78.9\%~\cite{swinunetr2022}.
 
 \textbf{Modern CNNs remain highly competitive.} MedNeXt~\cite{roy2023mednext} (86.2\% Dice~\cite{roy2023mednext}) outperforms transformers with 26M parameters (vs.\ 62M for Swin UNETR~\cite{swinunetr2022}) and no pre-training.
 
