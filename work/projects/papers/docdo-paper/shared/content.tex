@@ -615,6 +615,8 @@ CNNs excel at local features and efficiency; transformers excel at global contex
 
 Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present dataset-stratified performance comparisons. We separate results by benchmark to avoid misleading cross-dataset comparisons, as evaluation protocols (splits, preprocessing, label definitions) differ substantially. Within each table, methods are comparable; across tables, they are not.
 
+\textbf{Denominators used in this section:} Corpus-level percentages refer to the full set of 52 included studies. Per-organ statistics (Table~\ref{tab:synthesized_dice}) derive from the 32 corpus studies that reported individual organ Dice scores; within that subset, each organ uses its own denominator (liver n=16, kidney n=16, spleen n=9, pancreas n=8; Supplementary Data~S12), since a study contributes only the organs it reports. Benchmark tables (Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison}) aggregate method-level results from the cited source papers on each benchmark and do not count corpus studies.
+
 \textbf{Methodological note:} Performance values derive from original publications where available. When methods were not evaluated on a dataset in the original paper, we cite comparative studies that re-implemented or re-evaluated under controlled conditions. Empty cells indicate no reliable evaluation exists. HD95 values shown only when reported on the same dataset split.
 
 %--- BTCV Table ---
@@ -725,11 +727,11 @@ MedSAM$^\dagger$ & Found. & 88.5 & \checkmark & \cite{ma2024medsam} \\
 
 \textbf{Auto-configured CNNs deliver consistent top benchmark results.} nnU-Net~\cite{isensee2021nnunet} achieves 82.3\%~\cite{isensee2021nnunet} mean Dice on BTCV and 96.1\%~\cite{isensee2021nnunet} on KiTS without dataset-specific modifications.
 
-\textbf{Transformers excel with pre-training but require more compute.} Swin UNETR~\cite{tang2022selfsupervised} attains 82.4\% on BTCV when pre-trained on 5,050 CT volumes; without pre-training, drops to 78.9\%~\cite{swinunetr2022}.
+\textbf{Transformers excel with pre-training but require more compute.} Swin UNETR~\cite{tang2022selfsupervised} attains 82.4\% on BTCV when pre-trained on 5,050 CT volumes; without pre-training, drops to 78.9\%~\cite{tang2022selfsupervised}.
 
 \textbf{Modern CNNs remain highly competitive.} MedNeXt~\cite{roy2023mednext} (86.2\% Dice~\cite{roy2023mednext}) outperforms transformers with 26M parameters (vs.\ 62M for Swin UNETR~\cite{swinunetr2022}) and no pre-training.
 
-\textbf{Foundation models get close to supervised methods when fine-tuned.} MedSAM~\cite{ma2024medsam} reports 85.7\%~\cite{ma2024medsam} mean Dice when fine-tuned; zero-shot BTCV performance ($\sim$76\%) trails supervised methods but allows rapid deployment to new tasks.
+\textbf{Foundation models get close to supervised methods when fine-tuned.} MedSAM~\cite{ma2024medsam} reports 85.7\%~\cite{ma2024medsam} mean Dice when fine-tuned; zero-shot BTCV performance ($\sim$76\%) trails the benchmark Dice of supervised methods trained on BTCV (Table~\ref{tab:btcv_comparison}) but allows rapid deployment to new tasks.
 
 \textbf{Organ-specific performance varies substantially.} Large organs (liver, spleen, kidneys) achieve Dice $>$90\%, while small organs (gallbladder, adrenal glands) and variable structures (pancreas) show 10--20\% lower Dice.
 
@@ -756,14 +758,14 @@ Dense 3D annotation requires 15-45 minutes per organ per volume~\cite{sharma2010
 
 \textbf{Top performers (as reported in original papers):} Among reviewed studies, highest reported per-organ Dice scores: Kakeya et al.\ \cite{kakeya2018ujapa} (97.1\% liver, 98.4\% kidney, 86.1\% pancreas) with 3D U-JAPA-Net; Amjad et al.\ \cite{amjad2022general} (97.0\% liver, 97.0\% spleen) with nnU-Net~\cite{isensee2021nnunet} variants; Gibson et al.\ \cite{gibson2018densevnet} (90.7\% mean, 96.0\% liver/spleen) with DenseVNet. Well-optimized CNNs consistently achieve top per-organ performance.
 
-\textbf{Performance across 52 studies (Table~\ref{tab:synthesized_dice}):} Mean reported Dice scores varied by organ complexity. Liver segmentation achieved the highest accuracy (mean: 94.2\%, range: 89.0--97.1\%, n=16), followed by spleen (93.1\%, range: 84.0--97.0\%, n=9), kidney (92.1\%, range: 78.3--98.4\%, n=16), and pancreas (78.1\%, range: 72.0--86.1\%, n=8). Challenging structures like pancreas showed lower performance due to high anatomical variability and small size~\cite{oktay2018attention, gibson2018densevnet}. Overall Dice scores (n=36 studies reporting) ranged from 78\% to 98\%. The per-organ values in Table~\ref{tab:synthesized_dice} are reproduced from the contributing primary studies as cited; they were not independently re-extracted from the original CT volumes (see Supplementary Report~S11).
+\textbf{Per-organ performance (Table~\ref{tab:synthesized_dice}):} Among the 32 studies reporting individual organ Dice scores (of the 52-study corpus), reported means and cross-study ranges were: liver 94.2\% (89.0--97.1\%, n=16), spleen 93.1\% (84.0--97.0\%, n=9), kidney 92.1\% (78.3--98.4\%, n=16), and pancreas 78.1\% (72.0--86.1\%, n=8); cross-study ranges span 8.1 points (liver) to 20.1 points (kidney). Because these values aggregate heterogeneous datasets and evaluation protocols, we report them as descriptive dispersion and do not rank organ difficulty by cross-study means. Overall Dice scores (n=36 studies reporting) ranged from 78\% to 98\%. The per-organ values in Table~\ref{tab:synthesized_dice} are reproduced from the contributing primary studies as cited; they were not independently re-extracted from the original CT volumes (see Supplementary Report~S11).
 
 \textbf{Individual study results:} Per-study performance data for all 52 included studies, including all reported Dice, HD95, and ASSD values with precision measures (standard deviations or confidence intervals where provided by original authors), are presented in Supplementary Data~S2. Statistical precision measures (standard deviations or confidence intervals) were reported by 35 of 52 studies (67.3\%); formal confidence intervals or comparative hypothesis tests were present in 16 (30.8\%). The remaining 17 studies (32.7\%) reported point estimates only, a limitation common across computational benchmarking literature. Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present representative per-method results for key benchmarks.
 
 \begin{table}[!htb]
 \centering
 \small
-\caption{Per-Organ Dice Scores (\%) from 52 Reviewed Studies. Statistics computed from studies reporting individual organ metrics (Supplementary Data~S12).}
+\caption{Per-Organ Dice Scores (\%) from the 32 corpus studies (of 52 reviewed) reporting individual organ metrics; per-organ denominators $n$ as shown (Supplementary Data~S12).}
 \label{tab:synthesized_dice}
 \begin{tabular}{@{}lcccl@{}}
 \toprule
@@ -792,9 +794,9 @@ Our systematic analysis of 52 peer-reviewed studies uncovers several practical p
 
 \subsection{Aggregate Statistics by Architecture Family}
 
-Aggregated BTCV performance from verified source papers (Supplementary Data~S8): auto-configured CNNs (nnU-Net~\cite{isensee2021nnunet}, MedNeXt~\cite{roy2023mednext}, STU-Net~\cite{huang2023stunet}) reach 85.2$\pm$2.1\%~Dice; transformers (UNETR~\cite{hatamizadeh2022unetr}, Swin UNETR~\cite{swinunetr2022}) attain 80.5$\pm$1.8\%. Auto-configured CNNs outperform pure transformers by 4.7~points. \emph{Key finding: modern auto-configured CNNs lead current BTCV benchmarks, with transformer-only approaches 4--5 points behind.}
+Aggregated BTCV performance from verified source papers (Supplementary Data~S8): auto-configured CNNs (nnU-Net~\cite{isensee2021nnunet}, MedNeXt~\cite{roy2023mednext}, STU-Net~\cite{huang2023stunet}) reach 85.2\%~Dice (population SD 2.1 across the n=3 methods; per-method values 82.3/86.2/87.1); transformers (UNETR~\cite{hatamizadeh2022unetr}, Swin UNETR~\cite{swinunetr2022}) attain 80.5\% (population SD 1.8 across the n=2 methods; per-method values 78.7/82.4, mean 80.55). Auto-configured CNNs report the higher benchmark mean in this corpus (85.2\% vs.\ 80.5\%); with 3 versus 2 methods and heterogeneous evaluation splits, these descriptives do not sustain a general advantage of either family. \emph{Key finding: on BTCV, the highest verified method-level Dice in this corpus comes from auto-configured CNNs (STU-Net 87.1\%, MedNeXt 86.2\%), with the best transformer at 82.4\% (Swin UNETR, pre-trained)---a method-level observation, not a family-level verdict.}
 
-\textbf{Clarification:} These aggregate statistics (85.2$\pm$2.1\% and 80.5$\pm$1.8\%) are arithmetic means $\pm$ standard deviations computed from reported values across contributing studies, not pooled meta-analytic estimates. They are presented as descriptive summaries and should not be interpreted as statistically pooled effect sizes.
+\textbf{Clarification:} These aggregate statistics are arithmetic means $\pm$ \emph{population} standard deviations across the listed methods (auto-configured CNNs: n=3; transformers: n=2), not sample standard deviations and not pooled meta-analytic estimates. They are presented as descriptive summaries and should not be interpreted as statistically pooled effect sizes.
 
 \subsection{Statistical Considerations}
 
@@ -802,7 +804,7 @@ Heterogeneity in evaluation protocols precludes formal meta-analysis. Performanc
 
 \subsection{Heterogeneity Investigation Results}
 
-Stratification by architecture family revealed systematic performance differences: auto-configured CNNs (n=3 methods on BTCV; 85.2$\pm$2.1\% Dice) consistently outperformed pure transformers (n=2; 80.5$\pm$1.8\%) by 4.7 points. Stratification by pre-training regime showed that pre-trained models achieved 2--5\% higher Dice than randomly initialized counterparts within the same architecture family (e.g., Swin UNETR pre-trained: 82.4\% vs.\ from scratch: 78.9\%~\cite{swinunetr2022}). Performance variation by organ complexity was substantial: large parenchymal organs (liver, spleen, kidney) showed narrow cross-study ranges (2--5\% Dice spread), while small or variable organs (pancreas, adrenal glands) showed wider variability (10--18\% spread), suggesting that organ difficulty is a larger source of heterogeneity than architecture choice. Stratification by inference strategy showed that test-time augmentation added 1--2\% and ensembling added 1--2\% Dice. No formal subgroup analysis or meta-regression was conducted, as the absence of standardized evaluation conditions and pooled effect estimates rendered such analyses inappropriate.
+Stratification by architecture family: auto-configured CNNs (n=3 methods on BTCV; 85.2\%, population SD 2.1) reported higher mean Dice than pure transformers (n=2; 80.5\%, population SD 1.8) in this corpus; with 3 versus 2 methods and heterogeneous evaluation splits, this difference does not sustain a general family ranking. Stratification by pre-training regime showed that pre-trained models achieved 2--5\% higher Dice than randomly initialized counterparts within the same architecture family (e.g., Swin UNETR pre-trained: 82.4\% vs.\ from scratch: 78.9\%~\cite{tang2022selfsupervised}). Performance variation across organs: among the 32 per-organ studies, cross-study Dice ranges span 8.1 points (liver, 89.0--97.1\%), 13.0 points (spleen, 84.0--97.0\%), 14.1 points (pancreas, 72.0--86.1\%), and 20.1 points (kidney, 78.3--98.4\%) (Supplementary Data~S12); these ranges aggregate heterogeneous datasets and protocols and are reported as descriptive dispersion only, not as a measure of relative organ difficulty. Stratification by inference strategy showed that test-time augmentation added 1--2\% and ensembling added 1--2\% Dice. No formal subgroup analysis or meta-regression was conducted, as the absence of standardized evaluation conditions and pooled effect estimates rendered such analyses inappropriate.
 
 \subsection{Quality Assessment Results}
 \label{sec:qa-results}
