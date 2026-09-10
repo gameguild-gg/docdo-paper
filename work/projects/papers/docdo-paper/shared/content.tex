@@ -451,7 +451,7 @@ Two advances came with \emph{V-Net} \cite{milletari2016vnet}: residual connectio
 
 \emph{Attention U-Net} \cite{oktay2018attention} introduced attention gates at skip connections, learning to suppress irrelevant regions. The gating signal from decoder features modulates encoder features before concatenation. Attention gates help most for organs with variable position and size (e.g., pancreas).
 
-\emph{U-Net++} \cite{zhou2018unetpp} employs nested, dense pathways with deep supervision at multiple scales, narrowing the encoder-decoder semantic gap. \emph{U-Net 3+} \cite{huang2020unet3plus} uses full-scale skip connections with deep supervision and classification-guided modules. U-Net++ and U-Net 3+ were originally demonstrated on 2D images and are likewise included as historical context rather than counted as corpus members, except where the supplementary extraction table records a 3D CT evaluation.
+\emph{U-Net++} \cite{zhou2018unetpp} employs nested, dense pathways with deep supervision at multiple scales, narrowing the encoder-decoder semantic gap. \emph{U-Net 3+} \cite{huang2020unet3plus} uses full-scale skip connections with deep supervision and classification-guided modules. U-Net++ and its successor were originally demonstrated on 2D images and are likewise included as historical context rather than counted as corpus members, except where the supplementary extraction table records a 3D CT evaluation.
 
 \begin{figure*}[t]
 \centering
@@ -581,7 +581,7 @@ The core of transformer architectures is self-attention, computing relationships
 
 \subsection{Computational Considerations}
 
-Transformers need more resources than CNNs: Swin UNETR~\cite{swinunetr2022} (62M params) vs.\ nnU-Net~\cite{isensee2021nnunet} (31M); 1.5--3$\times$ slower inference; and 5,000+ volumes for pre-training. However, transformers excel at modeling long-range anatomical relationships. For preoperative planning where accuracy outweighs speed, both achieve comparable accuracy (Swin UNETR 82.4\%~\cite{swinunetr2022} vs.\ nnU-Net 82.3\% Dice~\cite{isensee2021nnunet}); auto-configured CNNs may be preferred for simpler deployment.
+Transformers need more resources than CNNs: Swin UNETR~\cite{swinunetr2022} (62M params) vs.\ nnU-Net~\cite{isensee2021nnunet} (31M); 1.5--3$\times$ slower inference; and 5,000+ volumes for pre-training. However, transformers excel at modeling long-range anatomical relationships. For preoperative planning where accuracy outweighs speed, both achieve comparable accuracy (Swin UNETR 82.4\%~\cite{tang2022selfsupervised} vs.\ nnU-Net 82.3\% Dice~\cite{isensee2021nnunet}); auto-configured CNNs may be preferred for simpler deployment.
 
 %==============================================================================
 \section{Hybrid and Foundation Models}
@@ -614,7 +614,7 @@ CNNs excel at local features and efficiency; transformers excel at global contex
 
 Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison} present dataset-stratified performance comparisons. We separate results by benchmark to avoid misleading cross-dataset comparisons, as evaluation protocols (splits, preprocessing, label definitions) differ substantially. Within each table, methods are comparable; across tables, they are not.
 
-\textbf{Denominators used in this section:} Corpus-level percentages refer to the full set of 52 included studies. Per-organ statistics (Table~\ref{tab:synthesized_dice}) derive from the 32 corpus studies that reported individual organ Dice scores; within that subset, each organ uses its own denominator (liver n=16, kidney n=16, spleen n=9, pancreas n=8; Supplementary Data~S12), since a study contributes only the organs it reports. Benchmark tables (Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison}) aggregate method-level results from the cited source papers on each benchmark and do not count corpus studies.
+\textbf{Denominators used in this section:} Corpus-level percentages refer to the full set of 52 included studies. Per-organ statistics (Table~\ref{tab:synthesized_dice}) derive from the 32 corpus studies that reported individual organ Dice scores for the four synthesis organs (liver, kidney, spleen, pancreas); of the 43 included studies with any organ-level Dice entries, these 32 reported at least one of the four. Within that subset, each organ uses its own denominator (liver n=16, kidney n=16, spleen n=9, pancreas n=8; Supplementary Data~S12), since a study contributes only the organs it reports. Benchmark tables (Tables~\ref{tab:btcv_comparison}--\ref{tab:kits_comparison}) aggregate method-level results from the cited source papers on each benchmark and do not count corpus studies.
 
 \textbf{Methodological note:} Performance values derive from original publications where available. When methods were not evaluated on a dataset in the original paper, we cite comparative studies that re-implemented or re-evaluated under controlled conditions. Empty cells indicate no reliable evaluation exists. HD95 values shown only when reported on the same dataset split.
 
@@ -640,7 +640,7 @@ MedNeXt & CNN & 86.2 & 12.1 & -- & \cite{roy2023mednext} \\
 STU-Net-L & CNN & 87.1 & 9.8 & -- & \cite{huang2023stunet} \\
 \midrule
 UNETR & Trans. & 78.7 & 29.1 & \checkmark & \cite{hatamizadeh2022unetr} \\
-Swin UNETR & Trans. & 82.4 & 18.3 & \checkmark & \cite{swinunetr2022} \\
+Swin UNETR & Trans. & 82.4 & 18.3 & \checkmark & \cite{tang2022selfsupervised} \\
 TransUNet & Hybrid & 77.3 & 31.7 & \checkmark & \cite{chen2024transunet} \\
 nnFormer & Hybrid & 86.9 & 14.2 & -- & \cite{zhou2021nnformer} \\
 \midrule
@@ -930,7 +930,7 @@ Raw network outputs need refinement through several stages. \textbf{Prediction r
 
 \subsection{Summary of Findings by Research Question}
 
-\textbf{RQ1 (Architectures):} Auto-configured CNNs (nnU-Net~\cite{isensee2021nnunet}, 82.3\% Dice~\cite{isensee2021nnunet}) and pre-trained transformers (Swin UNETR~\cite{swinunetr2022}, 82.4\%~\cite{swinunetr2022}) report comparable leading benchmark accuracy. The strongest verified method-level BTCV results in this corpus come from CNNs (MedNeXt~\cite{roy2023mednext}, 86.2\%~\cite{roy2023mednext}; STU-Net~\cite{huang2023stunet}, 87.1\%~\cite{huang2023stunet})---a method-level observation, not a family-level verdict (Section~\ref{sec:synthesis}). Foundation models (MedSAM~\cite{ma2024medsam}, 85.7\%~\cite{ma2024medsam} fine-tuned) approach CNN performance; these values are treated as reported, not reproduced, given their dependence on prompt count and type and the possible overlap between training and test task distributions (Section~\ref{sec:synthesis}).
+\textbf{RQ1 (Architectures):} Auto-configured CNNs (nnU-Net~\cite{isensee2021nnunet}, 82.3\% Dice~\cite{isensee2021nnunet}) and pre-trained transformers (Swin UNETR~\cite{swinunetr2022}, 82.4\%~\cite{tang2022selfsupervised}) report comparable leading benchmark accuracy. The strongest verified method-level BTCV results in this corpus come from CNNs (MedNeXt~\cite{roy2023mednext}, 86.2\%~\cite{roy2023mednext}; STU-Net~\cite{huang2023stunet}, 87.1\%~\cite{huang2023stunet})---a method-level observation, not a family-level verdict (Section~\ref{sec:synthesis}). Foundation models (MedSAM~\cite{ma2024medsam}, 85.7\%~\cite{ma2024medsam} fine-tuned) approach CNN performance; these values are treated as reported, not reproduced, given their dependence on prompt count and type and the possible overlap between training and test task distributions (Section~\ref{sec:synthesis}).
 
 \textbf{RQ2 (Datasets/Metrics):} BTCV~\cite{btcv2015}, AMOS~\cite{amos2022}, MSD~\cite{msd2022} dominate. Dice/DSC is reported by 48 of 52 studies, with the remaining four reporting IoU/Jaccard-type or volumetric measures instead; boundary reporting divides into 10 of 52 (19.2\%) with HD95, 21 of 52 (40.4\%) with other boundary or surface metrics (non-95th-percentile Hausdorff variants, ASSD/ASD, or surface Dice; NSD in only 2 of 52), and 21 of 52 (40.4\%) with overlap metrics only, limiting boundary accuracy assessment.
 
