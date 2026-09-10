@@ -94,7 +94,7 @@ This structured survey follows PRISMA 2020 guidelines \cite{page2021prisma} for 
 
 \subsection{Search Strategy}
 
-Three bibliographic databases were searched programmatically via their public APIs: PubMed (NCBI Entrez E-utilities), arXiv (official arXiv API), and Semantic Scholar (Graph API v1). Searches ran from November 15, 2025 to January 10, 2026, covering publications from 2015 onward. Closed-access indexes (IEEE Xplore, ACM Digital Library, Scopus) were not queried because no API access was available within the project budget; relevant papers indexed exclusively in those services were captured indirectly via Semantic Scholar's cross-publisher coverage and via the citation-tracking step described below.
+Three bibliographic databases were searched programmatically via their public APIs: PubMed (NCBI Entrez E-utilities), arXiv (official arXiv API), and Semantic Scholar (Graph API v1). Search reporting for this review follows PRISMA-S, the reporting guideline for literature searches. Searches ran from November 15, 2025 through January 10, 2026, covering publications from 2015 onward. The executed queries carried no database-side date or language filters, so the drafted year filter (e.g., PubMed's \texttt{2015:2026[dp]}) does not by itself document the day-level limit: the 2015-onward publication window and English-language restriction were enforced downstream at screening, and the definitive cut-off is the search execution window, whose inclusive end date is January 10, 2026. The search window is preserved as a historical cut-off (January 10, 2026): records published after this date were not sought, the review does not claim coverage beyond it, and the searches were not updated to the submission date. Closed-access indexes (IEEE Xplore, ACM Digital Library, Scopus) were not queried because no API access was available within the project budget. Semantic Scholar's cross-publisher coverage of IEEE/Scopus-indexed content is partial and was not presumed to be complete; records indexed exclusively in those services could enter the review only through the citation-tracking step described below.
 
 \textbf{Search query construction:} We used Boolean combinations of terms across three concepts:
 
@@ -106,24 +106,23 @@ Three bibliographic databases were searched programmatically via their public AP
 
 We also performed forward and backward citation tracking on 12 seminal papers (U-Net~\cite{ronneberger2015unet}, 3D U-Net~\cite{cicek20163dunet}, V-Net~\cite{milletari2016vnet}, nnU-Net~\cite{isensee2021nnunet}, UNETR~\cite{hatamizadeh2022unetr}, Swin UNETR~\cite{swinunetr2022}, TransUNet~\cite{chen2024transunet}, MedSAM~\cite{ma2024medsam}, and key benchmark papers) and manually searched proceedings from MICCAI, IPMI, MIDL, and ISBI (2015 to 2025).
 
-\textbf{Database-specific queries:} Boolean queries were adapted per database syntax. As an illustrative example, the PubMed query was:
+\textbf{Executed queries:} The queries executed per source are reported verbatim in Supplementary Protocol~S3 (v1 query set, including per-query execution dates); a dated amendment to that protocol documents a corrected, expanded query set (v2) and designates Google Scholar as a supplementary identification source with recorded limitations (no public API; capped retrieval depth)---the amended searches post-date the cut-off above and are not part of the corpus reported here. The executed PubMed query was a single concept block over \texttt{[Title/Abstract]} fields:
 
 \begin{quote}
 \scriptsize\ttfamily
-(("computed tomography"[MeSH]\\
-OR "CT"[tiab])\\
-AND ("image segmentation"[MeSH]\\
-OR "segmentation"[tiab])\\
-AND ("3D" OR "volumetric" OR "organ"\\
-OR "multi-organ" OR "abdominal")\\
-AND ("deep learning"[MeSH]\\
-OR "neural network*" OR "convolutional"\\
-OR "U-Net" OR "transformer"\\
-OR "encoder-decoder"))\\
-AND 2015:2026[dp] AND English[la]
+((CT[Title/Abstract]\\
+OR "computed tomography"[Title/Abstract])\\
+AND (segmentation[Title/Abstract])\\
+AND (organ[Title/Abstract] OR liver[Title/Abstract]\\
+OR kidney[Title/Abstract] OR spleen[Title/Abstract]\\
+OR pancreas[Title/Abstract] OR lung[Title/Abstract])\\
+AND ("deep learning"[Title/Abstract]\\
+OR "neural network"[Title/Abstract]\\
+OR CNN[Title/Abstract] OR "U-Net"[Title/Abstract]\\
+OR transformer[Title/Abstract]))
 \end{quote}
 
-Equivalent queries for arXiv (using the \texttt{cat:cs.CV} and \texttt{cat:eess.IV} category filters with title/abstract keyword combinations) and Semantic Scholar (using the \texttt{/paper/search} endpoint with topical keyword strings) were constructed using each API's native syntax. Complete query strings for all three databases are provided in Supplementary Protocol~S3.
+The arXiv searches used four plain relevance-ranked keyword strings (e.g., ``ct computed tomography organ segmentation deep learning''), and the Semantic Scholar searches used five relevance queries against the Graph API \texttt{/paper/search} endpoint; the complete executed strings for all sources are reproduced in Supplementary Protocol~S3. Retrieval limits and pagination were as follows: PubMed via Entrez \texttt{esearch}/\texttt{efetch} with a 1{,}000-record retrieval cap and full-record downloads in batches of 30; arXiv capped at 300 results per query (relevance-sorted); Semantic Scholar paginated at 100 records per page, up to 600 records per query and 1{,}000 records per source, with API rate-limit backoff. The three sources yielded approximately 1{,}000 (PubMed), 900 (arXiv), and 1{,}085 (Semantic Scholar) raw records---about 2{,}985 in total---deduplicated by DOI and title to the 2{,}821 unique database records reported in the PRISMA flow diagram (Fig.~\ref{fig:prisma}).
 
 \subsection{Study Selection Process}
 
