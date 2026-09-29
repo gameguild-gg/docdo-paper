@@ -1,0 +1,53 @@
+study_id,doi,outcome,reason,identified_by
+S001,10.1002/mp.12480,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S002,10.1002/mp.13300,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S003,10.1002/mp.13438,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S004,10.1002/mp.13950,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S005,10.1002/mp.14386,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S006,10.1002/mp.14422,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S007,10.1002/mp.15507,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S008,10.1007/978-3-030-00937-3_49,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S009,10.1007/s00330-020-07608-9,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S010,10.1016/j.compmedimag.2018.03.001,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S011,10.1016/j.imu.2020.100357,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S012,10.1038/s41598-019-40584-9,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S013,10.1038/s41598-020-63285-0,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S014,10.1038/s41598-022-07848-3,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S015,10.1088/1361-6560_aaf11c,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S016,10.1088/1361-6560_ab6f99,fulltext-missed,identified in v2 dedup but dropped by ES pre-filter before S2 screening; no acquisition attempted,title
+S017,10.1109/ACCESS.2020.3024277,re-included,S3v2 INCLUDE (method),status/extraction
+S018,10.1109/cvidliccea56201.2022.9823971,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S019,10.1109/ICIEAM48468.2020.9111950,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S020,10.1109/SPS.2019.8882073,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S021,10.1109/TMI.2018.2806309,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,doi
+S022,10.1109/WRCSARA57040.2022.9903976,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S023,10.1186/s12880-025-02106-0,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S024,10.1186/s13014-022-01985-9,re-included,S3v2 INCLUDE (method),status/extraction
+S025,10.1186/s41747-024-00507-4,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S026,10.3389/fonc.2018.00215,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S027,10.48550/arXiv.2309.09730,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S028,10.48550/arXiv.2406.13674,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S029,arXiv/1704.06382,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S030,arXiv/1809.04430,s3-excluded,S3v2 exclude: No extractable full text - obtained PDF is corrupt/image-only (not the paper); cannot full,status/extraction
+S031,arXiv/1908.00360,re-included,S3v2 INCLUDE (method),status/extraction
+S032,http/__arxiv.org_abs_1707.08037v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S033,http/__arxiv.org_abs_1710.05379v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S034,http/__arxiv.org_abs_1801.05912v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S035,http/__arxiv.org_abs_1809.00960v2,re-included,S3v2 INCLUDE (method),status/extraction
+S036,http/__arxiv.org_abs_1809.02268v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S037,http/__arxiv.org_abs_1811.11226v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S038,http/__arxiv.org_abs_1909.06684v1,re-included,S3v2 INCLUDE (method),title
+S039,http/__arxiv.org_abs_1909.07480v2,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S040,http/__arxiv.org_abs_2001.09647v1,s2-excluded,"S2v2 exclude: F1,FEC1,FEC3 (stage=S2v2)",title
+S041,http/__arxiv.org_abs_2003.07923v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S042,http/__arxiv.org_abs_2009.09571v4,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S043,http/__arxiv.org_abs_2105.02290v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S044,http/__arxiv.org_abs_2105.14314v3,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S045,http/__arxiv.org_abs_2108.06669v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S046,http/__arxiv.org_abs_2109.12634v1,fulltext-missed,identified in v2 dedup but dropped by ES pre-filter before S2 screening; no acquisition attempted,title
+S047,http/__arxiv.org_abs_2203.01934v1,not-identified,absent from v2 dedup CSV by DOI and normalized title,none
+S048,http/__arxiv.org_abs_2208.13271v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S049,http/__arxiv.org_abs_2210.04285v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S050,http/__arxiv.org_abs_2302.00162v4,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S051,http/__arxiv.org_abs_2302.13172v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
+S052,http/__arxiv.org_abs_2309.13872v1,fulltext-missed,S2v2 INCLUDE but full text not obtained (paywalled/hand-off); no S3 extraction,title
