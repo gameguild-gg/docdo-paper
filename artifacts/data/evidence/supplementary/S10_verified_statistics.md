@@ -1,3 +1,6 @@
+<!-- v1-history -->
+(v1 content preserved as history (v2 numbers supersede))
+
 # S10: Verified Statistics Documentation
 
 This document provides traceability for all statistics cited in the paper, linking them to verified source data.
@@ -101,3 +104,17 @@ Generated: 2026-01-28
 Source files: 
 - `data/processed/synthesis/all_papers_data_20260123_082136.csv` (52 studies)
 - `supplementary/S8_table_sources.csv` (BTCV benchmark values)
+
+<!-- /v1-history -->
+
+---
+
+## v2 Section (2026-09-29) — v2 verified statistics
+
+Machine-derived from `pipeline_outputs/` CSVs (regenerate via the same scripts; nothing hand-typed):
+- Included: 121 (116 method + 5 framework); extraction rows 186 == obtained distinct PDFs.
+- Method strata: CNN 106 (91.4%), Hybrid 8, Foundation 2; U-Net family 86 (74.1%); true-3D 100 (86.2%); multi-organ 51 (44.0%); code available 23 (19.8%); PyTorch 52 / TF-Keras 33 / other-unreported 31.
+- Organ target counts (method studies): liver 40, kidney 33, bladder 15, lung 14, spleen 12, pancreas 11, heart 10, prostate 10, stomach 7.
+- QA (method, n=116): mean 20.3, median 21, range 6-30; High(>=24) 30 (25.9%), Medium 73 (62.9%), Low 13 (11.2%). Scorer-tier shift documented in S4.
+- Funnel table: see S_PRISMA_funnel.md v2 section (273,115 -> 7,370 -> 1,035 -> 186 -> 121 -> 112).
+- Reconciliation: 52 v1 studies -> 5 re-included / 1 s2-excluded / 1 s3-excluded / 30 fulltext-missed / 15 not-identified.

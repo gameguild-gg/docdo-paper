@@ -1,3 +1,6 @@
+<!-- v1-history -->
+(v1 content preserved as history (v2 numbers supersede))
+
 # S11: Paywalled Article Access Instructions
 
 This document provides guidance for accessing paywalled articles included in this systematic review.
@@ -119,3 +122,11 @@ For questions about accessing specific articles or verifying extracted data:
 ---
 
 **Last updated**: 2025-10-01
+
+<!-- /v1-history -->
+
+---
+
+## v2 Section (2026-09-29) — v2 paywall log
+
+508 paywalled records routed to librarian-mediated hand-off: `pipeline_outputs/S3v2_paywalled_librarian_request.csv` + `documentation/reports/unobtainable-fulltexts-v2.md`. OA-first acquisition (Unpaywall/arXiv/PMC/publisher OA) recovered 243 oa-download rows incl. a 41-PDF Unpaywall re-audit. No shadow libraries used.

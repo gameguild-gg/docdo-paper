@@ -1,0 +1,122 @@
+study_id,paper_id,doi,title,year,study_type,screening_decision
+V001,10.1101_2021.03.17.435903,10.1101/2021.03.17.435903,Portable framework to deploy deep learning segmentation models for medical images,,framework,INCLUDE
+V002,10.48550_arxiv.2203.12362,10.48550/arxiv.2203.12362,MONAI Label: A framework for AI-assisted Interactive Labeling of 3D Medical Images,2022,framework,INCLUDE
+V003,10.48550_arxiv.2211.02701,10.48550/arxiv.2211.02701,MONAI: An open-source framework for deep learning in healthcare,2022,framework,INCLUDE
+V004,10.48550_arxiv.2406.05285,10.48550/arxiv.2406.05285,VISTA3D: A Unified Segmentation Foundation Model for 3D Medical Imaging,2024,framework,INCLUDE
+V005,10.48550_arxiv.2503.08373,10.48550/arxiv.2503.08373,nnInteractive: Redefining 3D Promptable Segmentation,2025,framework,INCLUDE
+V006,10.17918_d8p65k,10.17918/d8p65k,Image analysis methods for identification and segmentation of biological structures using machine learning techniques,2017,method,INCLUDE
+V007,10.48550_arxiv.1702.00045,10.48550/arxiv.1702.00045,Spatial Aggregation of Holistically-Nested Convolutional Neural Networks for Automated Pancreas Localization and Segmentation,2017,method,INCLUDE
+V008,10.48550_arxiv.1711.08580,10.48550/arxiv.1711.08580,3D Anisotropic Hybrid Network: Transferring Convolutional Features from 2D Images to 3D Anisotropic Volumes,2017,method,INCLUDE
+V009,10.1109_ijcnn.2018.8489677,10.1109/ijcnn.2018.8489677,End-to-End Supervised Lung Lobe Segmentation,2018,method,INCLUDE
+V010,10.48550_arxiv.1805.12526,10.48550/arxiv.1805.12526,Fully Automated Organ Segmentation in Male Pelvic CT Images,2018,method,INCLUDE
+V011,10.48550_arxiv.1807.02437,10.48550/arxiv.1807.02437,Deep Sequential Segmentation of Organs in Volumetric Medical Scans,2018,method,INCLUDE
+V012,10.48550_arxiv.1809.10245,10.48550/arxiv.1809.10245,CYLINDRICAL TRANSFORM: 3D SEMANTIC SEGMENTATION OF KIDNEYS WITH LIMITED ANNOTATED IMAGES,2018,method,INCLUDE
+V013,10.48550_arxiv.1810.04017,10.48550/arxiv.1810.04017,Comparison of U-net-based Convolutional Neural Networks for Liver Segmentation in CT,2018,method,INCLUDE
+V014,10.1038_s41598-019-40710-7,10.1038/s41598-019-40710-7,Measurement of Glomerular Filtration Rate using Quantitative SPECT/CT and Deep-learning-based Kidney Segmentation,2019,method,INCLUDE
+V015,10.1109_access.2019.2899608,10.1109/access.2019.2899608,AHCNet: An Application of Attention Mechanism and Hybrid Connection for Liver Tumor Segmentation in CT Volumes,2019,method,INCLUDE
+V016,10.1109_access.2019.2941154,10.1109/access.2019.2941154,An Augmentation Strategy for Medical Image Processing Based on Statistical Shape Model and 3D Thin Plate Spline for Deep Learning,2019,method,INCLUDE
+V017,10.1109_iwssip.2019.8787253,10.1109/iwssip.2019.8787253,Whole Heart Segmentation from CT images Using 3D U-Net architecture,2019,method,INCLUDE
+V018,10.24926_548719.002,10.24926/548719.002,Cascaded Semantic Segmentation for Kidney and Tumor,2019,method,INCLUDE
+V019,10.24926_548719.006,10.24926/548719.006,Coarse to Fine Framework for Kidney Tumor Segmentation,2019,method,INCLUDE
+V020,10.24926_548719.012,10.24926/548719.012,Segmentation of Kidney and Renal Tumor in CT Scans Using Convolutional Networks,2019,method,INCLUDE
+V021,10.24926_548719.014,10.24926/548719.014,KiTS challenge: VNet with attention gates and deep supervision,2019,method,INCLUDE
+V022,10.24926_548719.016,10.24926/548719.016,3D Unet-based Kidney and Kidney Tumor Segmentation with Attentive Feature Learning,2019,method,INCLUDE
+V023,10.24926_548719.018,10.24926/548719.018,Automatic Kidney and Tumor Segmentation with Hybrid Hierarchical Networks,2019,method,INCLUDE
+V024,10.24926_548719.034,10.24926/548719.034,Renal Tumor Segmentation in CT using Cascade U-Net with 2.5D approach,2019,method,INCLUDE
+V025,10.24926_548719.049,10.24926/548719.049,Using Two-stage Network to Segment Kidneys and Kidney Tumors,2019,method,INCLUDE
+V026,10.24926_548719.055,10.24926/548719.055,A Multi-scale Attention Network for Kidney Tumor Segmentation on CT Scans,2019,method,INCLUDE
+V027,10.24926_548719.059,10.24926/548719.059,Kidney and Kidney Tumor Segmentation Using Two-stage Convolutional Neural Network,2019,method,INCLUDE
+V028,10.48550_arxiv.1809.00960,10.48550/arxiv.1809.00960,Organ at Risk Segmentation in Head and Neck CT Images Using a Two-Stage Segmentation Framework Based on 3D U-Net,2019,method,INCLUDE
+V029,10.48550_arxiv.1907.05273,10.48550/arxiv.1907.05273,Accurate Congenital Heart Disease Model Generation for 3D Printing,2019,method,INCLUDE
+V030,10.48550_arxiv.1908.00360,10.48550/arxiv.1908.00360,A Method of Rapid Quantification of Patient-Specific Organ Dose for CT Using Coupled Deep-Learning based Multi-Organ Segmentation and GPU-accelerated Monte Carlo Dose Computing,2019,method,INCLUDE
+V031,10.48550_arxiv.1909.06684,10.48550/arxiv.1909.06684,3D Kidneys and Kidney Tumor Semantic Segmentation using Boundary-Aware Networks,2019,method,INCLUDE
+V032,10.1002_mp.14451,10.1002/mp.14451,Deep Learning from Dual-Energy Information for Whole-Heart Segmentation in Dual-Energy and Single-Energy Non-Contrast-Enhanced Cardiac CT,2020,method,INCLUDE
+V033,10.1088_1742-6596_1631_1_012049,10.1088/1742-6596/1631/1/012049,3D Densely Connected Convolution Neural Networks for Pulmonary Parenchyma Segmentation from CT Images,2020,method,INCLUDE
+V034,10.1109_access.2019.2961125,10.1109/access.2019.2961125,Automatic Pancreas Segmentation via Coarse Location and Ensemble Learning,2020,method,INCLUDE
+V035,10.1109_access.2019.2961410,10.1109/access.2019.2961410,Improving Whole-Heart CT Image Segmentation by Attention Mechanism,2020,method,INCLUDE
+V036,10.1109_access.2020.2985671,10.1109/access.2020.2985671,Cascade U-ResNets for Simultaneous Liver and Lesion Segmentation,2020,method,INCLUDE
+V037,10.1109_access.2020.3019518,10.1109/access.2020.3019518,Eso-Net: A Novel 2.5D Segmentation Network With the Multi-Structure Response Filter for the Cancerous Esophagus,2020,method,INCLUDE
+V038,10.1109_access.2020.3024277,10.1109/access.2020.3024277,Automatic Segmentation Using a Hybrid Dense Network Integrated With an 3D-Atrous Spatial Pyramid Pooling Module for Computed Tomography (CT) Imaging,2020,method,INCLUDE
+V039,10.1111_cpf.12611,10.1111/cpf.12611,Deep learning-based quantification of PET/CT prostate gland uptake: association with overall survival,2020,method,INCLUDE
+V040,10.21203_rs.3.rs-83236_v1,10.21203/rs.3.rs-83236/v1,Compare the Segmentation Accuracy of Heart Substructure on Contrast Enhanced CT by Deep Convolutional Neural Network with Different Loss Functions,2020,method,INCLUDE
+V041,10.2478_acss-2020-0005,10.2478/acss-2020-0005,Applying 3D U-Net Architecture to the Task of Multi-Organ Segmentation in Computed Tomography,2020,method,INCLUDE
+V042,10.25073_2588-1086_vnucsce.241,10.25073/2588-1086/vnucsce.241,Liver Segmentation on a Variety of CT Images Based on Convolutional Neural Networks Combined with Connected Components,2020,method,INCLUDE
+V043,10.32985_ijeces.11.1.3,10.32985/ijeces.11.1.3,Neural Network Based Whole Heart Segmentation from 3D CT Images,2020,method,INCLUDE
+V044,10.3389_fnbot.2020.00049,10.3389/fnbot.2020.00049,AutoPath: Image-Specific Inference for 3D Segmentation,2020,method,INCLUDE
+V045,10.48550_arxiv.1907.10132,10.48550/arxiv.1907.10132,Domain specific cues improve robustness of deep learning based segmentation of ct volumes,2020,method,INCLUDE
+V046,10.48550_arxiv.2001.03111,10.48550/arxiv.2001.03111,Unpaired Multi-modal Segmentation via Knowledge Distillation,2020,method,INCLUDE
+V047,10.48550_arxiv.2002.06927,10.48550/arxiv.2002.06927,PATIENT-SPECIFIC FINETUNING OF DEEP LEARNING MODELS FOR ADAPTIVE RADIOTHERAPY IN PROSTATE CT,2020,method,INCLUDE
+V048,10.48550_arxiv.2006.15713,10.48550/arxiv.2006.15713,Generalizable Cone Beam CT Esophagus Segmentation using Physics-Based Data Augmentation,2020,method,INCLUDE
+V049,10.48550_arxiv.2012.04701,10.48550/arxiv.2012.04701,"3D Graph Anatomy Geometry-Integrated Network for Pancreatic Mass Segmentation, Diagnosis, and Quantitative Patient Management",2020,method,INCLUDE
+V050,10.1088_1361-6560_ac3935,10.1088/1361-6560/ac3935,Efficient knowledge distillation for liver CT segmentation using growing assistant network,2021,method,INCLUDE
+V051,10.1088_1742-6596_1920_1_012060,10.1088/1742-6596/1920/1/012060,Segmentation and Reconstruction of Abdominal Multi-tissues Based on Multiple Algorithms and Networks,2021,method,INCLUDE
+V052,10.1109_access.2021.3055803,10.1109/access.2021.3055803,Cross-Dataset Multiple Organ Segmentation From CT Imagery Using FBP-Derived Domain Adaptation,2021,method,INCLUDE
+V053,10.1109_access.2021.3089704,10.1109/access.2021.3089704,R2U3D: Recurrent Residual 3D U-Net for Lung Segmentation,2021,method,INCLUDE
+V054,10.21203_rs.3.rs-902758_v1,10.21203/rs.3.rs-902758/v1,DALU-Net: Automated Liver Segmentation and Volumetry for Liver Transplantation in Abdominal Computed Tomography Volumes,2021,method,INCLUDE
+V055,10.22215_etd_2021-15566,10.22215/etd/2021-15566,Development of an Integrated System for Automatic Tumor Detection for PET-CT Images,2021,method,INCLUDE
+V056,10.3389_fonc.2021.669437,10.3389/fonc.2021.669437,Advanced Deep Learning Approach to Automatically Segment Malignant Tumors and Ablation Zone in the Liver With Contrast-Enhanced CT,2021,method,INCLUDE
+V057,10.3389_fphy.2021.743190,10.3389/fphy.2021.743190,Deep Learning-Augmented Head and Neck Organs at Risk Segmentation From CT Volumes,2021,method,INCLUDE
+V058,10.48550_arxiv.2005.07462,10.48550/arxiv.2005.07462,MetricUNet: Synergistic Image- and Voxel-Level Learning for Precise Prostate Segmentation via Online Sampling,2021,method,INCLUDE
+V059,10.48550_arxiv.2102.07899,10.48550/arxiv.2102.07899,A Deep-Learning Approach For Direct Whole-Heart Mesh Reconstruction,2021,method,INCLUDE
+V060,10.1007_s10916-022-01810-6,10.1007/s10916-022-01810-6,Automatic Cardiac Structure Contouring for Small Datasets with Cascaded Deep Learning Models,2022,method,INCLUDE
+V061,10.1016_j.compbiomed.2021.105191,10.1016/j.compbiomed.2021.105191,Deep learning-based whole-heart segmentation in 4D contrast-enhanced cardiac CT,2022,method,INCLUDE
+V062,10.1038_s41598-022-09978-0,10.1038/s41598-022-09978-0,Deep 3D attention CLSTM U-Net based automated liver segmentation and volumetry for the liver transplantation in abdominal CT volumes,2022,method,INCLUDE
+V063,10.1038_s41598-022-18173-0,10.1038/s41598-022-18173-0,Evaluation of a hybrid pipeline for automated segmentation of solid lesions based on mathematical algorithms and deep learning,2022,method,INCLUDE
+V064,10.1038_s41598-022-21562-0,10.1038/s41598-022-21562-0,Deep supervision and atrous inception-based U-Net combining CRF for automatic liver segmentation from CT,2022,method,INCLUDE
+V065,10.1109_elmar55880.2022.9899815,10.1109/elmar55880.2022.9899815,3D U-Net based method for fast segmentation of whole heart from CT images,2022,method,INCLUDE
+V066,10.1186_s12880-022-00785-7,10.1186/s12880-022-00785-7,Heart and bladder detection and segmentation on FDG PET/CT by deep learning,2022,method,INCLUDE
+V067,10.1186_s13014-022-01985-9,10.1186/s13014-022-01985-9,Dosimetric impact of deep learning-based CT auto-segmentation on radiation therapy treatment planning for prostate cancer,2022,method,INCLUDE
+V068,10.1186_s13014-022-02102-6,10.1186/s13014-022-02102-6,A deep image-to-image network organ segmentation algorithm for radiation treatment planning: principles and evaluation,2022,method,INCLUDE
+V069,10.1186_s40001-022-00943-1,10.1186/s40001-022-00943-1,Automated quantitative assessment of pediatric blunt hepatic trauma by deep learning-based CT volumetry,2022,method,INCLUDE
+V070,10.21203_rs.3.rs-1582742_v1,10.21203/rs.3.rs-1582742/v1,MAD-UNet: Multi-scale attention and deep supervision-based 3D UNet for automatic liver segmentation from CT,2022,method,INCLUDE
+V071,10.21203_rs.3.rs-1740114_v1,10.21203/rs.3.rs-1740114/v1,DA-UNet: Deep supervision and atrous inception-based U-Net combining CRF for automatic liver segmentation from CT,2022,method,INCLUDE
+V072,10.22266_ijies2022.1231.47,10.22266/ijies2022.1231.47,A Weakly Reiterative Patches-Wise Framework for CT Liver and Lesions Segmentation,2022,method,INCLUDE
+V073,10.3389_fphys.2021.725865,10.3389/fphys.2021.725865,Automatic Lung Segmentation and Quantification of Aeration in Computed Tomography of the Chest Using 3D Transfer Learning,2022,method,INCLUDE
+V074,10.3389_fvets.2022.1011804,10.3389/fvets.2022.1011804,A deep learning model for CT-based kidney volume determination in dogs and normal reference definition,2022,method,INCLUDE
+V075,10.3934_mbe.2022066,10.3934/mbe.2022066,An improved residual U-Net with morphological-based loss function for automatic liver segmentation in computed tomography,2022,method,INCLUDE
+V076,10.3934_mbe.2023149,10.3934/mbe.2023149,Hierarchical volumetric transformer with comprehensive attention for medical image segmentation,2022,method,INCLUDE
+V077,10.5954_icarob.2022.gs2-3,10.5954/icarob.2022.gs2-3,Liver Segmentation in CT Images Using Residual U-Net and 3D CRF,2022,method,INCLUDE
+V078,10.1007_s10278-023-00804-1,10.1007/s10278-023-00804-1,Effect of Dataset Size and Medical Image Modality on Convolutional Neural Network Model Performance for Automated Segmentation: A CT and MR Renal Tumor Imaging Study,2023,method,INCLUDE
+V079,10.1038_s41598-023-32741-y,10.1038/s41598-023-32741-y,Localization of spleen and kidney organs from CT scans based on classification of slices in rotational views,2023,method,INCLUDE
+V080,10.1038_s41598-023-34013-1,10.1038/s41598-023-34013-1,Graph matching and deep neural networks based whole heart and great vessel segmentation in congenital heart disease,2023,method,INCLUDE
+V081,10.1038_s41598-023-45140-0,10.1038/s41598-023-45140-0,Estimation of right lobe graft weight for living donor liver transplantation using deep learning-based fully automatic computed tomographic volumetry,2023,method,INCLUDE
+V082,10.1109_access.2023.3313646,10.1109/access.2023.3313646,Semi-Supervised Learning With Fact-Forcing for Medical Image Segmentation,2023,method,INCLUDE
+V083,10.1117_12.2651572,10.1117/12.2651572,Analyzing Components of a Transformer under Different Dataset Scales in 3D Prostate CT Segmentation,2023,method,INCLUDE
+V084,10.1140_epjp_s13360-023-03896-4,10.1140/epjp/s13360-023-03896-4,Quantification of pulmonary involvement in COVID-19 pneumonia: an upgrade of the LungQuant software for lung CT segmentation,2023,method,INCLUDE
+V085,10.21203_rs.3.rs-2466037_v1,10.21203/rs.3.rs-2466037/v1,Segmentation of Lung Lobes and Lesions in Chest CT for the Classification of COVID-19 Severity,2023,method,INCLUDE
+V086,10.21203_rs.3.rs-3788726_v1,10.21203/rs.3.rs-3788726/v1,Deep Learning for Automated Measurement of Total Cardiac Volume for Heart Transplantation Size Matching,2023,method,INCLUDE
+V087,10.24132_csrn.3301.6,10.24132/csrn.3301.6,Coordinate-Unet 3D for segmentation of lung parenchyma,2023,method,INCLUDE
+V088,10.3389_fonc.2023.1119008,10.3389/fonc.2023.1119008,Comprehensive clinical evaluation of deep learning-based auto-segmentation for radiotherapy in patients with cervical cancer,2023,method,INCLUDE
+V089,10.3389_fonc.2023.1137803,10.3389/fonc.2023.1137803,Validation of clinical acceptability of deep-learning-based automated segmentation of organs-at-risk for head-and-neck radiotherapy treatment planning,2023,method,INCLUDE
+V090,10.3389_fonc.2023.1172424,10.3389/fonc.2023.1172424,Clinical target volume and organs at risk segmentation for rectal cancer radiotherapy using the Flex U-Net network,2023,method,INCLUDE
+V091,10.3857_roj.2023.00444,10.3857/roj.2023.00444,Feasibility of artificial intelligence-driven interfractional monitoring of organ changes by mega-voltage computed tomography in intensity-modulated radiotherapy of prostate cancer,2023,method,INCLUDE
+V092,10.3934_era.2023221,10.3934/era.2023221,2.5D cascaded context-based network for liver and tumor segmentation from CT images,2023,method,INCLUDE
+V093,10.3934_mbe.2023059,10.3934/mbe.2023059,Multi-scale attention and deep supervision-based 3D UNet for automatic liver segmentation from CT,2023,method,INCLUDE
+V094,10.4111_icu.20220411,10.4111/icu.20220411,Feasibility of artificial intelligence-based decision supporting system in tolvaptan prescription for autosomal dominant polycystic kidney disease,2023,method,INCLUDE
+V095,10.48550_arxiv.2310.02972,10.48550/arxiv.2310.02972,Fully Automatic Segmentation of Gross Target Volume and Organs-at-Risk for Radiotherapy Planning of Nasopharyngeal Carcinoma,2023,method,INCLUDE
+V096,10.1007_s00330-023-10235-9,10.1007/s00330-023-10235-9,"External validation, radiological evaluation, and development of deep learning automatic lung segmentation in contrast-enhanced chest CT",2024,method,INCLUDE
+V097,10.1007_s12194-024-00832-8,10.1007/s12194-024-00832-8,Development of deep learning-based novel auto-segmentation for the prostatic urethra on planning CT images for prostate cancer radiotherapy,2024,method,INCLUDE
+V098,10.1101_2024.04.06.588383,10.1101/2024.04.06.588383,Deep learning-based detection of murine congenital heart defects from µCT scans,2024,method,INCLUDE
+V099,10.36306_konjes.1404420,10.36306/konjes.1404420,"A 3D U-NET BASED ON EARLY FUSION MODEL: IMPROVEMENT, COMPARATIVE ANALYSIS WITH STATE-OF-THE-ART MODELS AND FINE-TUNING",2024,method,INCLUDE
+V100,10.48550_arxiv.2404.04202,10.48550/arxiv.2404.04202,Deep-learning Segmentation of Small Volumes in CT images for Radiotherapy Treatment Planning,2024,method,INCLUDE
+V101,10.48550_arxiv.2406.16724,10.48550/arxiv.2406.16724,µ-Net: A Deep Learning-Based Architecture for µ-CT Segmentation,2024,method,INCLUDE
+V102,10.48550_arxiv.2410.10551,10.48550/arxiv.2410.10551,Preserving Cardiac Integrity: A Topology-Infused Approach to Whole Heart Segmentation,2024,method,INCLUDE
+V103,10.48550_arxiv.2401.04722,10.48550/arxiv.2401.04722,U-Mamba: Enhancing Long-range Dependency for Biomedical Image Segmentation,2024,method,INCLUDE
+V104,10.1007_s10796-024-10485-y,10.1007/s10796-024-10485-y,Comprehensive 3D Analysis of the Renal System and Stones: Segmenting and Registering Non-Contrast and Contrast Computed Tomography Images,2025,method,INCLUDE
+V105,10.1186_s12880-025-01682-5,10.1186/s12880-025-01682-5,A deep learning algorithm for automated adrenal gland segmentation on non-contrast CT images,2025,method,INCLUDE
+V106,10.1186_s12880-025-01991-9,10.1186/s12880-025-01991-9,Incremental 2D self-labelling for effective 3D medical volume segmentation with minimal annotations,2025,method,INCLUDE
+V107,10.1371_journal.pone.0332603,10.1371/journal.pone.0332603,Improving segmentation precision in prostate cancer adaptive radiation therapy with a patient-specific network,2025,method,INCLUDE
+V108,10.21203_rs.3.rs-7925953_v1,10.21203/rs.3.rs-7925953/v1,Deep Learning-Based CT Splenic Segmentation and Morphometrics: A Spleen Volume Prediction Model,2025,method,INCLUDE
+V109,10.3169_mta.13.83,10.3169/mta.13.83,Kidney and Renal Tumor Segmentation by nnU-Net Using 3D CT Data from Different Sources,2025,method,INCLUDE
+V110,10.3389_fonc.2025.1475133,10.3389/fonc.2025.1475133,TriSwinUNETR lobe segmentation model for computing DIR-free CT-ventilation,2025,method,INCLUDE
+V111,10.3803_enm.2025.2336,10.3803/enm.2025.2336,Deep Learning-Based Adrenal Gland Volumetry for the Prediction of Diabetes,2025,method,INCLUDE
+V112,10.46310_tjim.1580929,10.46310/tjim.1580929,Region segmentation for lung cancer Computed Tomography image using 3D U-Net model,2025,method,INCLUDE
+V113,10.48084_etasr.9157,10.48084/etasr.9157,Efficient Liver Segmentation using Advanced 3D-DCNN Algorithm on CT Images,2025,method,INCLUDE
+V114,10.48550_arxiv.2511.14971,10.48550/arxiv.2511.14971,Clinical Validation and Prospective Deployment of an Automated Deep Learning-Based Coronary Segmentation and Cardiac Toxicity Risk Prediction System,2025,method,INCLUDE
+V115,10.52783_jisem.v10i49s.9954,10.52783/jisem.v10i49s.9954,An Efficient Deep Learning Approach for Liver Segmentation in Medical Imaging,2025,method,INCLUDE
+V116,10.54254_2755-2721_2026.tj28958,10.54254/2755-2721/2026.tj28958,Speed-Accuracy-Memory Cooperative Optimization of Lightweight Dynamic 3D U-Net for Efficient Medical Image Segmentation,2025,method,INCLUDE
+V117,10.58190_imiens.2025.126,10.58190/imiens.2025.126,Dual-Scale Transformer-Guided Attention Network for Efficient Multi-OAR Segmentation in Head and Neck Radiotherapy,2025,method,INCLUDE
+V118,10.61882_ist.202502.10.03,10.61882/ist.202502.10.03,AbdomenAtlasNet-3.0: Multi-Phase Deep Learning for Robust Multi-Organ Segmentation of Core Abdominal Structures on a Large-Scale CT Atlas,2025,method,INCLUDE
+V119,10.17758_uruae31.ua0226112,10.17758/uruae31.ua0226112,Adaptive Three-Dimensional Identification of Renal Masses and Normal Kidney Tissues in Abdominal CT Using nnU-Net,2026,method,INCLUDE
+V120,10.48550_arxiv.2606.23879,10.48550/arxiv.2606.23879,Promise and challenges of heart chamber segmentation from non-contrast CT scans using contrastive unpaired image translation: a feasibility study,2026,method,INCLUDE
+V121,10.64898_2026.01.11.26343874,10.64898/2026.01.11.26343874,Onco-Seg: Adapting Promptable Concept Segmentation for Multi-Modal Medical Imaging,2026,method,INCLUDE

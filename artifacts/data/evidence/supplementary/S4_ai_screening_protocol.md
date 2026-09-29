@@ -1,3 +1,6 @@
+<!-- v1-history -->
+(v1 content preserved as history (v2 numbers supersede))
+
 # S4: AI-Assisted Screening Protocol
 
 ## 1. Overview
@@ -385,3 +388,14 @@ All screening data available in supplementary materials:
 **Document version:** 1.2  
 **Last updated:** 2025-10-01  
 **Contact:** [corresponding author]
+
+<!-- /v1-history -->
+
+---
+
+## v2 Section (2026-09-29) — model identifiers and scorer-tier shift
+
+**S2v2 title/abstract screening:** 3 independent votes per record at low temperature, unanimous-INCLUDE rule; model = mini-class `deepseek-v4-flash-vision-low` (proxy alias of `deepseek-ai/DeepSeek-V4-Flash-0731` tier) via LiteLLM chat endpoint (`llm.gameguild.gg`); OpenAI Batch/files API unavailable on the proxy (HTTP 500 `files_settings is not set`) — synchronous 2-worker runner with vote checkpointing used instead. Same two-lane criteria set as the S3 amendment (method IC/EC vs framework F/FEC).
+**S3v2 full-text screening + extraction + QA:** same mini tier via chat-completions (1-worker optimal); Cloudflare 524 recoveries via 25k-char text caps.
+**QA scorer-tier shift (explicit):** v1 QA/extraction scored by the GPT-4o/GPT-5.2 tier; v2 by the mini tier above. The 15-question rubric is byte-identical (copied from `operations/src/_archive/scripts/step2_quality_assessment_batch.py`); scores across waves are NOT comparable. v1 mean 21.0 (n=52) vs v2 mean 20.3 (n=116 method) must not be read as a literature-quality change.
+**Post-run QA:** 10 random INCLUDE re-checks 10/10 agreement; seed-recall oracle 12/12 terminal states; 10-row extraction audit vs PDFs = 0% true missing-field rate (all flags checker artifacts).

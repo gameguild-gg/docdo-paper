@@ -1,3 +1,6 @@
+<!-- v1-history -->
+(v1 content preserved as history (v2 numbers supersede))
+
 # S0: Data Provenance and Pipeline Documentation
 
 **Generated:** 2026-01-25  
@@ -312,3 +315,15 @@ For each of 638 papers:
 **Document Version:** 1.0  
 **Last Updated:** 2026-01-25  
 **Maintainer:** Data Pipeline Audit
+
+<!-- /v1-history -->
+
+---
+
+## v2 Section (2026-09-29) — raw inventory
+
+- API wave: 30 immutable per-query CSVs under `artifacts/data/evidence/raw/v2/` concatenated to `_combined.csv` (14,547 rows; per-source: PubMed 7,045, arXiv 7,164, Google Scholar 338; Semantic Scholar lane blocked HTTP 429).
+- OpenAlex identification lane: works snapshot scanned in-place (2,146 files, updated_date 2016-06..2026-06), 264,269 delta records (`interim/S1v2_openalex_delta.csv`, per-family CSVs + MD5SUMS under `raw/v2/openalex/`).
+- Full texts: `evidence/pdfs/openalex/` (180 DOI-named valid PDFs) + 6 seed PDFs in `evidence/pdfs/` = 186 distinct papers.
+- Acquisition log: 751 rows = 243 oa-download + 508 paywalled (routed to librarian hand-off).
+- All v2 pipeline outputs co-located in `pipeline_outputs/` (S1v2/S2v2/S3v2/qa_v2 prefixes).

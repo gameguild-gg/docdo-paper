@@ -341,3 +341,9 @@ For questions about the search protocol:
 - Corresponding author: [corresponding author email]
 - Information specialist: [librarian email]
 - Last updated: 2025-10-01
+
+---
+
+## v2 Amendment (promoted 2026-09-29)
+
+The corrected, expanded v2 query set (families A-G, framework-tool vocabulary lane, Google Scholar + OpenAlex supplementary sources) is recorded verbatim in [`S3v2_search_protocol_amendment.md`](S3v2_search_protocol_amendment.md) (dated 2026-09-08, with eligibility amendment adding the Framework/Software study type). The v1 query text above is preserved as history.

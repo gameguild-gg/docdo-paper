@@ -1,3 +1,6 @@
+<!-- v1-history -->
+(v1 content preserved as history (v2 numbers supersede))
+
 # S6: AI Screening Validation Report
 
 **Status (2026-04-23):** Rewritten end-to-end to remove internal
@@ -231,3 +234,11 @@ in this repository.
 consistency).
 **Predecessor:** `S6_validation_report.md.bak` (preserved unchanged
 for audit trail).
+
+<!-- /v1-history -->
+
+---
+
+## v2 Section (2026-09-29) — v2 validation
+
+The v1 10% human audit (n=64, 61/64, kappa=0.90) was NOT repeated for v2. v2 validation instead: (1) post-run 10-random-INCLUDE re-check = 10/10 agreement; (2) seed-recall oracle, 12/12 sentinels reaching terminal states (`pipeline_outputs/S2v2_seed_recall.md`); (3) 10-row random extraction audit against source PDFs (seed=7) = 59 field checks, 0 true extraction errors (6 initial flags all checker artifacts: percent-vs-decimal Dice, tumours/tumors spelling, extractor annotations); (4) funnel checker asserts (lanes disjoint, es_pass_total = standard + bypass). Residual: pre-filter sensitivity not directly audited (v1 limitation carried forward).
