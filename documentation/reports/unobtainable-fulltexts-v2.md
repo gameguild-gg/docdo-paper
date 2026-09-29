@@ -516,3 +516,20 @@ These papers passed S2v2 screening as INCLUDE but have **no open-access full-tex
 | 506 | mukhsadr/MLP_Fusion_Inference: MLP Fusion Inference v1.0.0 | https://doi.org/10.5281/zenodo.17903413 | 2025 | Zenodo (CERN European Organization for Nuclear Research) |
 | 507 | project-lighter/lighter: v0.0.2 | https://doi.org/10.5281/zenodo.12001398 | 2024 | Zenodo (CERN European Organization for Nuclear Research) |
 | 508 | 深度学习与影像自动化评估的肾肿瘤剜除术难度预分析 | https://doi.org/10.11834/jig.220375 | 2023 | Journal of Image and Graphics |
+
+---
+
+## Re-fetch addendum (2026-09-29)
+
+A second OA pass (Unpaywall `oa_locations[]` full-list retries, arXiv-direct, plus legacy
+landing-page scrape routes for MDPI/Frontiers/BMC-class publishers — scripts:
+`operations/scripts/legacy-fetch/`) recovered **+82 PDFs** (268 distinct papers on disk, up
+from 186). Shadow-library scripts present in the legacy folder's source were NOT used.
+
+**Remaining unobtainable: 620** (authoritative list: `pipeline_outputs/S3v2_paywalled_librarian_request.csv`).
+Failure classes: publisher anti-bot/paywall walls (Wiley, Elsevier, IEEE, Springer — HTML
+login pages returned), Unpaywall reports no OA location (truly closed), and 151 no-DOI
+phantom rows excluded from fetch-by-identifier entirely.
+
+Acquisition log now: 804 rows = 325 `oa-download` + 479 `paywalled` (OpenAlex-lane rows);
+the 620-row CSV additionally covers API-lane includes that never entered the lane-scoped log.
