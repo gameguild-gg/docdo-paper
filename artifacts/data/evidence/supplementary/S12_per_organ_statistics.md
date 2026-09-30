@@ -60,19 +60,19 @@ Source: data/processed/synthesis/all_papers_data_20260123_082136.csv
 
 ---
 
-## v2 Section (2026-09-29) — v2 per-organ Dice (method studies, aggregated from `dice_per_organ`)
+## v2.1 Section (2026-09-30) — per-organ Dice (224 method studies; first matching `dice_per_organ` entry per organ per study)
 
-| Organ | studies/values | Mean | Range |
-|-------|------|------|-------|
-| Liver | 30 studies (33 values) | 91.8% | 64.1-98.7% |
-| Kidney | 28 studies (46 values) | 90.2% | 63.2-99.5% |
-| Spleen | 9 | 93.0% | 85.3-98.8% |
-| Pancreas | 9 | 75.2% | 23.9-86.5% |
-| Bladder | 13 | 87.1% | 71.9-97.0% |
-| Lung | 12 | 94.7% | 67.0-99.2% |
-| Heart | 9 | 94.3% | 89.0-96.6% |
-| Stomach | 7 | 86.3% | 67.0-92.5% |
-| Prostate | 7 | 82.1% | 49.5-97.8% |
-| Esophagus | 4 | 80.6% | 74.3-85.2% |
+| Organ | studies | Mean | Range |
+|-------|---------|------|-------|
+| Liver | 64 | 93.6% | 64.1–98.7% |
+| Kidney | 47 | 93.0% | 52.5–99.0% |
+| Pancreas | 28 | 76.5% | 23.9–94.0% |
+| Bladder | 23 | 84.1% | 65.9–97.0% |
+| Spleen | 22 | 92.7% | 80.0–98.8% |
+| Heart | 20 | 93.3% | 87.0–96.6% |
+| Lung | 19 | 94.8% | 67.0–99.8% |
+| Stomach | 17 | 87.1% | 67.0–94.4% |
+| Esophagus | 15 | 75.4% | 50.3–85.2% |
+| Prostate | 8 | 81.5% | 49.5–97.8% |
 
-Descriptive dispersion over heterogeneous datasets/protocols (v1 convention); pancreas low end includes outlier reports.
+Descriptive dispersion over heterogeneous datasets/protocols (v1 convention); pancreas low end includes outlier reports. 215 of 224 method studies report at least one per-organ value.

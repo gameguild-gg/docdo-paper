@@ -7,7 +7,7 @@
 > altered or superseded silently; the v1 protocol text remains the record of
 > what was originally drafted and executed. The machine-readable source of
 > truth for the v2 queries is
-> [operations/src/_archive/scripts/queries_v2.yaml](../../../operations/src/_archive/scripts/queries_v2.yaml),
+> [operations/src/_archive/scripts/queries_v2.yaml](../../../../operations/src/_archive/scripts/queries_v2.yaml),
 > validated by `validate_queries_v2.py` in the same directory. The v2 search
 > will be executed against PubMed, arXiv, Semantic Scholar (API), and Google
 > Scholar (supplementary, no-API route) over the date range **2015-01-01 to
@@ -16,7 +16,7 @@
 ## A.1 Reason for Amendment (Diagnosis)
 
 Verification of the v1 fetcher source
-([operations/src/_archive/scripts/fetch_all_real_data.py:27-41,254-272](../../../operations/src/_archive/scripts/fetch_all_real_data.py))
+([operations/src/_archive/scripts/fetch_all_real_data.py:27-41,254-272](../../../../operations/src/_archive/scripts/fetch_all_real_data.py))
 confirms that v1 executed only three generic CNN-era query shapes:
 
 - **PubMed** — a single concept-block query (CT AND segmentation AND organs

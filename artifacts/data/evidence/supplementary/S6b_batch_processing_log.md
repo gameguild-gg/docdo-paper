@@ -1,3 +1,5 @@
+<!-- v1-history -->
+
 # S6b: AI Batch Processing Log
 
 ## 1. Overview
@@ -167,3 +169,14 @@ Assuming ~2,000 input tokens and ~200 output tokens per request (typical for scr
 
 **Log Date:** 2026-01-22  
 **Last Updated:** 2026-01-22
+
+<!-- /v1-history -->
+
+---
+
+## v2.1 Section (2026-09-30)
+
+The v1 GPT-4o-mini batch log above is historical. v2 screening ran 3-vote unanimous
+mini-class (`deepseek-v4-flash-vision-low`) via LiteLLM chat (two lanes), and full-text
+passes in two batches (mini-class n=186; glm-5.3-flash n=149) — model identifiers and
+QA audits in [`S4_ai_screening_protocol.md`](S4_ai_screening_protocol.md) §v2.1.

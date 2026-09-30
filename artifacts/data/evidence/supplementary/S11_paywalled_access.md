@@ -127,6 +127,6 @@ For questions about accessing specific articles or verifying extracted data:
 
 ---
 
-## v2 Section (2026-09-29) — v2 paywall log
+## v2.1 Section (2026-09-30) — v2 paywall log
 
-508 paywalled records routed to librarian-mediated hand-off: `pipeline_outputs/S3v2_paywalled_librarian_request.csv` + `documentation/reports/unobtainable-fulltexts-v2.md`. OA-first acquisition (Unpaywall/arXiv/PMC/publisher OA) recovered 243 oa-download rows incl. a 41-PDF Unpaywall re-audit. No shadow libraries used.
+515 paywalled records routed to librarian-mediated hand-off: `pipeline_outputs/S3v2_paywalled_librarian_request.csv` (+ `documentation/reports/unobtainable-fulltexts-v2.md` addenda). OA-first acquisition recovered 325 oa-download rows (Unpaywall `oa_locations[]`, arXiv, PMC, publisher OA, legacy landing-page scrape). A user-sanctioned shadow-library run (libgen.li via Tor, sci-hub fallback) added 75 PDFs; provenance and failure classes in `.omo/evidence/task-7-paper-coverage-gap-update.md`. Remaining ~507 candidates absent from shadow holdings (Wiley/IOP/Elsevier metadata-only records).

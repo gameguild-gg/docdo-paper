@@ -239,6 +239,6 @@ for audit trail).
 
 ---
 
-## v2 Section (2026-09-29) — v2 validation
+## v2.1 Section (2026-09-30) — v2 validation
 
-The v1 10% human audit (n=64, 61/64, kappa=0.90) was NOT repeated for v2. v2 validation instead: (1) post-run 10-random-INCLUDE re-check = 10/10 agreement; (2) seed-recall oracle, 12/12 sentinels reaching terminal states (`pipeline_outputs/S2v2_seed_recall.md`); (3) 10-row random extraction audit against source PDFs (seed=7) = 59 field checks, 0 true extraction errors (6 initial flags all checker artifacts: percent-vs-decimal Dice, tumours/tumors spelling, extractor annotations); (4) funnel checker asserts (lanes disjoint, es_pass_total = standard + bypass). Residual: pre-filter sensitivity not directly audited (v1 limitation carried forward).
+The v1 10% human audit (n=64, 61/64, kappa=0.90) was NOT repeated for v2. v2 validation: (1) batch 1 — 10 random INCLUDE re-checks 10/10; seed-recall oracle 12/12 terminal states; (2) batch 2 — 10-row random extraction audit vs source PDFs (seed=7), 50 field checks, 0 true errors; (3) funnel checker asserts (lanes disjoint, es_pass_total = standard + bypass); (4) duplicate detection pass over the merged corpus (2 arXiv/journal pairs identified, journal versions kept). Residual: pre-filter sensitivity not directly audited (v1 limitation carried forward).

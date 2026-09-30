@@ -66,22 +66,19 @@ Pipeline scripts (in `operations/src/_archive/scripts/`):
 
 ---
 
-## v2 Section (2026-09-29) — v2 funnel
+## v2.1 Section (2026-09-30) — final funnel (glm-5.3-flash re-screen corpus)
 
 | Stage | N | Artifact |
 |-------|---|----------|
 | Raw API records (PubMed 7,045 + arXiv 7,164 + Google Scholar 338) | 14,547 | `raw/v2/_combined.csv` |
 | OpenAlex identification-lane delta | 264,269 | `interim/S1v2_openalex_delta.csv` |
-| Deduplicated records entering pre-filter | **273,115** | `pipeline_outputs/S1v2_search_results_deduplicated.csv` + delta |
-| Pre-filter es_pass_total (641 standard + 460 framework bypass) | 1,101 | `pipeline_outputs/S2v2_elasticsearch_filtered.csv` |
-| OpenAlex lane pre-filter pass | 6,269 | `pipeline_outputs/S2v2_openalex_filtered.csv` |
-| Records screened (title/abstract, 3-vote unanimous) | **7,370** | union of both lanes |
-| S2 INCLUDE (unique studies; 288 API + 751 OpenAlex, 4 dual-lane counted once) | **1,035** | `all_papers_after_s2v2_with_status.csv` + OpenAlex lane |
-| Full texts obtained (18.0%) | **186** | `S3v2_acquisition_log.csv` (243 oa-download rows; 180 DOI + 63 OAD phantom; 6 seed) |
-| Not retrieved (508 paywalled hand-off + 341 no accessible route) | 849 | `S3v2_paywalled_librarian_request.csv` |
-| Full-text EXCLUDE (55 method incl. 4 unusable PDFs; 7 benchmark; 2 framework; 1 review) | 65 | `pipeline_outputs/s3v2_excluded_papers.csv` |
-| **Included (116 method + 5 framework)** | **121** | `pipeline_outputs/s3v2_extracted_data_full.csv`, `../S2v2_final_included_studies.csv` |
-| Method studies with per-organ Dice | 112 | `pipeline_outputs/s3v2_summary_table.csv` |
+| Deduplicated records entering pre-filter | **273,115** | dedup CSV + delta |
+| Pre-filter pass (1,101 API + 6,269 OpenAlex lane) | **7,370** | `S2v2_elasticsearch_filtered.csv` + `S2v2_openalex_filtered.csv` |
+| S2 INCLUDE (unique studies; 288 API + 751 OpenAlex, 4 dual-lane counted once) | **1,035** | `all_papers_after_s2v2_with_status.csv` + lane |
+| Not retrieved (515 paywalled hand-off + 187 no accessible route) | 702 | `S3v2_paywalled_librarian_request.csv` |
+| Full texts obtained (32.2%) — 186 original + 82 OA re-fetch + 75 user-sanctioned shadow-library | **333** | `S3v2_acquisition_log.csv` |
+| Full-text EXCLUDE (method 87 incl. 4 unusable PDFs; benchmark 7; framework 2; review 1) | 97 | `s3v2_excluded_papers.csv` |
+| **Included (224 method + 9 framework + 3 benchmark)** | **236** | `s3v2_extracted_data_full.csv`, `S2v2_final_included_studies.csv` |
+| Method studies with per-organ Dice | 215 | `s3v2_summary_table.csv` |
 
-v1↔v2 study-level reconciliation (52 v1 studies: 5 re-included / 1 s2-excluded / 1 s3-excluded / 30 fulltext-missed / 15 not-identified): `pipeline_outputs/v1_v2_study_reconciliation.csv`.
-
+Screening models: S3 batch 1 (186 papers) mini-class `deepseek-v4-flash-vision-low`; S3 batch 2 (149 papers, after dropping 8 supplementary-payload PDFs and 2 arXiv/journal duplicates) `zai/glm-5.3-flash` via OmniRoute. v1↔v2 reconciliation (52 v1 studies): **20 re-included / 1 s2-excluded / 1 s3-excluded / 25 fulltext-missed / 5 not-identified** (`v1_v2_study_reconciliation.csv`).

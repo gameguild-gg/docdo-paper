@@ -393,9 +393,14 @@ All screening data available in supplementary materials:
 
 ---
 
-## v2 Section (2026-09-29) — model identifiers and scorer-tier shift
+## v2.1 Section (2026-09-30) — model identifiers and scorer-tier shift
 
-**S2v2 title/abstract screening:** 3 independent votes per record at low temperature, unanimous-INCLUDE rule; model = mini-class `deepseek-v4-flash-vision-low` (proxy alias of `deepseek-ai/DeepSeek-V4-Flash-0731` tier) via LiteLLM chat endpoint (`llm.gameguild.gg`); OpenAI Batch/files API unavailable on the proxy (HTTP 500 `files_settings is not set`) — synchronous 2-worker runner with vote checkpointing used instead. Same two-lane criteria set as the S3 amendment (method IC/EC vs framework F/FEC).
-**S3v2 full-text screening + extraction + QA:** same mini tier via chat-completions (1-worker optimal); Cloudflare 524 recoveries via 25k-char text caps.
-**QA scorer-tier shift (explicit):** v1 QA/extraction scored by the GPT-4o/GPT-5.2 tier; v2 by the mini tier above. The 15-question rubric is byte-identical (copied from `operations/src/_archive/scripts/step2_quality_assessment_batch.py`); scores across waves are NOT comparable. v1 mean 21.0 (n=52) vs v2 mean 20.3 (n=116 method) must not be read as a literature-quality change.
-**Post-run QA:** 10 random INCLUDE re-checks 10/10 agreement; seed-recall oracle 12/12 terminal states; 10-row extraction audit vs PDFs = 0% true missing-field rate (all flags checker artifacts).
+**S2v2 title/abstract screening:** 3 votes per record at low temperature, unanimous-INCLUDE rule; mini-class `deepseek-v4-flash-vision-low` via LiteLLM chat endpoint (proxy alias of the `deepseek-ai/DeepSeek-V4-Flash-0731` tier; OpenAI Batch API unavailable on the proxy — HTTP 500 `files_settings is not set`). OpenAlex lane identical machinery (`WORKERS=2`, `VOTE_MAX_TOKENS=4096`).
+
+**S3v2 full-text screening + extraction + QA, batch 1 (186 papers):** same mini tier, chat-completions, 1-worker optimal; Cloudflare 524 recoveries via 25k-char text caps.
+
+**S3v2 full-text screening + extraction + QA, batch 2 (149 papers):** `zai/glm-5.3-flash` via OmniRoute (`omniroute.gameguild.gg`), streaming SSE, temperature 0.3, 4 parallel workers; same S3 criteria, same study-type routing (method/review/benchmark/framework), same 15-question QA rubric byte-identical.
+
+**QA scorer-tier shift (explicit):** v1 scored by GPT-4o/GPT-5.2; v2 batch 1 by mini-class (method mean 20.3, n=115 post-dedup); v2 batch 2 by glm-5.3-flash (mean 20.7, n=107). Rubric identical across all waves; scores not strictly comparable across tiers (batch means differ by 0.4).
+
+**Post-run QA:** batch 1 — 10 random INCLUDE re-checks 10/10; seed-recall oracle 12/12. Batch 2 — 10-row random extraction audit vs PDFs (seed=7): 50 field checks, 0 true extraction errors (all flags checker artifacts).

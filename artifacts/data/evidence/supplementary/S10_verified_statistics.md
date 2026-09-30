@@ -109,12 +109,13 @@ Source files:
 
 ---
 
-## v2 Section (2026-09-29) — v2 verified statistics
+## v2.1 Section (2026-09-30) — verified statistics
 
-Machine-derived from `pipeline_outputs/` CSVs (regenerate via the same scripts; nothing hand-typed):
-- Included: 121 (116 method + 5 framework); extraction rows 186 == obtained distinct PDFs.
-- Method strata: CNN 106 (91.4%), Hybrid 8, Foundation 2; U-Net family 86 (74.1%); true-3D 100 (86.2%); multi-organ 51 (44.0%); code available 23 (19.8%); PyTorch 52 / TF-Keras 33 / other-unreported 31.
-- Organ target counts (method studies): liver 40, kidney 33, bladder 15, lung 14, spleen 12, pancreas 11, heart 10, prostate 10, stomach 7.
-- QA (method, n=116): mean 20.3, median 21, range 6-30; High(>=24) 30 (25.9%), Medium 73 (62.9%), Low 13 (11.2%). Scorer-tier shift documented in S4.
-- Funnel table: see S_PRISMA_funnel.md v2 section (273,115 -> 7,370 -> 1,035 -> 186 -> 121 -> 112).
-- Reconciliation: 52 v1 studies -> 5 re-included / 1 s2-excluded / 1 s3-excluded / 30 fulltext-missed / 15 not-identified.
+Machine-derived from `pipeline_outputs/` CSVs; nothing hand-typed:
+- Corpus: 333 obtained / 236 included (224 method + 9 framework + 3 benchmark) / 97 excluded; retrieval 333/1,035 = 32.2%.
+- Method strata (n=224): CNN 205 (91.5%), Hybrid 16, Foundation 2, Transformer 1; U-Net family 160 (71.4%); true-3D 184 (82.1%); multi-organ 90 (40.2%); code available 41 (18.3%); PyTorch 92 (41.1%) / TF-Keras 61 (27.2%).
+- Organ targets: liver 88, kidney 64, pancreas 45, bladder 33, spleen 31, lung 28, heart 25, esophagus 22, stomach 21, prostate 13.
+- QA (scored n=222 of 224): mean 20.5, median 21, range 6–30; High 56 (25.2%), Medium 142 (64.0%), Low 24 (10.8%). Scorer tiers per S4.
+- Benchmarks (method studies): LiTS 42, KiTS 25, MSD 14, BTCV 10, MMWHS 5.
+- Hollow-organ 35 (15.6%); multi-center/external 17 (7.6%); HD95 56 (25.0%); DOI-identified 201, arXiv 23; DOI-subset QA-high 47/199 (23.6%).
+- v1↔v2 reconciliation: 20/1/1/25/5 (re-included/s2-excluded/s3-excluded/fulltext-missed/not-identified).

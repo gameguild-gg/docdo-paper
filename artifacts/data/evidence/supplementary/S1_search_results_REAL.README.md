@@ -1,3 +1,5 @@
+<!-- v1-history -->
+
 # S1_search_results_REAL.csv — provenance note
 
 **Status:** This CSV is a **200-row retained sample**, not the full
@@ -27,3 +29,13 @@ directory. See `S_PRISMA_funnel.md` for the stage-by-stage map and
 `operations/src/_archive/scripts/` for the scripts that produced each
 stage. For the included-studies table see
 `S2_final_included_studies.csv`.
+
+<!-- /v1-history -->
+
+---
+
+## v2.1 Section (2026-09-30)
+
+The v1 raw-export sampling note above is historical. The v2 identification wave's raw
+inventory (30 per-query CSVs, 14,547 API records + 264,269 OpenAlex-lane delta) is documented
+in [`S0_data_provenance.md`](S0_data_provenance.md) §v2.1; immutable files under `raw/v2/`.

@@ -1,3 +1,5 @@
+<!-- v1-history -->
+
 # PRISMA 2020 Compliance Analysis
 
 **Paper:** *3D Organ Segmentation from CT Scans: An Agentic Structured Survey of Deep Learning Approaches for Surgical Planning*
@@ -200,3 +202,20 @@ After these fixes, every quantitative claim in §IV–§VII of `main.tex` is ind
 - Every supplementary file in [artifacts/data/evidence/supplementary/](artifacts/data/evidence/supplementary/) was opened and `wc -l`'d; CSV column distributions for S2 (`code_available`) and S5 (`final_decision`) were enumerated with `awk`.
 - Phantom-file claims from the previous version of this document were tested with `find . -type f -name '<pattern>' | grep -v .venv` for `qa_summary*`, `s3_extracted*`, `all_papers_data*`, `final_screening*`, `main_prisma*`, `*compliance*.tex` — all returned empty.
 - This file replaces the earlier `PRISMA_compliance_analysis.md` in its entirety. The previous version's "side-by-side" comparison against `main_prisma-compliance.tex` and "DONE — CORRECTED" markers were unsupported by the repository and have been removed.
+
+<!-- /v1-history -->
+
+---
+
+## v2.1 Re-check (2026-09-30)
+
+The audit above refers to the v1 manuscript and the v1 corpus (52 studies); it is preserved
+as history. For the v2.1 corpus (333 obtained / 236 included / 224 method studies):
+
+- Every manuscript statistic now derives from `artifacts/data/evidence/supplementary/pipeline_outputs/`
+  CSVs; traceability lives in `S10_verified_statistics.md` §v2.1 and `S12_per_organ_statistics.md` §v2.1.
+- The funnel and per-stage counts are re-asserted in `S_PRISMA_funnel.md` §v2.1
+  (273,115 → 7,370 → 1,035 → 333 → 236; screening-stage node = 7,370 union).
+- Scorer-tier changes (GPT-4o/GPT-5.2 → mini-class → glm-5.3-flash, rubric byte-identical) are
+  documented in `S4_ai_screening_protocol.md` §v2.1 and flagged in manuscript §QA Results.
+- Item 16d (retrieval-rate limitation): now 32.2% (333/1,035); the v1-era retrieval figure is history.

@@ -1,3 +1,5 @@
+<!-- v1-history -->
+
 # S11: Per-Organ Performance Source Tracking
 
 This document tracks the source of per-organ Dice scores cited in the main paper.
@@ -74,3 +76,14 @@ These values ARE verified from S8_table_sources.csv:
 ---
 Generated: 2026-01-28
 Purpose: Transparent documentation of data sources and verification status
+
+<!-- /v1-history -->
+
+---
+
+## v2.1 Section (2026-09-30)
+
+The per-organ source tracking above (v1 corpus) is superseded. v2.1 per-organ statistics
+(224 method studies; first matching `dice_per_organ` entry per organ per study) are in
+[`S12_per_organ_statistics.md`](S12_per_organ_statistics.md) §v2.1. Machine-derived from
+`pipeline_outputs/s3v2_extracted_data_full.csv`.
