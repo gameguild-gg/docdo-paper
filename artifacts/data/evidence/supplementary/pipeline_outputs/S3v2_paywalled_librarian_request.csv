@@ -54,9 +54,7 @@ doi,title,year,venue
 10.1155/2021/8894222,Multiview Self-Supervised Segmentation for OARs Delineation in Radiotherapy,2021,Evidence-based Complementary and Alternative Medicine
 10.1109/iscid52796.2021.00065,V-Net Based Liver and Tumor Segmentation Using 3D ConditionalRandom Fields and Graph Cuts Method,2021,
 10.5281/zenodo.7459814,MONAI: Medical Open Network for AI,2022,Zenodo (CERN European Organization for Nuclear Research)
-10.1109/icsipa.2017.8120664,Fully automated esophagus segmentation with a hierarchical deep learning approach,2017,
 10.1109/ojemb.2024.3397623,BucketAugment: Reinforced Domain Generalisation in Abdominal CT Segmentation,2024,IEEE Open Journal of Engineering in Medicine and Biology
-10.1002/mp.14732,Automatic liver segmentation using 3D convolutional neural networks with a hybrid loss function,2021,Medical Physics
 10.1016/j.ejrai.2026.100096,Paediatric thoracal and abdominal organ segmentation in CT and MRI using global intensity non-linear augmentation,2026,European Journal of Radiology Artificial Intelligence
 10.26233/heallink.tuc.102213,Analysis of cardiac anatomy biomedical images with the use of Vision Τransformers,2025,Technical University of Crete
 10.48550/arxiv.2102.01822,Multi-class probabilistic atlas-based whole heart segmentation method in\n cardiac CT and MRI,2021,arXiv (Cornell University)
@@ -66,7 +64,6 @@ doi,title,year,venue
 10.1002/mp.17385,Attention‐enhanced multiscale feature fusion network for pancreas and tumor segmentation,2024,Medical Physics
 10.1109/iccams65118.2025.11233924,Advanced Liver Tumor Detection Using 3D Scan Segmentation With Dense Convolutional Networks,2025,
 10.1109/jiot.2026.3679599,A SimCLR-Based Contrastive Swin-UNet Model for Pancreas Segmentation in the Internet of Medical Things,2026,IEEE Internet of Things Journal
-10.1109/sps.2019.8882073,Segmentation of Organs at Risk in Chest Cavity Using 3D Deep Neural Network,2019,
 10.3233/faia240483,CPNet: 3D Semantic Relation and Geometry Context Prior Network for Multi-Organ Segmentation,2024,Frontiers in artificial intelligence and applications
 10.1371/journal.pone.0299970.g015,LiTS17 3D visualization of segmentation results.,2024,Figshare
 10.1016/j.ejrad.2025.112175,Deep-learning based automated pancreas segmentation on CT scans of chronic pancreatitis patients,2025,European Journal of Radiology
@@ -194,17 +191,14 @@ doi,title,year,venue
 10.48550/arxiv.1908.00360,A Method of Rapid Quantification of Patient-Specific Organ Dose for CT Using Coupled Deep-Learning based Multi-Organ Segmentation and GPU-accelerated Monte Carlo Dose Computing,2019,arXiv (Cornell University)
 10.48550/arxiv.1809.04430,Deep learning to achieve clinically applicable segmentation of head and neck anatomy for radiotherapy,2018,arXiv (Cornell University)
 10.6084/m9.figshare.c.6962087,Deep learning models for automatic tumor segmentation and total tumor volume assessment in patients with colorectal liver metastases,2024,Figshare
-10.1002/mp.15310,A conventional‐to‐spectral CT image translation augmentation workflow for robust contrast injection‐independent organ segmentation,2021,Medical Physics
 10.1117/12.2549749,Automated segmentation of computed tomography colonography images using a 3D U-Net,2020,
 ,Machine Learning Solution to Organ-At-Risk Segmentation for Radiation Treatment Planning,2019,Scholar Commons (Santa Clara University)
 10.1109/icicas51530.2020.00083,Automatic liver segmentation using U-net in the assistance of CNN,2020,
 10.1117/12.2551022,Usefulness of fine-tuning for deep learning based multi-organ regions segmentation method from non-contrast CT volumes using small training dataset,2020,Medical Imaging 2020: Computer-Aided Diagnosis
 ,H-DenseUNet: Hybrid Densely Connected UNet for Liver and Liver Tumor Segmentation from CT Volumes,2017,arXiv (Cornell University)
-10.1145/3301879.3301883,Automatic Segmentation of the Prostate on 3D CT Images by Using Multiple Deep Learning Networks,2018,
 10.15167/vincenzi-elena_phd2024-04-19,Deep Learning Applications in Pre-Clinical Imaging for accelerated Drug Discovery Studies,2024,CINECA IRIS Institutial Research Information System (University of Genoa)
 10.1049/cit2.12411,3D medical image segmentation using the serial–parallel convolutional neural network and transformer based on cross‐window self‐attention,2025,CAAI Transactions on Intelligence Technology
 10.1016/j.ijrobp.2025.01.028,A Dual-Energy Computed Tomography Guided Intelligent Radiation Therapy Platform,2025,International Journal of Radiation Oncology*Biology*Physics
-10.1148/ryct.2019190057,Left Atrial Volume as a Biomarker of Atrial Fibrillation at Routine Chest CT: Deep Learning Approach,2019,Radiology Cardiothoracic Imaging
 10.1109/bhi67747.2025.11269470,ResSwinUnet3D: Developing a New Residual-Based SwinUnet3D Model for Enhanced 3D Medical Image Segmentation,2025,
 10.1051/itmconf/20268202011/pdf,Deep Learning-Based Lung Segmentation for Multi-Modal Imaging Data using Attention Residual U-Net,2026,Springer Link (Chiba Institute of Technology)
 10.1002/mp.17494,Using CT images to assist the segmentation of MR images via generalization: Segmentation of the renal parenchyma of renal carcinoma patients,2024,Medical Physics
@@ -341,7 +335,6 @@ doi,title,year,venue
 10.1002/mp.16468,Delineation of clinical target volume and organs at risk in cervical cancer radiotherapy by deep learning networks,2023,Medical Physics
 10.1109/icprs66293.2025.11302847,DeepProstate: Integrated Deep Learning and Interactive Visualization for Clinically Significant Prostate Cancer Segmentation,2025,
 ,Digital Twins for AI-based Medical Imaging,2020,Duo Research Archive (University of Oslo)
-10.1088/1757-899x/1128/1/012049,CT Guided Diagnosis: Cascaded U-Net for 3D Segmentation of Liver and Tumor,2021,IOP Conference Series Materials Science and Engineering
 10.1002/mp.15923,A reciprocal learning strategy for semisupervised medical image segmentation,2022,Medical Physics
 10.1117/12.2512790,Improving V-Nets for multi-class abdominal organ segmentation,2019,
 10.1016/j.ifacol.2023.10.353,Surface Projection of CT Reconstructed Lung Volume for Regional Lung Mechanics Estimation: A Preliminary Analysis,2023,IFAC-PapersOnLine
@@ -396,19 +389,16 @@ doi,title,year,venue
 10.23919/ccc63176.2024.10662703,Comparison and Optimization Based Prior Knowledge of Models for Whole Heart Segmentation,2024,
 10.1097/js9.0000000000001829,Comprehensive deep learning-based assessment of living liver donor CT angiography: from vascular segmentation to volumetric analysis,2024,International Journal of Surgery
 10.1109/icict58900.2023.00020,AG-UN-Net: U-shaped and N-shaped network with attention gate for liver segmentation,2023,
-10.1109/siprocess.2019.8868690,Liver Segmentation in CT based on ResUNet with 3D Probabilistic and Geometric Post Process,2019,
 10.1145/3577117.3577139,A Lightweight 3D Segmentation Network for Abdominal Liver in CT Image,2022,
 10.1117/12.2606118,"Multitasking segmentation of lung and COVID-19 findings in CT scans using modified EfficientDet, UNet and MobileNetV3 models",2021,
 10.56536/jicet.v4i2.116,Deep Learning-Based Segmentation and Prediction of Liver Cancer Using CT Images,2024,Journal of Innovative Computing and Emerging Technologies
 10.5281/zenodo.17370968,PCT-HCC-Seg: Polyphasic CT hepatocellular carcinoma segmentation model,2025,Open MIND
 10.1002/ima.22802,<scp>SABOS‐Net</scp>: Self‐supervised attention based network for automatic organ segmentation of head and neck <scp>CT</scp> images,2022,International Journal of Imaging Systems and Technology
 10.1117/12.3008783,3D U-Net with region of interest segmentation of kidneys and masses in computed tomography scans,2024,
-10.1155/2017/6941306,A Multiorgan Segmentation Model for CT Volumes via Full Convolution-Deconvolution Network,2017,BioMed Research International
 10.1117/12.2653956,Multi-organ CT segmentation using shifted-window multilayer perceptron mixer,2023,
 10.1016/j.isci.2022.105712,Automated segmentation of lungs and lung tumors in mouse micro-CT scans,2022,iScience
 10.1117/12.3048842,A hybrid deep-learning model for tumors and organs segmentation in cervical cancer using Kolmogorov-Arnold convolutions,2025,
 ,Postoperative Pancreas Segmentation,2023,Research Repository (Delft University of Technology)
-10.1002/mp.13620,Robust contour propagation using deep learning and image registration for online adaptive proton therapy of prostate cancer,2019,Medical Physics
 ,Deep learning in medical image analysis: Efficient use of data and radiological expertise,2023,Duo Research Archive (University of Oslo)
 10.1109/icassp55912.2026.11462741,Precise Segmentation of Pathological Liver in 3D CT Scans Using Adaptive Shape Guidance from Prior Appearance,2026,
 10.1117/12.2512887,Deep learning of 3D CT images for organ segmentation using 2D multi-channel SegNet model,2019,
@@ -438,7 +428,6 @@ doi,title,year,venue
 10.1109/tensymp61132.2024.10752238,Kidney and Kidney Tumour Segmentation from 3D CT Scan using DeepLabv3+,2024,
 10.1117/12.2550314,"Evaluation of deep learning segmentation for rapid, patient-specific CT organ dose estimation using an LBTE solver",2020,Medical Imaging 2020: Physics of Medical Imaging
 10.1109/prai62207.2024.10827332,A Lightweight CNN-Transformer Network with Agent Attention Mechanism for 3D Whole Heart Segmentation,2024,
-10.1002/acm2.13631,RefineNet‐based 2D and 3D automatic segmentations for clinical target volume and organs at risks for patients with cervical cancer in postoperative radiotherapy,2022,Journal of Applied Clinical Medical Physics
 10.1109/tencon54134.2021.9707278,Deep learning model-based segmentation of medical diseases from MRI and CT images,2021,TENCON 2021 - 2021 IEEE Region 10 Conference (TENCON)
 10.1088/2057-1976/ad6a63,Anatomy-constrained synthesis for spleen segmentation improvement in unpaired mouse micro-CT scans with 3D CycleGAN,2024,Biomedical Physics & Engineering Express
 10.7302/1492,Automated Decision Support System for Traumatic Injuries,2021,Deep Blue (University of Michigan)
@@ -450,7 +439,6 @@ doi,title,year,venue
 ,Segmentacija CT slik s postopki umetne inteligence z orodjem Monai Label in programom 3D-Slicer,2024,Repository of the University of Ljubljana (University of Ljubljana)
 10.48550/arxiv.1807.02437,Deep Sequential Segmentation of Organs in Volumetric Medical Scans,2018,arXiv (Cornell University)
 10.48550/arxiv.1907.05273,Accurate Congenital Heart Disease Model Generation for 3D Printing,2019,arXiv (Cornell University)
-10.1016/j.neucom.2022.07.024,Adaptable volumetric liver segmentation model for CT images using region-based features and convolutional neural network,2022,Neurocomputing
 ,[Automated system for supporting medical decision-making in the treatment of patients with renal parenchyma neoplasms first experience of using the web-platform Sechenov.AI_nephro results of multicenter testing].,2024,PubMed
 10.1109/iciip68302.2025.11346235,A Two-Stage Framework with 3D Shape Constraints for Pancreas Segmentation in Abdominal CT,2025,
 10.1016/j.heliyon.2023.e16810,Age-related morphometrics of normal adrenal glands based on deep learning-aided segmentation,2023,Heliyon
@@ -485,10 +473,8 @@ doi,title,year,venue
 10.1117/12.2590639,Unpaired medical image translation between portal-venous phase and non-contrast CT volumes for multi-organ segmentation,2021,
 10.1002/acm2.14371,A deep learning‐based 3D Prompt‐nnUnet model for automatic segmentation in brachytherapy of postoperative endometrial carcinoma,2024,Journal of Applied Clinical Medical Physics
 10.1109/isbi61048.2026.11515801,Intelligent Diagnosis of Chronic Obstructive Pulmonary Disease by Integrating CT Segmentation and Multi-Dimensional Representations,2026,
-10.1109/spin48934.2020.9071339,Deep Dilated V-Net for 3D Volume Segmentation of Pancreas in CT images,2020,
 ,A framework for CT image segmentation inspired by the clinical environment,2019,MPG.PuRe (Max Planck Society)
 10.48550/arxiv.2012.04701,"3D Graph Anatomy Geometry-Integrated Network for Pancreatic Mass Segmentation, Diagnosis, and Quantitative Patient Management",2020,arXiv (Cornell University)
-10.1002/mp.12593,Esophagus segmentation in CT via 3D fully convolutional neural network and random walk,2017,Medical Physics
 10.1063/5.0185220,Medical image segmentation using UNet algorithm,2024,AIP conference proceedings
 10.1117/12.3119543,CABGenie: hyperparameter-optimized 3D deep learning framework for coronary artery segmentation to support coronary artery bypass grafting surgical intervention plan,2026,
 10.70675/0f749706zfbbbz4490z8e6cz71099f1406e1,Learning under Data Scarcity through Latent Representation Refinement,2025,

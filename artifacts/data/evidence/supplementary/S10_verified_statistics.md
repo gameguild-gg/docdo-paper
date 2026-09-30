@@ -109,13 +109,13 @@ Source files:
 
 ---
 
-## v2.1 Section (2026-09-30) — verified statistics
+## v2.2 Section (2026-10-01) — verified statistics
 
 Machine-derived from `pipeline_outputs/` CSVs; nothing hand-typed:
-- Corpus: 333 obtained / 236 included (224 method + 9 framework + 3 benchmark) / 97 excluded; retrieval 333/1,035 = 32.2%.
-- Method strata (n=224): CNN 205 (91.5%), Hybrid 16, Foundation 2, Transformer 1; U-Net family 160 (71.4%); true-3D 184 (82.1%); multi-organ 90 (40.2%); code available 41 (18.3%); PyTorch 92 (41.1%) / TF-Keras 61 (27.2%).
-- Organ targets: liver 88, kidney 64, pancreas 45, bladder 33, spleen 31, lung 28, heart 25, esophagus 22, stomach 21, prostate 13.
-- QA (scored n=222 of 224): mean 20.5, median 21, range 6–30; High 56 (25.2%), Medium 142 (64.0%), Low 24 (10.8%). Scorer tiers per S4.
-- Benchmarks (method studies): LiTS 42, KiTS 25, MSD 14, BTCV 10, MMWHS 5.
-- Hollow-organ 35 (15.6%); multi-center/external 17 (7.6%); HD95 56 (25.0%); DOI-identified 201, arXiv 23; DOI-subset QA-high 47/199 (23.6%).
-- v1↔v2 reconciliation: 20/1/1/25/5 (re-included/s2-excluded/s3-excluded/fulltext-missed/not-identified).
+- Corpus: 354 obtained / 254 included (242 method + 9 framework + 3 benchmark) / 100 excluded; retrieval 354/1,035 = 34.2%.
+- Method strata (n=242): CNN 223 (92.1%), Hybrid 16, Foundation 2, Transformer 1; U-Net family 167 (69.0%); true-3D 199 (82.2%); multi-organ 96 (39.7%); code available 43 (17.8%); PyTorch 95 (39.3%) / TF-Keras 62 (25.6%).
+- Organ targets: liver 97, kidney 67, pancreas 46, bladder 36, spleen 34, lung 29, heart 28, esophagus 25, stomach 21, prostate 15.
+- QA (scored n=240 of 242): mean 20.4, median 21, range 6–30; High 60 (25.0%), Medium 154 (64.2%), Low 26 (10.8%). Scorer tiers per S4.
+- Benchmarks (method studies): LiTS 45, KiTS 25, MSD 14, BTCV 10, MMWHS 5.
+- Hollow-organ 38 (15.7%); multi-center/external 18 (7.4%); HD95 57 (23.6%); DOI-identified 219, arXiv 23; DOI-subset QA-high 51/217 (23.5%).
+- v1↔v2 reconciliation: 22/1/1/23/5 (re-included/s2-excluded/s3-excluded/fulltext-missed/not-identified).

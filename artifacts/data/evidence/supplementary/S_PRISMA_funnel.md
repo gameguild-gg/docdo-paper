@@ -66,7 +66,7 @@ Pipeline scripts (in `operations/src/_archive/scripts/`):
 
 ---
 
-## v2.1 Section (2026-09-30) — final funnel (glm-5.3-flash re-screen corpus)
+## v2.2 Section (2026-10-01) — final funnel (second shadow-library wave)
 
 | Stage | N | Artifact |
 |-------|---|----------|
@@ -75,10 +75,10 @@ Pipeline scripts (in `operations/src/_archive/scripts/`):
 | Deduplicated records entering pre-filter | **273,115** | dedup CSV + delta |
 | Pre-filter pass (1,101 API + 6,269 OpenAlex lane) | **7,370** | `S2v2_elasticsearch_filtered.csv` + `S2v2_openalex_filtered.csv` |
 | S2 INCLUDE (unique studies; 288 API + 751 OpenAlex, 4 dual-lane counted once) | **1,035** | `all_papers_after_s2v2_with_status.csv` + lane |
-| Not retrieved (515 paywalled hand-off + 187 no accessible route) | 702 | `S3v2_paywalled_librarian_request.csv` |
-| Full texts obtained (32.2%) — 186 original + 82 OA re-fetch + 75 user-sanctioned shadow-library | **333** | `S3v2_acquisition_log.csv` |
-| Full-text EXCLUDE (method 87 incl. 4 unusable PDFs; benchmark 7; framework 2; review 1) | 97 | `s3v2_excluded_papers.csv` |
-| **Included (224 method + 9 framework + 3 benchmark)** | **236** | `s3v2_extracted_data_full.csv`, `S2v2_final_included_studies.csv` |
-| Method studies with per-organ Dice | 215 | `s3v2_summary_table.csv` |
+| Not retrieved (501 paywalled hand-off + 180 no accessible route) | 681 | `S3v2_paywalled_librarian_request.csv` |
+| Full texts obtained (34.2%) — 186 original + 82 OA re-fetch + 96 user-sanctioned shadow-library (two waves) | **354** | `S3v2_acquisition_log.csv` |
+| Full-text EXCLUDE (method 90 incl. 4 unusable PDFs; benchmark 7; framework 2; review 1) | 100 | `s3v2_excluded_papers.csv` |
+| **Included (242 method + 9 framework + 3 benchmark)** | **254** | `s3v2_extracted_data_full.csv`, `S2v2_final_included_studies.csv` |
+| Method studies with per-organ Dice | 233 | `s3v2_summary_table.csv` |
 
-Screening models: S3 batch 1 (186 papers) mini-class `deepseek-v4-flash-vision-low`; S3 batch 2 (149 papers, after dropping 8 supplementary-payload PDFs and 2 arXiv/journal duplicates) `zai/glm-5.3-flash` via OmniRoute. v1↔v2 reconciliation (52 v1 studies): **20 re-included / 1 s2-excluded / 1 s3-excluded / 25 fulltext-missed / 5 not-identified** (`v1_v2_study_reconciliation.csv`).
+Screening models: S3 batch 1 (186 papers) mini-class `deepseek-v4-flash-vision-low`; S3 batch 2 (149 papers) `zai/glm-5.3-flash`; S3 batch 3 (21 papers, second shadow wave) `zai/glm-5.3-flash`. v1↔v2 reconciliation (52 v1 studies): **22 re-included / 1 s2-excluded / 1 s3-excluded / 23 fulltext-missed / 5 not-identified** (`v1_v2_study_reconciliation.csv`).

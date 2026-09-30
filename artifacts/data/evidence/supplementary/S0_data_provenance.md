@@ -320,10 +320,10 @@ For each of 638 papers:
 
 ---
 
-## v2.1 Section (2026-09-30) — raw inventory
+## v2.2 Section (2026-10-01) — raw inventory
 
 - API wave: 30 immutable per-query CSVs under `raw/v2/` (14,547 rows; PubMed 7,045, arXiv 7,164, Google Scholar 338; Semantic Scholar lane blocked HTTP 429).
 - OpenAlex identification lane: works snapshot scan, 264,269 delta records (`interim/S1v2_openalex_delta.csv`; per-family CSVs + MD5SUMS under `raw/v2/openalex/`).
-- Full texts (333 distinct papers): `pdfs/openalex/` (262 DOI-named OA PDFs), `pdfs/` (6 seeds), `pdfs/shadow/` (75 user-sanctioned shadow-library acquisitions — libgen.li via Tor + sci-hub fallback; provenance in `.omo/evidence/task-7-paper-coverage-gap-update.md`).
-- Acquisition log: 822 rows = 325 oa-download + 75 shadow-library + 422 paywalled (515-paper librarian hand-off list).
-- All v2 pipeline outputs in `pipeline_outputs/` (S1v2/S2v2/S3v2/qa_v2 prefixes). Re-screen runner + merged outputs: glm-5.3-flash batch, 2026-09-30.
+- Full texts (354 distinct papers; 365 PDF files): `pdfs/openalex/` (262 DOI-named OA PDFs), `pdfs/` (6 seeds), `pdfs/shadow/` (97 user-sanctioned shadow-library acquisitions across two waves — libgen.li via Tor + sci-hub.ru/.ee fallback; provenance in `.omo/evidence/task-7-paper-coverage-gap-update.md`).
+- Acquisition log: 843 rows = 325 oa-download + 96 shadow-library + 422 paywalled (501-paper librarian hand-off list).
+- All v2 pipeline outputs in `pipeline_outputs/` (S1v2/S2v2/S3v2/qa_v2 prefixes). Re-screen waves: glm-5.3-flash batches, 2026-09-30/10-01.

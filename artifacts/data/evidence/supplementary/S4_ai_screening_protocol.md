@@ -393,14 +393,14 @@ All screening data available in supplementary materials:
 
 ---
 
-## v2.1 Section (2026-09-30) — model identifiers and scorer-tier shift
+## v2.2 Section (2026-10-01) — model identifiers and scorer-tier shift
 
 **S2v2 title/abstract screening:** 3 votes per record at low temperature, unanimous-INCLUDE rule; mini-class `deepseek-v4-flash-vision-low` via LiteLLM chat endpoint (proxy alias of the `deepseek-ai/DeepSeek-V4-Flash-0731` tier; OpenAI Batch API unavailable on the proxy — HTTP 500 `files_settings is not set`). OpenAlex lane identical machinery (`WORKERS=2`, `VOTE_MAX_TOKENS=4096`).
 
 **S3v2 full-text screening + extraction + QA, batch 1 (186 papers):** same mini tier, chat-completions, 1-worker optimal; Cloudflare 524 recoveries via 25k-char text caps.
 
-**S3v2 full-text screening + extraction + QA, batch 2 (149 papers):** `zai/glm-5.3-flash` via OmniRoute (`omniroute.gameguild.gg`), streaming SSE, temperature 0.3, 4 parallel workers; same S3 criteria, same study-type routing (method/review/benchmark/framework), same 15-question QA rubric byte-identical.
+**S3v2 full-text screening + extraction + QA, batches 2–3 (149 + 21 papers):** `zai/glm-5.3-flash` via OmniRoute (`omniroute.gameguild.gg`), streaming SSE, temperature 0.3, 2–4 parallel workers; same S3 criteria, same study-type routing (method/review/benchmark/framework), same 15-question QA rubric byte-identical.
 
-**QA scorer-tier shift (explicit):** v1 scored by GPT-4o/GPT-5.2; v2 batch 1 by mini-class (method mean 20.3, n=115 post-dedup); v2 batch 2 by glm-5.3-flash (mean 20.7, n=107). Rubric identical across all waves; scores not strictly comparable across tiers (batch means differ by 0.4).
+**QA scorer-tier shift (explicit):** v1 scored by GPT-4o/GPT-5.2; v2 batch 1 by mini-class (method mean 20.3, n=115 post-dedup); v2 batches 2–3 by glm-5.3-flash (mean 20.5, n=125). Rubric identical across all waves; scores not strictly comparable across tiers (batch means differ by 0.2).
 
-**Post-run QA:** batch 1 — 10 random INCLUDE re-checks 10/10; seed-recall oracle 12/12. Batch 2 — 10-row random extraction audit vs PDFs (seed=7): 50 field checks, 0 true extraction errors (all flags checker artifacts).
+**Post-run QA:** batch 1 — 10 random INCLUDE re-checks 10/10; seed-recall oracle 12/12. Batches 2–3 — 10-row random extraction audit vs PDFs (seed=7): 50 field checks, 0 true extraction errors (all flags checker artifacts).

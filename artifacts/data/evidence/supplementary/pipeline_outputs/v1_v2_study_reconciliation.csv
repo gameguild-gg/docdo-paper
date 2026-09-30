@@ -7,7 +7,7 @@ S005,10.1002/mp.14386,fulltext-missed,identified in v2 but full text not obtaine
 S006,10.1002/mp.14422,re-included,S3v2 INCLUDE (method)
 S007,10.1002/mp.15507,not-identified,absent from v2 dedup CSV by DOI and normalized title
 S008,10.1007/978-3-030-00937-3_49,not-identified,absent from v2 dedup CSV by DOI and normalized title
-S009,10.1007/s00330-020-07608-9,fulltext-missed,identified in v2 but full text not obtained (paywalled/unavailable)
+S009,10.1007/s00330-020-07608-9,re-included,S3v2 INCLUDE (method)
 S010,10.1016/j.compmedimag.2018.03.001,re-included,S3v2 INCLUDE (method)
 S011,10.1016/j.imu.2020.100357,re-included,S3v2 INCLUDE (method)
 S012,10.1038/s41598-019-40584-9,not-identified,absent from v2 dedup CSV by DOI and normalized title
@@ -18,7 +18,7 @@ S016,10.1088/1361-6560_ab6f99,re-included,S3v2 INCLUDE (method)
 S017,10.1109/ACCESS.2020.3024277,re-included,S3v2 INCLUDE (method)
 S018,10.1109/cvidliccea56201.2022.9823971,fulltext-missed,identified in v2 screening lane but no full text
 S019,10.1109/ICIEAM48468.2020.9111950,re-included,S3v2 INCLUDE (method)
-S020,10.1109/SPS.2019.8882073,fulltext-missed,identified in v2 screening lane but no full text
+S020,10.1109/SPS.2019.8882073,re-included,S3v2 INCLUDE (method)
 S021,10.1109/TMI.2018.2806309,re-included,S3v2 INCLUDE (method)
 S022,10.1109/WRCSARA57040.2022.9903976,re-included,S3v2 INCLUDE (method)
 S023,10.1186/s12880-025-02106-0,re-included,S3v2 INCLUDE (method)

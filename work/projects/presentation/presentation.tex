@@ -106,7 +106,7 @@ Clinical prototype tested on 1{,}000+ cases over 10 years. Surgeon requirements:
 \end{column}
 \end{columns}
 \vspace{0.1cm}
-\scriptsize\color{gray}CNNs 98.1\,\% of literature; 3D U-Net 82.7\,\% of studies. nnU-Net and Swin UNETR statistically indistinguishable on parenchyma.
+\scriptsize\color{gray}CNNs 92.1\,\% of 242 method studies; U-Net family 69.0\,\%. nnU-Net and Swin UNETR statistically indistinguishable on parenchyma; 9-study framework stratum (MONAI, nnInteractive, VISTA3D) assessed separately.
 \end{frame}
 
 
@@ -750,15 +750,15 @@ These three limits motivate the differentiable formulation: \alert{learn the cos
 \scriptsize
 \begin{itemize}
 \setlength\itemsep{4pt}
-\item CNNs dominate literature: \alert{\textbf{98.1\,\%}} of 52 studies.
-\item 3D U-Net variants in \alert{\textbf{82.7\,\%}} of studies.
+\item CNNs dominate literature: \alert{\textbf{92.1\,\%}} of 242 method studies.
+\item U-Net variants in \alert{\textbf{69.0\,\%}} of studies; hybrids 6.6\,\%; frameworks (MONAI, nnInteractive, VISTA3D) form a separate 9-study stratum.
 \item Parenchyma Dice plateau: \alert{$\approx 82\%$} regardless of paradigm (CNN vs Transformer).
 \item Confidence intervals overlap; no significant difference between nnU-Net and Swin UNETR.
 \item Foundation models: remarkable zero-shot coverage; underperform on vessels and surgeon-grade margins.
 \end{itemize}
 \end{block}
 \vspace{0.15cm}
-\scriptsize\color{gray}Sources: 52-study LLM-assisted SLR (2015--Jan.~2026); 20\,\% double-screened ($\kappa = 0.89$); protocol in S2.
+\scriptsize\color{gray}Sources: 242-method-study LLM-assisted SLR (2015--Sep.~2026); v1 10\,\% human audit $\kappa = 0.89$; v2 post-run QA 10/10 + seed oracle 12/12; protocol in S2v2.
 \end{column}
 \end{columns}
 \end{frame}
@@ -977,14 +977,14 @@ Operational for 1000+ cases over 10+ years
 \begin{column}{0.48\linewidth}
 \textbf{PRISMA flow}
 \begin{itemize}\itemsep1pt
-  \item 2821 records (PubMed, arXiv, Semantic Scholar)
-  \item 638 ES pre-filter (strict IC1--IC5 Boolean)
-  \item 161 AI screening (GPT multi-model)
-  \item 63 full-text assessed
-  \item 52 included in synthesis
+  \item 278{,}816 records (APIs 14{,}547 + OpenAlex 264{,}269)
+  \item 7{,}370 two-lane pre-filter (standard + framework bypass)
+  \item 1{,}035 AI screening (3-vote unanimous, mini-class)
+  \item 354 full-text assessed (34.2\,\% retrieval; 501 paywalled $\to$ librarian)
+  \item 254 included (242 method + 9 framework + 3 benchmark)
 \end{itemize}
 \vspace{0.15cm}
-Inter-rater $\kappa = 0.89$ (10\% stratified audit)
+v1 inter-rater $\kappa = 0.89$; v2 post-run QA (10/10, oracle 12/12)
 \end{column}
 \begin{column}{0.50\linewidth}
 \textbf{Datasets}\\[2pt]

@@ -30625,5 +30625,1706 @@
   "detailed_extraction": "Dataset arithmetic — 493-scan highly curated pool (258 COVER-ALL + 205 Anderson + 30 BTCV) split into 244 training (76 COVER-ALL + 168 Anderson) and 249 test (182 COVER-ALL + 37 Anderson + 30 BTCV); test set includes 54 intraoperative scans with ablation-probe artifacts; plus 2,596 minimally curated internal scans (unvalidated contours from early AI models/trainees) with QC via 5-fold CV of a 2,840-scan model and radiologist correction of the 65 scans scoring DSC < 0.90. Mixed sub-dataset curated fractions: 56:2 (4%), 142:15 (11%), 284:21 (7%), 710:59 (8%), 1420:119 (8%), 2130:182 (9%), 2840:244 (9%). Variance protocol — eight resampled 56-scan mixed-curation models (Models 1-8, default 250 batches/epoch) averaged DSC 0.960 (range 0.955-0.964); Models 4 and 8 showed one-tailed distributions attributed to missing metal-artifact outlier scans; Model 1 chosen as anchor and retrained at 1000 batches/epoch. Key results — full test set: DSC plateau 0.970-0.971 above 710 scans; 56→142 mixed-curation gains significant (DSC 0.961→0.967, HD95 4.56→3.18 mm, SD 2mm 0.936→0.950, all p<.001); highly curated 244-scan statistically indistinguishable (p>.999) from all mixed models ≥1,420 scans on 3D metrics; Slice DSC full test: mixed 710-scan (0.957) significantly beats curated 244-scan (0.954, p<.001). BTCV external: all models degrade; curated 244-scan significantly worse on Slice DSC than all mixed models ≥284 scans (p<.02) except 2840 (p>.999); mixed 710-scan peaks (Slice DSC 0.929, 5th pct 0.821, 0-DSC slices 2.04%, HD95 6.8 mm, SD 2mm 0.94). Statistics — Friedman + Dunn's, alpha=0.05, p-values in Supplementary Tables 1-3. Compute — 5x NVIDIA A100, ~18 h/model, 3d_fullres only (no 2D/3D ensembling). Availability — BTCV public via Synapse (syn3193805); institutional data on request; no code/model release; nnU-Net version unstated. Internal discrepancy — abstract reports HD95 2.98 mm for the curated 244-scan model vs. 2.87 mm for the best (2,840-scan) model; both consistent with results text. Total trained models ≈ 17-18.",
   "contribution_summary": "First comprehensive controlled comparison of the annotation-quality vs. dataset-quantity tradeoff for AI-based whole-liver CT segmentation, training 3D nnU-Net models on 56-2,840 scans spanning highly curated and mixed-curation compositions. A 244-scan highly curated dataset matched a 2,840-scan mixed-curation dataset (10x larger) on 3D metrics (DSC 0.971, p>.999), while larger mixed-curation datasets improved generalizability on external BTCV data (Slice DSC 0.929 at 710 scans) and reduced worst-slice failures. The authors conclude the quality/quantity tradeoff is nuanced and goal-dependent: quality suffices when data are scarce and inference is in-distribution; quantity buys robustness out-of-distribution.",
   "study_type": "method"
+ },
+ {
+  "paper_id": "10.1002_mp.12593",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 1,
+     "justification": "50 CT scans total (20 clinical + 30 Synapse, 29 evaluated), but training/testing performed separately per dataset with 5-fold CV, so each training set contains only ~16-24 subjects. Authors explicitly acknowledge 'rather small training datasets'. Borderline adequacy for 2017 standards."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Thoroughly described: clinical CTs from University of Freiburg (Philips GEMINI TF Big Bore / Siemens Emotion scanners, voxel sizes 0.78-1.17 mm in-plane, 2-3 mm slice, 60-181 slices, free-breathing) plus 30 public Synapse multi-atlas challenge CTs (0.67-0.98 mm in-plane, 3-5 mm slice, 50-198 slices)."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "5-fold cross-validation on both datasets, clearly stated that training and testing were strictly separated across datasets (no subject overlap). No patient leakage. Minor gap: no dedicated validation set for early stopping described."
+    },
+    "Q4_ground_truth": {
+     "score": 2,
+     "justification": "Clinical contours created by experienced radiation oncologist following EORTC 2211-308113 Lungtech protocol and peer-reviewed by at least one other expert. Synapse reference contours provided by challenge organizers. High-quality, clinically validated ground truth."
+    },
+    "Q5_external_validation": {
+     "score": 1,
+     "justification": "Two distinct datasets (clinical + public Synapse) were used, but models were trained separately on each, so testing was always within-dataset via CV — no true external/independent validation. Cross-dataset generalization was attempted but failed (resolution differences) and results not reported."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Fully specified: 13-layer dual-pathway 3D FCNN (based on Dolz et al. + Kamnitsas et al. dual re-scaled pathway), 9 conv layers per path with 25-75 kernels of 3x3x3, 3 FC layers (400/200/150) converted to 1x1x1 convolutions, PReLU, unit strides, second path downsampled by factor 2, sub-volume sizes 27^3 (train)/45^3 (test)."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "Highly detailed: RMSprop (momentum 0.6, LR 0.001 halved every 5 epochs from epoch 10), Gaussian weight init with std sqrt(2/n_l), 25 epochs x 20 subepochs, 500 samples/subepoch, batch size 5, Theano framework, NVIDIA Tesla P100 16GB, ~13h training time. Main missing element is unavailable code."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Cross-entropy averaged over sub-volumes (softmax output) is stated with equation, but choice is justified only by citing prior work ('following [15]') rather than on task-specific grounds; no comparison with alternative losses."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Comprehensively described: HU<-150 voxels outside ACM distance map (<=0.5) replaced with mean esophageal intensity (eliminates air-related gradients); morphological closing post-processing; ACM parameters given (2nd-order internal energy 0.2, step size 0.001, free boundary, 25mm centerline distance radius); RW weighting formulas (Eqs. 2-4) with dataset-learned Gaussian parameters and GMM-based HU prior fully specified."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or trained model publicly released; only mentions that the CNN builds on prior Theano implementations and RW uses a modified scikit-image implementation."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Three complementary metrics with explicit equations and clinical rationale: DSC (volume overlap), ASSD and Hausdorff distance (surface/shape fidelity, argued as critical for RTP dose calculation)."
+    },
+    "Q12_statistical_analysis": {
+     "score": 2,
+     "justification": "Wilcoxon signed-rank tests (alpha=1%) comparing RW vs. baselines with p-values reported per metric per dataset (Table II); non-normality/heteroscedasticity explicitly motivated test choice; means +/- std reported throughout."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Table III compares against 10 published methods (fully- and semi-automatic) with DSC/ASSD/HD and subject counts; internal ablation baselines (CNN threshold, CNN+closing). Claimed SOTA on Synapse (0.76 vs. 0.69 prior best). Minor caveat: some literature comparisons come from different datasets/settings."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (esophagus), so per-organ averaging is moot; results are reported per dataset (clinical vs. Synapse), per evaluation setting (whole vs. cropped volume), and per-patient bar plots (Figs. 3-4) showing individual variability."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Extensive failure analysis: excluded Synapse case 7 (stripe artifacts from arms in FOV) with visual example; identified cases where RW degraded results (clinical patients 9-10, discontinuity between slices); free-breathing artifacts affecting both images and references; small training set; failed cross-dataset transfer with explanation."
+    }
+   },
+   "total_score": 25,
+   "quality_rating": "High",
+   "risk_of_bias": {
+    "selection_bias": "Low-to-moderate. Clinical cohort clearly defined (radiotherapy planning patients, EORTC protocol contours, single center Freiburg) and public Synapse data used, but explicit inclusion/exclusion criteria not stated. Post-hoc exclusion of Synapse case 7 after observing method failure could introduce optimistic bias.",
+    "performance_bias": "Low. Uniform evaluation pipeline across all configurations, peer-reviewed reference contours, standardized metrics with equations, and statistical significance testing. Mild subjectivity in choosing the cropped-volume evaluation region (favorable comparison to prior work).",
+    "reporting_bias": "Low. All pipeline variants (CNN, CNN+closing, full RW) reported with per-patient figures, and limitations transparently discussed. Minor issue: cross-dataset training/testing experiment mentioned as unsatisfactory but quantitative results withheld."
+   }
+  },
+  "detailed_extraction": "SUPPLEMENTARY DETAILS (beyond previously extracted data): NOVELTY CLAIMS: Authors state this is the first deep learning approach for esophagus segmentation and the first attempt to drive a random walker with CNN probability maps. RW DESIGN RATIONALE: RW chosen over graph-cut because it is less prone to shrinking bias, better suited for thin/tubular structures like the esophagus. RW GRAPH: weighted undirected graph; inter-voxel edge weights computed from CT gradients via modified Gaussian (Eq. 2) with max{0,(delta-mu)} numerator; mu_delta and sigma_delta learned from training contours (mu_delta approx. 0) instead of manual beta scaling; voxel-to-class-vertex weights are products of three priors: CNN probability map, ACM distance map, and GMM-modeled HU probability (GMM used because HU distributions were non-normal); sparse linear system solved via graph Laplacian; based on modified scikit-image implementation. ACM DETAILS: scikit-image 'snakes'; points placed per slice, steered by internal/external energies; second-order internal functional weight increased to 0.2, step size reduced to 0.001, 'free' boundary conditions; resulting centerline converted to distance map (value 1 on line, linear decay to 0 at 25mm; radius chosen to cover typical esophageal width of 15-20mm). EVALUATION PROTOCOL: 5-fold CV used to train/test each of the CNN, GMM, and gradient models separately per dataset; two evaluation settings: whole volume vs. volume cropped below lower tip of heart (to match the region analyzed by prior best methods [Feulner et al.]); cropping improved DSC 0.73->0.76 but shape metrics affected more (HD 16.57 whole vs. 11.88 cropped). EFFECT SIZES: RW improved DSC ~30% over thresholded CNN and ~10% over CNN+closing; ASSD reduced 80-90% vs. CNN+closing. STATISTICAL NUANCE: On clinical dataset alone, RW improvement not significant for DSC (p=0.14) and ASSD (p=0.08) due to worsened cases 9-10; significant (p<0.01) for all metrics on Synapse and when pooling both datasets. RUNTIME BREAKDOWN (90-100s/CT): CNN probability map 40-60s, ACM 30s, CT probability values 7s, RW ~10s. CROSS-DATASET FAILURE: Training on one dataset and testing on the other failed due to large resolution/slice-thickness differences (2-3mm clinical vs. 3-5mm Synapse); quantitative results not reported. COMPARISON CAVEAT: Best semi-automatic method (Rousson 2006, DSC 0.80, n=20) still outperforms the proposed fully-automatic method; previous Synapse results (Heinrich 2015) came from a single test subset whereas this work used 5-fold CV (claimed more robust estimate). CLINICAL CONTEXT: Esophageal intra-fractional motion 5-10mm (up to 15mm), patient- and location-dependent, motivating future 4D/cone-beam CT extensions. FUNDING: NSERC discovery grant and ETS Research Chair on AI in Medical Imaging; no conflicts declared.",
+  "contribution_summary": "This paper presents the first deep learning approach for esophagus segmentation in CT: a dual-pathway 3D FCNN generates esophagus probability maps that are refined through an active-contour-derived centerline and a random walker combining CNN, shape, and GMM-based HU intensity priors. Achieving DSC 0.76 +/- 0.11, ASSD 1.36 mm, and HD 11.68 mm across two datasets (fully automatic, ~90-100s per scan), it outperformed all prior fully-automatic methods on the public Synapse benchmark and demonstrated that RW post-processing statistically significantly improves raw CNN output. The work established a CNN-plus-graphical-model refinement paradigm for thin, low-contrast tubular organs where shrinkage-bias-prone methods fail.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1007_s00330-020-07608-9",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "441 patients (882 kidneys), 309/618 kidneys for training — far above the >50 threshold; plus 35-patient small-tumor test cohort."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Single center clearly described: Peking University First Hospital, July 2017–April 2019, explicit inclusion/exclusion criteria (472 screened → 441 enrolled), 4 named MDCT scanners, CMP of CTU, full demographics."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Patient-level random split 7:1.5:1.5 (309/66/66 patients; 618/132/132 kidneys); both kidneys of a patient kept in the same set, avoiding leakage; split imbalance (age, tumor appearance) honestly reported."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Two radiologists (5 and 9 yrs experience) jointly annotated kidney/tumor/cyst in Philips IntelliSpace Discovery 3.0 — process described, but no inter-rater agreement statistics, no adjudication protocol, no pathology-confirmed reference standard in main text."
+    },
+    "Q5_external_validation": {
+     "score": 1,
+     "justification": "35-patient small-tumor cohort (May 2019–July 2020) is non-overlapping and later-collected but from the same institution, same scanners/protocol — temporal holdout, not true external validation."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "Conceptual design clear (cascaded two-step 3D U-Net for kidney; single multi-label 3D U-Net for masses), but layer-level detail is deferred to cited Çiçek et al. architecture and Supplements 3/5, not in accessible text."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Hyperparameters referenced only to 'Table S2 of Supplementary Material 5'; optimizer, learning rate, epochs, augmentation, framework, and GPU not reported anywhere in the main text — not reproducible from what is provided."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "Loss function never stated or justified, in main text or extraction; only 'multi-label learning' is mentioned."
+    },
+    "Q9_preprocessing": {
+     "score": 1,
+     "justification": "Preprocessing workflow described at concept level (left/right cropping, low-res downsampling for localization, cropping + linear resampling for fine segmentation); no voxel spacings, intensity normalization, or explicit segmentation post-processing given."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release; no repository URL or license mentioned."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "DSC for segmentation; AUC with 95% CI, sensitivity, specificity, accuracy, Youden index, and detection thresholds for mass detection; Pearson correlations for failure analysis."
+    },
+    "Q12_statistical_analysis": {
+     "score": 2,
+     "justification": "95% CIs on all AUCs; chi-square, Bonferroni pairwise tests, independent t-tests, Pearson correlation; p-values throughout (SPSS 26.0); no CIs on DSC values, but overall statistical rigor is good."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Literature comparison only: Kim et al. (DSC 0.520), KiTS19 top-5 (0.825–0.851), prior kidney models (0.910–0.974) — no experimental head-to-head on the same data; authors explicitly acknowledge no comparison against other architectures."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study but fine-grained reporting: separate DSC for kidney (both cascade steps), tumor, cyst, plus subgroup analyses by tumor location, appearance, size, and per-set miss/false-positive counts (Tables 2–4)."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Extensive: three explicit limitations (single phase, unbalanced mass sizes, no architecture comparison) plus dedicated failure-case figures (Fig. 5 missed cases, Fig. 6 false positives), quantified FP rates (20–24% tumors, 38–48% cysts), and correlation analyses of failure modes."
+    }
+   },
+   "total_score": 20,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-to-moderate. Consecutive retrospective recruitment with explicit inclusion/exclusion criteria and reported screening attrition (472→441) reduces selection bias; however, single-center design and a cohort enriched for suspected renal mass (disease-referred population) limit generalizability.",
+    "performance_bias": "Low-to-moderate. Outcomes assessed consistently across train/val/test with pre-specified metrics (DSC, ROC/AUC); but the reference standard was annotated by the same institution's radiologists with clinical context available, no blinded independent adjudication, and detection thresholds were Youden-optimized on the same data.",
+    "reporting_bias": "Low. Unfavorable results reported candidly (cyst DSC 0.536, small-tumor DSC 0.459, ~20–48% false positives, subgroup failures); limitations explicitly listed. Main gap is incomplete methodological reporting (loss, optimizer, framework) rather than outcome selective reporting; no protocol registration."
+   }
+  },
+  "detailed_extraction": "Design: retrospective, single-center, diagnostic accuracy study; IRB approved, written consent waived; no funding; no code release. Cohort: 472 consecutive suspected renal mass CTU patients screened, 441 enrolled (266 male; 55.60±13.10 yrs; range 22–91); small-tumor cohort: 35 consecutive patients (≤1.5 cm tumors), May 2019–July 2020, 70 kidneys. Data: 882 kidneys total; 618/132/132 kidneys in train/val/test; ~27–30% of kidneys per set contain tumors, ~27–36% cysts, remainder normal. Imaging: corticomedullary phase of 4-phase CTU from 4 scanners (Siemens SOMATOM Definition Flash, GE Lightspeed VCT, GE Discovery CT750HD, Philips Brilliance 256 iCT), uniform protocol (parameters in Supplement 1). Annotation: kidney, solid/solid-cystic tumors, simple cysts labeled jointly by 2 radiologists in Philips IntelliSpace Discovery 3.0; tumor diameter, CT values, location (endophytic/exophytic), appearance recorded; histopathology in Supplement 6. Model: (1) kidney — cascade of two 3D U-Nets (Çiçek 2016): low-res global localization → crop + linear resample → high-res fine segmentation; (2) renal mass — single 3D U-Net trained multi-label (kidney/tumor/cyst simultaneously) on localized high-res images; detailed parameters in Supplement Table S2; framework and GPU not reported. Detection: volume of maximum 3D VOI per kidney as score, Youden-index threshold (tumor test threshold 1042.3 mm³; cyst 62.4 mm³). Key results (test set): kidney DSC 0.974±0.007 (step 2; step 1: 0.940), tumor 0.844±0.194, cyst 0.536±0.274; small tumors 0.459±0.292. Detection: tumor AUC 0.986 (SEN 94.1%, SPEC 98.4%, ACC 96.2%); small-tumor AUC 0.896; cyst AUC 0.882 (SEN 83.3%, SPEC 88.9%). Failure analysis: unsegmentable tumors 1 per main set, 4/35 small-tumor group (small, 1.0–2.0 cm, ill-defined boundaries); missed cysts 0.2–0.9 cm or CMP medulla-isodense; typical FPs: bowel, CMP renal medulla, cyst-parenchyma junction, intratumoral cystic areas, perinephric fat stranding. Subgroup effects: DSC increases with exophytic degree (endophytic 0.747 < exophytic<50% 0.872 < exophytic≥50% 0.910, p<0.05); homogeneous tumors worse (0.811) vs heterogeneous (0.886) and solid-cystic (0.904), p<0.05; DSC weakly correlates with tumor diameter (r=0.306, p<0.001), not with CT value (r=−0.037). Statistics: SPSS 26.0; chi-square, Bonferroni, independent t-test, Pearson, ROC/Youden, two-sided p<0.05. Notable internal validity flag: age and tumor appearance differ significantly between training and test sets (p<0.05). For review synthesis: kidney segmentation figure (0.974) is comparable to KiTS19 leaders; cyst and small-tumor segmentation figures are weak and should not be pooled with general organ-segmentation results; single-organ (kidney) study, not multi-organ.",
+  "contribution_summary": "This paper presents a fully automated clinical pipeline of two 3D U-Net models — a cascaded localization-then-fine-segmentation pair for kidney and a single multi-label U-Net for renal tumor/cyst — trained and tested on a large single-center CTU cohort (441 patients, 882 kidneys) in the corticomedullary phase, achieving test DSCs of 0.974 (kidney) and 0.844 (tumor). It adds a simple detection layer that thresholds the maximum 3D VOI volume, yielding strong tumor detection (AUC 0.986; 94.1% sensitivity) even on small tumors (AUC 0.896), though cyst segmentation (DSC 0.536) and small-tumor segmentation (DSC 0.459) remain weak. Its main value for the review is evidence that cascaded 3D U-Nets reach near-KiTS19 kidney performance on clinical CTU data; its main weaknesses are unreproducible training details (no loss, optimizer, framework, or code) and absence of true external validation.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1016_j.cmpb.2020.105447",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "160 subjects total, 140 used for training per fold in 8-fold CV — well above the >50 threshold."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "All four sources enumerated with references/DOIs: Gibson et al. public set (zenodo.1169361), MICCAI SLiVer07, 3Dircadb (URL given), plus 30 private clinical scans; scan specs reported (slice thickness 0.5-5.0mm, pixel size 0.6-1.0mm)."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Split clearly specified: 8-fold CV (140 train / 20 validation), plus explicit low-data setting (10 train / 150 val). Caveat: no held-out independent test set — validation doubles as test within CV (penalized separately under Q5)."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Public datasets carry established annotations; the 30 private scans were 'annotated with the help of clinical experts' with no protocol, rater count, or inter-rater agreement reported. The paper itself documents clinician disagreement on portal vein inclusion, confirming annotation variability."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external/independent cohort. All 160 scans (public + private) are pooled and evaluated by internal cross-validation only."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Module-level detail: V-net-style encoder-decoder, D_Block (DenseNet-style, depth-wise separable convs, k=16, n=4, total 3k features/block), contour and shape transition branches, out-transition layers with kernel/stride/padding/dilation specified in figures."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "Xavier init, Adam, lr 0.001 (×0.1 every 50 epochs), batch 4, 300 epochs, loss weights α=1 β=1 γ=0.1, self-supervision threshold schedule (p=1.0 → ×0.9/10 epochs after epoch 100, floor 0.5), augmentation probabilities, hardware, and 10h training time all reported. Only gap: DL framework unnamed."
+    },
+    "Q8_loss_function": {
+     "score": 2,
+     "justification": "Combined loss given explicitly (Eq. 4): Dice loss for main output and shape branch (class imbalance rationale), class-balanced softmax CE for thin contour structures; each component's role motivated in Sections 3.3 and 5. Minor gap: numeric weights fixed without ablation."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Full pipeline: resample to 128×128×64, windowing L=10/W=700 (clip [-340,360]), normalize [0,1], on-the-fly affine deformation (80%), cutout (80%, mask size 5L≤l≤4L per dimension). Postprocessing explicitly none (smoothing for visualization only)."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release; no repository URL anywhere in the paper."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Five metrics with formal definitions: DSC, 95% Hausdorff distance, ASSD, sensitivity, precision (definitions follow SLiVer07)."
+    },
+    "Q12_statistical_analysis": {
+     "score": 2,
+     "justification": "Paired sample t-tests against all three baselines across folds (Table 3 p-values), mean±std over 8 folds (Table 2), box plots, 95% confidence interval stated."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Three external baselines (DSN, VoxResNet, DenseVNet) retrained under identical 8-fold CV with hyperparameters from their original papers, plus four internal ablations (CENet-A/C/S/R). Comparisons are 2017-2018 methods — reasonable but not the newest 2019-2020 work."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (liver); the reported average is the complete per-organ result (Dice 0.96, HD 3.99mm, ASSD 1.20mm, S 0.97, P 0.97)."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Failure mode root-caused (portal vein entry region, attributed to inconsistent GT annotation), parameter retuning needed for other applications (k, n, p), single-organ scope acknowledged, and baseline failure modes analyzed (DenseVNet resolution/shape-prior weaknesses)."
+    }
+   },
+   "total_score": 25,
+   "quality_rating": "High",
+   "risk_of_bias": {
+    "selection_bias": "Moderate concern — the four data sources are named, but inclusion criteria for the 30 private clinical scans (demographics, contrast phase, pathology spectrum) are unreported; unclear how representative the pooled cohort is.",
+    "performance_bias": "Low — all methods trained and evaluated under the identical 8-fold CV protocol with identical metrics; baseline hyperparameters taken from original papers; no differential postprocessing (none applied to any method).",
+    "reporting_bias": "Low — all five metrics, fold-level variance, and unfavorable findings are reported (portal vein failures, DenseVNet's non-inferior sensitivity at p=0.405, weaker ablation variants). Minor omissions: framework and inference time."
+   }
+  },
+  "detailed_extraction": "Supplementary details beyond prior extraction: (1) Contour self-supervision schedule — threshold p=1.0 for the first 100 epochs, then decayed ×0.9 every 10 epochs to a floor of 0.5; contours already correctly delineated by the network are erased from the GT contour target each iteration (Eq. 2-3). (2) Shape branch is a residual design: two identical shape transitions learn complementary features, combined by subtraction (Fs0 − Fs1); the CENet-R ablation (sequential stacking instead of subtraction) has the worst distance errors among variants, showing the residual is critical, especially in low-data regimes. (3) Ablation ordering: CENet-A (full GT contour supervision) performs worse than CENet-C (no contour branch) on HD/ASSD — forcing full-contour learning harms boundary accuracy, which is the paper's core evidence for adaptive self-supervision. (4) Generalization analysis: 10 train/150 val experiment shows CENet has lowest validation loss; removing cutout augmentation causes the largest generalization degradation — authors claim this is the first application of cutout to segmentation. (5) Data-efficiency: multi-fold CV at 10/30/50/70/90% training fractions (Fig. 9); CENet-S and CENet-R degrade most with few training images. (6) Statistical significance: CENet significantly better than all baselines on all metrics except sensitivity vs DenseVNet (p=0.405). (7) HD reported is 95% HD, truncated to exclude 5% outliers caused by portal vein variation. (8) D_Block outputs 3k feature maps; depth-wise separable convolutions replace DenseNet bottleneck/compression layers for parameter efficiency in 3D. (9) Baseline hyperparameters 'set as specified in the original studies' under the same CV folds. (10) Training: 300 epochs, 10h on Titan Xp, i7-7700K, 32GB RAM.",
+  "contribution_summary": "Proposes CENet, a 3D V-net-based FCN with densely connected separable-convolution blocks that embeds two deeply supervised auxiliary branches: an adaptively self-supervised contour branch (ground-truth contours erased where the network already predicts correctly, via a decaying threshold) and a residual shape branch, merged with deep features for final liver segmentation. On 160 abdominal CTs under 8-fold cross-validation it achieves 0.96 Dice, 3.99mm HD95, and 1.20mm ASSD, a 2.13% Dice improvement over DSN, VoxResNet, and DenseVNet, with significant gains on nearly all metrics. Secondary contributions include the first use of cutout augmentation in segmentation, shown to drive generalization in low-data regimes, and evidence that sparse self-supervised contours outperform full-contour supervision.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1080_03091902.2021.1905895",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "64 training / 32 testing CT volumes from Task06_Lung (MSD 2018). Meets the >50 threshold, though small by current standards and no separate validation set."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Clearly described: Task06_Lung from TCIA (NSCLC patients, Stanford University), part of 2018 Medical Segmentation Decathlon; DICOM converted to NIfTI; voxel dimensions given (512x512x100-600)."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "64/32 train/test counts stated, but split methodology (random vs. predefined, stratification) not described and no validation set mentioned."
+    },
+    "Q4_ground_truth": {
+     "score": 2,
+     "justification": "Annotation described: tumour area delineated by a specialist thoracic radiologist on axial CT using OsiriX; labels inherited from the curated public database."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external/independent dataset. All evaluation on the single 32-case test split of one public database."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "High-level only: V-Net-based FCN, 5 layers depth, 16 base filters with doubling per level. Full architecture (blocks, residual connections, decoder details) deferred to the Milletari et al. citation; no network figure."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Reports learning rate (0.0001), max 250 epochs, batch/patch size '46x46x46' (stated as-is; likely a typo), MATLAB implementation, Intel Core-i9/12GB hardware. Missing: optimizer, loss function, augmentation parameters (rotation angles), patch sampling strategy."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "No loss function stated or justified anywhere in the paper (V-Net's original Dice loss is never mentioned)."
+    },
+    "Q9_preprocessing": {
+     "score": 1,
+     "justification": "Preprocessing well described (tumour-centred cropping to 64x64x64, per-volume mean/std normalisation to 0-1, splitting) plus rotation/flip augmentation; post-processing steps not described at all."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code, model weights, or repository mentioned."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 0,
+     "justification": "DSC is the only metric; no HD95, sensitivity, specificity, precision, or volume error."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No confidence intervals, p-values, standard deviations, or per-case variance; only single average DSC values reported."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Comparison table provided (2D-UNet 58.48%, 2D-LungNet 62.67%, 3D-LungNet 65.77%, Recurrent 3D-DenseUNet 72.28%), but each compared method was evaluated on a different database (ISBI cell tracking, ILD, NSCLC-Radiomics), making the cross-database comparison invalid; internal inconsistency also exists (3D-LungNet 0.6977 in text vs. 65.77% in Table 1)."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Results reported separately per structure: 98% DSC for lung parenchyma and 80% DSC for tumour ROI, not a single blended average."
+    },
+    "Q15_limitations": {
+     "score": 1,
+     "justification": "Only brief mentions: a general call for 'further experiments' and a note that more powerful hardware is needed. No failure-case analysis or discussion of specific limitations."
+    }
+   },
+   "total_score": 14,
+   "quality_rating": "Low",
+   "risk_of_bias": {
+    "selection_bias": "Moderate/unclear — single public dataset from one institution (Stanford NSCLC cases); no patient inclusion/exclusion criteria or split methodology described; no external cohort.",
+    "performance_bias": "High — single metric (DSC) self-evaluated by authors without statistical testing; non-standard DSC convention (assigning DSC=1 to true-negative slices) can inflate the reported 98% lung score; comparisons drawn against methods evaluated on different datasets.",
+    "reporting_bias": "Moderate/high — only average DSC values reported (no variance, per-case results, or failure cases); internal numerical inconsistency for the 3D-LungNet baseline; no protocol, code, or negative results reported."
+   }
+  },
+  "detailed_extraction": "Task: 3D semantic segmentation of lungs and lung tumours (ROI) from CT. Data: Task06_Lung (MSD 2018, via TCIA; source: Stanford NSCLC radiogenomics collection), 96 volumes total — 64 training / 32 testing as stated in the paper; volumes 512x512x100 to 512x512x600 voxels, converted DICOM→NIfTI. Pipeline: (1) preprocessing — tumour-centred cropping to 64x64x64 patches, per-volume normalisation (subtract mean, divide by std of cropped lung region, scaled 0-1), train/test split; (2) augmentation — per-epoch rotation and flipping; (3) V-Net FCN (5 depth levels, 16 base filters doubling per level) trained up to 250 epochs, learning rate 0.0001, stated batch size '46x46x46' (likely a patch-size typo). Implementation in MATLAB on Intel Core-i9 CPU with 12GB RAM (no GPU mentioned). Evaluation: DSC only, averaged over tumour-containing slices; paper uses the non-standard convention DSC=1 for correctly identified tumour-free slices. Results: DSC 98% (lung), 80% (tumour). Baseline table compares against methods trained on different databases (ISBI 2015 cell tracking, ILD, NSCLC-Radiomics), so the claimed outperformance is not like-for-like; text cites 3D-LungNet at 0.6977 DSC while Table 1 lists 65.77%. No validation set, loss function, optimizer, post-processing, code release, or statistical testing reported. Study scope note for review classification: lung + tumour segmentation (2 structures), not multi-organ.",
+  "contribution_summary": "Applies an off-the-shelf V-Net architecture (with cropping, normalisation, and rotation/flip augmentation) to the public Task06_Lung dataset for 3D segmentation of lung parenchyma and tumours, reporting DSC of 98% (lung) and 80% (tumour). The main claim is that volumetric 3D segmentation outperforms prior 2D and 3D baselines, though the baseline comparison mixes results across different databases and lacks statistical support. The contribution is an application/evaluation of an existing architecture rather than a methodological novelty.",
+  "study_type": null
+ },
+ {
+  "paper_id": "10.1088_1361-6560_ab2818",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "120 patients with 80 used for training exceeds the >50 subject threshold. Still a modest dataset by deep learning standards, but adequate and explicitly partitioned (80 train / 20 validation / 20 hold-out test)."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Source well characterized: institutional planning CTs from definitive prostate radiotherapy patients, acquired on a Siemens scanner at 120 kVp with native resolution 0.98×0.98×1.0 mm; contours created in MIM Maestro."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Explicit 80/20/20 split following Kaggle-style competition rules, with the hold-out test set used only once to report final results — a rigorous practice that mitigates validation-set overfitting and multiple hypothesis testing. Randomization/stratification method not stated, but split rationale is transparent."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "All contours by a single trained observer (JWC, co-author) using MIM Maestro, explicitly chosen to maximize consistency, and single-observer variability acknowledged as a limitation. However, no inter-observer agreement analysis, no second-observer verification, and observer experience level not reported."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external validation. All 120 patients from a single institution on a single scanner model; generalizability to other scanners, protocols, and populations is untested."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Highly detailed: 4-level 3D cascaded encoder-decoder (2/3/3/3 conv layers per level), 3×3×3 kernels, residual connections, 128×128×64 input, PReLU/batch-norm/0.3 dropout, plus full schematics and equations for the additive sigmoidal attention gates, learned deconvolutional deep supervision with decaying multi-scale loss weights, and the sequestered channel-boosting protocol (base + 50% and 25% channel boosted networks)."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Learning rate (0.001), optimizer (Adam), dropout (0.3), input dimensions, sliding-window patching parameters, and deep supervision weight decay schedules are reported, and hyperparameters were auto-tuned on the validation set. However, batch size, number of epochs, deep learning framework, and GPU hardware are not specified, limiting independent reproduction."
+    },
+    "Q8_loss_function": {
+     "score": 2,
+     "justification": "Soft Dice loss choice explicitly justified (differentiability vs. hard Dice, mitigation of class imbalance vs. Euclidean losses, with citations [42, 43]); stabilization term δ=1e-6 defined mathematically; rationale given for multi-channel Dice (base/1st boosted nets) vs. single-structure Dice (2nd boosted nets)."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Preprocessing clearly described: resampling to 0.98×0.98×3 mm, intensity normalization, and rich on-the-fly augmentation (non-rigid deformation, rotation, translation, resolution variation, synthetic metal/fiducial artifact contamination, noise). Auxiliary center-of-mass U-Net for patch extraction is explained, and postprocessing (resampling predictions to native resolution) is stated."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No mention of publicly released code, models, or repository links anywhere in the manuscript."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Both Dice coefficient and average surface distance (ASD) reported for all four structures across all eight algorithms, with means and standard deviations over the 20 test patients."
+    },
+    "Q12_statistical_analysis": {
+     "score": 2,
+     "justification": "Two-sample one-sided Mann-Whitney U tests with exact p-values for Dice and ASD, per structure, for DAB-CNN against all seven comparators (e.g., prostate vs. UNet p=7.4e-4; bladder vs. DA-UNet p=0.086 correctly reported as non-significant). Means ± SD reported throughout."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Exceptionally thorough comparison against seven architectures (UNet, A-UNet, B-UNet, D-UNet, ResNeXt, LL-CNN, DA-UNet), effectively doubling as an ablation study isolating the contributions of attention gates, deep supervision, and channel boosting individually and in combination."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Full per-organ breakdown: Dice and ASD for prostate (90.02), bladder (93.12), rectum (83.46), and penile bulb (72.21) with SDs, plus per-structure statistical tests — no averaging across organs that would mask performance differences."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Candid, substantive limitations discussion: degraded performance with heavy metal artifacts (illustrated with a fiducial-seed patient), unnecessary complexity for easily segmented organs (bladder), unclear clinical/dosimetric significance of contour gains, single-observer ground-truth ceiling, GPU memory constraints, and dependency of boosted networks on the base network."
+    }
+   },
+   "total_score": 24,
+   "quality_rating": "High",
+   "risk_of_bias": {
+    "selection_bias": "Moderate risk. All patients are prostate radiotherapy cases from one institution on one Siemens scanner; inclusion/exclusion criteria and patient recruitment process are not described. The homogeneous, single-site, single-disease cohort limits external validity, though it ensures imaging protocol consistency.",
+    "performance_bias": "Low risk. All eight algorithms were trained and evaluated under a uniform protocol on the same data splits, hyperparameters were auto-tuned on the validation set for every method, all models produced a single prediction per structure for fair comparison, and the hold-out test set was used only once (Kaggle rules), ensuring consistent outcome assessment.",
+    "reporting_bias": "Low risk. All pre-planned outcomes (Dice, ASD, p-values, training/inference times) reported per structure and per comparator, with non-significant results (bladder vs. DA-UNet, p=0.086) transparently disclosed. Minor omissions (batch size, epochs, framework) are reporting gaps rather than selective outcome reporting; limitations are openly discussed."
+   }
+  },
+  "detailed_extraction": "Supplementary methodological details not captured above: (1) Input pipeline — network accepts 128×128×64 voxel blocks at 1×1×3 mm³; an auxiliary simplified U-Net predicts structure centers-of-mass to guide extraction of informative patches. The combined bounding box of all four OARs is mosaiced into 128×128×64 blocks with sliding-window spacing of 32×32×16 and overlap of 16×16×8 voxels. (2) Boosting specifics — base network (q=0) and 1st boosted network (q=1, 50% channels) are trained on all four structures with multi-channel soft Dice; a dedicated 2nd boosted network module (q=2, 25% channels) is trained per structure on the isolated structure with random translational shifts about its center of mass. Locked prior-stage parameters require only forward passes (no gradient tracking), giving memory-efficient sequestered learning; boosting is incremental until GPU memory is exhausted or validation accuracy degrades. Boosted networks cannot predict meaningfully without the base network. (3) Deep supervision — applied only to the base network (not during boosting phases); multi-scale loss weights initialized at 0.25, relatively decayed by 0.0005/0.001/0.005 per epoch for the 2nd/3rd/4th levels, renormalized to 1 each epoch; learned deconvolutional upsampling used instead of prior tri-linear upsampling. (4) Attention design — additive vector-concatenation gates (chosen over multiplicative for accuracy) with sigmoidal rather than softmax coefficient normalization to avoid sparse activations; spatial (per-pixel) rather than global gating. (5) Fairness controls — hyperparameters for ALL methods automatically tuned on the validation set; multi-scale loss weighting δn also validation-derived; input volume size chosen empirically as a memory/batch/filter/structure-size compromise. (6) Efficiency — DAB-CNN trains in ~28h for all 4 OARs (comparators 16–32h) and infers in ~6s (comparators 6–7s), making it comparable in speed despite greater capacity. (7) Statistical results — DAB-CNN significantly superior to all 7 comparators on prostate, rectum, and penile bulb (Dice); inferior only relative to DA-UNet on bladder (p=0.086, n.s.); component analysis showed attention gates alone ≈ UNet, channel boosting alone had the largest single-component effect, and attention+deep supervision outperformed boosting alone. (8) Unreported items — framework, GPU model, batch size, epoch count, and random seeds are not provided; code is not released.",
+  "contribution_summary": "This paper presents DAB-CNN, the first architecture to combine additive spatial attention gates with incremental channel boosting (sequestered learning with locked base parameters) and deep supervision in a 3D cascaded fully-convolutional network, specifically addressing GPU memory constraints and convergence difficulties of large 3D medical segmentation networks. Evaluated on 120 prostate radiotherapy planning CTs with Kaggle-style hold-out testing, DAB-CNN achieved statistically significantly higher Dice scores (prostate 90.02, bladder 93.12, rectum 83.46, penile bulb 72.21) than seven comparator architectures for three of four pelvic OARs, with the component-wise comparison doubling as an informative ablation of attention, deep supervision, and boosting. The channel-boosting strategy is the paper's most transferable methodological contribution, offering a memory-efficient path to scaling 3D CNN capacity.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1088_1757-899x_1128_1_012049",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "~122 training subjects (130 used, 8 held out for testing) exceeds the >50 threshold. Minor inconsistency: 130 subjects used vs. 131 with ground truth in LiTS; one exclusion unexplained."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "LiTS benchmark clearly named, cited [13], and characterized: 201 CTs, 131 with GT, resolution 0.56–1.00 mm axial / 0.45–6.0 mm in z, 42–1026 slices, hyper- and hypo-contrast."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Test set size (8 subjects) reported, but selection method for the 8 volumes, exact training count, and any validation set are unspecified; ambiguous whether the 130 includes the 8 test subjects."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "GT comes from the cited public LiTS benchmark, but the annotation process itself is not described in the paper and no annotation-quality checks are reported."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external or independent dataset; all evaluation is internal to LiTS."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "Cascaded two-stage U-Net and the decoder modification (up-convolution preserves feature count instead of halving, followed by encoder concatenation) are described with a block diagram and architecture figure; however, depth, filter counts, kernel sizes, and input/patch handling are not specified."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "SGD, lr 0.001, 40 epochs, categorical cross-entropy given. Missing: framework, batch size, hardware/GPU, patch/tile size, data augmentation, exact split — not reproducible as published."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "Categorical cross-entropy stated but never justified; the acknowledged tumor class imbalance is not addressed in the loss (no weighting, no Dice/compound loss)."
+    },
+    "Q9_preprocessing": {
+     "score": 1,
+     "justification": "Preprocessing limited to HU window clipping [-100, 400] and described; no resampling (notable given 0.45–6.0 mm z-variation), no normalization details, no post-processing."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release mentioned."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 0,
+     "justification": "Dice only; no HD/HD95, Jaccard, sensitivity, or volumetric error."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No confidence intervals, p-values, standard deviations, or per-subject variability; means over only 8 test volumes."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Table 1 compares against ResNet, H-DenseUNet, nnU-Net, DeepX, and Cascaded ResNet, but the comparison figures appear quoted from prior literature rather than re-run on an identical split/protocol."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Separate Dice reported for liver (0.95) and tumor (0.69) in abstract and Table 1."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Explicit discussion of false-negative tumor regions (Figure 4c), class imbalance, concave-boundary difficulty, and insufficient tumor Dice (0.69); future work stated."
+    }
+   },
+   "total_score": 14,
+   "quality_rating": "Low",
+   "risk_of_bias": {
+    "selection_bias": "High/unclear — method for choosing the 8 test subjects not stated; 130 of 131 ground-truth subjects used with one unexplained exclusion; no patient demographics or tumor-burden case-mix reported.",
+    "performance_bias": "Moderate/unclear — single metric on 8 volumes, no statistical testing, qualitative example likely hand-selected (concave-boundary slice shown); baseline numbers not evaluated under a common protocol.",
+    "reporting_bias": "Moderate — limitations acknowledged, but internal inconsistencies (tumor Dice 0.65 in Results text vs. 0.69 in Table 1/abstract; liver Dice 0.95 in Table 1 vs. 0.96 in Conclusion) and absent per-subject results hinder full appraisal."
+   }
+  },
+  "detailed_extraction": "Supplementary details not in prior extraction: (1) Internal numeric inconsistencies — tumor Dice reported as 0.65 in the Results narrative but 0.69 in abstract/Table 1; liver Dice as 0.96 in Conclusion vs. 0.95 elsewhere; treat 0.95/0.69 (Table 1) as authoritative. (2) Training details absent: framework, batch size, patch extraction strategy, augmentation, GPU, training/inference time all unreported. (3) Ambiguous split: '130 subjects used... tested on eight' — unclear if the 8 are within the 130; no validation set. (4) The cascade motivation is class imbalance (tumor-to-non-tumor ratio), but no imbalance countermeasure (weighted loss, sampling) is applied. (5) Comparison-table values (e.g., H-DenseUNet 0.98/0.94, nnU-Net 0.95/0.73) appear to be literature-reported LiTS results, not re-implementations — cross-paper comparability is weak. (6) Categorical cross-entropy implies multi-class output (background/liver/tumor) in stage 2. (7) No resampling despite large anisotropy range in LiTS (0.45–6.0 mm z). (8) Stated application context beyond diagnosis: 3D printing and VR platforms for pre/post-treatment analysis. (9) 5-page conference paper; figures show qualitative 2D slices only, no 3D rendering of predictions despite '3D segmentation' claim.",
+  "contribution_summary": "Proposes a fully automatic cascaded two-stage U-Net for liver and tumor segmentation in CT, where the first U-Net's liver probability map is concatenated with the raw image as input to the second U-Net, and the decoder is modified to keep feature counts constant during up-convolution to reduce information loss. On 130 LiTS subjects (8 test volumes), it reaches Dice 0.95 for liver and 0.69 for tumor — liver performance matches cited baselines, but tumor performance trails H-DenseUNet and DeepX, which the authors attribute to class imbalance and false negatives. The contribution is incremental (a modest U-Net variant), and the evaluation is too small and under-reported to establish generalizability.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1109_icsipa.2017.8120664",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 0,
+     "justification": "Only 25 training subjects per fold (30 total, 6-fold CV); below the >50 subject threshold."
+    },
+    "Q2_dataset_source": {
+     "score": 1,
+     "justification": "Private thoracic CT set reasonably described: 30 scans, lung cancer/Hodgkin lymphoma patients, resolution 0.98x0.98x2.5mm, 512x512x(150-284) voxels, annotated structures listed. Missing: institution, acquisition protocol, ethics statement."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Split clearly stated (6-fold CV, 25 train / 5 test), but no validation set or stopping criterion described for hyperparameter selection; learning-rate schedule appears hand-set."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "'Manual delineations' stated for esophagus, heart, trachea, aorta, and body contour; annotator expertise, number of observers, and inter-observer variability not reported."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "Single private dataset evaluated with internal cross-validation only; no independent external cohort."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Fully specified: SharpMask base with explicit modifications (transposed convolutions in refinement module, conv+ReLU channel equalization on skips, 7x7 kernels), channel counts in Fig. 2, and complete two-stage design including 128x128 ROI inputs and stage-2 organ-probability-map channels."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "SGD, lr 0.1 decayed x0.1 every 20 epochs, Xavier init, and augmentation scheme (random affine + B-spline deformation via 2x2x2 control-point grid) are given. Missing: batch size, total epochs, framework, hardware."
+    },
+    "Q8_loss_function": {
+     "score": 2,
+     "justification": "Dice loss (V-Net) explicitly justified: directly optimizes the evaluation metric and removes the class-weight hyperparameter of weighted cross-entropy; formula provided (Eq. 1)."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Pre-processing clear (zero-mean/unit-variance normalization; body contour masks background during training). Post-processing clear (connected-component filter >10 voxels/slice on stage-1 output to derive stage-2 ROI and z-range; no further postprocessing)."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release mentioned."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 0,
+     "justification": "Dice only (mean +/- SD). No distance-based metrics (HD, ASSD) or volumetric error measures."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "Descriptive mean +/- SD over 5 test subjects per fold; no confidence intervals and no significance testing."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Compared against classical SOTA (OPAL atlas label fusion, 0.39+/-0.05) and DL ablations (single-stage SharpMask 0.66+/-0.08; SharpMask+CRFasRNN 0.67+/-0.04). Appropriate for 2017; no other DL esophagus baselines existed."
+    },
+    "Q14_per_organ_results": {
+     "score": 1,
+     "justification": "The target organ (esophagus) is reported with SD rather than an average, but heart, trachea, and aorta — segmented by stage 1 — are never quantified."
+    },
+    "Q15_limitations": {
+     "score": 1,
+     "justification": "Low esophageal CT contrast and stage-1 false negatives acknowledged implicitly in the motivation, and small-dataset limits are inferable; no dedicated limitations section and the 'valuable results for the clinic' claim is not tempered for a 0.72 Dice."
+    }
+   },
+   "total_score": 14,
+   "quality_rating": "Low",
+   "risk_of_bias": {
+    "selection_bias": "High — 30 oncology patients (lung cancer / Hodgkin lymphoma) from an unnamed private source; inclusion/exclusion criteria and recruitment process not defined, limiting generalizability.",
+    "performance_bias": "Low/moderate — all methods evaluated on the same CV folds with the same Dice protocol, but no blinding and OPAL was re-implemented by the authors rather than using vendor results.",
+    "reporting_bias": "Moderate — Dice is the only reported metric; stage-1 organs (heart, trachea, aorta) never quantified; framework, GPU, and runtimes all unreported."
+   }
+  },
+  "detailed_extraction": "Training details: SGD with lr=0.1 decreased x10 every 20 epochs; Xavier initialization; 7x7 conv kernels (following CT literature); data augmentation = random affine transform + random B-spline deformation (2x2x2 control-point grid, per V-Net) applied per scan. Stage 2 ROI derivation: esophagus centroid per slice from stage-1 output, averaged over slices whose connected component exceeds 10 voxels; 128x128 in-plane crop (power-of-2 for max-pooling) preserving neighboring-structure context; z-range = min/max slice meeting the 10-voxel rule. Stage-2 inputs additionally include stage-1 probability maps of heart, trachea, aorta cropped identically — authors frame this as a learned (backprop) variant of auto-context models vs. hand-crafted features. Slice-based 2D processing of 3D volumes despite volumetric augmentation. Baseline numbers: PatchMatch 0.39+/-0.05, SharpMask stage 1 0.66+/-0.08, SharpMask+CRFasRNN 0.67+/-0.04, proposed 0.72+/-0.07. Body-contour channel used during training only to exclude background. Prior work reference: ISBI 2017 (Trullo et al.) is the single-stage + CRF baseline. Funding: EU ERDF (HN0002137) and Normandie Regional Council (M2NUM). Framework, GPU, training/inference time: not reported.",
+  "contribution_summary": "Proposes a fully automatic two-stage hierarchical FCN for esophagus segmentation in thoracic CT: a modified SharpMask performs multi-organ segmentation (esophagus, heart, trachea, aorta), then a second SharpMask fine-tuned on an esophagus-centered 128x128 ROI — fed with stage-1 probability maps of neighboring organs as a learned auto-context prior — refines the result. Uses Dice loss to avoid class-imbalance weight tuning, and outperforms OPAL atlas fusion (0.72 vs 0.39 Dice) and a SharpMask+CRFasRNN variant on 30 scans. Notable as an early (2017) deep learning solution to the low-contrast esophagus problem, though limited by small data, 2D slice-wise processing, and Dice-only evaluation.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1109_spin48934.2020.9071339",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "82 contrast-enhanced CT scans; 72 for training exceeds the >50 threshold. Caveat: validation set is only 10 cases, small for reliable performance estimation."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Public TCIA pancreas-CT (CT-82) dataset clearly cited [9]; demographics (53 male, 27 female), resolution (512x512xL, L in [181,466]), and slice thickness (1.5-2.5 mm) reported."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Split stated (72 random train / 10 validation) but no independent held-out test set — final results are reported on the same 10-case validation set used during development, risking optimistic estimates."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Ground-truth masks come from the public TCIA dataset and are cited, but the paper does not describe the annotation process (who annotated, protocol, inter-observer variability)."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "Single dataset (TCIA CT-82) only; no external or independent cohort evaluation."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Fully specified: complete layer-by-layer table (filter sizes, strides, padding, output shapes), DDN block with dilation rates 1/3/5, channel excitation (adaptive avg pool + 1x1x1 conv), ELU activations, strided 2x2x2 convs replacing max-pool, residual and skip connections, architecture figure."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Most hyperparameters given (Adam, lr=0.0001, momentum=0.9, weight decay=0.00001, batch=2, 80 epochs, Kaiming init, PyTorch, P100). Gaps: dropout rate unspecified, 'adaptive learning rate' schedule ambiguous, flip augmentation axes unspecified, no random seed, single training run."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "WFL = 0.2*BBCE + 0.8*SDC is motivated (class imbalance, small target; beta=0.23 to suppress false positives), but no ablation showing WFL outperforms BBCE-only or SDC-only, and the alpha tuning procedure is not described."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Preprocessing clearly described with example figure: per-sample [0,1] normalization, random flips, axial resizing, clipping near pancreas centroid to fixed 128x128x64 voxels at 1x1x1.5 mm. No post-processing applied, stated implicitly."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release mentioned anywhere in the paper."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Dice, Sensitivity, and Precision all reported with formal equations (Eq. 5-7) — exceeds the Dice+one-other threshold."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No confidence intervals, p-values, std, or repeated runs; single-point estimates on 10 validation cases."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Comparison table against V-Net, Attention U-Net, and U-Net exists, but baseline provenance is unclear: U-Net (0.820) and Attention U-Net (0.831) numbers appear quoted from prior literature [5],[6], and it is not stated that any baseline was retrained under the identical preprocessing/loss setup."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (pancreas) so per-organ reporting is trivially satisfied — organ-level Dice/SENS/PREC given. Note: no per-case results or variance reported."
+    },
+    "Q15_limitations": {
+     "score": 0,
+     "justification": "No limitations section, no failure-case analysis; only a best-case visualization (Dice 88.39%) is shown. Future work is mentioned but framed as extension, not limitation."
+    }
+   },
+   "total_score": 17,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-moderate: public TCIA CT-82 cohort with demographic breakdown reduces selection concerns, but inclusion/exclusion criteria and the randomization procedure for the 72/10 split are not detailed; no external cohort.",
+    "performance_bias": "Moderate-high: final metrics reported on the same 10-case validation set used for model development and selection (no held-out test set); baselines possibly compared using literature numbers rather than retrained under identical conditions; single training run with no variance estimates.",
+    "reporting_bias": "Moderate: only aggregate mean metrics on 10 cases (no per-case spread, CI, or significance tests); best-performing sample (Dice 88.39%) visualized while failure cases are absent; however, all three headline metrics (Dice, sensitivity, precision) are consistently reported for all compared methods."
+   }
+  },
+  "detailed_extraction": "Supplementary details: (1) Architecture — bottleneck feature map is 256x8x8x4; the DDN block runs three parallel branches (1-, 3-, 5-dilated 3x3x3 convs, each 256->64 channels) aggregated with adaptive average pooling + 1x1x1 conv channel excitation; every encoder/decoder level uses 5x5x5 stride-1 padding-2 convs; downsampling via 2x2x2 stride-2 convs (no max-pool) to avoid information loss; output is a single-channel 128x128x64 volume. (2) Loss — BBCE with balancing factor beta=0.23 (stated rationale: suppress false positives given foreground/background imbalance); SDC as in V-Net; alpha=0.2 'after tuning' with no ablation table or tuning protocol. (3) Training — from scratch (no pretraining), 80 epochs, batch size 2, dropout at high-level layers (rate not reported), Kaiming initialization, Adam with stated momentum 0.9, single run on one NVIDIA Tesla P100 via Google Cloud Platform. (4) Evaluation — results computed on the 10-case validation split only, no test split. Full comparison table: proposed 0.833/0.877/0.970 (Dice/SENS/PREC), V-Net 0.801/0.849/0.822, Attention U-Net 0.831/0.840/0.825, U-Net 0.828 Dice / 0.802 SENS (Li et al.) or 0.820/0.828/0.824 per Table II — minor internal inconsistency between cited related-work numbers and the results table. Claimed gains: +0.24% Dice (vs Attention U-Net), +4.6% sensitivity, +17.5% precision. Best single validation case: Dice 88.39% (Fig. 6). (5) Missing items: no runtime/inference-speed measurements despite motivating memory/speed concerns in the introduction; no statistical tests; no failure cases; no ethics/dosimetry statement; no code, license, or release version.",
+  "contribution_summary": "Proposes DDV-Net, a V-Net variant that inserts a multi-rate (dilation 1/3/5) deep dilated network with channel-wise feature excitation at the bottleneck to widen receptive fields, combined with a novel Weighted Fusion Loss (0.2*Balanced BCE + 0.8*Smooth Dice) targeting foreground/background class imbalance in small-organ segmentation. On the 82-scan TCIA pancreas CT dataset (72/10 train/validation), it reports Dice 0.833, sensitivity 0.877, and precision 0.970, marginally exceeding Attention U-Net on Dice with larger gains in precision. Evidence strength is limited to a single small public dataset with no external validation, no ablations, no statistical analysis, and no code release.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1145_3301879.3301883",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "150 CT scans (~120 per fold for training under 5-fold CV); exceeds the >50 subject threshold."
+    },
+    "Q2_dataset_source": {
+     "score": 1,
+     "justification": "Two named institutions (Ruijin Hospital, Xuhui Central Hospital), but no scanning protocol, patient inclusion/exclusion criteria, or ethics statement."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Five-fold cross-validation stated, but no held-out independent test set and no description of fold composition (patient-wise vs. image-wise) or validation set usage."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Only one sentence: manual delineation by 'experienced experts'. Number of observers, protocol, and inter-observer variability not reported."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external/independent cohort; all 150 scans from the same two-hospital pool evaluated via internal cross-validation."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "3-D CNN well characterized (residual units of three 5x5x5 convs, 2x2x2 down/deconv, 1x1x1 softmax head; V-Net-inspired) and 2-D CNN kernel/stride details given, but number of feature maps per stage and total depth are only in figures, not text."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "PyTorch, 1080ti GPU, momentum 0.9, batch size 2, weight decay, 150 epochs/100K iterations, augmentation parameters all reported — but the learning rate value is missing from the text and neither numeric value (LR, weight decay) is recoverable from the provided paper."
+    },
+    "Q8_loss_function": {
+     "score": 2,
+     "justification": "V-Net-style Dice loss with explicit gradient formulation; choice justified as avoiding manual class-weighting for foreground/background imbalance, with citation."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Fully described: 1mm isotropic resampling, intensity threshold 250 for bone landmarks (coccyx/symphysis pubis), CBVEM VOI to fixed 128x128x64, augmentation ranges (20° rotation, 10-voxel translation, flips, B-spline deformation on 2x2x2 grid). Postprocessing stated: threshold softmax at 0.5."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code, model weights, or repository link mentioned anywhere."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "DSC, Sensitivity, and PPV all reported with formulas; exceeds Dice + one other."
+    },
+    "Q12_statistical_analysis": {
+     "score": 1,
+     "justification": "Mean ± SD and maximum reported, but no confidence intervals, no significance testing, and no statistical comparison between the CBVEM ablation arms or vs. baselines."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Compared to Han et al. (81.31% DSC, same 150 patients) and Ma et al. (86.80% DSC, but on a different 92-patient set, so not directly comparable), plus internal CBVEM ablation. No comparison to contemporary 3-D DL methods on identical data."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study; all reported results are prostate-specific, so no cross-organ averaging obscures anything."
+    },
+    "Q15_limitations": {
+     "score": 0,
+     "justification": "No limitations or failure-case discussion; qualitative figures show only successes; 'faster' runtime claims never quantified."
+    }
+   },
+   "total_score": 17,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Unclear/moderate — patients from two hospitals but no inclusion/exclusion criteria, no consecutive-sampling statement, no ethics/consent reporting; potential convenience sampling.",
+    "performance_bias": "Low/moderate — standardized overlap metrics against expert contours; the Han et al. baseline was run on the same 150 patients; however, no inter-observer reference standard and the Ma et al. comparison uses a different cohort.",
+    "reporting_bias": "Moderate — no limitations section, only successful qualitative cases shown, cross-paper DSC comparison mixes different datasets, and inference-time superiority is asserted without any numbers; the 89.74% headline likely represents the best-configured arm."
+   }
+  },
+  "detailed_extraction": "Supplementary details not in prior extraction: (1) The 2-D CNN input is a 256x256 slice with two-class output (prostate/non-prostate), used only to locate the prostate center point — it is not trained on full slices; training slices are selected via the intensity-250 bone-threshold step that finds coccyx/symphysis pubis. (2) The no-CBVEM ablation arm was constructed by artificially translating images 25–35 voxels so the prostate is off-center — i.e., the ablation simulates poor localization rather than a different pipeline. (3) Learning rate and weight decay values are blank/garbled in the text ('a weight decay of _ and a learning rate of _') — unrecoverable, a concrete reproducibility gap. (4) Augmentation claim: one image yields 'more than hundreds' of distinct volumes; each fold holds >3000 augmented volumes at 128x128x64. (5) DSC is computed in the squared-sum (V-Net) formulation over VOI voxels, not the intersection-over-union form. (6) Hyperparameters: batch size 2, momentum 0.9, 150 epochs ≈ 100K iterations ≈ 5 days per model on one 1080ti. (7) Voxelwise thresholding at p>0.5 is the only postprocessing (no connected-component or shape correction). (8) No report of VOI-localization failure rate of CBVEM itself — a mis-localized VOI would propagate to segmentation, unmeasured. (9) Comparison caveat: Ma et al. 86.80% was on 92 patients (different data), Han et al. 81.31% on the same 150 patients; the paper's claim of being 'faster' than atlas/deformable/feature methods is unquantified. (10) No mention of the total dataset being multi-institutional split (e.g., one hospital train, other test) — hospitals are pooled.",
+  "contribution_summary": "The paper proposes a fully automatic two-stage prostate segmentation pipeline for 3D CT: a CNN-based VOI extraction method (CBVEM) combining intensity thresholding of pelvic bone landmarks with a 2-D U-Net-like CNN to center a fixed 128x128x64 VOI, followed by a 3-D residual V-Net-style CNN trained with Dice loss. On 150 private CT scans under 5-fold cross-validation, the full pipeline achieves 89.7±2.9% DSC (max 94.8%), versus 86.5±7.2% for the same 3-D CNN without accurate VOI localization and 81.31% for an atlas-based method on the same data. The key evidence is the localization ablation showing VOI accuracy, not network depth alone, drives performance on small single-organ CT datasets.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1155_2017_6941306",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 0,
+     "justification": "12 patients (~70 slices each). Far below the >50 subject threshold; authors acknowledge this as their main weakness vs ~100 cases in Chu/Wolz."
+    },
+    "Q2_dataset_source": {
+     "score": 1,
+     "justification": "In-house abdominal CT, single scanner, doctor-approved manual annotations. But institution, scanner model, patient demographics, contrast protocol, and selection criteria not reported."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "4-fold cross validation with random train/test splitting, explicitly stated. No separate validation set, but the CV methodology is clear."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Boundaries 'manually defined by us and approved by a doctor'. No annotation protocol, annotator count, or inter-rater agreement; authors annotating their own evaluation ground truth is a bias risk."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external/independent dataset. Single in-house dataset, single scanner."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Fully described: VGG-16 initialization, FC layers converted to conv, 1x1 conv with 4 channels at pool3/pool4/pool5/fc7, 4 rounds of new unpooling (mean-fill, Eq. 1) + deconvolution + fusion, stride-8 output, with architecture figure and activation visualizations."
+    },
+    "Q7_reproducibility": {
+     "score": 0,
+     "justification": "No optimizer, learning rate, batch size, iteration count, augmentation, or framework named. Only 'initialized from VGG-16' and 'training time lower than FCN-8s'. Not reproducible."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "Loss function not mentioned anywhere; no justification possible."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Preprocessing (512x512 slice extraction; affine + B-spline nonlinear registration for atlas alignment) and postprocessing (MS-PA Bayes refinement via mean of FCN and atlas voxel probabilities, max-mean label assignment, stacking pixel probabilities to voxels, 3D reconstruction) clearly described."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release; no URL."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Dice, Precision, Recall (Tables 2-3) plus pixel accuracy, mean accuracy, mean IU vs FCN-8s (Table 1). Formulas given (Eq. 6)."
+    },
+    "Q12_statistical_analysis": {
+     "score": 1,
+     "justification": "Mean ± SD across 4 folds reported (e.g., liver 90.1 ± 1). No confidence intervals, no significance tests, no p-values. Table 2 mixes per-fold maxima with Table 3 means — inconsistent reporting."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Compares against 6 methods (FCN-8s, Shimizu, Liu, Okada, Chu, Wolz) in Table 3 with case counts. Caveat: comparisons are literature-reported numbers, not re-implementations on a shared test set."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Liver, spleen, right kidney, left kidney reported separately in Tables 2 and 3 (left kidney column partially garbled in source text: ~90.1 ± 5)."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Explicitly discusses small dataset (12 vs ~100 cases), lower performance vs Chu/Wolz, residual errors after FCN-DecNet alone, atlas-count-limited boundary errors, and registration failure on extreme abdominal cavity sizes."
+    }
+   },
+   "total_score": 17,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "High. 12 patients from one scanner at one site; inclusion/exclusion criteria, demographics, and pathology status unreported. 'Random' 4-fold splitting without seed or stratification on n=12 gives unstable folds.",
+    "performance_bias": "Moderate. Ground truth annotated by the authors themselves (one doctor approval), no blinding, no inter-observer reference. Standard metrics mitigate but do not remove this. Max-vs-mean result reporting (Table 2 vs Table 3) risks optimistic selection.",
+    "reporting_bias": "Moderate-high. Loss, optimizer, hyperparameters, framework, hardware, and timing omitted; Table 3 interleaves max Dice (this paper's per-organ CV maxima) with other methods' means, inflating apparent competitiveness; left-kidney numbers inconsistent between tables."
+   }
+  },
+  "detailed_extraction": "Supplementary methodological details: (1) 2D slice-based pipeline despite 3D volumes — FCN-DecNet processes 512x512 slices; 3D structure recovered only by stacking slice probabilities and reconstructing the volume; MS-PA is the only component using volumetric context (9x9 neighborhoods across adjacent slices, 242 voxels total). (2) New unpooling: unlike Zeiler-style unpooling (zero-fill), vacancy cells are filled with the mean of the whole feature map when the max activation exceeds that mean, claimed to reduce intersubject variance in local regions; deconvolution densifies remaining vacancies. (3) MS-PA weighting: image-wise W_a = PCC(volume, atlas); organ-wise W_o = Jaccard(rough FCN organ region, atlas organ) * PCC; voxel-wise W_v = 1 - EUD/max(EUD); final voxel probability is the weighted vote over atlases (Eq. 4), with intensity likelihoods fit as Gaussian mixtures via EM and combined by Bayes rule (Eq. 5). (4) Fusion with FCN: unweighted mean of FCN-DecNet and MS-PA voxel probabilities, argmax label. (5) Reported ablation: FCN-DecNet vs FCN-8s — pixel acc 98.6 vs 98.7, mean acc 91.4 vs 80.5, mean IU 70.0 vs 69.2; headline gains are in mean accuracy (small-class sensitivity), not pixel accuracy. (6) Table 2 reports per-fold maxima (Dice 91.1/91.6/90.3), Table 3 reports mean ± SD (90.1 ± 1 / 89.0 ± 1.6 / 89.0 ± 1.3) — the abstract quotes the mean values. (7) Funded by NSFC grant 61472073; venue is a general biology/medicine journal (BioMed Research International), not a medical imaging venue; contemporary with early FCN-for-abdominal-CT work (2017), pre-dating V-Net/nnU-Net era standards. (8) Only non-contrast vs contrast protocol unspecified; kidney treated as pooled class in some tables (89.0 ± 1.3) and split into right/left in Table 3.",
+  "contribution_summary": "Proposes a two-stage coarse-to-fine model combining FCN-DecNet — a VGG-16-initialized fully convolutional network with a novel mean-filling unpooling layer, deconvolution, and multi-scale fusion (stride-8 output) — with a multiscale weighted probabilistic atlas (MS-PA) that refines the network's coarse output via image-, organ-, and voxel-level weights and Bayes-based fusion. Achieves Dice of 90.1 ± 1 (liver), 89.0 ± 1.6 (spleen), and 89.0 ± 1.3 (kidney) on a 12-patient in-house dataset with 4-fold CV, outperforming FCN-8s and atlas-only baselines of similar cohort size, though trailing methods trained on ~100 cases. Its historical value is as an early (2017) hybrid CNN+atlas approach demonstrating that FCN spatial-detail limitations can be partially compensated by probabilistic atlas priors, with primary limitations being tiny data and non-reproducible training details.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1002_mp.13620",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "418 LUMC patients for CNN training (350 train / 68 validation), far exceeding the >50 subject threshold; 14 EMC and 18 HMC patients for pipeline evaluation."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Three institutions (LUMC, EMC, HMC), three scanner vendors (Toshiba, Siemens, GE), voxel spacings, scan counts, and delineated structures all tabulated (Table I)."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Explicit: 350/68 LUMC train/validation split; EMC and HMC held out entirely as external test sets; CNN applied 'without modification' to them."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Manual delineations by radiation oncologists per cited guidelines [8,9], but number of observers, annotation protocol, and inter-observer handling not described."
+    },
+    "Q5_external_validation": {
+     "score": 2,
+     "justification": "Strong external validation on two independent datasets from different institutes and vendors, plus dosimetric validation on HMC (11 patients, 99 registrations)."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "3D U-Net variant (based on Cicek et al.) with strided convolutions replacing maxpooling, leaky ReLU, skip connections, 64,320 parameters, architecture figure provided; input constraint (divisible by 16) stated."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "Tensorflow, Adam, fixed lr 1e-4, 100k iterations, patch size 96x96x96 with balanced fg/bg sampling, resampling to 1.0x1.0x2.0 mm, GPU hardware specified; full elastix registration parameters (MI metric, ASGD, pyramid schedule, B-spline, iteration counts) given. Caveat: code release not stated."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Negative DSC loss used (cited from V-Net) but no justification for choosing it over alternatives; the registration weighting term alpha was, by contrast, empirically justified."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Thoroughly described: contrast clipping [-300, 300] HU, rectum gas pocket detection (threshold -200 HU) and inpainting (both simple fixed-value method with equation and GAN-based, compared head-to-head), torso masking, bony-anatomy initialization, largest-connected-component post-processing."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "Built on open-source elastix, but the authors' pipeline, CNN weights, and training code are not stated as publicly released."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "DSC, MSD, 95% Hausdorff Distance, geometric success rate, plus dosimetric metrics (V95%, V107%, DVH parameters V45/60/75Gy, Dmean) and runtime."
+    },
+    "Q12_statistical_analysis": {
+     "score": 1,
+     "justification": "Mean +/- SD throughout and significance markers (p=0.05, dagger in Table IV) present, but no confidence intervals, no multiple-comparison handling, and test details sparse."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Direct comparison with Qiao et al. baseline (same HMC data) and affine registration; contextual comparison with Thor, Thornqvist, Woerner (registration) and Cha, Zhou (bladder CNN) from literature."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Separate results for prostate, seminal vesicles, lymph nodes, rectum, and bladder in all tables, per dataset."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Failure analysis included: 14/99 dosimetric failures traced (7 to manual contouring inconsistencies, V95% 92.5%), two patients with bladder DSC 0.65 identified; limitations discussed (no contrast-enhanced CT support, runtime 98.3s vs 13.5s, fixed alpha)."
+    }
+   },
+   "total_score": 25,
+   "quality_rating": "High",
+   "risk_of_bias": {
+    "selection_bias": "Moderate/unclear: retrospective multi-institution cohorts; explicit patient inclusion/exclusion criteria not defined; test sets small (EMC n=14 patients / ~42 scans, HMC n=18 patients / ~162 scans; dosimetric subset n=11).",
+    "performance_bias": "Low-moderate: evaluation consistent across methods (geometric + dosimetric against manual contours), but the registration weight alpha was tuned via 'initial experiments on EMC and HMC datasets' — i.e., on the same data later used as test sets, with no held-out tuning split, risking optimistic registration results.",
+    "reporting_bias": "Low: per-organ results, failure cases, and both geometric and dosimetric outcomes reported; minor gap — the EMC alpha=0.01 experiment was noted as 'not reported'."
+   }
+  },
+  "detailed_extraction": "SCOPE NOTE FOR REVIEW: despite the review topic, this is primarily a deformable image registration paper for online adaptive IMPT contour propagation; deep learning is an auxiliary component (bladder segmentation only — no other organ is DL-segmented). Extract accordingly if the review requires pure segmentation studies. DL components: (1) 3D U-Net bladder segmentation, 64,320 params, ~2s inference/volume, DSC 85.4%+/-1.4% (LUMC validation), 82.3%+/-1.5% (EMC), 87.9%+/-1.2% (HMC); segmentation integrated into registration stage 2 as a distance-transform-based mean-squared-difference term (Eq. 3) weighted alpha=0.05 (HMC) / 0.01 (EMC), applied at coarsest resolution only to avoid bladder overfitting. (2) 2D contextual-attention GAN (Yu et al.) retrained for rectum gas inpainting (~3s/volume) — abandoned because simple inpainting (fill 60 HU, 7x7x1 dilation, 4mm Gaussian smoothing, Eq. 1) gave equivalent registration MSD, attributed to mutual information metric responding to histogram rather than texture. Registration: elastix, three stages — affine (MI, 200 it) on bony anatomy initialization with torso mask; B-spline deformable with CNN bladder term; third B-spline stage masked to dilated rectum (45x45x1 kernel) for seminal vesicles. ASGD optimizer, 3-level Gaussian pyramid (4/2/1 mm), 100 iterations final. Data: LUMC 418 pts (Toshiba, bladder+rectum labels); EMC 14 pts x 4 scans (Siemens, prostate/SV/bladder/rectum); HMC 18 pts x 8-11 scans (GE, +lymph nodes), 11 pts for dosimetric planning evaluation (Erasmus-iCycle + Astroid, SIB 74Gy/55Gy, margins 2mm prostate / 3.5mm SV+LN). Key results: MSD prostate 1.29+/-0.39 mm (HMC), 2.31+/-1.92 mm (EMC); geometric success rate (MSD<2mm) 97%/93%/87% prostate/SV/LN (HMC); dosimetric acceptance 86%/91%/99%; CSR 80% vs 65% intensity-only baseline. Runtime 98.3s/registration (CPU) vs 13.5s for baseline. Robustness shown against bladder distension (weak correlation, Fig. 7). Funding: Varian Medical Systems and ZonMw (grant 104003012).",
+  "contribution_summary": "The paper embeds a lightweight 3D U-Net bladder segmentation (64k params) as a distance-transform cost term into a three-stage elastix registration pipeline, combined with rectum gas-pocket inpainting and contrast clipping, for automatic contour propagation in online adaptive proton therapy. Validated geometrically (DSC/MSD/95%HD) and dosimetrically (IMPT plan acceptance) on two external multi-vendor datasets, it raises the Conservative Success Rate from 65% to 80%, meaning 80% of auto-generated treatment plans need no manual correction. The practical finding that a trivial fixed-value inpainting matched a retrained GAN is itself a useful negative result for the registration domain.",
+  "study_type": null
+ },
+ {
+  "paper_id": "10.1002_mp.14732",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 0,
+     "justification": "Trained with only 20 CT scans per dataset (Sliver07: 20; CHAOS: 20), well below the >50 subject threshold; relies on heavy data augmentation (interpolation to 64-256 liver slices, rotations, flips, cropping) and TTA to compensate."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Two public challenge datasets fully characterized: CHAOS (portal venous phase, healthy livers, 512x512, 77-105 slices, 0.7-0.8 mm x-y spacing, 3.0-3.2 mm slice distance) and Sliver07 (central venous phase, mostly pathological with tumors/metastases/cysts, 64-502 slices, 0.55-0.8 mm spacing, 1.0-3.0 mm slice distance)."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Clear protocol: challenge-provided splits (Sliver07: 20 train/10 organizer-held test; CHAOS: 20 train/20 organizer-held test), fivefold CV on training data with 4 images as validation for hyperparameter selection, then retraining on all training data."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Reference segmentations provided by challenge organizers and used for evaluation, but the annotation process itself (raters, protocol, inter-observer variability) is not described in the paper."
+    },
+    "Q5_external_validation": {
+     "score": 2,
+     "justification": "Test sets are independent of training data and evaluated by external third parties (Sliver07 and CHAOS challenge organizers), with results on two separate datasets."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Fully specified: 3D DenseNet encoder (growth rate 16, dense block layers 6/12/24/16, BN-ReLU-Conv(1x1x1)-BN-ReLU-Conv(3x3x3), transition layers with 1x1x1 conv + 2x2x2 avg pooling halving channels), FCN/DeepLabv3+-style decoder with single concatenation skip from dense block 2 and 4x4x4 strided upsampling, plus separate shape autoencoder with same encoder; figures and rationale (memory limits, DeepLabv3+ finding) given."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "Extensive training details: SGD, momentum 0.9, weight decay 0.0001, batch size 1, He initialization, poly LR schedule (power 0.9; autoencoder LR 1 to 0.01 over 150k iterations; SC-SegNet LR 0.1 to 0.0001 over 30k iterations), alpha annealed 100 to 0 linearly, beta=0.1, gamma=4, gradient scaling, hardware (TITAN V, Xeon E5-2686), training times (14h/30h), C++ cuda-convnet framework; identical settings across both datasets."
+    },
+    "Q8_loss_function": {
+     "score": 2,
+     "justification": "Each component explicitly motivated by shortcomings of CE (pixel-independent, imbalance-sensitive), Dice (intra-class imbalance blind), and focal loss (no pixel correlations); full ablation grid over 8 (alpha,beta,gamma) configurations (Table III) and loss-function comparison (Table IV) confirm the combined hybrid loss is best (97.71%/97.48% DSC in CV)."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Preprocessing: HU clipping (-250,250) to (0,1), axial resampling to 256x256, test-time z-resampling/padding to 256 slices, liver-centered patch cropping with z-scale 160/(pf-pi), random training interpolation to 64-256 liver slices. Postprocessing: probability thresholding, largest connected component for liver extent, TTA (rotations 90/180/270 + 3-axis flips, averaged), resampling back, largest CC + hole filling; CRF tested and rejected with quantified cost (+0.35/+0.5 score for +26.1 s)."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or trained model released; data availability statement covers public datasets only; implementation in niche C++ cuda-convnet framework further hinders reproduction."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "DSC plus VOE, RVD, ASSD, RMSD, MSSD (Sliver07) and RAVD, ASSD, MSSD (CHAOS), plus composite challenge scores - all reported with mean and std."
+    },
+    "Q12_statistical_analysis": {
+     "score": 1,
+     "justification": "Means and standard deviations reported throughout and paired Student's t-tests used to compare against Hu et al. and Al-Shaikhli et al., but the reported p-values are contradictory/erroneous: significance is claimed with 'P > 0.1' and 'P > 0.02', which does not support the stated conclusion. No confidence intervals."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Direct comparison on Sliver07 against 6 published automatic methods (Dou, Hu, Lu x2, Al-Shaikhli, Huang) achieving best VOE (4.53%), ASSD (0.70 mm), RMSD (1.54 mm), DSC (97.68%), and score (82.55) with the fewest training scans; additional cross-dataset comparison with Guo, Li, Novikov, Qin (limitations of direct comparability acknowledged)."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (liver); full per-dataset, per-metric results with standard deviations, per-fold CV results, and per-case visualizations reported; no hidden averaging."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Explicit limitations section: experimentally tuned hyperparameters (alpha, beta, gamma), sequential (non-joint) autoencoder/segmentation training due to memory limits, under-segmentation when liver is truncated at scan boundaries (CHAOS), restriction to liver only with limited datasets/phases; marginal absolute improvements over baselines candidly discussed."
+    }
+   },
+   "total_score": 24,
+   "quality_rating": "High",
+   "risk_of_bias": {
+    "selection_bias": "Low. Data drawn from two established public challenges with predefined, fixed patient cohorts and organizer-held test sets; no author-driven patient selection. Caveat: very small N (20 training scans each), CHAOS contains only healthy livers while Sliver07 is mostly pathological, limiting generalizability rather than introducing selection bias per se.",
+    "performance_bias": "Low. Test-set evaluation performed blind by external challenge organizers using standardized metrics; identical preprocessing, architecture, and hyperparameters across both datasets; ablations (loss configurations, skip connection, CRF) run under the same training protocol.",
+    "reporting_bias": "Low-moderate. All metrics including unfavorable ones reported (e.g., RAVD worsened by 0.16% vs SegNet on CHAOS; CRF outperformed the hybrid loss gain on CHAOS score); limitations openly discussed. However, the contradictory statistical reporting (claiming significance with P > 0.1 and P > 0.02) and cross-dataset comparability caveats in Table IX are reporting weaknesses."
+   }
+  },
+  "detailed_extraction": "Validation protocol: fivefold CV on training data (4 scans held out per fold for hyperparameter selection), followed by retraining on full training set; test evaluation done by Sliver07/CHAOS organizers on held-out scans. Loss composition: four mathematical terms (Eq. 4-9) collapsed into three conceptual parts - adaptively weighted CE = base CE + hard-sample-mining CE on misclassified pixels (gamma=4 weighting); edge-preserving smoothness regularizer over 5x5x5 neighborhoods with weights w_ij combining (a) exclusion of misclassified neighbors, (b) +/-1 sign for same/different labels, (c) intensity-difference measure DM (1 - |Ii-Ij|^2 for same label, |Ii-Ij|^2 for different labels); shape constraint = L2 between SC-SegNet encoder features f_le(x) and frozen shape-autoencoder encoder codes f_se(y) (alpha=100 annealed linearly to 0 during training). Ablations: all 8 (alpha,beta,gamma) combos tested (Table III, best = full combination); hybrid loss beats CE/Dice/Focal by 0.27/0.38, 0.58/0.55, 0.40/0.37 DSC points (CV); skip-connection ablation shows large drops without it (SC-SegNet 97.71->95.75, SegNet 97.44->94.04 on Sliver07 CV); CRF adds only +0.35 (Sliver07) / +0.5 (CHAOS) score at +26.1 s/scan and was rejected. Pathology robustness claim: SC-SegNet performance gap between pathological (Sliver07) and healthy (CHAOS) data is 0.12% DSC vs 0.37% for CE-only SegNet, and MSSD gap 1.19 mm vs 3.20 mm, supporting hybrid-loss benefit on small/pathological data. Focal-loss training needed LR 0.2 (performance degraded at higher LR / larger focusing parameter); Dice-loss config used LR 0.1. Shape autoencoder prone to overfitting, requiring extra augmentation (patch liver-coverage ratio >0.75 vs center-offset <8 slices for SC-SegNet). Sliver07 test scores evaluated by organizers: 82.55 +/- 3.41 (VOE 4.53+/-0.84%, RVD 0.33+/-1.72%, ASSD 0.70+/-0.14 mm, RMSD 1.54+/-0.42 mm, MSSD 17.75+/-5.85 mm, DSC 97.68+/-0.44%); CHAOS test: 83.02 +/- 5.24 (RAVD 1.62+/-1.02%, ASSD 0.83+/-0.13 mm, MSSD 16.56+/-4.93 mm, DSC 97.56+/-0.34%). Efficiency: 7-10 s/scan on TITAN V including TTA (~8.5 s avg), faster than all compared postprocessing-heavy methods (e.g., Hu et al. 135 s, Li et al. 94 s). Statistical anomaly: paired t-tests reported as 'significantly better' with P > 0.1 (vs Hu et al. 80.3) and P > 0.02 (vs Al-Shaikhli et al. 79.6) - inconsistent with standard significance thresholds. Funding: NSFC 91630311, 11801511; Zhejiang NSF LSD19H180005; Guangdong 2019A1515110206; equal contribution Tan & Mao; no conflicts; all data public. Not relevant to multi-organ review scope beyond liver-only application, but notable as a small-data (<50 scans) method with loss-engineering rather than architecture-scale contributions.",
+  "contribution_summary": "Tan et al. propose SC-SegNet, a 3D DenseNet-based encoder-decoder trained with a novel hybrid loss combining adaptively weighted cross-entropy (hard sample mining), an edge-preserving smoothness regularizer, and a high-level shape constraint derived from a pretrained 3D DenseNet liver shape autoencoder. The shape-guided loss enables accurate liver segmentation (best reported Sliver07 score of 82.55, DSC 97.68%; CHAOS score 83.02, DSC 97.56%) from only 20 training scans while eliminating time-consuming CRF/graph-cut postprocessing (8.5 s vs 90+ s per scan). Ablations demonstrate each loss component contributes, and the method shows greater robustness to pathological livers than cross-entropy training on small datasets.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1007_s11548-018-1733-7",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "124 CT volumes total with 100 used for training, comfortably exceeding the >50 subject threshold. Sufficient for a single-organ segmentation task, though modest by multi-organ standards."
+    },
+    "Q2_dataset_source": {
+     "score": 1,
+     "justification": "Source partially described: 124 volumes from several CT scanners at one hospital, with technical details (256x256/512x512 slices, 65-156 slices/volume, 0.78-2.24mm in-plane resolution, 3-5mm slice thickness). Missing: patient demographics, clinical indication/population, acquisition period, scanning protocols (e.g., contrast enhancement), and IRB specifics beyond a boilerplate ethics statement."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Random 100/24 train/validation split is described, but there is NO held-out test set. The validation set was used simultaneously for hyperparameter selection, CRF kernel grid search, AND final performance reporting. The authors candidly acknowledge results 'may be over-fitted'; this is a significant methodological weakness."
+    },
+    "Q4_ground_truth": {
+     "score": 2,
+     "justification": "Annotation process well described: manual delineation by two radiation oncologists with verification/modification by a third, more experienced radiation oncologist. Minor gaps: no description of how disagreements between the two annotators were resolved and no inter-observer agreement statistics."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external validation whatsoever. Entirely single-center, single-hospital data; no independent dataset from another institution used for evaluation. Authors acknowledge this as future work."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Architecture well described: V-net base (referenced to original paper) with explicit modifications (batch normalization after each convolutional layer), plus a detailed mathematical formulation of the 3D fully connected CRF-RNN including Gibbs energy, appearance/smoothness Gaussian kernels, Potts-initialized label compatibility, and mean-field-as-RNN formulation. GitHub code compensates for absent layer-by-layer specs."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "Excellent training detail: two-stage schedule (400 epochs CNN-only, lr=1e-4, batch=2; then 10 epochs joint fine-tuning, lr=1e-7, batch=1), SGD with weight decay 0.0005 and momentum 0.99, Gaussian weight init (std=0.01), resampling to 128x128x64, elastic deformation augmentation (50% probability, in-plane), 3 mean-field iterations, appearance kernel params by grid search, plus full hardware/software stack (Caffe, ITK 4.10, GTX 1080 Ti) and public code."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "Pixel-wise cross-entropy loss is stated but never justified. Notably, the original V-net uses a Dice-based loss, and the authors silently switched to cross-entropy without discussion, despite class imbalance considerations relevant to organ segmentation."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Pre- and post-processing thoroughly described with rationale: dual-channel density filter (formula given, wl=1030, ww=20), intensity rescaling to [0,1], resampling specs, augmentation strategy, and the in-network CRF-RNN refinement explicitly contrasted with offline CRF post-processing in a dedicated ablation."
+    },
+    "Q10_code_availability": {
+     "score": 2,
+     "justification": "Full implementation publicly available on GitHub (https://github.com/superxuang/caffe_3d_crf_rnn), explicitly stated in the paper as a reproducibility measure."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Five complementary metrics reported: DSC (primary), VOE, RVD, ASD, MSD, plus computational efficiency (segmentation time per volume). This is a comprehensive standard metric suite for segmentation."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No statistical analysis of any kind: no confidence intervals, standard deviations, p-values, or significance tests. Only point estimates (presumably means over the 24 validation volumes) are reported; even averaging methodology is not explicitly stated."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Compared against V-net, fairly reimplemented and retrained on identical data, plus extensive ablations. However, only a single baseline is used ('methods' plural not satisfied), no comparison with other published bladder segmentation approaches (DL or traditional), and a minor inconsistency exists (V-net DSC 84.12% in Table 1 vs 83.57% in Table 2)."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (bladder), so reported results are inherently per-organ with no cross-organ averaging to obscure detail. Caveat: no per-case or distribution-level results (best/worst DSC quantified), only cohort averages; the worst case is shown visually but not numerically."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Candid, thorough limitations discussion: false positives from soft-tissue/tumors with bladder-like density amplified by CRF long-range connections and dual-channel preprocessing; explicit admission of possible overfitting to the validation set; GPU memory constraints; slower inference (5.4s vs 0.9s); worst-case case visualization (Fig. 6); clear future work plan."
+    }
+   },
+   "total_score": 21,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Moderate-to-high risk. Retrospective, single-center convenience sample of 124 CT volumes; no inclusion/exclusion criteria, patient demographics, or clinical characteristics reported; method of volume selection (consecutive vs. convenience) undefined. Random train/validation split mitigates but does not eliminate concerns about generalizability.",
+    "performance_bias": "Moderate risk. The same 24-volume validation set served for hyperparameter tuning, CRF kernel grid search, model selection, AND final evaluation, with no held-out test set — authors themselves acknowledge results may be optimistic. Mitigating factors: all compared methods trained/evaluated under identical conditions, and the baseline was reimplemented along original authors' lines.",
+    "reporting_bias": "Low risk. All five metrics plus timing reported for the main comparison and every ablation configuration; failures and worst-case cases shown; limitations openly discussed. Only incompleteness is the absence of variance estimates/CIs, which limits but does not indicate selective reporting."
+   }
+  },
+  "detailed_extraction": "SUPPLEMENTARY DETAILS NOT IN PRIOR EXTRACTION:\n\n(1) Density filter formula: D_i = exp(-((I_i - w_l)/w_w)^2) with w_l=1030, w_w=20 (values tuned for bladder); voxel intensities rescaled to [0,1] after filtering — the dual channel preserves original CT detail that the filter discards.\n\n(2) CRF-RNN configuration: appearance kernel parameters (theta_alpha, theta_beta, omega_1) determined by grid search on validation set; smoothness kernel fixed at theta_gamma=1, omega_2=1 (per Krahenbuhl & Koltun recommendation, reported as not directly impacting accuracy); trainable parameters are kernel weights omega_1, omega_2 and label compatibility mu (Potts-initialized), learned via backpropagation; 3 mean-field iterations in BOTH training and inference.\n\n(3) Weight initialization: all layers from zero-mean Gaussian, std=0.01.\n\n(4) Loss detail: pixel-wise cross-entropy — NOT the Dice loss of the original V-net paper; the switch is unjustified (scoring rationale for Q8).\n\n(5) Complete ablation results (DSC%/VOE%/RVD%/ASD mm/MSD mm): V-net 83.57/28.23/-3.25/3.48/28.37; Dual-channel+V-net 91.35/15.92/-7.96/1.93/43.60; V-net+BN 84.13/27.40/-7.70/3.45/32.56; Dual-channel+CNN 91.90/14.99/-2.98/2.19/67.68; CNN+3D CRF-RNN (no dual-channel) 88.39/20.80/-2.68/2.72/30.00; CNN+offline 3D CRF post-processing 87.81/21.72/-3.81/2.86/34.99; Full approach 92.24/14.41/-3.40/2.02/67.68.\n\n(6) Key ablation findings: dual-channel preprocessing is the dominant contributor (~+8 DSC points); batch normalization accelerates convergence but yields negligible accuracy gain (84.13 vs 83.57); CRF-RNN adds ~+4.8 DSC without dual-channel; joint end-to-end CRF-RNN training beats offline CRF post-processing (88.39 vs 87.81), supporting the integrated design.\n\n(7) Baseline inconsistency: V-net DSC reported as 84.12% in Table 1 but 83.57% in Table 2 (unexplained; possibly different runs/initializations).\n\n(8) MSD caveat: full approach MSD (67.68 mm) is WORSE than V-net (28.37 mm) despite better average metrics, and equals the dual-channel+CNN MSD — indicating the worst-case outliers (false positives from similar-density tissue) originate from the dual-channel+CNN components and that average metrics mask tail failures. Dual-channel+V-net also shows high volume bias (RVD -7.96%).\n\n(9) Dataset annotation: masks delineated by two radiation oncologists, verified/modified by a third more senior radiation oncologist; dataset built because no public bladder CT segmentation dataset existed at the time.\n\n(10) Claimed novelty: first application of 3D fully connected CRF-RNN in medical image processing (extension of Zheng et al.'s 2D CRF-RNN for RGB natural images).\n\n(11) Implementation environment: Caffe + Insight Toolkits 4.10 on Windows 7 64-bit; Intel i7-5960X @3.00GHz; NVIDIA GTX 1080 Ti 11GB (memory limits forced 128x128x64 input and batch sizes of 2/1).\n\n(12) Qualitative note: authors observe some predicted contours are closer to true bladder boundaries than the manual ground truth itself (penalized by the metrics); jagged edges from CRF smoothness constraints slightly reduce visual quality.\n\n(13) Ethics/funding: 'formal consent is not required' (no IRB details); funded by National Key R&D Program of China (2017YFC0113100) and NSFC (61601012); no declared conflicts of interest.\n\n(14) Evaluation detail: all metrics computed on the 24-volume validation set; average per-volume segmentation time reported (5.4s full pipeline vs 0.9s V-net).",
+  "contribution_summary": "This paper presents the first application of a 3D fully connected CRF-RNN in medical image segmentation, integrated end-to-end with a batch-normalized V-net CNN and combined with a novel dual-channel preprocessing scheme (original CT stacked with a density-filtered, bladder-enhanced map) for bladder segmentation in CT. On a private 124-volume single-center clinical dataset (no held-out test set), it achieves DSC 92.24%, outperforming the reimplemented V-net baseline by 8.12 points, with ablations showing dual-channel preprocessing as the largest contributor and joint CRF-RNN training superior to offline CRF post-processing. The main caveats are the absence of external validation, evaluation on the tuning/validation set, and worsened maximum surface distance due to false positives from bladder-like-density tissues.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1016_j.neucom.2022.07.024",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 1,
+     "justification": "Partial. Total cohort across the three benchmarks is 60 CT volumes (>50), but no single training run exceeds 50 subjects: leave-one-out training uses 19 volumes per dataset (90/10 split of augmented data) and the largest training set (MICCAI Sliver07 + 3D-IRCADb combined for cross-dataset testing) contains only 40 volumes. The paper explicitly designs for this small-data regime (augmentation, compact network) but does not meet the >50 training-subject threshold."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Excellent. All three public datasets (MICCAI Sliver07, 3D-IRCADb, VISCERAL Anatomy3) are thoroughly characterized: number of volumes, contrast phase (portal/venous), pathology prevalence (mostly pathological in Sliver07; 75% tumor-bearing in IRCADb; non-pathological in VISCERAL subset), slice counts (64-394 / 74-260), in-plane (0.56-0.87 mm) and inter-slice (0.7-5.0 mm) resolutions, scanner variety, and field-of-view differences (VISCERAL includes thorax)."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Clear and explicit: leave-one-out on Sliver07 and 3D-IRCADb (each volume tested once); augmented training sets randomly split 90% train / 10% validation; VISCERAL (20 volumes) used strictly as an unseen external test set. Model selection criterion (weights from epoch with best validation DSC) also specified."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Partial. Ground truths are expert manual segmentations from the public benchmarks, and the annotation convention is stated (entire liver tissue including all internal structures: vessels, tumors, cirrhosis). However, no annotation protocol details are provided (number of raters, segmentation tools, inter-rater agreement, arbitration of disagreements)."
+    },
+    "Q5_external_validation": {
+     "score": 2,
+     "justification": "Yes. The model trained only on Sliver07 + 3D-IRCADb was evaluated on the fully unseen VISCERAL Anatomy3 set (DSC 0.922) with an explicit generalization analysis against both an external LiTS-trained 3D U-Net (He et al., DSC 0.907) and VISCERAL-trained methods (DSC 0.853-0.939). This is genuine cross-dataset external validation, rare for small-dataset studies."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Fully described with figures: 3D RP-UNet replaces 3D U-Net skip connections with ResPaths (3/2/1 conv blocks; 64/128/256 feature maps; 3x3x3 convolutions with 1x1x1 residual connections, adapted from MultiResUNet), uses upsampling instead of up-convolution, dropout p=0.2, batch normalization deliberately omitted for GPU memory, decoder feature maps 256/128/64, and total parameter count (~17.7M) reported and contrasted with competitors (e.g., H-DenseUNet >200M)."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Partial. Most algorithmic details are given: Adam, lr 1e-4, 100 epochs (165 for ablation, 18 steps/epoch), batch size 1 volume, augmentation parameters (rotation 5-75 deg, shear 5-20 deg, scaling 80-120%, axial only), supervoxel count Nd=410, threshold 0.5, and full pre/postprocessing parameters. However, the deep learning library is not named, GPU hardware is unspecified (only CPU/RAM for timing), random seeds and the number of augmented copies per volume are not stated, preventing exact replication."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "The loss (BCE combined with DSC, both monitored per epoch) is clearly specified and a sound checkpointing strategy is used (weights from best validation DSC), but no explicit justification or rationale is ever provided for choosing this loss combination over alternatives (e.g., class imbalance handling, boundary sensitivity)."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Outstanding detail, a strength of the paper. Preprocessing: HU-max rescaling to 16-bit, resampling to 128x128x64, median filtering, spine detection via axial MIP of bone mask with 180-degree rotation correction, PDF-based intensity thresholding on the upper quadrant with high/low-contrast scan classification, exclusion of voxels <500, cavity filling, morphological opening, largest connected component, dilation, 3D SLIC supervoxels (Matlab superpixels3, Nd=410, actual Na in [250,350]) to recover boundary vessels/lesions, final contrast rescaling. Postprocessing: 0.5 thresholding, air-mask lung segmentation with 3-class component filtering, gradient-based per-slice liver-heart separating surface with inter-slice averaging, largest CC, morphological closing, constraint to original probability map, axial cavity filling. A dedicated preprocessing ablation (Table 4) quantifies its contribution (DSC 0.950 vs 0.936)."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code, model weights, or repository link provided. Paper is open access (CC BY-NC-ND) but the implementation (Matlab + Python) is not released."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Six standard metrics reported with formal definitions: DSC, volumetric overlap error (VOE), relative volume difference (RVD), average symmetric surface distance (ASD), root-mean-square symmetric surface distance (RMSSD), and maximum symmetric surface distance (MaxD)."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No statistical analysis: only dataset-level means are reported, with no confidence intervals, p-values, or standard deviations in the comparison tables. The ablation averaged 10 training runs per model (shown as curves) but without variance estimates or significance testing. Absolute improvements over some competitors (e.g., DSC 0.964 vs 0.973 for Esfandiarkhani & Foruzan on Sliver07) cannot be assessed for significance, particularly with n=20 leave-one-out cases."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Extensive: ~20 published methods compared across Sliver07 (Table 2) and 3D-IRCADb (Table 3) spanning classical (graph cut, active shape, multi-atlas), CNN, and hybrid approaches, plus a generalization comparison on VISCERAL (Table 5) including a LiTS-trained external model, and internal ablations against three 3D U-Net variants (Table 1) and a simpler preprocessing (Table 4). Caveat acknowledged: competitor numbers are transcribed from original publications under potentially differing protocols (some marked as evaluated on few cases), and fair comparison with transformer models trained on BTCV/MSD was not possible."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Trivially satisfied: single-organ study (liver), so no cross-organ averaging can mask performance. Results are broken out per benchmark (Sliver07 0.964, 3D-IRCADb 0.945, VISCERAL 0.922) rather than pooled, and the worst-case volume is explicitly quantified (DSC 0.923, VOE 14.239, RVD -11.166). Minor limitation: no full per-case distributions (mean/min/max/std) are tabulated."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Thorough failure analysis with illustrative figures: preprocessing errors (large lesion removed in 1/60 cases; small boundary tissue removed in 5/60; intra-liver intensity variation amplified), segmentation errors (border-adjacent tumor undersegmentation, liver-heart separation failures, vessel inclusion via axial cavity filling, missed two-part liver), quantified worst case (DSC 0.923, RVD -11.166), and discussion-level limitations (GPU-memory-constrained model size, slightly weaker unseen-data performance vs. VISCERAL-trained methods, small heterogeneous evaluation sets) plus concrete future work."
+    }
+   },
+   "total_score": 21,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-to-moderate. All data derive from well-characterized public benchmarks (MICCAI Sliver07, 3D-IRCADb, VISCERAL Anatomy3) with defined acquisition properties, limiting arbitrary case selection, and leave-one-out ensures every case is tested. Concerns: very small cohorts (n=20 per benchmark), VISCERAL subsampled to 20 of 79 available contrast-enhanced volumes with limited stated rationale, and differing case mix across benchmarks (mostly pathological Sliver07/IRCADb vs non-pathological VISCERAL subset); no patient-level inclusion/exclusion criteria are reported.",
+    "performance_bias": "Low for internally generated results: one fixed, fully automated pipeline was applied uniformly, scored against expert manual ground truth using six standard symmetric metrics under a consistent leave-one-out protocol, with fixed hyperparameters throughout. Moderate concern for the comparative tables: state-of-the-art values are transcribed from original publications that may have used different case subsets, preprocessing, or evaluation implementations (the authors themselves flag some entries as evaluated 'only on a few data'), so cross-study comparisons are indicative rather than controlled.",
+    "reporting_bias": "Low. All six metrics are reported for every evaluated dataset, both ablations (architecture and preprocessing) are included, and unfavorable findings are explicitly disclosed (worst-case metrics, preprocessing failure rates, undersegmentation tendency indicated by negative RVD, weaker generalization than VISCERAL-trained methods). The absence of variance estimates and code release limits reproducibility but does not indicate selective outcome reporting."
+   }
+  },
+  "detailed_extraction": "SUPPLEMENTARY METHODOLOGICAL DETAILS (beyond previously extracted data):\n\nABLATION STUDY (Sec 3.4, Table 1): Four variants trained 10x each on 18 MICCAI Sliver07 volumes (2 held-out test volumes: test1/test2) with minimal preprocessing (resample 128x128x64, normalize to [-128,128]); 165 epochs x 18 steps, Adam lr 1e-4, batch 1. Parameter counts: original 3D U-Net = 19,078,337 (incl. 4,672 non-trainable); w/o upconvolution = 16,315,585; w/o upconv + BN; 3D RP-UNet = 17,699,137 (all trainable). 3D RP-UNet converged fastest with lowest validation loss; on test2 it substantially outperformed on RVD (-0.55 vs 5.07), RMSSD (1.61 vs 2.34) and MaxD (14.96 vs 24.66) relative to the BN variant. Ablation performed WITHOUT the full pre/postprocessing to isolate architecture effects.\n\nPREPROCESSING ABLATION (Table 4): RP-UNet without postprocessing or augmentation, trained only on Sliver07: proposed preprocessing DSC 0.950 / VOE 9.434 / ASD 0.627 vs simpler anisotropic-diffusion preprocessing (ref [52]) DSC 0.936 / VOE 11.809 / ASD 0.778.\n\nPREPROCESSING FAILURE RATES: 1/60 extreme case (large lesion with distinct intensity adjacent to boundary removed); 5/60 cases with small boundary liver tissue removed; intra-liver intensity variation amplified in preprocessed input (complicates segmentation).\n\nLIVER-HEART SEPARATION ALGORITHM: air-filled component mask via thresholding; 3D components classified as border-connected (left/right/bottom), floating, or other; first two classes eliminated, remainder taken as lung mask; per-coronal-slice curve grown from rightmost point of patient's left lobe to leftmost point of right lobe by following largest local gradient; curves averaged across neighboring slices for a smooth separating surface; all voxels above surface zeroed.\n\nORIENTATION HANDLING: liver assumed in upper half of volume; spine located via axial MIP of bone mask; if spine appears on left, volume rotated 180 degrees.\n\nPDF THRESHOLDING: computed on the selected upper quadrant; voxels <500 excluded; scans classified as high-contrast (multi-peak PDF, second peak = liver range) or low-contrast (single peak); threshold boundaries set at peak location/half-height.\n\nTRAINING PROTOCOL: per-epoch monitoring of both DSC and BCE; weights from epoch with best VALIDATION DSC used for all reported evaluations; augmented leave-one-out training sets randomly split 90/10 train/validation; batch = 1 whole volume; 100 epochs for main experiments.\n\nDATA AUGMENTATION: axial-plane only: rotation 5-75 deg, random shearing 5-20 deg, scaling 80-120% of original size.\n\nGROUND TRUTH CONVENTION: liver region defined to include entire liver tissue and all internal structures (vessels, tumors, cirrhosis); expert annotations inherited from public benchmarks; no rater/inter-observer details.\n\nTIMING BREAKDOWN: preprocessing 8.4 s + prediction 6.2 s + postprocessing 1.2 s = ~15.8 s/volume on Intel Core i9-9900 @3.60 GHz, 64 GB RAM (GPU unspecified). Comparators cited: H-DenseUNet 30-200 s; SAR-U-Net 68 s; shape-model methods 45 s to >16 min.\n\nGENERALIZATION CONTEXT (Table 5): proposed method (trained on Sliver07+IRCADb, 40 vols) DSC 0.922 on VISCERAL vs He et al. 2021 3D U-Net trained on LiTS (130 vols) DSC 0.907; VISCERAL-trained baselines: Blendowski 0.853, Gass 0.908, Kechichian 0.933, He 2015 0.933, Oliveira 0.939.\n\nWORST-CASE ANALYSIS (Fig 15): Sliver07 volume with large border tumor: DSC 0.923, VOE 14.239, RVD -11.166; errors = undetected border tumor, inaccuracy near hepatic arteries, merged two-part liver, amplified intra-liver intensity heterogeneity.\n\nCOMPARISON CAVEATS: SOTA numbers compiled from original publications; some entries evaluated on subsets (marked *); no direct comparison possible with transformer models on BTCV/MSD (trained on large annotated data) - authors position their method for the small-database regime instead.\n\nPUBLICATION DETAILS: open access CC BY-NC-ND; funding: Hungarian AI National Laboratory Program (NRDI) and Janos Bolyai Research Scholarship; no competing interests declared; no code/model release.",
+  "contribution_summary": "The paper introduces 3D RP-UNet, a compact (~17.7M-parameter) 3D U-Net variant that embeds MultiResUNet-style ResPath skip connections (3x3x3 convolutions with 1x1x1 residual shortcuts) into a one-step volumetric pipeline, wrapped in a carefully engineered classical+deep hybrid: PDF- and 3D-supervoxel-based preprocessing that isolates the liver region, and postprocessing with a lung-mask-driven liver-heart separating surface and morphological refinement. Designed explicitly for small, heterogeneous datasets, it achieves DSC 0.964 (MICCAI Sliver07) and 0.945 (3D-IRCADb) under leave-one-out evaluation, and demonstrates cross-dataset generalization on the unseen VISCERAL Anatomy3 set (DSC 0.922, exceeding a LiTS-trained 3D U-Net) at ~15.8 s per volume. The key contribution is evidence that a fully 3D, end-to-end approach with strong domain-specific pre/postprocessing can match or surpass state-of-the-art liver segmentation where large training corpora are unavailable.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1088_1361-6560_61_24_8676",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "109 CT volumes for CNN training (>50 threshold); 42 volumes for testing across two sources."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Two sources clearly described: public Sliver07 (20 GT + 10 online-testing volumes, scanner/spacing/slice-thickness ranges given) and 121 local hospital volumes (phase, dimensions, spacing given). Most Sliver07 subjects pathologic (metastases, tumors, cysts)."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Train (109 local, 'randomly selected') and test (12 local + 30 Sliver07) explicitly defined, but no validation set or cross-validation; threshold analysis (Fig. 10) and parameter tuning touched the 32 testing volumes, blurring the train/test boundary."
+    },
+    "Q4_ground_truth": {
+     "score": 2,
+     "justification": "Training labels: semiautomatic tool (Peng et al 2014b) by trained technicians, approved/revised by experienced radiologists. Local test labels: radiologist slice-by-slice delineation. Sliver07 GT provided by challenge."
+    },
+    "Q5_external_validation": {
+     "score": 2,
+     "justification": "Sliver07-II evaluated online by challenge organizers against withheld GT (genuinely external, unblinded-to-authors evaluation); results replicated across two independent cohorts (public vs. local hospitals) with no significant difference (Mann-Whitney, p>0.05 except RMSD)."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Full layer-by-layer specification in Table 1 (input/output dims, filter sizes, strides, padding) for the 11-layer 3D CNN; PReLU activation, Krizhevsky-style 4-GPU parallelization (Conv3-Conv7), Doublesize layers, logistic regression output all specified."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Framework (cuda-convnet), hardware (4x GTX 980, Xeon E5-2680), 70 epochs (~17h, converged ~epoch 40), and all refinement parameters given; but learning rate, batch size, weight-decay value, and weight initialization are unspecified."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Cross-entropy with weight decay stated with only a one-line rationale ('added to avoid overfitting'); the refinement energy terms (region statistics, shape prior, weighted TV) are well motivated, but the CNN loss itself is standard and unexamined."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Thoroughly described: normalization to 279 slices, crop to 496x496x279, probability output range [0.1,0.9] with zero-fill outside block, downsampling to 256x256 for refinement; postprocessing (morphological closing, cavity filling, vessel inclusion) matched to Sliver07 convention; all parameter values listed with sensitivity analysis."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model released; only third-party dependencies named (cuda-convnet, Yuan et al GPU max-flow code)."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Six metrics: VOE, RVD, ASD, RMSD, MSD, DSC, plus the composite Sliver07 score."
+    },
+    "Q12_statistical_analysis": {
+     "score": 2,
+     "justification": "Mean ± SD for all metrics and per-case results (Table 2); Mann-Whitney U-tests between data cohorts; paired t-tests vs 3D CNN-GC (p<0.05); parameter sensitivity analysis. Confidence intervals not reported."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Compared against 7 automatic state-of-the-art methods on Sliver07-II (Table 6, with box plots); direct head-to-head vs the closest CNN method (3D CNN-GC, Lu et al 2015) on 29 cases; plus ablation of model terms (Fig. 9)."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (liver only), so per-organ = the reported liver results; reported per-case (Table 2) and per-dataset (Tables 3-4), not only as a global average."
+    },
+    "Q15_limitations": {
+     "score": 0,
+     "justification": "No explicit limitations discussed in the available text (paper truncated after section 5.3); parameter stability is framed as robustness, not as a limitation. Liver-specific fixed input sizing (279 slices) is an implicit limitation never acknowledged."
+    }
+   },
+   "total_score": 23,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-to-moderate. Training volumes were 'randomly selected' from the 121 local volumes, but the local cohort's inclusion criteria, scanner distribution, and patient demographics are unreported; Sliver07 selection is fully defined by the challenge protocol.",
+    "performance_bias": "Low. Sliver07-II was scored centrally by challenge organizers against hidden ground truth, and standardized Sliver07 metrics were used across all cohorts. Minor concern: threshold selection (Fig. 10) and parameter analysis involved the 32 testing volumes, so some tuning touched test data.",
+    "reporting_bias": "Low. All five Sliver07 metrics, DSC, per-case results, and even a competitor's complete failure (case #05) are reported; the comparison restricted to methods 'with available references' is disclosed. No limitations subsection, but no evidence of suppressed unfavorable outcomes."
+   }
+  },
+  "detailed_extraction": "CNN detail: PReLU after every convolution; output probability values constrained to [0.1,0.9]. Prior usage: thresholded map (t=0.5) serves double duty as initialization and shape prior; prior shrunk/dilated 5 voxels via signed distance function to estimate foreground/background PDFs, background estimated only in a narrow band. Data term: features = intensity + LBP + local variance; region appearance distance via L1 Wasserstein distance to reference appearance, normalized to |P-mu_ref|/tau_ref. Local prior: abnormal-liver candidates S_c = voxels with p_in below (mean - std) near the initial surface; Parzen Gaussian-kernel density (width eta=4) estimated in window W(x)=17x17x5 intersected with initial liver region; appearance-distance potential set to 0 inside abnormal region S. Optimization: continuous max-flow (Yuan et al 2010/2012), fully time-implicit surface propagation, time gap h=10; edge function g(x)=1/(1+0.2|grad I|^2); spatially varying weights lambda_i(x)=alpha_i*g(x). Runtime breakdown per volume: 3s CNN, 105s data-term (MATLAB), 25s max-flow, 2s other = ~135s total. Sensitivity: initial-segmentation DSC 93.45±3.52% at t=0.5 on testing (stable for t in [0.4,0.6]); final score stable for alpha1 in [36,80], alpha2 in [20,40], gamma/sigma in [0.005,0.020]. Ablation: score rises monotonically from CNN-only -> global data term (no prior) -> +prior constraint (=3D CNN-GC formulation) -> full local-prior model; local-prior improvement significant (p<0.05) on unhealthy livers. Failure handling: case #05 (rotated liver, poor CNN prior) recovered by their refinement where 3D CNN-GC failed. Cohort statistics: Sliver07 vs non-Sliver07 differed only on RMSD (p=0.042); healthy vs non-healthy showed no significant difference on any metric. Reference semiautomatic methods (Maklad 2013, Peng 2014b/2015) reportedly score higher on Sliver07 but require user interaction.",
+  "contribution_summary": "Proposes a two-stage hybrid framework in which an 11-layer 3D CNN learns a subject-specific liver probability map that serves simultaneously as initialization and shape prior for a globally optimized (continuous max-flow) variational surface-evolution model. The key novelty is a data term that adaptively switches between global intensity/appearance statistics and local nonparametric (Parzen) estimates in detected abnormal regions, handling tumors and intrahepatic vessels without explicit region separation. Achieves Sliver07 online score of 80.3±4.5 (DSC 97.25±0.65%) at ~135 s/volume, outperforming 3D CNN-GC significantly (p<0.05), particularly on heterogeneous and shape-variant livers.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1088_1361-6560_ab59a4",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 0,
+     "justification": "35 training images per fold (<50 threshold; 40 total pseudo-contrast + 10 real low-contrast test). Augmentation (voxel shifts ±1/±3/±5) and 8-repeat cross-validation mitigate but do not meet the >50-subject criterion. This is the pivotal item: a lenient read (preclinical data, augmentation) would score 1 and lift the paper to 24/High."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Fully described: Crump Institute UCLA database (Stout et al. 2005), Siemens MicroCAT II scanner, 70 kVp / 500 mAs / 2.0 mm Al filtration, 0.20 mm voxel, 256×256×496 array, Fenestra LC contrast agent."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Split described (5 test / 35 train, repeated 8 times), but no separate validation set is reported; hyperparameters were 'empirically fine-tuned' without stating on which data — possible tuning-on-test leakage."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "GT manually segmented by a single expert of mouse anatomy on contrast-enhanced images. No second reader, no inter-rater agreement, no annotation protocol or tooling described."
+    },
+    "Q5_external_validation": {
+     "score": 1,
+     "justification": "10 real low-contrast images are independent subjects (one acquired on a different homemade scanner, different config), i.e., domain-shift testing — but same institution and evaluated only qualitatively (no quantitative metrics), so not true external validation."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "Complete: 12-layer 3D FCN, 3×3×3 kernels, stride-2 downsampling, BN+ReLU, auxiliary deconvolutional deep-supervision branches, two-stage global→local workflow, with structure and workflow figures."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "All training details reported: SGD, lr 0.01 (poly decay p=0.9), weight decay 0.005, momentum 0.9, batch size 1, 30000 iterations, α init 0.3/0.4 decayed 5%/10 epochs, Gaussian init, augmentation scheme, 3D CAFFE, hardware (3× P40, ~30 h/session). Plus public code."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Deep supervision well motivated (anatomical priors, mitigates gradient vanishing). But softmax cross-entropy itself is not justified against alternatives; paper explicitly identifies small-organ class imbalance as a challenge yet does not consider Dice/weighted losses."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Fully described: torso crop, 96×96×96 resampling, [0,1] normalization, pseudo-low-contrast synthesis (μ∈(200,800)); postprocessing: 0.01 threshold, largest connected component. Caveat: μ manually adjusted per organ per subject — subjective step, weakly reproducible (training-time only)."
+    },
+    "Q10_code_availability": {
+     "score": 2,
+     "justification": "Code/models released: https://github.com/DlutMedimgGroup/MouseCTSegmentation"
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Four metrics with formulas: Dice, recovery coefficient (volume), precision, recall — each tied to a downstream preclinical use case (dosimetry, tracer uptake ROI)."
+    },
+    "Q12_statistical_analysis": {
+     "score": 1,
+     "justification": "Mean±std in Table 1 and box plots across 8 CV repeats, but no p-values, confidence intervals, or significance tests for any comparison; RC/precision/recall have no numeric values in text."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Ablation baselines (FCN w/o deep supervision, 3D DSN w/o two-stage) plus SOTA: SSM atlas registration (best prior mouse method, authors' own) and Dense V-net, all on identical test data."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Per-organ Dice±std for all six organs (Table 1); per-organ qualitative figures for both pseudo and real low-contrast images."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Explicit: pseudo vs real performance gap, generalizability across scanners/protocols/animal sizes/postures, empirically tuned parameters; concrete remediation plans (phantom-based synthesis, paired pre/post-contrast acquisition)."
+    }
+   },
+   "total_score": 23,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low–moderate. Images 'randomly selected' from a single institutional database; no inclusion/exclusion criteria, strain, weight, or health status reported; single-center preclinical cohort.",
+    "performance_bias": "Low–moderate. All methods evaluated on identical test data against the same GT, but GT from a single unblinded expert and the comparator SSM is the authors' own prior method — potential annotator/assessment bias.",
+    "reporting_bias": "Moderate. The clinically relevant condition (real low-contrast images) is reported qualitatively only — no Dice/RC/precision/recall on the 10 real images; precision/recall/RC shown only as box plots without numeric values; per-fold results of the 8 repeats not tabulated."
+   }
+  },
+  "detailed_extraction": "Supplementary details not in prior extraction — Acquisition: Siemens MicroCAT II, 70 kVp, 500 mAs, 2.0 mm Al filtration, 0.20 mm voxels, 256×256×496; Fenestra LC (ART, Montreal) contrast enhancing liver/spleen/kidneys. Secondary test config: homemade micro-CT, 0.13 mm voxels, 50 kVp, 20.2 mAs, 1.0 mm Al — used for one real-image test including a matched pre/post-contrast pair of the same subject in the same posture (predictions on pre-contrast agreed with post-contrast organ regions), supporting cross-scanner robustness. Pseudo-low-contrast synthesis: μ manually adjusted per organ per subject because enhancement was inconsistent across organs/subjects — feasible only with paired contrast data, adds an unverifiable subjective step to training-data creation; not needed at inference. Split nuance: '5 test / 35 train repeated 8 times' is repeat-random sampling, not standard disjoint k-fold; fixed 30000 iterations, no early stopping/validation set. One real test subject carried a large shoulder tumor xenograft; segmentation remained reasonable (single robustness anecdote). Class imbalance for small organs addressed architecturally (two-stage refinement) rather than via loss reweighting. Efficiency: <2 s/image (both stages) vs 4–5 min for SSM (~150×); ~30 h training on 3× P40. Reviewer note: total 23/30 is borderline — the rating flips to High (24) if Q1 is scored leniently for preclinical-scale data; recommendation for the review: apply the >50 rule consistently across preclinical studies and state this convention in the protocol.",
+  "contribution_summary": "One of the first deep learning approaches to multi-organ segmentation in non-contrast (low-contrast) mouse micro-CT, transferring anatomical priors learned from contrast-enhanced images via pseudo-low-contrast training data and deep supervision, with a two-stage global-to-local refinement showing that localized single-organ prediction outperforms global multi-organ prediction. TS-DSN improved Dice over SSM atlas registration on abdominal organs by 18–26% (spleen +26%, left kidney +18%) while running ~150× faster (<2 s vs 4–5 min per image). The approach potentially removes the need for contrast agents and high X-ray dose in preclinical micro-CT workflows, though real low-contrast accuracy remains below pseudo-data accuracy and only qualitatively characterized.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1109_embc46164.2021.9629671",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 1,
+     "justification": "Two separate single-organ models: spleen trained on only 41 scans (below 50 threshold) with 9-test; liver adequate at 103 train / 28 test. Test sets small."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Private spleen dataset attributed to Shiga University of Medical Science Hospital with ethics approval stated; liver from public MICCAI 2017 LiTS. Voxel resolution and slice spacing ranges reported for both."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Fixed train/test counts given (41/9, 103/28) and 5-fold CV mentioned for final scores, but the relationship between the fixed split and the CV folds is never explained, and no validation set for hyperparameter tuning is described."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Only states organs were 'labeled by experienced doctors'. No annotation protocol, tool, rater count, or inter-rater agreement reported."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "Each model trained and tested on its own single dataset; no independent external cohort."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "MCE well specified (fusion equations Fs1/Fs2, fixed 36 channels, trilinear alignment) and residual block described (Conv3D+InstanceNorm+ReLU, 3x3x3). But overall backbone depth, decoder layout, and block counts live only in figures; channel plan 36→72→144 inferred from Fig 1; no parameter count."
+    },
+    "Q7_reproducibility": {
+     "score": 0,
+     "justification": "Optimizer, learning rate, batch size, epochs/iterations, patching strategy, data augmentation, framework, and GPU all unreported. Only preprocessing and random weight initialization given."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Dice loss defined with smoothness term plus explicit gradient derivation (Eq. 1-2), but no rationale for choosing Dice over alternatives (CE, combo losses)."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Full pipeline described: HU truncation, per-dataset resampling (2.0x2.0x2.0 spleen; 2.0x2.0x5.0 liver), [0,1] normalization, and explicitly no post-processing. Caveat: HU window printed as [200, 250], almost certainly a typo for [-200, 250]."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release, no URL."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Dice, VOE, Jaccard, and per-volume inference time, all reported per organ and per method."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "Only fold-averaged point estimates. No standard deviations, confidence intervals, or significance tests despite 5-fold CV and small test sets."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Compares 3D U-Net, V-Net, VoxResNet, 3D DSD-FCN, MultiResUNet plus internal ablation (ResU-Net vs +MCE), all retrained by authors under a unified 5-fold CV protocol with each method's original loss. Deducted nothing for re-implementation nature, though results are not from original papers."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Spleen and liver reported separately across all metrics and all methods (Tables I-II)."
+    },
+    "Q15_limitations": {
+     "score": 0,
+     "justification": "Conclusions state 'Some limitations are presented to optimize future work' but never enumerate any. No failure-case analysis despite qualitative TP/FP/FN visualizations in Fig. 5."
+    }
+   },
+   "total_score": 15,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Unclear risk. Inclusion/exclusion criteria for the private 50-scan spleen cohort are unreported (no scanning protocol, patient demographics, or consecutive-vs-convenience sampling statement); LiTS arm is public and better defined.",
+    "performance_bias": "Low-to-unclear risk. Automatic metrics applied identically across all methods under a unified 5-fold CV protocol with no post-processing for anyone; however, all baselines are author re-implementations on the authors' own splits, and no human/blinded assessment occurred.",
+    "reporting_bias": "High risk. Only fold-average point estimates reported (no variance), limitations are declared but omitted, no failure cases discussed, and speed results — a metric favoring the proposed method — are prominently reported while statistical support is absent."
+   }
+  },
+  "detailed_extraction": "Evaluation protocol: all five baselines retrained by the authors on identical splits with each method's original loss function, single-model prediction, no post-processing, 5-fold CV averages for everything including timing. Ablation (Table I): light 3D ResU-Net alone scores Dice 0.877/0.927 (spleen/liver); adding MCE yields 0.911/0.947 (+0.034/+0.020) at negligible cost (+0.04 s), so the MCE contribution is modest in absolute terms and unaccompanied by variance. Two suspected typos affecting reproduction: (1) HU truncation printed as [200, 250] — must be [-200, 250] to preserve organ tissue; (2) final fusion written as Seg = RBs(conv([Fc1, Fs1])), which omits the second fusion output Fs2 just defined — likely should be conv([Fc1, Fs2]) or equivalent; Fs2 as printed is computed but never consumed. Network details from figures: channels 36→72→144 with MCE invariant at 36; trilinear interpolation aligns Fc1/Fc2 resolutions; InstanceNorm on all hidden layers; 3x3x3 kernels chosen for parameter/speed efficiency. Data characteristics: spleen scans 1.0 mm resolution, slice spacing 1.0-2.0 mm; LiTS contrast-enhanced CT, 0.55-1.0 mm resolution, spacing 0.45-6.0 mm, acquired by different doctors. Unreported reproduction blockers: optimizer, LR, batch size, epochs, augmentation, patch/ROI strategy, framework, GPU model, parameter count. Funding: MEXT grants 20KK0234, 20K21821, 21H03470. Prior extracted field correction: preprocessing HU range should read [-200, 250] with typo flagged.",
+  "contribution_summary": "Proposes a unified 3D segmentation network pairing a multiple-contextual extractor (fuses low- and high-level features via two concat-conv fusion steps at a fixed 36 channels) with a light 3D ResU-Net backbone, targeting the compute cost of fully symmetric 3D encoder-decoders. Under a unified 5-fold CV protocol it reports the best Dice for spleen (0.911) and liver (0.947) against V-Net, VoxResNet, 3D DSD-FCN, and MultiResUNet, with ~4-10x faster inference (~0.52 s per volume) and no post-processing. Evidence quality is limited by small single-organ datasets, no statistical testing, no code release, and unreported training hyperparameters.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1109_siprocess.2019.8868690",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "91 training patients / 130 CT scans (50,622 slices) exceeds the >50-subject threshold; test set adds 70 scans / 40 patients."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Public LiTS benchmark (MICCAI 2017) clearly identified with scan/slice counts and multi-site provenance; scanner and demographic details absent."
+    },
+    "Q3_train_test_split": {
+     "score": 1,
+     "justification": "Split sizes stated (130 train / 70 test), but no validation set, no split methodology, and evaluation protocol unclear (official LiTS leaderboard vs. self-computed on hidden labels)."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Masks provided by the LiTS challenge are used, but no annotation protocol described (raters, delineation guidelines, inter-rater agreement)."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "Single public dataset only; evaluation on hospital data explicitly deferred to future work."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "Architecture class, depth (5 down/up-sampling blocks), 3x3 kernels, pooling/unpooling, residual units + BN, and 5-slice multi-channel input described; channel widths, parameter counts, and full feature-map specs missing."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Adam optimizer, mini-batch training, 200k-400k iterations, CE class weights (0.2/1.2), epsilon=0.5 reported; learning rate, batch size, data augmentation, framework, and hardware all missing."
+    },
+    "Q8_loss_function": {
+     "score": 2,
+     "justification": "DCE choice well motivated: Dice captures global overlap, weighted CE handles class imbalance and is probability-aware; validated by ablation (0.919 at 200k iters vs. 0.906 for CE at 400k). Minor gap: the 0.5/0.5 weighting is not ablated."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Full pipeline specified: HU clipping [-200,200], histogram equalization, two-Gaussian-kernel 3D CRF with Krahenbuhl fast inference, top-n component CCA via union-find (O(E)). CRF hyperparameter values (theta_alpha/beta/gamma, w1/w2) omitted."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release mentioned."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 0,
+     "justification": "Dice only; no volumetric overlap error, Hausdorff distance, ASSD, or any second segmentation metric (mIoU mentioned as similar but never reported)."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No confidence intervals, p-values, or run-to-run variance; all results are single-point Dice values."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Compared against H-DenseUNet (Li, 0.960) and Han (0.961) on the same benchmark, plus systematic internal ablations: loss function, 2D vs. 3D CRF, and CCA component count (1/2/3)."
+    },
+    "Q14_per_organ_results": {
+     "score": 1,
+     "justification": "Single-organ study, so organ-level reporting is trivially complete; however, no per-patient or per-case breakdown, and the tumor class excluded despite LiTS providing lesion labels."
+    },
+    "Q15_limitations": {
+     "score": 0,
+     "justification": "No limitations or failure-case discussion. The 'state-of-the-art' claim is an overstatement: the result (0.960) ties Li and trails Han (0.961)."
+    }
+   },
+   "total_score": 15,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-moderate: uses the public LiTS challenge data with a fixed 130/70 scan composition rather than a self-selected cohort; however, absence of per-case results means selective case reporting cannot be excluded.",
+    "performance_bias": "High: evaluation protocol opaque (unclear whether final Dice came from the official LiTS leaderboard or self-evaluation); the CCA component count n=3 appears selected post hoc, possibly on test data; no blinding, no repeated runs.",
+    "reporting_bias": "High: only best aggregate Dice reported with no variance or per-patient results; SOTA claimed despite tying/trailing comparators; tumor segmentation (half of LiTS) unreported."
+   }
+  },
+  "detailed_extraction": "Formulation is binary (liver vs. background); pixel-wise probabilities P(v_i = k | I). Input: 5 consecutive CT slices as channels (2 before, 2 after current). ~35% of slices contain liver. Ablation decomposition of the final 0.960 Dice: ResUNet_DCE alone 0.919; +2D_CRF 0.943 (+0.024); +3D_CRF 0.948 (+0.005); +3D_CCA keeping 3 components 0.960 (+0.012) — i.e., ~87% of the gain over the base network comes from post-processing, not the network. Notably, keeping 3 connected components (0.960) outperforms keeping 1 (0.958), implying disconnected liver fragments persist after CRF. CRF uses two Gaussian kernels following Christ et al.: position+HU-intensity kernel and position-only kernel; pairwise potentials over all pixel pairs in the volume. DCE = epsilon*Dice + (1-epsilon)*CE with epsilon=0.5; CE computed on softmax probabilities. Convergence: DCE reaches 0.919 at 200k iterations vs. CE needing 400k for 0.906 — roughly 2x faster convergence. Dice loss baseline: 0.918 at 400k. Union-find with path compression used to reduce CCA from O(VE) to O(E). Funding: Beijing Natural Science Foundation (4172058), Beijing Haidian Original Innovation Joint Foundation (L182054). Missing for reproduction: learning rate, batch size, augmentation, framework, GPU, CRF hyperparameter values, and test-evaluation protocol. Reference numbers as cited in paper: Li (H-DenseUNet) 0.960, Han 0.961, own 0.960 — paper's 'state-of-the-art' claim should be recorded as 'matches SOTA' in the review.",
+  "contribution_summary": "Proposes ResUNet — U-Net extended with residual units, batch normalization, five down/up-sampling levels, and 5-consecutive-slice multi-channel input — trained with a hybrid DCE loss (0.5*Dice + 0.5*weighted CE) that roughly halves iterations to convergence versus CE alone. Two 3D post-processing steps (fully connected CRF over position/HU pairs, then connected-component filtering keeping the 3 largest regions) lift liver Dice on LiTS from 0.919 to 0.960. The result matches H-DenseUNet and sits 0.001 below Han, making post-processing — not the architecture — the paper's substantive contribution.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1109_sps.2019.8882073",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 1,
+     "justification": "60 CT scans total (>50) but only 40 for train/val (32 trained per fold) — below the >50-for-training threshold."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Public SegTHOR 2019 competition data, expanded with 30-CT set from Trullo et al. [4]; resolution and organs documented."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Explicit: 5-fold CV on 40 scans (32 train/8 val per fold), fixed 20-scan held-out test set."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Only stated as 'manually labeled'; no annotator count, protocol, or inter-rater agreement."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external cohort; single-dataset internal split only."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 1,
+     "justification": "Key modifications named (ResNet-50 backbone, shortcuts, BN, 3D upsampling, softmax, crop sizes) but decoder config missing and 2D→3D conversion of ResNet-50 unspecified; Fig. 1 shows vanilla U-Net, not the actual model."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Optimizer, lr schedule, batch size, epochs/iterations, CV scheme, crop sizes given; framework, hardware, and code are not."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Generalized Dice Loss with equation and empirically derived class weights (200 samples) for imbalance; no ablation vs. alternative losses."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Thorough: HU clipping [-1200,600], normalization, 6mm coarse resampling, 10mm esophagus/trachea mask dilation, explicit post-processing rules (connected components, >500-voxel filter)."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code or model release."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Dice + Hausdorff distance, both per organ."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "No CIs, p-values, or fold variance; single point estimates on a 20-scan test set."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Direct table comparison against 4 SegTHOR top participants on the same test split."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Per-organ Dice and HD for all 4 organs reported."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Explicitly concedes results do not outperform SOTA (esophagus 0.77 vs 0.865) and identifies esophagus difficulty; future work stated."
+    }
+   },
+   "total_score": 19,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-moderate: fixed public competition split applied consistently, but cohort is small (60 scans), single dataset, and patient selection criteria are inherited from SegTHOR rather than independently defined.",
+    "performance_bias": "Low: all compared methods evaluated on the identical 20-scan test split with identical metrics; however, the HD variant (max vs 95th percentile) and who computed test metrics are unspecified.",
+    "reporting_bias": "Low-moderate: negative result honestly reported with full per-organ breakdown; but no uncertainty quantification and the preprocessing/augmentation ablations are reported qualitatively ('did not outperform') with no numbers."
+   }
+  },
+  "detailed_extraction": "Supplementary pipeline details: (1) Two-stage inference — coarse network (6mm-resampled volumes, esophagus/trachea masks dilated 10mm to survive downsampling) predicts organ masks; bounding-box centers derived from these define VOIs; fine network segments fixed 256^3 crops around centers. (2) Crop-center sampling differs by stage: normal distribution (sigma = size/6) around image center for fine stage, uniform for coarse stage. (3) GDL class weights computed from 200 generated samples per Eq. 2-3. (4) Inference = ensemble of 5 fold models, 20-25 s per CT. (5) Augmentation ablation (equalization, resampling, elastic deformation, affine) discarded without reported numbers. (6) Minor inconsistencies: trachea HD 0.223 (abstract) vs 0.224 (table/conclusion); HD units presumably mm but unstated; framework, GPU, and training hardware unreported. (7) Reference [5] (Han VB-nets) serves as both a compared method and the source of the mask-dilation trick. (8) Test-set comparison is fair (same split) but relies on published leaderboard numbers.",
+  "contribution_summary": "Proposes a two-stage multi-resolution 3D U-Net with a ResNet-50 encoder and Generalized Dice Loss for segmenting four thoracic organs at risk, where a coarse-resolution network localizes organ VOIs and a fine-resolution network segments them, ensembling 5 cross-validation folds at inference. Achieves competitive but non-superior SegTHOR results (Dice: esophagus 0.77, heart 0.933, trachea 0.913, aorta 0.908) with fast ~20-25 s inference. Valuable as an honest baseline and multi-resolution pipeline reference, but limited by a 60-scan dataset, no statistical analysis, and no code release.",
+  "study_type": "method"
+ },
+ {
+  "paper_id": "10.1148_ryct.2019190057",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "500 consecutive patients in derivation cohort (31,393 images) plus 500-patient validation cohort (34,554 images); far exceeds 50-subject threshold. Authors note dataset is small by DL standards but adequate given agreement matched inter-observer performance."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Single institution (Stanford), retrospective consecutive inpatients/outpatients, exact date ranges given (derivation: Jul 27–Aug 29, 2018; validation: Feb 1–Mar 12, 2012), both contrast- and non-contrast routine chest CT with 5-mm axial reconstructions."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Clear two-stage design: eightfold cross-validation within derivation cohort, then entire derivation cohort used to train final model tested on completely separate temporal validation cohort (~6-year gap). Dice comparisons restricted to a defined 50-study subset."
+    },
+    "Q4_ground_truth": {
+     "score": 2,
+     "justification": "Manual voxel labeling in 3D Slicer by one of three board-eligible cardiothoracic radiology fellows; inter-rater reproducibility quantified (Dice 0.84) on 50-study subset. Caveat: single-radiologist ground truth per case, acknowledged by authors."
+    },
+    "Q5_external_validation": {
+     "score": 2,
+     "justification": "Independent 500-patient validation cohort from a different time period with intentional ~6-year gap to demonstrate temporal generalizability. Limitation: same institution, scanners only 'qualitatively similar' — temporal but not multi-center external validation."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "U-Net base with residual modules and instance normalization (motivated by small batch size), 2D axial 256×256 input/output, skip connections via concatenation, full schematic in Figure 1 with module-level exploded view."
+    },
+    "Q7_reproducibility": {
+     "score": 2,
+     "justification": "PyTorch, RMSProp, training duration (200,000 images/fold; 250,000 for final model), detailed augmentation (random zoom, rotation, 224×224 crop, window/level, Gaussian noise), hardware specified (RTX Titan, 64 GB RAM), and public code at https://github.com/akbratt/AF. Minor gap: learning rate and batch size not stated in text."
+    },
+    "Q8_loss_function": {
+     "score": 1,
+     "justification": "Weighted softmax cross-entropy with class weights 0.1 (background) / 0.9 (LA) stated, implicitly addressing class imbalance, but no explicit justification of the weighting choice or comparison to alternatives."
+    },
+    "Q9_preprocessing": {
+     "score": 2,
+     "justification": "Preprocessing: rescaling to 256×256 plus augmentation. Postprocessing: sequential 2D slice segmentation concatenated along z-axis to form 3D volume. No 3D postprocessing cleanup, but all performed steps are clearly described."
+    },
+    "Q10_code_availability": {
+     "score": 2,
+     "justification": "Training and testing code publicly available at https://github.com/akbratt/AF."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "Four segmentation metrics: Dice (0.87), IoU (0.77), Hausdorff distance (4.36 mm), average symmetric surface distance (0.96 mm), plus Bland-Altman volume agreement and ROC-AUC for the clinical task."
+    },
+    "Q12_statistical_analysis": {
+     "score": 2,
+     "justification": "95% CIs on AUC (0.768; 95% CI 0.71–0.82) and relative risk (2.9; 95% CI 2.6–3.2), Mann-Whitney tests (P=.004 for Dice comparison), Bland-Altman limits of agreement, age-adjusted Cochran-Mantel-Haenszel risk ratios."
+    },
+    "Q13_comparison_sota": {
+     "score": 1,
+     "justification": "Compared against human inter-observer variability (model Dice 0.85 vs inter-reader 0.84, P=.004) and manual volumetry AUC (0.741), but no comparison with other published automated LA segmentation algorithms (e.g., atlas-based or other DL methods)."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Single-organ study (left atrium); organ-specific metrics fully reported. No per-substructure breakdown (e.g., pulmonary vein ostia), and failure cases (9 of 500 with >40 cm³ discrepancy) are individually characterized."
+    },
+    "Q15_limitations": {
+     "score": 2,
+     "justification": "Dedicated limitations section: small training set, no exhaustive hyperparameter search, single-radiologist ground truth, chart-review AF ascertainment may miss occult disease, tertiary-care population limits generalizability. Specific failure modes identified (5 space-occupying lesions, 4 LA/pulmonary vein boundary discrepancies)."
+    }
+   },
+   "total_score": 28,
+   "quality_rating": "High",
+   "risk_of_bias": {
+    "selection_bias": "Low — consecutive patient sampling in both cohorts with a single explicit inclusion criterion (5-mm axial reconstruction availability); however, single tertiary-care center restricts generalizability, acknowledged by authors.",
+    "performance_bias": "Low-to-moderate — segmentation evaluated with standardized overlap/distance metrics against a consistent protocol; but ground truth from a single reader per case (subjective judgment, intra/inter-rater variability), and AF status by chart review with ECG verification in only 85% of AF-negative patients.",
+    "reporting_bias": "Low — all prespecified metrics reported including unfavorable findings (9 discrepant cases, sensitivity/specificity tradeoff table over 21 thresholds), limitations explicitly discussed; no evidence of selective outcome reporting."
+   }
+  },
+  "detailed_extraction": "Task: automated left atrial (LA) segmentation and volumetry from routine non-gated chest CT (with or without contrast, 5-mm axial slices) as biomarker for atrial fibrillation (AF). Data: derivation cohort 500 consecutive patients (Jul–Aug 2018, 31,393 slices; mean age 64, 51% female), annotated in 3D Slicer by three cardiothoracic radiology fellows; validation cohort 500 consecutive patients (Feb–Mar 2012, 34,554 slices; mean age 61, 46% female) with AF status via EPIC chart review (107 AF-positive: 67 paroxysmal, 14 persistent, 26 indeterminate). Model: 2D U-Net (Ronneberger et al.) with residual modules (He et al.) and instance normalization replacing batch normalization; axial slices rescaled to 256×256, 2D segmentations stacked along z for volumetric output; trained with RMSProp, weighted softmax cross-entropy (0.9 LA / 0.1 background), aggressive augmentation (zoom, rotation, 224×224 crop, window/level, Gaussian noise); 8-fold cross-validation (200,000 images/fold) for derivation-cohort evaluation, final model trained 250,000 images on full derivation cohort before temporal validation; PyTorch on RTX Titan (24 GB). Segmentation performance: model vs manual Dice 0.87, IoU 0.77, HD 4.36 mm, ASSD 0.96 mm; significantly better agreement than inter-observer (0.85 vs 0.84, P=.004); 98% of volumes within 40 cm³ of manual; runtime 1.39 s/case vs 111 s manual (~80× speedup). Clinical performance: LA volume predicted AF with AUC 0.768 (auto) vs 0.741 (manual volumetry); threshold 199 cm³ gave specificity 0.98; age-adjusted relative risk of AF 2.9 (95% CI 2.6–3.2); mean LA volume 145 cm³ (AF) vs 99 cm³ (no AF), P<.001; larger volumes in persistent vs paroxysmal AF (196 vs 138 cm³, P<.01). Hypothesis-driven clinical paper where segmentation is the enabling instrument, not the primary endpoint — no benchmark comparison against other segmentation methods. Relevance to multi-organ segmentation reviews: single-organ, 2D-slice-based architecture (no native 3D context), but notable for temporal external validation design and clinical utility framing.",
+  "contribution_summary": "This paper demonstrates a 2D residual U-Net (with instance normalization) that segments the left atrium from routine non-gated chest CT in 1.39 seconds, achieving agreement with manual segmentation (Dice 0.87) slightly exceeding inter-observer agreement (0.85 vs 0.84, P=.004). Using a temporally separated 500-patient validation cohort, automated LA volume proved an independent age-adjusted predictor of atrial fibrillation (relative risk 2.9; AUC 0.768), matching manual volumetry's predictive performance. The key contribution is establishing fully automated LA volumetry from opportunistic chest CT as a clinically valid AF biomarker, with code released publicly.",
+  "study_type": null
+ },
+ {
+  "paper_id": "10.1002_acm2.13631",
+  "quality_assessment": {
+   "dataset_quality": {
+    "Q1_dataset_size": {
+     "score": 2,
+     "justification": "313 patients / 44,222 CT slices (251 train, 31 val, 31 test); far exceeds 50-subject threshold."
+    },
+    "Q2_dataset_source": {
+     "score": 2,
+     "justification": "Single institution (Wenzhou Medical University First Affiliated Hospital), retrospective, Jan 2018–Sept 2020, stage I–III postoperative cervical cancer; scanner (Philips Brilliance Big Bore), 3-mm slices, 512×512, IV contrast, scan range, and immobilization all specified; full cohort characteristics in Table 1."
+    },
+    "Q3_train_test_split": {
+     "score": 2,
+     "justification": "Random split explicitly stated with sizes (251/31/31) at patient level; baseline balance across sets tested (Fisher's exact / Mann–Whitney U, Table 1)."
+    },
+    "Q4_ground_truth": {
+     "score": 1,
+     "justification": "Contours delineated and verified by two senior radiation oncologists (>10 yrs) following RTOG 0418 guidelines; but consensus/adjudication process and interobserver agreement not described; single reference standard used."
+    },
+    "Q5_external_validation": {
+     "score": 0,
+     "justification": "No external validation; all data from one institution, single scanner protocol."
+    }
+   },
+   "methodology_quality": {
+    "Q6_architecture_description": {
+     "score": 2,
+     "justification": "RefineNet (ResNet50 encoder, RCU/CRP/fusion decoder) and RefineNetPlus3D described in detail with architecture figures, including 3D modifications (3D ops, added ReLU/BatchNorm, 1/2-rate first down/upsampling, shortcut connections)."
+    },
+    "Q7_reproducibility": {
+     "score": 1,
+     "justification": "Adam, poly LR policy, initial LR (2e-4 2D / 1e-4 3D), iteration counts (44/300), batch sizes (6/2), augmentation (random rotate), GPU (RTX 2080 Ti), and frameworks (PyTorch 1.5.0, Keras 2.4.0) given; but 'weight decay 0.8' is likely a mislabeled poly power, patch/input sizes and per-structure model training scheme unstated."
+    },
+    "Q8_loss_function": {
+     "score": 0,
+     "justification": "Losses named only (Dice for 2D; 'binary gross-entropy' — likely a typo for binary cross-entropy — for 3D); no justification for the choice and no explanation of 2D/3D divergence."
+    },
+    "Q9_preprocessing": {
+     "score": 1,
+     "justification": "Only augmentation (random rotate) and label interpolation of CTV subregions described; no intensity normalization, resampling, cropping, or any post-processing reported."
+    },
+    "Q10_code_availability": {
+     "score": 0,
+     "justification": "No code, model weights, or repository mentioned."
+    }
+   },
+   "evaluation_quality": {
+    "Q11_multiple_metrics": {
+     "score": 2,
+     "justification": "DSC, Jaccard (JSC), average symmetric surface distance (ASSD), plus inference time; formulas provided."
+    },
+    "Q12_statistical_analysis": {
+     "score": 0,
+     "justification": "Statistics (Fisher's exact, Mann–Whitney U) applied only to cohort characteristics; segmentation results reported as means only — no SD, CIs, or significance tests comparing models."
+    },
+    "Q13_comparison_sota": {
+     "score": 2,
+     "justification": "Head-to-head benchmarking of 7 networks (FCN, U-Net, CE-Net, UNet3D, ResUNet3D vs. RefineNet/RefineNetPlus3D) under identical data, plus explicit literature comparison (Ju 0.82; Rhee/Wang/Liu ~0.86 for CTV)."
+    },
+    "Q14_per_organ_results": {
+     "score": 2,
+     "justification": "Tables 2 and 3 report DSC, JSC, ASSD, and time per structure (CTV, bladder, small intestine, rectum, right/left femoral heads) for every model."
+    },
+    "Q15_limitations": {
+     "score": 1,
+     "justification": "Discusses rectum's poor DSC (small volume, unclear boundaries), lower CTV DSC vs. published CNNs, negative-sample imbalance, and whole-image prediction burden; but no dedicated limitations section and no failure-case visualization."
+    }
+   },
+   "total_score": 18,
+   "quality_rating": "Medium",
+   "risk_of_bias": {
+    "selection_bias": "Low-moderate: inclusion criteria explicit (stage I–III, postoperative, single center, fixed date range); whether sampling was consecutive is unstated; single-center/single-scanner limits generalizability.",
+    "performance_bias": "Low-moderate: consistent guideline-based (RTOG 0418) ground truth by two senior oncologists for all cases; however, the same contours served as both training labels and evaluation reference, and the adjudication method between the two observers is not described.",
+    "reporting_bias": "Moderate: all planned metrics (DSC, JSC, ASSD, time) reported per structure for all 7 models, but only mean values — no dispersion measures or per-patient distributions — and statistical testing of model differences omitted; favorable reframing of 'good performance' contrasts with CTV DSC below some prior work, though this is acknowledged."
+   }
+  },
+  "detailed_extraction": "Task: multi-structure segmentation of combined CTV (central vaginal + regional nodal, interpolated) plus 5 OARs (bladder, small intestine, rectum, bilateral femoral heads) on contrast-enhanced planning CT (3 mm, 512×512, iliac crest to ischial tuberosity). Cohort: 313 patients (median 55 y, range 21–80); predominantly squamous cell carcinoma; stage I/II/III = 179/132/2; split 251/31/31. Models: 2D — RefineNet50 (ResNet50 encoder + RCU/CRP/fusion decoder), FCN, U-Net, CE-Net; 3D — RefineNetPlus3D (novel: RefineNet decoder replaced by 3D Refine block with added ReLU/BatchNorm, first down/upsampling at rate 1/2, encoder-decoder shortcut), UNet3D, ResUNet3D. Training: Adam, poly LR (2e-4/44 iters 2D; 1e-4/300 iters 3D), batch 6 (2D)/2 (3D), random-rotation augmentation, RTX 2080 Ti, PyTorch 1.5.0 + Keras 2.4.0, Python 3.7; Dice loss (2D), binary cross-entropy ('gross-entropy' [sic], 3D). Results: CTV DSC 0.80–0.82 across all models (JSC 0.67–0.72); RefineNetPlus3D OAR DSC — bladder 0.97, small intestine 0.95, rectum 0.91, femoral heads 0.98/0.98; ASSD 0.15–2.13 mm; inference 6.4 s (CTV) / 6.6 s (OARs), ~half of UNet3D/ResUNet3D time; manual contouring benchmark 90–120 min/patient. 3D models outperformed 2D on small bowel and rectum. Key anomalies noted: '44 training iterations' and 'weight decay 0.8' likely transcription errors; no variance reported; abstract rectum DSC '091' = 0.91 (matches Table 3).",
+  "contribution_summary": "This study adapts the lightweight 2D RefineNet and introduces RefineNetPlus3D, a 3D encoder-decoder variant with a modified 3D Refine block, for automatic segmentation of CTV and five OARs in postoperative cervical cancer radiotherapy CT. On 313 single-institution patients, RefineNetPlus3D achieved the best or tied-best accuracy among seven benchmarked networks (CTV DSC 0.82; OAR DSC 0.91–0.98) while roughly halving inference time versus UNet3D/ResUNet3D. The main limitation is the absence of external validation, code release, and variance/statistical testing of performance differences.",
+  "study_type": "method"
  }
 ]

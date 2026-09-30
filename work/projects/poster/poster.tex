@@ -249,7 +249,7 @@ of 3D CT organ segmentation for surgical planning:
   \end{minipage}\\[0.5em]
   \begin{minipage}[t]{0.48\linewidth}
     \begin{statchip}{CNN Dominance in Literature}
-      98.1\%
+      92.1\%
     \end{statchip}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.48\linewidth}
@@ -296,27 +296,27 @@ of 3D CT organ segmentation for surgical planning:
   earrow/.style={->, >=stealth, thick, utadred},
   iarrow/.style={->, >=stealth, thick, utadgray!70!black}]
 
-  \node[mbox] (db) {Records Identified (n\,=\,2{,}821)\\
-                    \small PubMed, arXiv, Semantic Scholar};
-  \node[ebox, right=0.8cm of db] (src) {Search executed Nov\,2025\,--\,Jan\,2026\\
+  \node[mbox] (db) {Records Identified (n\,=\,278{,}816)\\
+                    \small APIs 14{,}547 + OpenAlex lane 264{,}269};
+  \node[ebox, right=0.8cm of db] (src) {Search: 2015\,--\,Sep\,2026 (v2 wave)\\
                                          DOI + title dedup,\\
                                          citation tracking on 12 seminal papers};
-  \node[mbox, below=of db] (es) {Elasticsearch Pre-filter (n\,=\,638)\\
-                                  \small Boolean IC queries on abstracts};
-  \node[ebox, right=0.8cm of es] (ex0) {Excluded n\,=\,2{,}183\\
+  \node[mbox, below=of db] (es) {Two-lane Pre-filter (n\,=\,7{,}370)\\
+                                  \small standard + framework bypass};
+  \node[ebox, right=0.8cm of es] (ex0) {Excluded n\,=\,265{,}745\\
                                          No 3D/organ/DL keyword};
-  \node[mbox, below=of es] (ai) {AI Screening: 638 $\to$ 161\\
-                                  \small GPT-4o-mini, GPT-5-nano, GPT-5.2};
-  \node[ebox, right=0.8cm of ai] (ex1) {Excluded n\,=\,477\\
+  \node[mbox, below=of es] (ai) {AI Screening: 7{,}370 $\to$ 1{,}035\\
+                                  \small 3-vote unanimous, mini-class};
+  \node[ebox, right=0.8cm of ai] (ex1) {Excluded n\,=\,6{,}331\\
                                          No 3D DL, non-CT};
-  \node[mbox, below=of ai] (ft) {Full-text Assessed (n\,=\,63)\\
-                                  \small 98 not retrieved (paywalled / no PDF)};
-  \node[ebox, right=0.8cm of ft] (ex2) {Excluded n\,=\,11\\
+  \node[mbox, below=of ai] (ft) {Full-text Assessed (n\,=\,354)\\
+                                  \small 681 not retrieved (501 paywalled)};
+  \node[ebox, right=0.8cm of ft] (ex2) {Excluded n\,=\,100\\
                                          Final full-text screen};
   \node[mbox, below=of ft,
         fill=utadnavy!12, draw=utadnavy, line width=2pt] (inc)
-    {\textbf{Included: n\,=\,52}\\
-     \small Synthesis (n=52), Per-organ (n=32)};
+    {\textbf{Included: n\,=\,254}\\
+     \small 242 method + 9 framework, Per-organ (n=233)};
 
   \draw[farrow] (db) -- (es);
   \draw[farrow] (es) -- (ai);
@@ -331,10 +331,10 @@ of 3D CT organ segmentation for surgical planning:
 \vspace{0.3em}
 {\small\setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}ll@{}}
-  \textbf{Literature window:}    & 2015--2025 \\
-  \textbf{Full-text retrieval:}  & 39.1\% \\
-  \textbf{Human audit:}          & $\kappa=0.89$, n\,=\,64, 10\% stratified \\
-                                 & 2 domain experts, blind to AI decisions \\
+  \textbf{Literature window:}    & 2015--2026 \\
+  \textbf{Full-text retrieval:}  & 34.2\% \\
+  \textbf{Validation:}           & v1 human audit $\kappa=0.89$ (n\,=\,64); \\
+                                 & v2 post-run QA 10/10 + seed oracle 12/12 \\
 \end{tabular}
 }
 \vspace{0.2em}
@@ -423,7 +423,7 @@ MedSAM$^\dagger$ & Found. & 85.7 &  8.1 & \checkmark  \\
 \end{pblock}
 
 %--- Per-Organ ---------------------------------------------------------------
-\begin{pblock}{Per-Organ Dice Scores \newline (from 32 of 52 studies reporting)}
+\begin{pblock}{Per-Organ Dice Scores \newline (from 111 of 242 method studies reporting)}
 \vspace{0.4em}
 {\small
 \begin{tabular}{@{}lcccc@{}}
@@ -431,10 +431,10 @@ MedSAM$^\dagger$ & Found. & 85.7 &  8.1 & \checkmark  \\
 \textbf{Organ} & \textbf{Mean} & \textbf{Range} & \textbf{n} &
   \textbf{Challenge} \\
 \midrule
-Liver        & 94.2\% & 89.0--97.1\% & 16 & Large, well-defined  \\
-Spleen       & 93.1\% & 84.0--97.0\% &  9 & Consistent shape     \\
-Kidney       & 92.1\% & 78.3--98.4\% & 16 & Bilateral, variable  \\
-Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
+Liver        & 93.6\% & 64.1--98.7\% & 69 & Large, well-defined  \\
+Spleen       & 91.2\% & 57.0--98.8\% & 24 & Consistent shape     \\
+Kidney       & 92.9\% & 52.5--99.0\% & 48 & Bilateral, variable  \\
+Pancreas     & 76.7\% & 23.9--94.0\% & 29 & Small, deformable    \\
 \bottomrule
 \end{tabular}
 }
@@ -494,13 +494,17 @@ Pancreas     & 78.1\% & 72.0--86.1\% &  8 & Small, deformable    \\
 {\small
 \begin{tabular}{@{}lcc@{}}
 \toprule
-\textbf{Family} & \textbf{BTCV Dice} & \textbf{Share of 52 Studies} \\
+\textbf{Family} & \textbf{BTCV Dice} & \textbf{Share of 242 Method Studies} \\
 \midrule
-CNN (all)              & 74--87\% & 98.1\% \\
-\quad 3D U-Net variants & 74--87\% & 82.7\% \\
-Transformer (pure)     & 79--82\% & 9.6\%  \\
-Hybrid (CNN+Trans.)    & 77--87\% & 7.7\%  \\
-Foundation model       & 76--86\% & 3.8\%  \\
+CNN (all)              & 74--87\% & 92.1\% \\
+\quad 3D U-Net variants & 74--87\% & 69.0\% \\
+Hybrid (CNN+Trans.)    & 77--87\% & 6.6\%  \\
+Transformer (pure)     & 79--82\% & 0.4\%  \\
+Foundation model       & 76--86\% & 0.8\%  \\
+\midrule
+\multicolumn{3}{@{}l@{}}{\footnotesize + Framework stratum: 9 of 254 included} \\
+\multicolumn{3}{@{}l@{}}{\footnotesize (MONAI Label, nnInteractive, VISTA3D, MHub.ai);} \\
+\multicolumn{3}{@{}l@{}}{\footnotesize emerging neuro-symbolic thread (graph/topology)} \\
 \bottomrule
 \end{tabular}
 }
@@ -521,12 +525,12 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \begin{itemize}\setlength\itemsep{1pt}
   \item \textbf{English-only search:} may under-represent
         non-English-language publications (e.g.\ Chinese-language journals)
-  \item \textbf{PDF availability:} only 39.1\% of 161 AI-screened
-        candidates had retrievable full-text; 98 remain paywalled
+  \item \textbf{PDF availability:} only 34.2\% of 1{,}035 AI-screened
+        candidates had retrievable full-text; 501 routed to librarian hand-off
   \item \textbf{Benchmark gap:} reported Dice likely overestimates
         clinical accuracy by \textbf{5--15\%} due to controlled splits,
         test-time augmentation, and ensembling
-  \item \textbf{Single-centre dominance:} only 4/52 studies (7.7\%)
+  \item \textbf{Single-centre dominance:} only 18/242 studies (7.4\%)
         include multi-centre or prospective validation
 \end{itemize}
 \end{pblock}
@@ -589,7 +593,7 @@ Foundation model       & 76--86\% & 3.8\%  \\
 \begin{pblock}{Clinical Deployment Barriers}
 \begin{enumerate}\setlength\itemsep{2pt}
   \item \textbf{Domain shift:} scanner heterogeneity degrades Dice by
-        \textbf{5--15\%} across institutions; only 4/52 studies (7.7\%)
+        \textbf{5--15\%} across institutions; only 18/242 studies (7.4\%)
         include multi-centre validation
   \item \textbf{Vascular deficit:} 65--75\% Dice for vessels vs.\
         90\%+ for parenchymal organs
@@ -639,8 +643,8 @@ Foundation model       & 76--86\% & 3.8\%  \\
 %--- Conclusions -------------------------------------------------------------
 \begin{pblock}{Conclusions}
 \begin{enumerate}\setlength\itemsep{2pt}
-  \item \textbf{CNNs dominate} (98.1\%); nnU-Net is the strongest reported
-        baseline (82.3\% Dice on BTCV, no pre-training)
+  \item \textbf{CNNs dominate} (92.1\% of 242 method studies); nnU-Net is
+        the strongest reported baseline (82.3\% Dice on BTCV, no pre-training)
   \item \textbf{Auto-CNNs outperform transformers} on BTCV:
         $85.2 \pm 2.1$\% vs.\ $80.5 \pm 1.8$\%;
         MedNeXt (86.2\%) leads without any pre-training

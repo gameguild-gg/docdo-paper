@@ -64,22 +64,22 @@
 	\node[stage, right=of s3]  (qa)  {QA};
 
 	% Tool labels (row 2)
-	\node[tool, below=of s1]  (t1) {Python\\APIs REST};
+	\node[tool, below=of s1]  (t1) {Python\\APIs REST\\+ OpenAlex};
 	\node[tool, below=of dd]  (t2) {DOI+título};
 	\node[tool, below=of es]  (t3) {Título+Resumo};
-	\node[tool, below=of llm] (t4) {GPT-4o-mini\\×3 votos};
-	\node[tool, below=of pdf] (t5) {Unpaywall\\+manual};
-	\node[tool, below=of s3]  (t6) {GPT-5.2\\batch};
+	\node[tool, below=of llm] (t4) {Mini-classe\\×3 votos};
+	\node[tool, below=of pdf] (t5) {Unpaywall\\OA-first};
+	\node[tool, below=of s3]  (t6) {Mini-classe\\+ GLM-5.3};
 	\node[tool, below=of qa]  (t7) {Rubrica\\15Q×3};
 
 	% Counts (row 3)
-	\node[cnt, below=0.08cm of t1] {2.985};
-	\node[cnt, below=0.08cm of t2] {2.821};
-	\node[cnt, below=0.08cm of t3] {638};
-	\node[cnt, below=0.08cm of t4] {161};
-	\node[cnt, below=0.08cm of t5] {63};
-	\node[cnt, below=0.08cm of t6] {52};
-	\node[cnt, below=0.08cm of t7] {52};
+	\node[cnt, below=0.08cm of t1] {278.816};
+	\node[cnt, below=0.08cm of t2] {273.115};
+	\node[cnt, below=0.08cm of t3] {7.370};
+	\node[cnt, below=0.08cm of t4] {1.035};
+	\node[cnt, below=0.08cm of t5] {354};
+	\node[cnt, below=0.08cm of t6] {254};
+	\node[cnt, below=0.08cm of t7] {254};
 
 	% Arrows
 	\draw[arr] (s1)--(dd); \draw[arr] (dd)--(es); \draw[arr] (es)--(llm);
@@ -92,18 +92,19 @@
 \section{Coleta via APIs}
 \begin{frame}{2. Coleta de registros via APIs}
 \small
-Três bases consultadas programaticamente (sem dependência de portais web):
+Na v1, três bases; na v2 (set/2026), PubMed + arXiv + Google Scholar, com Semantic Scholar bloqueada por rate-limit (HTTP 429) e OpenAlex como pista suplementar:
 \begin{table}
 \centering
 \begin{tabular}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{6cm} r}
 \toprule
 \textbf{Base} & \textbf{API / método} & \textbf{Registros} \\
 \midrule
-PubMed & Entrez E-utilities (NCBI) --- \texttt{esearch} + \texttt{efetch} XML & 997 \\
-arXiv & API oficial do arXiv (Atom XML), categoria \texttt{cs.CV} (Computer Vision) & 904 \\
-Semantic Scholar & Graph API v1, paginação por \texttt{offset/limit} & 1.084 \\
+PubMed & Entrez E-utilities (NCBI) --- \texttt{esearch} + \texttt{efetch} XML & 7.045 \\
+arXiv & API oficial do arXiv (Atom XML), categoria \texttt{cs.CV} (Computer Vision) & 7.164 \\
+Google Scholar & suplementar (sem API pública; colheita parcial) & 338 \\
+OpenAlex & pista de identificação (delta filtrado contra as APIs) & 264.269 \\
 \midrule
-\textbf{Total} & \textbf{Antes de deduplicação} & \textbf{2.985} \\
+\textbf{Total} & \textbf{Antes de deduplicação} & \textbf{278.816} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -111,9 +112,9 @@ Semantic Scholar & Graph API v1, paginação por \texttt{offset/limit} & 1.084 \
 \vspace{0.3em}
 \textbf{Artefatos gerados:}
 \begin{itemize}
-	\item \texttt{S1\_search\_results\_REAL.csv} --- 2.985 linhas, metadados brutos.
+	\item \texttt{raw/v2/} --- 30 CSVs imutáveis por consulta (14.547 registros API) + OpenAlex delta.
 	\item \texttt{S1\_evidence\_report.md} --- desagregação por fonte, datas de execução.
-	\item Script: \texttt{fetch\_all\_real\_data.py} (rate limiting + retry exponencial).
+	\item Script v1: \texttt{fetch\_all\_real\_data.py}; v2: \texttt{fetch\_v2} + 7 famílias de consulta A--G.
 \end{itemize}
 \end{frame}
 
@@ -138,9 +139,9 @@ Semantic Scholar & Graph API v1, paginação por \texttt{offset/limit} & 1.084 \
 \centering
 \begin{tabular}{lr}
 \toprule
-Entrada & 2.985 \\
-Duplicatas removidas & 164 \\
-\textbf{Saída} (\texttt{S1\_search\_results\_deduplicated.csv}) & \textbf{2.821} \\
+Entrada (APIs + OpenAlex) & 278.816 \\
+Duplicatas removidas & 5.701 \\
+\textbf{Saída} (dedup DOI + título) & \textbf{273.115} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -204,14 +205,16 @@ EC6 & Revisão/survey & \texttt{systematic review, meta-analysis, overview of, s
 \end{table}
 
 \centering\small
-\textbf{Resultado: 2.821 $\to$ 638} \quad (\texttt{S2\_elasticsearch\_filtered.csv})
+\textbf{v2:} mesma DSL em avaliador Python puro com duas pistas --- padrão (641) + contorno de frameworks (460, ex.: MONAI, nnInteractive) + pista OpenAlex (6.269) $\Rightarrow$ \textbf{273.115 $\to$ 7.370}.
+
+\textbf{v1:} 2.821 $\to$ 638 \quad (\texttt{S2\_elasticsearch\_filtered.csv})
 \end{frame}
 
 % ---------------------------------------------------------------
 \section{Triagem LLM (Título+Resumo)}
 \begin{frame}{5. Triagem LLM em cascata}
 \small
-\textbf{Protocolo de consenso para 638 candidatos:}
+\textbf{v1:} GPT-4o-mini ($\times$3) + GPT-5-nano + desempate GPT-5.2 para 638 candidatos. \textbf{v2:} mesma regra unânime, modelo mini-classe, 7.370 registros:
 
 \begin{table}
 \centering
@@ -231,14 +234,14 @@ Desempate & GPT-5.2 & 1 & 0.3 & Resolver disagreement (274 papers) \\
 \textbf{Regra conservadora:} qualquer divergência entre as 3 chamadas $\to$ desempatador GPT-5.2.
 
 \centering
-\textbf{638 $\to$ 161 incluídos} \quad (\texttt{all\_papers\_after\_s2\_with\_status.csv})
+\textbf{v2: 7.370 $\to$ 1.035 incluídos} (288 APIs + 751 OpenAlex, 4 entre pistas) \quad (\texttt{all\_papers\_after\_s2v2\_with\_status.csv})
 \end{frame}
 
 % ---------------------------------------------------------------
 \section{Validação Humana}
 \begin{frame}{6. Validação humana da triagem LLM}
 \small
-\textbf{Auditoria 10\%}, amostragem estratificada (n = 64 dos 638 pós-Elasticsearch).
+\textbf{v1:} auditoria humana de 10\% estratificada (n = 64 dos 638 pós-ES). \textbf{v2:} QA pós-execução --- 10 re-cheques aleatórios de INCLUDE (10/10) + oráculo de 12 sementes (12/12); \texttt{S4/S6} \S v2.1.
 
 \textbf{Estratos:} decisão da IA (INCLUDE/EXCLUDE) $\times$ tipo de consenso (unânime/maioria) $\times$ base de origem.
 
@@ -260,23 +263,23 @@ Falsos positivos (IA INCLUI $\to$ humano EXCLUI) & 0 \\
 \section{Aquisição de PDFs}
 \begin{frame}{7. Aquisição de texto completo}
 \small
-Dos 161 estudos selecionados em S2b, foi necessário obter o PDF para a triagem de texto completo.
+Dos 1.035 estudos incluídos em S2 (v2), foi necessário obter o texto completo para a triagem.
 
 \textbf{Estratégia:}
 \begin{enumerate}
-	\item Tentativa automática via \textbf{Unpaywall} (DOI $\to$ URL open access).
-	\item Captura direta via arXiv (PDF público).
-	% \item Acesso institucional (UTAD/sci-hub apenas para verificação de elegibilidade).
-	\item Registro de falhas em \texttt{excluded\_no\_fulltext.csv}.
+	\item Tentativa automática via \textbf{Unpaywall} (todas as \texttt{oa\_locations}).
+	\item Captura direta via arXiv / PMC / OA de editora.
+	\item v2: re-execução com rotas legadas (MDPI/Frontiers/BMC).
+	\item Registro de falhas em \texttt{S3v2\_paywalled\_librarian\_request.csv} (515; lista para bibliotecário).
 \end{enumerate}
 
 \begin{table}
 \centering
 \begin{tabular}{lr}
 \toprule
-Selecionados em S2b & 161 \\
-PDFs obtidos & \textbf{63} \\
-Sem acesso (paywall ou indisponível) & 98 \\
+Incluídos em S2 (v2) & 1.035 \\
+PDFs obtidos & \textbf{354} (34,2\%) \\
+Sem acesso (paywall ou indisponível) & 681 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -291,7 +294,7 @@ Sem acesso (paywall ou indisponível) & 98 \\
 \begin{enumerate}
 	\item Extração de texto: \texttt{PyMuPDF} $\to$ \texttt{markdown} normalizado.
 	\item Truncamento controlado para caber na janela do modelo.
-	\item Submissão em lote (\texttt{batch API}) ao \textbf{GPT-5.2}.
+	\item v2: três lotes via chat-completions --- mini-classe (186) e \textbf{glm-5.3-flash} (149 + 21).
 	\item Re-aplicação dos critérios IC1--IC6 / EC1--EC6 sobre o texto completo.
 	\item Extração estruturada: dataset, métricas (Dice/HD), arquitetura, órgãos, dataset, GPU.
 \end{enumerate}
@@ -300,14 +303,14 @@ Sem acesso (paywall ou indisponível) & 98 \\
 \centering
 \begin{tabular}{lr}
 \toprule
-PDFs avaliados & 63 \\
-\textbf{Incluídos na síntese} & \textbf{52} \\
-Excluídos (motivos categorizados) & 11 \\
+PDFs avaliados & 354 \\
+\textbf{Incluídos na síntese} & \textbf{254} (242 método + 9 frameworks + 3 benchmarks) \\
+Excluídos (motivos categorizados) & 100 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\footnotesize Saídas: \texttt{s3\_extracted\_data\_full.csv} (52 linhas, dados extraídos), \texttt{s3\_excluded\_papers.csv} (motivos), \texttt{s3\_summary\_table.csv}.
+\footnotesize Saídas v2: \texttt{s3v2\_extracted\_data\_full.csv} (354 linhas), \texttt{s3v2\_excluded\_papers.csv} (100 motivos), \texttt{s3v2\_summary\_table.csv} (242 método).
 \end{frame}
 
 % ---------------------------------------------------------------
@@ -322,21 +325,21 @@ Excluídos (motivos categorizados) & 11 \\
 	\item \textbf{Relevância clínica:} validação externa, comparação com radiologistas, métricas clínicas, tempo de inferência, integração de fluxo.
 \end{itemize}
 
-\textbf{Aplicação:} GPT-5.2 batch sobre os 52 incluídos.
+\textbf{v1:} GPT-5.2 (52 estudos). \textbf{v2:} rubrica idêntica em dois lotes (mini-classe 20,3; glm-5.3-flash 20,7) sobre 224 estudos de método.
 
 \begin{table}
 \centering
 \begin{tabular}{lr}
 \toprule
-Pontuação média total & \textbf{21,0 / 30} \\
-Amplitude & 14 -- 28 \\
-Alta qualidade ($\geq 24$) & 10 (19,2\%) \\
-Média qualidade (15--23) & 41 (78,8\%) \\
-Baixa qualidade ($<15$) & 1 (1,9\%) \\
+Pontuação média total (v2, n=240) & \textbf{20,4 / 30} \\
+Amplitude & 6 -- 30 \\
+Alta qualidade ($\geq 24$) & 60 (25,0\%) \\
+Média qualidade (15--23) & 154 (64,2\%) \\
+Baixa qualidade ($<15$) & 26 (10,8\%) \\
 \bottomrule
 \end{tabular}
 \end{table}
-\footnotesize Per-study scores: \texttt{qa\_summary.csv}; respostas brutas: \texttt{qa\_parsed\_results.json}.
+\footnotesize v2: \texttt{qa\_v2\_summary.csv} (348 linhas) e \texttt{qa\_v2\_parsed\_results.json}; escalão de QA documentado em S4 \S v2.1.
 \end{frame}
 
 % ---------------------------------------------------------------
@@ -357,22 +360,22 @@ Cada etapa do pipeline gera CSVs/MDs versionados que permitem auditoria:
 
 \textbf{Dados brutos e filtrados:}
 \begin{itemize}
-	\item \texttt{S1\_search\_results\_REAL.csv} (2.985)
-	\item \texttt{S1\_*\_deduplicated.csv} (2.821)
-	\item \texttt{S2\_elasticsearch\_filtered.csv} (638)
+	\item \texttt{raw/v2/} (14.547 API) + OpenAlex (264.269)
+	\item \texttt{S1v2\_search\_results\_deduplicated.csv} (8.846)
+	\item \texttt{S2v2\_elasticsearch\_filtered.csv} (1.101)
 \end{itemize}
 
 \column{0.5\textwidth}
 \textbf{Decisões e auditoria:}
 \begin{itemize}
-	\item \texttt{S5\_screening\_decisions.csv}
+	\item \texttt{all\_papers\_after\_s2v2\_with\_status.csv} (1.101)
 	\item \texttt{S6\_validation\_report.md}
 	\item \texttt{s3\_excluded\_papers.csv}
 \end{itemize}
 
 \textbf{Síntese final:}
 \begin{itemize}
-	\item \texttt{S2\_final\_included\_studies.csv} (52)
+	\item \texttt{S2v2\_final\_included\_studies.csv} (236)
 	\item \texttt{s3\_extracted\_data\_full.csv}
 	\item \texttt{qa\_summary.csv}
 	\item \texttt{S12\_per\_organ\_statistics.md}
@@ -391,18 +394,18 @@ Cada etapa do pipeline gera CSVs/MDs versionados que permitem auditoria:
 		side/.style={rectangle, draw, align=center, minimum width=3.6cm, minimum height=0.55cm, inner sep=2pt},
 		arr/.style={-{Stealth[length=2mm]}, thick}
 ]
-	\node[box] (s1raw) {S1: Registros identificados (PubMed + arXiv + Semantic Scholar): \textbf{2.985}};
-	\node[box, below=of s1raw] (dedup) {Após deduplicação (DOI + título normalizado): \textbf{2.821}};
-	\node[side, right=0.2cm of dedup] (dedupexc) {Duplicatas removidas: \textbf{164}};
-	\node[box, below=of dedup] (s2) {S2a: Pré-filtro Elasticsearch (título + resumo): \textbf{638}};
-	\node[side, right=0.2cm of s2] (s2exc) {Excluídos no pré-filtro: \textbf{2.183}};
-	\node[box, below=of s2] (llm) {S2b: Triagem LLM (GPT-4o-mini ×3 unânime): \textbf{161}};
-	\node[side, right=0.2cm of llm] (llmexc) {Excluídos via LLM: \textbf{477}};
-	\node[box, below=of llm] (pdf) {Texto completo obtido (PDF): \textbf{63}};
-	\node[side, right=0.2cm of pdf] (nopdf) {Sem PDF: \textbf{98}};
-	\node[box, below=of pdf] (s3) {S3: Triagem de texto completo (GPT-5.2): \textbf{52 incluídos}};
-	\node[side, right=0.2cm of s3] (s3exc) {Excluídos (texto completo): \textbf{11}};
-	\node[box, below=of s3] (final) {Síntese narrativa + QA: \textbf{52 estudos}};
+	\node[box] (s1raw) {S1: APIs 14.547 + pista OpenAlex 264.269: \textbf{278.816}};
+	\node[box, below=of s1raw] (dedup) {Após deduplicação (DOI + título normalizado): \textbf{273.115}};
+	\node[side, right=0.2cm of dedup] (dedupexc) {Duplicatas removidas: \textbf{5.701}};
+	\node[box, below=of dedup] (s2) {S2a: Pré-filtro de 2 pistas (padrão + frameworks): \textbf{7.370}};
+	\node[side, right=0.2cm of s2] (s2exc) {Excluídos no pré-filtro: \textbf{265.745}};
+	\node[box, below=of s2] (llm) {S2b: Triagem LLM (mini-classe ×3 unânime): \textbf{1.035 incluídos}};
+	\node[side, right=0.2cm of llm] (llmexc) {Excluídos via LLM: \textbf{6.331}};
+	\node[box, below=of llm] (pdf) {Texto completo obtido (PDF): \textbf{354}};
+	\node[side, right=0.2cm of pdf] (nopdf) {Sem PDF: \textbf{681} (501 paywall)};
+	\node[box, below=of pdf] (s3) {S3: Triagem de texto completo (3 lotes LLM): \textbf{254 incluídos}};
+	\node[side, right=0.2cm of s3] (s3exc) {Excluídos (texto completo): \textbf{100}};
+	\node[box, below=of s3] (final) {Síntese narrativa + QA: \textbf{254 estudos} (242 método)};
 
 	\draw[arr] (s1raw) -- (dedup);
 	\draw[arr] (dedup) -- (s2);

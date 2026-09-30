@@ -1,24 +1,24 @@
 # S3v2 Synthesis — Architecture Strata, Supervision, Multi-Axis Taxonomy, Per-Organ Dice
 
-**v2.1 (2026-09-30):** regenerated after the glm-5.3-flash re-screen of 149 additional full texts
-(OA re-fetch + user-sanctioned shadow-library acquisition). All counts machine-derived from
-`s3v2_extracted_data_full.csv` (333 rows), `s3v2_summary_table.csv` (224 method-INCLUDE rows),
-`qa_v2_summary.csv`, and `v1_v2_study_reconciliation.csv`. The prior 186/121-based version is superseded.
+**v2.2 (2026-10-01):** regenerated after the second shadow-library wave (+21 PDFs, glm-5.3-flash screened).
+All counts machine-derived from `s3v2_extracted_data_full.csv` (354 rows), `s3v2_summary_table.csv`
+(242 method-INCLUDE rows), `qa_v2_summary.csv`, and `v1_v2_study_reconciliation.csv`.
+The 333/236-based v2.1 version is superseded.
 
 ## Funnel recap (full-text stage)
 
-- Obtained distinct papers: **333** (186 original + 82 OA re-fetch + 75 shadow-library; 149 re-screened by glm-5.3-flash after dedup of supplementary payloads)
-- Full-text INCLUDE: **236** (method 224, framework 9, benchmark 3)
-- Full-text EXCLUDE: **97** (method 87 incl. 4 unusable PDFs, benchmark 7, framework 2, review 1)
-- Retrieval: 333/1,035 unique S2-includes = **32.2%**; 515 paywalled routed to librarian hand-off
+- Obtained distinct papers: **354** (186 original + 82 OA re-fetch + 96 user-sanctioned shadow-library; two re-screen waves)
+- Full-text INCLUDE: **254** (method 242, framework 9, benchmark 3)
+- Full-text EXCLUDE: **100** (method 90 incl. 4 unusable PDFs, benchmark 7, framework 2, review 1)
+- Retrieval: 354/1,035 unique S2-includes = **34.2%**; 501 paywalled routed to librarian hand-off
 
-## Architecture-family strata (method INCLUDE, n=224)
+## Architecture-family strata (method INCLUDE, n=242)
 
-- **CNN**: 205/224
-- **Hybrid**: 16/224
-- **Transformer**: 1/224
-- **Foundation**: 2/224
-- U-Net family: 160/224 (71.4%)
+- **CNN**: 223/242
+- **Hybrid**: 16/242
+- **Transformer**: 1/242
+- **Foundation**: 2/242
+- U-Net family: 167/242 (69.0%)
 
 ## Framework stratum (INCLUDE, n=9) — qualitative template
 
@@ -36,61 +36,56 @@
 
 Framework papers are EXCLUDED from the quantitative table (plan task-8 contract).
 
-## Supervision regime (method INCLUDE)
-
-- fully(implicit): 217
-- semi: 5
-- self: 2
-
 ## Multi-axis taxonomy (method INCLUDE)
 
-- **Input dimensionality**: true-3D 184 / not-3D 40
-- **Anatomical scope**: multi-organ 90 / single-organ 134
-- **Code availability**: 41/224 report code
-- **Best-Dice reported**: 212/224
+- **Input dimensionality**: true-3D 199 / not-3D 43
+- **Anatomical scope**: multi-organ 96 / single-organ 146
+- **Code availability**: 43/242 report code
+- **Per-organ Dice reported**: 233/242
 
 ## Year distribution (method INCLUDE)
 
-- 2016: 1
-- 2017: 7
-- 2018: 16
-- 2019: 32
-- 2020: 43
-- 2021: 27
-- 2022: 27
+- 2016: 2
+- 2017: 10
+- 2018: 18
+- 2019: 36
+- 2020: 45
+- 2021: 31
+- 2022: 29
 - 2023: 21
 - 2024: 16
 - 2025: 26
 - 2026: 8
 
-## Per-organ Dice (methods papers only, aggregated from dice_per_organ)
+## Per-organ Dice (methods papers only, first matching `dice_per_organ` entry per organ per study)
 
-| Organ | n (values) | Mean | Range |
+| Organ | studies | Mean | Range |
 |---|---|---|---|
-| liver | 100 | 89.8% | 8.0-98.7% |
-| kidney | 92 | 88.5% | 50.2-99.5% |
-| pancreas | 40 | 76.4% | 23.9-96.0% |
-| lung | 33 | 95.0% | 62.0-99.8% |
-| spleen | 26 | 89.2% | 33.0-98.8% |
-| bladder | 26 | 84.6% | 65.9-97.0% |
-| heart | 22 | 93.0% | 86.0-96.6% |
-| stomach | 19 | 87.3% | 67.0-97.0% |
-| esophagus | 17 | 74.3% | 50.3-85.2% |
-| prostate | 8 | 81.5% | 49.5-97.8% |
+| liver | 69 | 93.6% | 64.1-98.7% |
+| kidney | 48 | 92.9% | 52.5-99.0% |
+| pancreas | 29 | 76.7% | 23.9-94.0% |
+| bladder | 25 | 84.8% | 65.9-97.0% |
+| spleen | 24 | 91.2% | 57.0-98.8% |
+| heart | 22 | 93.4% | 87.0-96.6% |
+| lung | 20 | 94.7% | 67.0-99.8% |
+| esophagus | 17 | 75.5% | 50.3-85.2% |
+| stomach | 17 | 87.1% | 67.0-94.4% |
+| prostate | 9 | 82.5% | 49.5-97.8% |
 
 Cross-study aggregation over heterogeneous datasets/protocols; descriptive dispersion only (v1 convention).
 
-## Quality assessment (method INCLUDE, scored n=222 of 224)
+## Quality assessment (method INCLUDE, scored n=240 of 242)
 
-- 15-question rubric (v1-identical): mean **20.5/30**, median **21/30**, range 6-30
-- High (>=24): 56 (25.2%) | Medium: 142 (64.0%) | Low: 24 (10.8%)
-- Scorer tiers: v1 GPT-4o/GPT-5.2; v2 batch-1 deepseek-v4-flash (mean 20.3, n=116); v2 batch-2 glm-5.3-flash (mean 20.7, n=107). Rubric identical across all waves.
+- 15-question rubric (v1-identical): mean **20.4/30**, median **21/30**, range 6-30
+- High (>=24): 60 (25.0%) | Medium: 154 (64.2%) | Low: 26 (10.8%)
+- Scorer tiers: v1 GPT-4o/GPT-5.2; v2 batch-1 mini-class (mean 20.3, n=115); v2 batch-2 glm-5.3-flash (mean 20.5, n=125). Rubric identical across all waves.
 
 ## v1-to-v2 study reconciliation (52 v1 studies)
 
-- fulltext-missed: 26
-- re-included: 20
+- fulltext-missed: 23
+- re-included: 22
 - not-identified: 5
 - s3-excluded: 1
+- s2-excluded: 1
 
-The fetch + re-screen waves recovered 15 additional v1 studies (re-included 5 -> 20; not-identified 15 -> 5).
+The two fetch + re-screen waves recovered 17 additional v1 studies (re-included 5 -> 22; not-identified 15 -> 5).

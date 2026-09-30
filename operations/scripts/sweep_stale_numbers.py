@@ -20,6 +20,7 @@ CLASSES = {
     'dedup-funnel':[r'2{,}821', r'2,821', r'2{,}183', r'2,183', r'\b638\b', r'\bn = 161\b', r'\b161 candidates\b', r'\b98 papers\b', r'\b103 unobtain', r'63 of 161', r'39\.1'],
     'corpus-v1':   [r'52 included', r'52 studies', r'52-study', r'52 reviewed', r'52 peer', r'52 papers', r'of 52 studies', r'/52\b', r'\bn=52\b'],
     'v2-stale':    [r'121 included', r'121 studies', r'116 method', r'of 116\b', r'/116\b', r'116-study', r'186 distinct', r'n = 186\b', r'1\{,\}039', r'n = 849', r'82\.0\\%', r'18\.0\\%', r'17\.9'],
+    'v2.1-stale':  [r'236 included', r'All 236', r'n = 236\b', r'236 studies', r'224 method', r'of 224\b', r'/224\b', r'222 scored', r'n=222\b', r'333 distinct', r'n = 333\b', r'333 of 1', r'32\.2\\%', r'n = 702\b', r'702 not retrieved', r'515 paywalled', r'515 routed', r'215 of 224', r'105 method studies', r'105 of 224', r'n=105 of 224', r'97 papers', r'Excluded n\s*=\s*97'],
     'arch-share':  [r'96\.2\\%', r'82\.7\\%', r'98\.1\\%', r'65\.4\\%', r'34\.6\\%', r'36\.5\\%', r'30\.8\\%', r'\b7\.7\\%'],
     'qa-v1':       [r'21\.0/30', r'78\.8\\%', r'1\.9\\%', r'\(10 of 52\)', r'\(8 of 28\)'],
     'organs-v1':   [r'liver \(n=29\)', r'kidney/renal \(n=26\)', r'spleen \(n=17\)', r'pancreas \(n=16\)', r'stomach \(n=16\)', r'gallbladder \(n=13\)', r'bladder \(n=11\)'],
