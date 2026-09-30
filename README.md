@@ -11,18 +11,18 @@ A comprehensive systematic literature review of deep learning methods for 3D org
 
 - **Manuscript:** [https://github.com/gameguild-gg/docdo-paper](https://github.com/gameguild-gg/docdo-paper)
 - **Format:** IEEE Conference
-- **Studies Reviewed:** 52 peer-reviewed papers (2015–2025)
+- **Studies Reviewed:** 254 included studies (242 method papers + 9 framework/software + 3 benchmark; 2015–2026)
 
 ## Key Findings
 
 | Metric | Value |
 |--------|-------|
-| Papers reviewed | 52 |
-| Architectures compared | CNN, Transformer, Hybrid |
-| Datasets analyzed | BTCV, AMOS, KiTS, MSD, TotalSegmentator |
+| Studies included | 254 (242 method; of 354 full texts obtained from 1,035 S2-includes) |
+| Architectures compared | CNN (92.1%), Hybrid, Transformer, Foundation |
+| Datasets analyzed | BTCV, AMOS, KiTS, MSD, LiTS, TotalSegmentator |
 | Best overall method | nnU-Net (self-configuring) |
-| Highest Dice (liver) | 97.2% |
-| Highest Dice (pancreas) | 88.1% |
+| Mean Dice (liver, n=69) | 93.6% |
+| Mean Dice (pancreas, n=29) | 76.7% |
 
 ## Building the Paper
 
