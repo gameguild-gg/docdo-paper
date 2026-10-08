@@ -119,3 +119,16 @@ Machine-derived from `pipeline_outputs/` CSVs; nothing hand-typed:
 - Benchmarks (method studies): LiTS 45, KiTS 25, MSD 14, BTCV 10, MMWHS 5.
 - Hollow-organ 38 (15.7%); multi-center/external 18 (7.4%); HD95 57 (23.6%); DOI-identified 219, arXiv 23; DOI-subset QA-high 51/217 (23.5%).
 - v1↔v2 reconciliation: 22/1/1/23/5 (re-included/s2-excluded/s3-excluded/fulltext-missed/not-identified).
+
+---
+
+## v2.3 Section (2026-10-08) — verified statistics
+
+Machine-derived from `pipeline_outputs/` CSVs; nothing hand-typed:
+- Corpus: 1,211 obtained / 433 included (405 method + 13 framework + 15 benchmark) / 733 excluded. Legacy retrieval 354/1,035 = 34.2%; wave-8 added 857 full texts beyond the S2 pool.
+- Method strata (n=405, one uniform keyword classifier — see synthesis.md note): CNN 364 (89.9%), Hybrid 31, Foundation 6, Transformer 4; U-Net family 269 (66.4%); true-3D 360 (88.9%); multi-organ 177 (43.7%); code available 74 (18.3%); PyTorch 114 (28.1%) / TF-Keras 78 (19.3%).
+- Organ targets (method studies mentioning organ in organs_segmented/datasets): liver 154, kidney 100, pancreas 80, bladder 61, lung 57, spleen 54, heart 50, esophagus 32, stomach 32, prostate 31.
+- QA (scored n=403 of 405): mean 16.4, median 17, range 0–30; High (>=24) 60 (14.9%), Medium 186 (46.2%), Low (<=14) 157 (39.0%). Scorer tiers per S4; wave-8 tier (`omo/vision`) scores structurally lower than legacy tiers — treat cross-tier comparisons with caution.
+- Benchmarks (method studies): LiTS 63, KiTS 33, MSD 19, BTCV 18, AMOS 9, MMWHS 7, TotalSegmentator 7.
+- Hollow-organ 82 (20.2%); HD95 reported 87 (21.5%); DOI-identified 316, arXiv 25.
+- Per-organ Dice table: see S12 v2.3 section (values scale-normalized: >1.5 treated as percent).

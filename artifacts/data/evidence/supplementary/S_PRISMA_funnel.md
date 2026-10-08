@@ -82,3 +82,18 @@ Pipeline scripts (in `operations/src/_archive/scripts/`):
 | Method studies with per-organ Dice | 233 | `s3v2_summary_table.csv` |
 
 Screening models: S3 batch 1 (186 papers) mini-class `deepseek-v4-flash-vision-low`; S3 batch 2 (149 papers) `zai/glm-5.3-flash`; S3 batch 3 (21 papers, second shadow wave) `zai/glm-5.3-flash`. v1↔v2 reconciliation (52 v1 studies): **22 re-included / 1 s2-excluded / 1 s3-excluded / 23 fulltext-missed / 5 not-identified** (`v1_v2_study_reconciliation.csv`).
+
+---
+
+## v2.3 Section (2026-10-08) — wave-8 expansion funnel
+
+| Stage | N | Artifact |
+|-------|---|----------|
+| (v2.2 stages unchanged: 273,115 dedup → 7,370 pre-filter → 1,035 S2 INCLUDE) | — | v2.2 section above |
+| Wave-8 acquisition beyond the S2 pool (user-sanctioned shadow/expansion harvest: OpenAlex deep-harvest, EPMC core, arXiv/bioRxiv, libgen/sci-hub, Anna's Archive; see `.omo/evidence/task-*-get-missing-papers-1000.md`) | 857 PDFs | `pipeline_outputs/wave8_screening_raw.json` |
+| Full texts obtained (354 legacy + 857 wave-8) | **1,211** | `S3v2_acquisition_log.csv` (1,700 rows) |
+| Full-text EXCLUDE | 733 | `s3v2_excluded_papers.csv` |
+| **Included (405 method + 13 framework + 15 benchmark)** | **433** | `s3v2_extracted_data_full.csv`, `S2v2_final_included_studies.csv` |
+| Method studies with per-organ Dice | 301 | `s3v2_summary_table.csv` |
+
+Screening model: wave-8 S3 + QA on `omo/vision` (OmniRoute), temperature 0.3, network-retry hardened (0 terminal failures). Dedup on merge: 30 preprint-vs-published / arXiv-version / supplement-DOI manifestations dropped, 15 duplicate excludes dropped (reconciliation CSV). One decision flip flagged for human adjudication: `10.1016_j.eclinm.2024.102772` (C1 INCLUDE conf 0.6 vs wave-8 EXCLUDE; wave-8 retained).

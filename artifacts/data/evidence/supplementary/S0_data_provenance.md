@@ -327,3 +327,11 @@ For each of 638 papers:
 - Full texts (354 distinct papers; 365 PDF files): `pdfs/openalex/` (262 DOI-named OA PDFs), `pdfs/` (6 seeds), `pdfs/shadow/` (97 user-sanctioned shadow-library acquisitions across two waves — libgen.li via Tor + sci-hub.ru/.ee fallback; provenance in `.omo/evidence/task-7-paper-coverage-gap-update.md`).
 - Acquisition log: 843 rows = 325 oa-download + 96 shadow-library + 422 paywalled (501-paper librarian hand-off list).
 - All v2 pipeline outputs in `pipeline_outputs/` (S1v2/S2v2/S3v2/qa_v2 prefixes). Re-screen waves: glm-5.3-flash batches, 2026-09-30/10-01.
+
+---
+
+## v2.3 Section (2026-10-08) — raw inventory update
+
+- Wave-8 harvest (beyond S2 pool): 857 QA-passed PDFs (magic bytes, >10KB, pdftotext>100 chars) under `pdfs/`, `pdfs/openalex/`, `pdfs/shadow/` (1,615 distinct PDFs on disk across all lanes; routes per `.omo/evidence/task-*` files).
+- Acquisition log now 1,700 rows: +857 route `wave8-shadow-expansion`.
+- Raw screening audit: `pipeline_outputs/wave8_screening_raw.json` (857 records, lane `omo/vision`).

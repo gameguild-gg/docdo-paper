@@ -130,3 +130,9 @@ For questions about accessing specific articles or verifying extracted data:
 ## v2.2 Section (2026-10-01) — v2 paywall log
 
 501 paywalled records routed to librarian-mediated hand-off: `pipeline_outputs/S3v2_paywalled_librarian_request.csv` (+ `documentation/reports/unobtainable-fulltexts-v2.md` addenda). OA-first acquisition recovered 325 oa-download rows (Unpaywall `oa_locations[]`, arXiv, PMC, publisher OA, legacy landing-page scrape). Two user-sanctioned shadow-library waves (libgen.li via Tor with DOI + title search; sci-hub.ru/.ee fallback) added 96 PDFs; provenance and failure classes in `.omo/evidence/task-7-paper-coverage-gap-update.md`. The remaining ~524 candidates are confirmed absent from all accessible shadow holdings (Wiley/IOP/Elsevier metadata-only records) — librarian hand-off is the sole remaining route.
+
+---
+
+## v2.3 Section (2026-10-08) — wave-8 acquisition note
+
+Wave-8 obtained 857 full texts beyond the 1,035-study S2 pool via user-sanctioned routes (OpenAlex deep-harvest, EPMC `resultType=core` + PMC PoW, arXiv/bioRxiv mirror fix, libgen/sci-hub Tor rotation, Anna's Archive DDoS-Guard solver). The 402-record librarian hand-off list remains the route for confirmed-paywalled items.

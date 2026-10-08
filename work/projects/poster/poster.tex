@@ -249,7 +249,7 @@ of 3D CT organ segmentation for surgical planning:
   \end{minipage}\\[0.5em]
   \begin{minipage}[t]{0.48\linewidth}
     \begin{statchip}{CNN Dominance in Literature}
-      92.1\%
+      89.9\%
     \end{statchip}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.48\linewidth}
@@ -309,14 +309,14 @@ of 3D CT organ segmentation for surgical planning:
                                   \small 3-vote unanimous, mini-class};
   \node[ebox, right=0.8cm of ai] (ex1) {Excluded n\,=\,6{,}331\\
                                          No 3D DL, non-CT};
-  \node[mbox, below=of ai] (ft) {Full-text Assessed (n\,=\,354)\\
+  \node[mbox, below=of ai] (ft) {Full-text Assessed (n\,=\,1{,}211)\\
                                   \small 681 not retrieved (501 paywalled)};
   \node[ebox, right=0.8cm of ft] (ex2) {Excluded n\,=\,100\\
                                          Final full-text screen};
   \node[mbox, below=of ft,
         fill=utadnavy!12, draw=utadnavy, line width=2pt] (inc)
-    {\textbf{Included: n\,=\,254}\\
-     \small 242 method + 9 framework, Per-organ (n=233)};
+    {\textbf{Included: n\,=\,433}\\
+     \small 405 method + 13 framework, Per-organ (n=301)};
 
   \draw[farrow] (db) -- (es);
   \draw[farrow] (es) -- (ai);
@@ -332,7 +332,7 @@ of 3D CT organ segmentation for surgical planning:
 {\small\setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}ll@{}}
   \textbf{Literature window:}    & 2015--2026 \\
-  \textbf{Full-text retrieval:}  & 34.2\% \\
+  \textbf{Full-text retrieval:}  & 34.2\% legacy + 857 harvested \\
   \textbf{Validation:}           & v1 human audit $\kappa=0.89$ (n\,=\,64); \\
                                  & v2 post-run QA 10/10 + seed oracle 12/12 \\
 \end{tabular}
@@ -423,7 +423,7 @@ MedSAM$^\dagger$ & Found. & 85.7 &  8.1 & \checkmark  \\
 \end{pblock}
 
 %--- Per-Organ ---------------------------------------------------------------
-\begin{pblock}{Per-Organ Dice Scores \newline (from 111 of 242 method studies reporting)}
+\begin{pblock}{Per-Organ Dice Scores \newline (from 182 of 405 method studies reporting)}
 \vspace{0.4em}
 {\small
 \begin{tabular}{@{}lcccc@{}}
@@ -494,15 +494,15 @@ Pancreas     & 76.7\% & 23.9--94.0\% & 29 & Small, deformable    \\
 {\small
 \begin{tabular}{@{}lcc@{}}
 \toprule
-\textbf{Family} & \textbf{BTCV Dice} & \textbf{Share of 242 Method Studies} \\
+\textbf{Family} & \textbf{BTCV Dice} & \textbf{Share of 405 Method Studies} \\
 \midrule
-CNN (all)              & 74--87\% & 92.1\% \\
-\quad 3D U-Net variants & 74--87\% & 69.0\% \\
+CNN (all)              & 74--87\% & 89.9\% \\
+\quad 3D U-Net variants & 74--87\% & 66.4\% \\
 Hybrid (CNN+Trans.)    & 77--87\% & 6.6\%  \\
 Transformer (pure)     & 79--82\% & 0.4\%  \\
 Foundation model       & 76--86\% & 0.8\%  \\
 \midrule
-\multicolumn{3}{@{}l@{}}{\footnotesize + Framework stratum: 9 of 254 included} \\
+\multicolumn{3}{@{}l@{}}{\footnotesize + Framework stratum: 13 of 433 included} \\
 \multicolumn{3}{@{}l@{}}{\footnotesize (MONAI Label, nnInteractive, VISTA3D, MHub.ai);} \\
 \multicolumn{3}{@{}l@{}}{\footnotesize emerging neuro-symbolic thread (graph/topology)} \\
 \bottomrule
@@ -530,7 +530,7 @@ Foundation model       & 76--86\% & 0.8\%  \\
   \item \textbf{Benchmark gap:} reported Dice likely overestimates
         clinical accuracy by \textbf{5--15\%} due to controlled splits,
         test-time augmentation, and ensembling
-  \item \textbf{Single-centre dominance:} only 18/242 studies (7.4\%)
+  \item \textbf{Single-centre dominance:} only 17/405 studies (4.2\%)
         include multi-centre or prospective validation
 \end{itemize}
 \end{pblock}
@@ -593,7 +593,7 @@ Foundation model       & 76--86\% & 0.8\%  \\
 \begin{pblock}{Clinical Deployment Barriers}
 \begin{enumerate}\setlength\itemsep{2pt}
   \item \textbf{Domain shift:} scanner heterogeneity degrades Dice by
-        \textbf{5--15\%} across institutions; only 18/242 studies (7.4\%)
+        \textbf{5--15\%} across institutions; only 17/405 studies (4.2\%)
         include multi-centre validation
   \item \textbf{Vascular deficit:} 65--75\% Dice for vessels vs.\
         90\%+ for parenchymal organs
@@ -643,7 +643,7 @@ Foundation model       & 76--86\% & 0.8\%  \\
 %--- Conclusions -------------------------------------------------------------
 \begin{pblock}{Conclusions}
 \begin{enumerate}\setlength\itemsep{2pt}
-  \item \textbf{CNNs dominate} (92.1\% of 242 method studies); nnU-Net is
+  \item \textbf{CNNs dominate} (89.9\% of 405 method studies); nnU-Net is
         the strongest reported baseline (82.3\% Dice on BTCV, no pre-training)
   \item \textbf{Auto-CNNs outperform transformers} on BTCV:
         $85.2 \pm 2.1$\% vs.\ $80.5 \pm 1.8$\%;

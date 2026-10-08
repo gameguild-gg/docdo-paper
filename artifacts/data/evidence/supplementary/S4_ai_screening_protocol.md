@@ -404,3 +404,11 @@ All screening data available in supplementary materials:
 **QA scorer-tier shift (explicit):** v1 scored by GPT-4o/GPT-5.2; v2 batch 1 by mini-class (method mean 20.3, n=115 post-dedup); v2 batches 2–3 by glm-5.3-flash (mean 20.5, n=125). Rubric identical across all waves; scores not strictly comparable across tiers (batch means differ by 0.2).
 
 **Post-run QA:** batch 1 — 10 random INCLUDE re-checks 10/10; seed-recall oracle 12/12. Batches 2–3 — 10-row random extraction audit vs PDFs (seed=7): 50 field checks, 0 true extraction errors (all flags checker artifacts).
+
+---
+
+## v2.3 Section (2026-10-08) — wave-8 scorer tier
+
+**S3 full-text screening + extraction + QA, wave-8 (857 papers):** `omo/vision` (OmniRoute fallback chain), temperature 0.3, docling/pdftotext text lanes with size-aware truncation, multi-pass network retries (4–6 attempts per paper; all 857 terminal-ok). Same S3 criteria, same study-type routing, same 15-question QA rubric (D/M/C items mapped to Q1–15 at merge).
+
+**QA scorer-tier note (explicit):** wave-8 tier mean 16.4 (n=209 method includes) vs legacy tiers 20.3–20.5. Rubric identical; scores not strictly comparable across tiers.

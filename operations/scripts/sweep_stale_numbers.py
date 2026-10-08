@@ -25,14 +25,16 @@ CLASSES = {
     'qa-v1':       [r'21\.0/30', r'78\.8\\%', r'1\.9\\%', r'\(10 of 52\)', r'\(8 of 28\)'],
     'organs-v1':   [r'liver \(n=29\)', r'kidney/renal \(n=26\)', r'spleen \(n=17\)', r'pancreas \(n=16\)', r'stomach \(n=16\)', r'gallbladder \(n=13\)', r'bladder \(n=11\)'],
     'dates':       [r'between 2015 and January 2026', r'and January 10, 2026'],
+    'v2.2-stale':  [r'254 included', r'254 studies', r'242 method', r'of 242\b', r'/242\b', r'242-study', r'n = 354\b', r'354 full-text', r'354 obtained', r'233 of 242', r'n=233\b', r'111 of 242', r'92\.1\\%', r'69\.0\\%', r'82\.2\\%', r'39\.7\\%', r'17\.8\\%', r'223/242', r'167/242', r'146/242', r'96/242', r'199/242', r'16 of 242', r'2 of 242 method', r'of 254', r'/254\b'],
 }
 # Contexts in which a pattern hit is legitimate current text:
-LEGIT_CTX = ['`10.', '`arXiv', 'v1 studies', 'v1-52', 'original searches ran',
+LEGIT_CTX = ['`10.', '`arXiv', 'v1 studies', 'v1-52', 'original searches ran', 'v2.2 Section',
              '2020 (43 papers', 'HD95', 'v1 corpus', 'v1 wave', 'v1 line',
              '95.3', 'MedNeXt', 'Table~\\ref{tab:organs}', 'tab:organs',
              '82.3', '82.4', '85.2', '80.5', '86.2', '87.1', '96.1']
 
 HIST_MD = re.compile(r'<!-- v1-history -->.*?<!-- /v1-history -->', re.S)
+HIST_V22 = re.compile(r'## v2\.2 Section.*?(?=\n---\n|\n## v2\.3 Section|\Z)', re.S)
 HIST_TEX = re.compile(r'^\s*% v1-history.*?^\s*% /v1-history', re.S | re.M)
 
 def targets():
@@ -59,11 +61,16 @@ def main():
         is_tex = path.endswith('.tex')
         body = open(path, errors='ignore').read()
         body = (HIST_TEX if is_tex else HIST_MD).sub('', body)
+        if not is_tex:
+            body = HIST_V22.sub('', body)
         for cls, pats in CLASSES.items():
             for pat in pats:
                 for m in re.finditer(pat, body):
                     ctx = body[max(0, m.start()-70):m.start()+70].replace('\n', ' ')
-                    if any(x in ctx for x in LEGIT_CTX):
+                    line_start = body.rfind('\n', 0, m.start()) + 1
+                    line_end = body.find('\n', m.end())
+                    line = body[line_start:line_end if line_end != -1 else len(body)]
+                    if any(x in ctx for x in LEGIT_CTX) or 'v2.2 Section' in line or 'v2.2 section' in line:
                         continue
                     violations.append((os.path.relpath(path, REPO), cls, m.group(0), ctx))
                     break

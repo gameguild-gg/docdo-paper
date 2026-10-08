@@ -242,3 +242,9 @@ for audit trail).
 ## v2.2 Section (2026-10-01) — v2 validation
 
 The v1 10% human audit (n=64, 61/64, kappa=0.90) was NOT repeated for v2. v2 validation: (1) batch 1 — 10 random INCLUDE re-checks 10/10; seed-recall oracle 12/12 terminal states; (2) batches 2–3 — 10-row random extraction audit vs source PDFs (seed=7), 50 field checks, 0 true errors; (3) funnel checker asserts (lanes disjoint, es_pass_total = standard + bypass); (4) duplicate detection over the merged corpus (2 arXiv/journal pairs identified, journal versions kept; supplementary-payload PDFs dropped pre-screen). Residual: pre-filter sensitivity not directly audited (v1 limitation carried forward).
+
+---
+
+## v2.3 Section (2026-10-08) — wave-8 validation
+
+(1) Deterministic merge battery: 433 unique ids, qa json == qa_summary id sets, every include present in extraction/QA/acquisition tables (all asserts passed). (2) Dedup detector reproduced the 30 known preprint-vs-published pairs on re-run. (3) QA score recovery: 187/209 rows had nested-only total_score — recovered from nested quality_assessment; band cutoffs calibrated to reproduce v2.2's 60/26 High/Low exactly on legacy scores. (4) C1 spot-check: 9/9 wave-7 paper_ids re-verified present in wave-8. Residual: wave-8 tier not human-audited (legacy 10% audit carried forward as protocol limitation); one flip flagged (`10.1016_j.eclinm.2024.102772`).

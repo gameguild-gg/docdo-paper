@@ -106,7 +106,7 @@ Clinical prototype tested on 1{,}000+ cases over 10 years. Surgeon requirements:
 \end{column}
 \end{columns}
 \vspace{0.1cm}
-\scriptsize\color{gray}CNNs 92.1\,\% of 242 method studies; U-Net family 69.0\,\%. nnU-Net and Swin UNETR statistically indistinguishable on parenchyma; 9-study framework stratum (MONAI, nnInteractive, VISTA3D) assessed separately.
+\scriptsize\color{gray}CNNs 89.9\,\% of 405 method studies; U-Net family 66.4\%. nnU-Net and Swin UNETR statistically indistinguishable on parenchyma; 13-study framework stratum (MONAI, nnInteractive, VISTA3D) assessed separately.
 \end{frame}
 
 
@@ -750,15 +750,15 @@ These three limits motivate the differentiable formulation: \alert{learn the cos
 \scriptsize
 \begin{itemize}
 \setlength\itemsep{4pt}
-\item CNNs dominate literature: \alert{\textbf{92.1\,\%}} of 242 method studies.
-\item U-Net variants in \alert{\textbf{69.0\,\%}} of studies; hybrids 6.6\,\%; frameworks (MONAI, nnInteractive, VISTA3D) form a separate 9-study stratum.
+\item CNNs dominate literature: \alert{\textbf{89.9\,\%}} of 405 method studies.
+\item U-Net variants in \alert{\textbf{66.4\,\%}} of studies; hybrids 7.7\,\%; frameworks (MONAI, nnInteractive, VISTA3D) form a separate 13-study stratum.
 \item Parenchyma Dice plateau: \alert{$\approx 82\%$} regardless of paradigm (CNN vs Transformer).
 \item Confidence intervals overlap; no significant difference between nnU-Net and Swin UNETR.
 \item Foundation models: remarkable zero-shot coverage; underperform on vessels and surgeon-grade margins.
 \end{itemize}
 \end{block}
 \vspace{0.15cm}
-\scriptsize\color{gray}Sources: 242-method-study LLM-assisted SLR (2015--Sep.~2026); v1 10\,\% human audit $\kappa = 0.89$; v2 post-run QA 10/10 + seed oracle 12/12; protocol in S2v2.
+\scriptsize\color{gray}Sources: 405-method-study LLM-assisted SLR (2015--Sep.~2026); v1 10\,\% human audit $\kappa = 0.89$; v2 post-run QA 10/10 + seed oracle 12/12; protocol in S2v2.
 \end{column}
 \end{columns}
 \end{frame}
@@ -980,8 +980,8 @@ Operational for 1000+ cases over 10+ years
   \item 278{,}816 records (APIs 14{,}547 + OpenAlex 264{,}269)
   \item 7{,}370 two-lane pre-filter (standard + framework bypass)
   \item 1{,}035 AI screening (3-vote unanimous, mini-class)
-  \item 354 full-text assessed (34.2\,\% retrieval; 501 paywalled $\to$ librarian)
-  \item 254 included (242 method + 9 framework + 3 benchmark)
+  \item 1{,}211 full-text assessed (354 legacy at 34.2\,\% retrieval + 857 expansion-harvest; 501 paywalled $\to$ librarian)
+  \item 433 included (405 method + 13 framework + 15 benchmark)
 \end{itemize}
 \vspace{0.15cm}
 v1 inter-rater $\kappa = 0.89$; v2 post-run QA (10/10, oracle 12/12)

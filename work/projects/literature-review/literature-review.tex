@@ -42,14 +42,14 @@
 \begin{itemize}
 	\item Busca em PubMed, arXiv e Google Scholar + pista de identificação OpenAlex, 2015--set/2026.
 	\item PRISMA modificado com triagem semi-automática (pré-filtro de 2 pistas + LLMs).
-	\item Síntese narrativa de 254 estudos incluídos (242 método + 9 frameworks + 3 benchmarks).
+	\item Síntese narrativa de 433 estudos incluídos (405 método + 13 frameworks + 15 benchmarks).
 	\item Meta-análise formal não aplicada (heterogeneidade de protocolos).
 \end{itemize}
 
 \textbf{Principais achados:}
 \begin{itemize}
 	\item nnU-Net (82,3\% Dice) e Swin UNETR (82,4\%) com desempenho de ponta semelhante.
-	\item CNNs dominam (92,1\%); variantes U-Net em 69,0\% dos 242 estudos de método.
+	\item CNNs dominam (89,9\%); variantes U-Net em 66,4\% dos 405 estudos de método.
 	\item Novos estratos no corpus: frameworks (MONAI, nnInteractive, VISTA3D) e métodos neuro-simbólicos.
 	\item Gargalos de translação: \textit{domain shift}, segmentação vascular inferior e integração em fluxo clínico.
 \end{itemize}
@@ -206,15 +206,15 @@ Semantic Scholar bloqueada por rate-limit (HTTP 429). Deduplicação (DOI + tít
 	\node[side, right=0.2cm of llm] (llmexc) {Excluídos via LLM: \textbf{6.331}\\
 	\tiny mod.~não-CT; 2D sem vol.; não-órgão;\\
 	\tiny sem DL; revisão sem método novo};
-	\node[box, below=of llm] (pdf) {Texto completo obtido (PDF): \textbf{354}};
+	\node[box, below=of llm] (pdf) {Texto completo obtido (PDF): \textbf{1.211} (354 pool v2 + 857 expansão)};
 	\node[side, right=0.2cm of pdf] (nopdf) {Sem PDF:\textbf{681}\\
 	\tiny 501 paywall (lista p/ bibliotecário)};
-	\node[box, below=of pdf] (s3) {Triagem de texto completo: \textbf{254 incluídos}};
+	\node[box, below=of pdf] (s3) {Triagem de texto completo: \textbf{433 incluídos}};
 	\node[side, right=0.2cm of s3] (s3exc) {Excluídos (texto completo): \textbf{100}\\
 	\tiny método:90 (4 PDFs inutilizáveis)\\
 	\tiny benchmark:7; framework:2; revisão:1};
-	\node[box, below=of s3] (final) {Síntese narrativa final: \textbf{254}\\
-	\tiny 242 método + 9 frameworks + 3 benchmarks};
+	\node[box, below=of s3] (final) {Síntese narrativa final: \textbf{433}\\
+	\tiny 405 método + 13 frameworks + 15 benchmarks};
 
 	\draw[arr] (s1raw) -- (dedup);
 	\draw[arr] (dedup) -- (s2);
