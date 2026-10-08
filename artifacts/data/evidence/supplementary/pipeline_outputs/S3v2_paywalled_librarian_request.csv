@@ -214,7 +214,6 @@ doi,title,year,venue
 10.21608/bfemu.2020.40618.1043,Automated deep system for joint liver and tumor segmentation using majority voting,2020,MEJ Mansoura Engineering Journal
 10.1007/978-3-030-98385-7_14,An Ensemble of 3D U-Net Based Models for Segmentation of Kidney and Masses in CT Scans,2022,Lecture notes in computer science
 10.1109/ic-icns68863.2026.11537449,Hybrid Attention and Transformer-Driven Deep Networks for Robust Lung Nodule Segmentation in Low-Dose CT,2026,
-10.1164/rccm.202311-2185oc,Deep Learning–based Segmentation of Computed Tomography Scans Predicts Disease Progression and Mortality in Idiopathic Pulmonary Fibrosis,2024,American Journal of Respiratory and Critical Care Medicine
 10.1088/1742-6596/2004/1/012007,Improved 3D fully convolutional network based on squeeze-excitation method for liver segmentation,2021,Journal of Physics Conference Series
 10.1145/3777577.3777673,Hybrid Transformer-CNN for Multi-Modal Whole-Heart Segmentation with MAE Pretraining,2025,
 10.1117/12.2613060,Automated CT segmentation for rapid assessment of anatomical variations in head-and-neck radiation therapy,2022,
